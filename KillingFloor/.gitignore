@@ -53,6 +53,7 @@ ExportedObj/
 
 # image files
 *.tif
+*.tga
 
 # Unity3D generated meta files
 *.pidb.meta
