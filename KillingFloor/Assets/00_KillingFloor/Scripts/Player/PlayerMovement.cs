@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 newCameraRotation;
     private Vector3 newCharacterRotation;
     public Transform cameraHolder; // 카메라가 담기는 곳 (플레이어가 보는 방향에 맞게 카메라 방향 변경)
+    public Transform lookTarget; // 카메라가 담기는 곳 (플레이어가 보는 방향에 맞게 카메라 방향 변경)
+    public Transform gunPosition;
 
     [Header("Player")]
     public Vector2 inputMoveVec;
@@ -83,6 +85,9 @@ public class PlayerMovement : MonoBehaviour
         newCameraRotation.x = Mathf.Clamp(newCameraRotation.x, playerSettings.viewClampYMin, playerSettings.viewClampYMax);
 
         cameraHolder.localRotation = Quaternion.Euler(newCameraRotation);
+        lookTarget.localRotation = Quaternion.Euler(newCameraRotation);
+        gunPosition.localRotation = Quaternion.Euler(newCameraRotation);
+
     }
 
     // 플레이어 이동 입력
@@ -96,6 +101,7 @@ public class PlayerMovement : MonoBehaviour
     {
         inputViewVec = value.Get<Vector2>();
     }
+    // 게임 패드로 적용할 경우
     public void OnViewPad(InputValue value)
     {
         inputViewVec = value.Get<Vector2>();
@@ -144,4 +150,5 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("xDir", inputMoveVec.x);
         animator.SetFloat("yDir", inputMoveVec.y);
     }
+
 }
