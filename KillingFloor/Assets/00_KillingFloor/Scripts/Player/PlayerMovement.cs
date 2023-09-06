@@ -10,7 +10,8 @@ using static PlayerSetting; // 플레이어 모델 셋팅 클래스
 public class PlayerMovement : MonoBehaviour
 {
     private CharacterController characterController;
-    public Animator animator;
+    public Animator tpsAnimator;
+    public Animator fpsAnimator;
     private PlayerAction playerInput;                    // 인풋 시스템 활용시 이름 동일해야함
 
     [Header("Settings")]
@@ -45,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-        Animator animator = GetComponent<Animator>();
+        Animator tpsAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -130,25 +131,30 @@ public class PlayerMovement : MonoBehaviour
         //// 걷기 애니메이션 셋팅
         if (inputMoveVec.x != 0 || inputMoveVec.y != 0)
         {
-            animator.SetBool("isWalk", true);
+            tpsAnimator.SetBool("isWalk", true);
+            fpsAnimator.SetBool("isWalk", true);
         }
         else
         {
-            animator.SetBool("isWalk", false);
+            tpsAnimator.SetBool("isWalk", false);
+            fpsAnimator.SetBool("isWalk", false);
         }
-        animator.SetBool("isRun", isDash);
+        tpsAnimator.SetBool("isRun", isDash);
+        fpsAnimator.SetBool("isRun", isDash);
 
         if(!characterController.isGrounded && isGrounded)
         {   isGrounded = false;
-            animator.SetBool("isGrounded", isGrounded);
+            tpsAnimator.SetBool("isGrounded", isGrounded);
+            fpsAnimator.SetBool("isGrounded", isGrounded);
         }
         else if (characterController.isGrounded && !isGrounded)
         { 
             isGrounded = true;
-            animator.SetBool("isGrounded", isGrounded);
+            tpsAnimator.SetBool("isGrounded", isGrounded);
+            fpsAnimator.SetBool("isGrounded", isGrounded);
         }
-        animator.SetFloat("xDir", inputMoveVec.x);
-        animator.SetFloat("yDir", inputMoveVec.y);
+        tpsAnimator.SetFloat("xDir", inputMoveVec.x);
+        tpsAnimator.SetFloat("yDir", inputMoveVec.y);
     }
 
 }
