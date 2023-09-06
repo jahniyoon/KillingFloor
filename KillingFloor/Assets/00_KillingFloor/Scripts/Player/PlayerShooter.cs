@@ -17,12 +17,25 @@ public class PlayerShooter : MonoBehaviour
     public Weapon weapon;
     public Transform rightHandObj = null;   // 오른손
     public Transform leftHandObj = null;    // 왼손
+    private int weaponSlot;
+
+    Weapon pistolWeapon;
+    Weapon rifleWeapon;
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
-        weapon = weaponPosition.GetChild(0).GetComponent<Weapon>();
+
+        // 무기 가져오기
+        pistolWeapon = weaponPosition.GetChild(0).GetComponent<Weapon>();
+        rifleWeapon = weaponPosition.GetChild(1).GetComponent<Weapon>();
+        rifleWeapon.gameObject.SetActive(false);    // 미리 꺼두기
+
+        weapon = pistolWeapon;
+        rightHandObj = weapon.rightHandObj.transform;
+        leftHandObj = weapon.leftHandObj.transform;
+        weaponSlot = 1;
     }
 
     // Update is called once per frame
@@ -31,22 +44,56 @@ public class PlayerShooter : MonoBehaviour
         ActiveAnimation ();
     }
 
+    // 사격 입력
     public void OnShoot()
     {
         if (weapon != null)
         handAnimator.SetTrigger("isFire");
     }
-
+    // 장전 입력
     public void OnReload()
     {
         if (weapon != null)
             handAnimator.SetTrigger("isReload");
     }
+
+    public void OnWeaponSlot1()
+    {
+        Debug.Log("1번 무기로 변경");
+        if (weaponSlot == 2)
+        {
+            rifleWeapon.gameObject.SetActive(false);
+            pistolWeapon.gameObject.SetActive(true);
+
+            weapon = pistolWeapon;
+            rightHandObj = weapon.rightHandObj.transform;
+            leftHandObj = weapon.leftHandObj.transform;
+            weaponSlot = 1;
+        }
+    }
+
+    public void OnWeaponSlot2()
+    {
+        Debug.Log("2번 무기로 변경");
+        if (weaponSlot == 1)
+        {
+            pistolWeapon.gameObject.SetActive(false);
+            rifleWeapon.gameObject.SetActive(true);
+
+            weapon = rifleWeapon;
+            rightHandObj = weapon.rightHandObj.transform;
+            leftHandObj = weapon.leftHandObj.transform;
+            weaponSlot = 2;
+        }
+    }
+
     public void ActiveAnimation()
     {
+      
     }
 
 
+    // 무기 애니메이션 처리
     void OnAnimatorIK()
     {
         weaponPosition.position = animator.GetIKHintPosition(AvatarIKHint.RightElbow);
