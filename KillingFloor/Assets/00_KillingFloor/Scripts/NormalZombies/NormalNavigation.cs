@@ -36,9 +36,17 @@ public class NormalNavigation : MonoBehaviour
 
     private void Update()
     {
-        if (isCoroutine == false)
+        if (GetComponent<NormalZombie>().healthBody <= 0 || GetComponent<NormalZombie>().healthHead <= 0)
         {
-            StartCoroutine(Target());
+            if (isCoroutine == false)
+            {
+                CheckIfInRadius();
+                StartCoroutine(Target());
+            }
+        }
+        else
+        {
+            GetComponent<NavMeshAgent>().enabled = false;
         }
     }
 
@@ -74,4 +82,18 @@ public class NormalNavigation : MonoBehaviour
 
         isCoroutine = false;
     }
+
+    private void CheckIfInRadius()
+    {
+        float distance = Vector3.Distance(transform.position, targets[minDistanceTarget].transform.position);
+
+        if (distance <= GetComponent<NavMeshAgent>().radius)
+        {
+            GetComponent<NavMeshAgent>().enabled = false;
+        }
+        else
+        {
+            GetComponent<NavMeshAgent>().enabled = true;
+        }
+    }   // 공격 및 죽음을 확인하기 위해 NavMeshAgent를 끄는 로직
 }

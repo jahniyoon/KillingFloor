@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class NormalZombieData : MonoBehaviour
 {
-    protected float healthBody;
-    protected float healthHead;
-    protected float damage;
-    protected float speed;
-    protected int coin;
+    public float healthBody;
+    public float healthHead;
+    public float damage;
+    public float speed;
+    public int coin;
 
     public virtual (float, float, float, float, int) ZombieWalk(float _healthBody, float _healthHead, float _damage, float _speed, int _coin)
     {
