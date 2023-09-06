@@ -52,7 +52,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Crouch"",
@@ -113,6 +113,15 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""03749592-ae0c-4f9f-a9b6-0a1ac72a07e0"",
                     ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""b823918c-087e-4ff4-bb4d-9e0a74c3fd18"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -316,6 +325,17 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""action"": ""ViewPad"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c7779095-2879-4adb-bbd3-aa9f883a1469"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -334,6 +354,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         m_Player_View = m_Player.FindAction("View", throwIfNotFound: true);
         m_Player_ChangeCamera = m_Player.FindAction("ChangeCamera", throwIfNotFound: true);
         m_Player_ViewPad = m_Player.FindAction("ViewPad", throwIfNotFound: true);
+        m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -405,6 +426,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_View;
     private readonly InputAction m_Player_ChangeCamera;
     private readonly InputAction m_Player_ViewPad;
+    private readonly InputAction m_Player_Aim;
     public struct PlayerActions
     {
         private @PlayerAction m_Wrapper;
@@ -419,6 +441,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         public InputAction @View => m_Wrapper.m_Player_View;
         public InputAction @ChangeCamera => m_Wrapper.m_Player_ChangeCamera;
         public InputAction @ViewPad => m_Wrapper.m_Player_ViewPad;
+        public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -458,6 +481,9 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @ViewPad.started += instance.OnViewPad;
             @ViewPad.performed += instance.OnViewPad;
             @ViewPad.canceled += instance.OnViewPad;
+            @Aim.started += instance.OnAim;
+            @Aim.performed += instance.OnAim;
+            @Aim.canceled += instance.OnAim;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -492,6 +518,9 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @ViewPad.started -= instance.OnViewPad;
             @ViewPad.performed -= instance.OnViewPad;
             @ViewPad.canceled -= instance.OnViewPad;
+            @Aim.started -= instance.OnAim;
+            @Aim.performed -= instance.OnAim;
+            @Aim.canceled -= instance.OnAim;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -521,5 +550,6 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         void OnView(InputAction.CallbackContext context);
         void OnChangeCamera(InputAction.CallbackContext context);
         void OnViewPad(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
     }
 }

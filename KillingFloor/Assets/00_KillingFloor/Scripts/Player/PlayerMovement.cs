@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController characterController;
     public Animator tpsAnimator;
     public Animator fpsAnimator;
-    private PlayerAction playerInput;                    // 인풋 시스템 활용시 이름 동일해야함
 
     [Header("Settings")]
     public PlayerSettingsModel playerSettings;
@@ -46,7 +45,6 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-        Animator tpsAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame

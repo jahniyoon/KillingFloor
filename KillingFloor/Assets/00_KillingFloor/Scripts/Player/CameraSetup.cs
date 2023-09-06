@@ -8,16 +8,12 @@ public class CameraSetup : MonoBehaviour
     GameObject tpsCam;
     CinemachineVirtualCamera followCam; // 현재 카메라
     
-    public GameObject fpsBody;
-    public GameObject tpsBody;
-
+    public GameObject fpsBody;  // FPS 추적할 대상
+    public GameObject tpsBody;  // TPS 추적할 대상
 
     bool isFPS;
-
-
     void Awake()
     {
-
             // 씬에 있는 시네 머신 가상 카메라를 찾고 플레이어 하위에 넣기
             tpsCam = GameObject.FindWithTag("TPS CAM");
             tpsCam.transform.parent = this.transform;
@@ -32,6 +28,7 @@ public class CameraSetup : MonoBehaviour
 
             ChangeCamera(followCam);
     }
+
     // I 버튼을 누르면 카메라 변경
     public void OnChangeCamera()
     {
@@ -63,6 +60,7 @@ public class CameraSetup : MonoBehaviour
                 ChangeCamera(followCam);
             }
     }
+    // 카메라 변경
     public void ChangeCamera(CinemachineVirtualCamera _followCam)
     {
         // 가상 카메라의 추적 대상을 자신의 트랜스폼으로 변경
