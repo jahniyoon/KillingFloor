@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,6 +9,7 @@ public class NormalNavigation : MonoBehaviour
 {
     private List<GameObject> targets = new List<GameObject>();  // Player가 저장되는 List
 
+    private NormalZombie normalZombie;
     public Transform Players;                                   // Player가 저장되는 부모 오브젝트
 
     private NavMeshAgent nav;                                   // 네비게이션
@@ -16,9 +18,11 @@ public class NormalNavigation : MonoBehaviour
     private int minDistanceTarget;                              // 가장 가까운 오브젝트 List number
 
     private bool isCoroutine;                                   // 코루틴이 끝났는지 체크
+    public bool isContact;                                      // 물체와 부딪혔는지 체크
 
     private void Awake()
     {
+        normalZombie = GetComponent<NormalZombie>();
         nav = GetComponent<NavMeshAgent>();
     }
 
@@ -36,17 +40,16 @@ public class NormalNavigation : MonoBehaviour
 
     private void Update()
     {
-        if (GetComponent<NormalZombie>().healthBody <= 0 || GetComponent<NormalZombie>().healthHead <= 0)
+        if (0.0f <= normalZombie.healthBody || 0.0f <= normalZombie.healthHead)
         {
             if (isCoroutine == false)
             {
-                CheckIfInRadius();
                 StartCoroutine(Target());
             }
         }
         else
         {
-            GetComponent<NavMeshAgent>().enabled = false;
+            nav.enabled = false;
         }
     }
 
@@ -54,7 +57,6 @@ public class NormalNavigation : MonoBehaviour
     {
         isCoroutine = true;
         minDistance = 0.0f;     // minDistance 초기화
-
         for (int i = 0; i < targets.Count; i++)
         {
             if (targets[i].activeSelf == true)      // if: 케릭터가 죽었는지 확인
@@ -65,7 +67,7 @@ public class NormalNavigation : MonoBehaviour
                 {
                     minDistance = distance;
                 }   // if: minDistance 가 0.0f 일 때를 예외처리
-                else
+                if (minDistance != 0.0f)
                 {
                     minDistance = minDistance < Mathf.Abs(distance) ? minDistance : Mathf.Abs(distance);
                     minDistanceTarget = minDistance < Mathf.Abs(distance) ? minDistanceTarget : i;
@@ -75,10 +77,12 @@ public class NormalNavigation : MonoBehaviour
             yield return null;
         }
 
-        if (GetComponent<NavMeshAgent>().enabled)
+        if (nav.enabled)
         {
             nav.SetDestination(targets[minDistanceTarget].transform.position);
         }   // if: 이동을 제외한 액션
+
+        CheckIfInRadius();
 
         isCoroutine = false;
     }
@@ -87,13 +91,17 @@ public class NormalNavigation : MonoBehaviour
     {
         float distance = Vector3.Distance(transform.position, targets[minDistanceTarget].transform.position);
 
-        if (distance <= GetComponent<NavMeshAgent>().radius)
+        if (distance <= nav.radius)
         {
-            GetComponent<NavMeshAgent>().enabled = false;
+            nav.enabled = false;
+
+            isContact = true;
         }
         else
         {
-            GetComponent<NavMeshAgent>().enabled = true;
+            nav.enabled = true;
+
+            isContact = false;
         }
     }   // 공격 및 죽음을 확인하기 위해 NavMeshAgent를 끄는 로직
 }
