@@ -2889,6 +2889,7 @@ GameObject:
   - component: {fileID: 8015595073755256274}
   - component: {fileID: 8015595073755256285}
   - component: {fileID: 912411154}
+  - component: {fileID: 8719361460486020683}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2982,7 +2983,7 @@ CharacterController:
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.0001
-  m_MinMoveDistance: 0.001
+  m_MinMoveDistance: 0
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &8015595073755256284
 MonoBehaviour:
@@ -3042,25 +3043,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tpsAnimator: {fileID: 3645348580467676432}
-  fpsAnimator: {fileID: 6625897421491019371}
-  playerSettings:
-    viewXSensitivity: 20
-    viewYSensitivity: 20
-    viewXInverted: 0
-    viewYInverted: 0
-    viewClampYMin: -50
-    viewClampYMax: 60
-  cameraHolder: {fileID: 0}
-  lookTarget: {fileID: 1815458963872597001}
-  gunPosition: {fileID: 9171883578071905935}
-  inputMoveVec: {x: 0, y: 0}
-  inputViewVec: {x: 0, y: 0}
-  walkSpeed: 5
-  dashSpeed: 8
-  rotaionSpeed: 90
-  jumpForce: 1.5
-  gravity: -4.5
-  isDie: 0
+  fpsAnimator: {fileID: 0}
+  MoveSpeed: 4
+  SprintSpeed: 6
+  RotationSpeed: 10
+  SpeedChangeRate: 10
+  JumpHeight: 1.2
+  Gravity: -15
+  JumpTimeout: 0.1
+  FallTimeout: 0.15
+  Grounded: 1
+  GroundedOffset: -0.14
+  GroundedRadius: 0.5
+  GroundLayers:
+    serializedVersion: 2
+    m_Bits: 1
+  CinemachineCameraTarget: {fileID: 3228452181750202760}
+  TopClamp: 90
+  BottomClamp: -90
 --- !u!114 &912411154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3073,10 +3073,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e461382a2d17e1549b5b4d37af7882e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handAnimator: {fileID: 6625897421491019371}
+  handAnimator: {fileID: 0}
   ikActive: 1
   weaponPosition: {fileID: 9171883578071905935}
-  targetObj: {fileID: 1815458963872597001}
+  targetObj: {fileID: 1458365898}
   tpsWeapon: {fileID: 0}
   rightHandObj: {fileID: 0}
   leftHandObj: {fileID: 0}
@@ -3084,6 +3084,25 @@ MonoBehaviour:
   fpsPistolObj: {fileID: 0}
   fpsRifleObj: {fileID: 0}
   fpsWeapon: {fileID: 0}
+--- !u!114 &8719361460486020683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015595073755256272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb6b3f14ee5802546b7c351592d03aec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  move: {x: 0, y: 0}
+  look: {x: 0, y: 0}
+  jump: 0
+  dash: 0
+  analogMovement: 0
+  cursorLocked: 1
+  cursorInputForLook: 1
 --- !u!1 &8021252060600596928
 GameObject:
   m_ObjectHideFlags: 0
@@ -3333,12 +3352,6 @@ GameObject:
 --- !u!4 &6534626328636285183 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6245168362682521063, guid: 14d3f2da636edae448be5f53252404b9,
-    type: 3}
-  m_PrefabInstance: {fileID: 866067234877142296}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &6625897421491019371 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 6338544994136288115, guid: 14d3f2da636edae448be5f53252404b9,
     type: 3}
   m_PrefabInstance: {fileID: 866067234877142296}
   m_PrefabAsset: {fileID: 0}

@@ -15,6 +15,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "c53404bd-d4b9-47b2-b4c4-a2df02c65427",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Jump",
                     "type": "Button",
                     "id": "d6815ecb-92e2-4cb9-96f7-5fe80a55abb0",
@@ -27,10 +36,10 @@
                     "name": "Dash",
                     "type": "PassThrough",
                     "id": "495ac11d-2be8-4508-8e97-5ba349626516",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Crouch",
@@ -69,15 +78,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "View",
-                    "type": "Value",
-                    "id": "c53404bd-d4b9-47b2-b4c4-a2df02c65427",
-                    "expectedControlType": "Delta",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "ChangeCamera",
                     "type": "Button",
                     "id": "646a377b-ca3c-43a0-b6f5-f75a8e612d36",
@@ -87,22 +87,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ViewPad",
-                    "type": "Value",
-                    "id": "03749592-ae0c-4f9f-a9b6-0a1ac72a07e0",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "Aim",
                     "type": "PassThrough",
                     "id": "b823918c-087e-4ff4-bb4d-9e0a74c3fd18",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 },
                 {
                     "name": "WeaponSlot1",
@@ -280,17 +271,6 @@
                 },
                 {
                     "name": "",
-                    "id": "4958f84e-4a91-4bd3-8bf7-d2c0d3798d92",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "View",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "3c3f3934-3666-487a-90e8-b975be9cb262",
                     "path": "<Keyboard>/i",
                     "interactions": "",
@@ -308,17 +288,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "ChangeCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8cafa3ae-668f-4fcd-a3ad-7b58628c7d64",
-                    "path": "<XInputController>/rightStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ViewPad",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -352,6 +321,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "WeaponSlot2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4958f84e-4a91-4bd3-8bf7-d2c0d3798d92",
+                    "path": "<Pointer>/delta",
+                    "interactions": "",
+                    "processors": "InvertVector2(invertX=false),ScaleVector2",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "09747fcb-324d-4e3d-97c1-40f99303cc26",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

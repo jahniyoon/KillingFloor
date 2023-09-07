@@ -63,12 +63,12 @@ public class CameraSetup : MonoBehaviour
     // 카메라 변경
     public void ChangeCamera(CinemachineVirtualCamera _followCam)
     {
+        PlayerMovement playerMovement = GetComponent<PlayerMovement>();
+
         // 가상 카메라의 추적 대상을 자신의 트랜스폼으로 변경
-        _followCam.Follow = transform;
+        _followCam.Follow = playerMovement.CinemachineCameraTarget.transform;
         _followCam.transform.parent = this.transform;
 
-        // 플레이어에게 달아주기
-        PlayerMovement playerMovement = GetComponent<PlayerMovement>();
-        playerMovement.cameraHolder = _followCam.transform;
+        //playerMovement.cameraHolder = _followCam.transform;
     }
 }
