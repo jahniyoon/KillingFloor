@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerShooter : MonoBehaviour
 {
+    private PlayerMovement playerMovement;
 
     [Header("Animator IK")]
     protected Animator animator;
@@ -13,29 +14,49 @@ public class PlayerShooter : MonoBehaviour
     public Transform weaponPosition = null;    // 무기 위치 기준점
     public Transform targetObj;             // 플레이어 시점
 
-    [Header("Weapon")]
-    public Weapon weapon;
+    [Header("TPS Weapon")]
+    public Weapon tpsWeapon;
     public Transform rightHandObj = null;   // 오른손
     public Transform leftHandObj = null;    // 왼손
     private int weaponSlot;
 
-    Weapon pistolWeapon;
-    Weapon rifleWeapon;
+    Weapon tpsPistol;    // 가져올 권총 무기 정보
+    Weapon tpsRifle;     // 가져올 라이플 무기 정보
+
+    [Header("FPS Weapon")]
+    public Transform fpsPosition;
+    public Transform fpsPistolObj;
+    public Transform fpsRifleObj;
+    public Transform fpsWeapon;
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
+        playerMovement = GetComponent<PlayerMovement>();
 
-        // 무기 가져오기
-        pistolWeapon = weaponPosition.GetChild(0).GetComponent<Weapon>();
-        rifleWeapon = weaponPosition.GetChild(1).GetComponent<Weapon>();
-        rifleWeapon.gameObject.SetActive(false);    // 미리 꺼두기
+        // TPS 무기 가져오기
+        tpsPistol = weaponPosition.GetChild(0).GetComponent<Weapon>();
+        tpsRifle = weaponPosition.GetChild(1).GetComponent<Weapon>();
+        tpsRifle.gameObject.SetActive(false);    // 미리 꺼두기
 
-        weapon = pistolWeapon;
-        rightHandObj = weapon.rightHandObj.transform;
-        leftHandObj = weapon.leftHandObj.transform;
-        weaponSlot = 1;
+        tpsWeapon = tpsPistol;                          // 기본총을 권총으로 장착
+        rightHandObj = tpsWeapon.rightHandObj.transform;   // 권총의 오른손 그랩
+        leftHandObj = tpsWeapon.leftHandObj.transform;     // 권총의 왼손 그랩
+        weaponSlot = 1;                                 // 현재 슬롯 상태
+
+        // FPS 무기 가져오기
+        fpsPosition = transform.GetChild(2).GetComponent<Transform>();
+        fpsPistolObj = fpsPosition.transform.GetChild(1).GetComponent<Transform>();
+
+        fpsRifleObj = fpsPosition.transform.GetChild(2).GetComponent<Transform>();  // 라이플은 미리 불러와서 꺼두기
+        fpsRifleObj.gameObject.SetActive(false);
+
+        fpsWeapon = fpsPistolObj;
+        handAnimator = fpsWeapon.GetComponent<Animator>();
+        playerMovement.fpsAnimator = handAnimator;
+
+        
     }
 
     // Update is called once per frame
@@ -47,43 +68,56 @@ public class PlayerShooter : MonoBehaviour
     // 사격 입력
     public void OnShoot()
     {
-        if (weapon != null)
         handAnimator.SetTrigger("isFire");
     }
     // 장전 입력
     public void OnReload()
     {
-        if (weapon != null)
-            handAnimator.SetTrigger("isReload");
+        handAnimator.SetTrigger("isReload");
     }
 
     public void OnWeaponSlot1()
     {
-        Debug.Log("1번 무기로 변경");
         if (weaponSlot == 2)
         {
-            rifleWeapon.gameObject.SetActive(false);
-            pistolWeapon.gameObject.SetActive(true);
+            tpsRifle.gameObject.SetActive(false);
+            tpsPistol.gameObject.SetActive(true);
 
-            weapon = pistolWeapon;
-            rightHandObj = weapon.rightHandObj.transform;
-            leftHandObj = weapon.leftHandObj.transform;
+            tpsWeapon = tpsPistol;
+            rightHandObj = tpsWeapon.rightHandObj.transform;
+            leftHandObj = tpsWeapon.leftHandObj.transform;
             weaponSlot = 1;
+
+
+            fpsRifleObj.gameObject.SetActive(false);
+            fpsPistolObj.gameObject.SetActive(true);
+
+            fpsWeapon = fpsPistolObj;
+            handAnimator = fpsWeapon.GetComponent<Animator>();
+            playerMovement.fpsAnimator = handAnimator;
+
         }
     }
 
     public void OnWeaponSlot2()
     {
-        Debug.Log("2번 무기로 변경");
         if (weaponSlot == 1)
         {
-            pistolWeapon.gameObject.SetActive(false);
-            rifleWeapon.gameObject.SetActive(true);
+            tpsPistol.gameObject.SetActive(false);
+            tpsRifle.gameObject.SetActive(true);
 
-            weapon = rifleWeapon;
-            rightHandObj = weapon.rightHandObj.transform;
-            leftHandObj = weapon.leftHandObj.transform;
+            tpsWeapon = tpsRifle;
+            rightHandObj = tpsWeapon.rightHandObj.transform;
+            leftHandObj = tpsWeapon.leftHandObj.transform;
             weaponSlot = 2;
+
+            fpsPistolObj.gameObject.SetActive(false);
+            fpsRifleObj.gameObject.SetActive(true);
+
+            fpsWeapon = fpsRifleObj;
+            handAnimator = fpsWeapon.GetComponent<Animator>();
+            playerMovement.fpsAnimator = handAnimator;
+
         }
     }
 
