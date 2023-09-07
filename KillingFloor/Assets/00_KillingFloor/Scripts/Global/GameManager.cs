@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    public static GameManager instance;
+
+    // Junoh 추가
+    public int round = 1;       // 현재 라운드
+    public int player = 4;      // 플레이어 인원 수
+    // Junoh 추가
 
     public void Awake()
     {
-        if(Instance == null)
-        { Instance = this; }
+        if(instance == null)
+        { instance = this; }
         else
         { GlobalFunc.LogWarning("씬에 두 개 이상의 게임 매니저가 존재합니다."); }
     }
