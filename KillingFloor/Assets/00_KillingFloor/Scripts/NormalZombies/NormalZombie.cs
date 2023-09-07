@@ -63,8 +63,8 @@ public class NormalZombie : NormalZombieData
             else
             {
                 if (ani.GetFloat("blendPosX") != 0.0f && ani.GetFloat("blendPosY") != 0.0f)
-                { 
-                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, 1.0f, true));
+                {
+                    StartCoroutine(AnimationCoroutine(0.0f, 0.0f, 1.0f, true));
                 }
             }
         }
@@ -126,30 +126,34 @@ public class NormalZombie : NormalZombieData
     {
         isCoroutine = true;
 
-        if (isCheck == true)
+        if (!(thisPosX == posX && thisPosY == posY))
         {
-            timeElapsed = 0.0f;
-
-            thisPosX = ani.GetFloat("blendPosX");
-            thisPosY = ani.GetFloat("blendPosY");
-
-            while (timeElapsed < duration)
+            if (isCheck == true)
             {
-                timeElapsed += Time.deltaTime;
+                timeElapsed = 0.0f;
 
-                float time = Mathf.Clamp01(timeElapsed / duration);
+                thisPosX = ani.GetFloat("blendPosX");
+                thisPosY = ani.GetFloat("blendPosY");
 
-                ani.SetFloat("blendPosX", Mathf.Lerp(thisPosX, posX, time));
-                ani.SetFloat("blendPosY", Mathf.Lerp(thisPosY, posY, time));
+                while (timeElapsed < duration)
+                {
+                    timeElapsed += Time.deltaTime;
 
-                yield return null;
+                    float time = Mathf.Clamp01(timeElapsed / duration);
+
+                    ani.SetFloat("blendPosX", Mathf.Lerp(thisPosX, posX, time));
+                    ani.SetFloat("blendPosY", Mathf.Lerp(thisPosY, posY, time));
+
+                    yield return null;
+                }
+            }
+            else
+            {
+                ani.SetFloat("blendPosX", posX);
+                ani.SetFloat("blendPosY", posY);
             }
         }
-        else
-        {
-            ani.SetFloat("blendPosX", posX);
-            ani.SetFloat("blendPosY", posY);
-        }
+        else { /*No Event*/ }
 
         isCoroutine = false;
     }
@@ -158,7 +162,7 @@ public class NormalZombie : NormalZombieData
     {
         isCoroutine = true;
 
-        int number = Random.Range(0, 3);
+        int number = Random.Range(0, 1);
 
         switch (number)
         {
