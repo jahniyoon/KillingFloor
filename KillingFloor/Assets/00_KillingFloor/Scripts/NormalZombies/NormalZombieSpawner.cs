@@ -13,8 +13,11 @@ public class NormalZombieSpawner : MonoBehaviour
     //    for (int i = 0; i <= zombieList.Count; i++)
     //    {
     //        if (zombieList.Count == i)
-    //        { 
-    //        zombieList.Add(Instantiate())
+    //        {
+    //            zombieList.Add(
+    //                Instantiate(zombieStyle[Random.Range(0, zombieStyle.Count)],
+    //                Quaternion.identity,
+    //                Transform));
     //        }
     //    }
     //}

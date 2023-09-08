@@ -30,7 +30,7 @@ public class NormalZombie : NormalZombieData
         navigation = GetComponent<NormalNavigation>();
         ani = GetComponent<Animator>();
 
-        // 초기 애니메이션 좌표를 idle로 시작
+        // 초기 애니메이션 좌표를 Idle로 시작
         thisBlend = 0.0f;
 
         ani.SetFloat("move", thisBlend);

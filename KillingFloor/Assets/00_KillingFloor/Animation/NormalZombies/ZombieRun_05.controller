@@ -665,7 +665,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ZombieWalk_05
+  m_Name: ZombieRun_05
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: move
