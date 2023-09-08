@@ -6,6 +6,7 @@ TagManager:
   tags:
   - FPS CAM
   - TPS CAM
+  - AttackObject
   layers:
   - Default
   - TransparentFX
@@ -15,11 +16,11 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - LeftAttack
+  - FrontAttack
+  - RightAttack
+  - HeadAttack
+  - Weapon
   - 
   - 
   - 
