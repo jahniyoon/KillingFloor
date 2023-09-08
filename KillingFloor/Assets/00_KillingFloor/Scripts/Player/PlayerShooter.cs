@@ -6,8 +6,7 @@ public class PlayerShooter : MonoBehaviour
 {
     private PlayerMovement playerMovement;
     private CameraSetup cameraSet;
-    int layerMask = (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11);
-
+    int layerMask = (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11);    // 데미지 받을 좀비의 레이어 마스크
 
     public float damage = 10f;
     public float range = 100f;
@@ -18,7 +17,7 @@ public class PlayerShooter : MonoBehaviour
 
     public bool ikActive = false;
     public Transform weaponPosition = null;    // 무기 위치 기준점
-    public Transform targetObj;             // 플레이어 시점
+    public Transform targetObj;                // 플레이어 시점
 
     [Header("TPS Weapon")]
     public Weapon tpsWeapon;

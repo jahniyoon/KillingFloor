@@ -4,15 +4,45 @@ using UnityEngine;
 
 public class PlayerHealth : LivingEntity
 {
-    // Start is called before the first frame update
-    void Start()
+    private PlayerMovement playerMovement; // 플레이어 움직임 컴포넌트
+    private PlayerShooter playerShooter; // 플레이어 슈터 컴포넌트
+    private Animator playerAnimator; // 플레이어의 애니메이터
+
+    private void Awake()
     {
-        
+        // 사용할 컴포넌트를 가져오기
+        playerAnimator = GetComponent<Animator>();
+        playerMovement = GetComponent<PlayerMovement>();
+        playerShooter = GetComponent<PlayerShooter>();
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void OnEnable()
     {
-        
+        // LivingEntity의 OnEnable() 실행 (상태 초기화)
+        base.OnEnable();
+
+        // 플레이어 조작을 받는 컴포넌트들 활성화
+        playerMovement.enabled = true;
+        playerShooter.enabled = true;
+        PlayerUIManager.instance.UpdateHPText(startingHealth);
+    }
+
+    // 데미지 처리
+    //[PunRPC]
+    public override void OnDamage(float damage, Vector3 hitPoint,
+        Vector3 hitDirection)
+    {
+        if (!dead)
+        {
+            // 사망하지 않은 경우에만 효과음을 재생
+            //playerAudioPlayer.PlayOneShot(hitClip);
+        }
+
+        // LivingEntity의 OnDamage() 실행(데미지 적용)
+        base.OnDamage(damage, hitPoint, hitDirection);
+        PlayerUIManager.instance.UpdateHPText(health);
+
+        // 갱신된 체력을 체력 슬라이더에 반영
+        //healthSlider.value = health;
     }
 }

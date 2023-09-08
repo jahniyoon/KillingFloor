@@ -8,6 +8,7 @@ public class CameraSetup : MonoBehaviour
     GameObject tpsCam;
     public CinemachineVirtualCamera followCam; // 현재 카메라
     public GameObject tpsPlayerBody;
+    public GameObject fpsPlayerBody;
     public bool isFPS;
 
     void Awake()
@@ -36,6 +37,7 @@ public class CameraSetup : MonoBehaviour
                 fpsCam.SetActive(false);                    
                 tpsCam.SetActive(true);                  
                 tpsPlayerBody.SetActive(true);
+                fpsPlayerBody.SetActive(false);
 
                 followCam = tpsCam.GetComponent<CinemachineVirtualCamera>();
 
@@ -47,6 +49,7 @@ public class CameraSetup : MonoBehaviour
                 tpsCam.SetActive(false);
                 fpsCam.SetActive(true);
                 tpsPlayerBody.SetActive(false);
+                fpsPlayerBody.SetActive(true);
     
                 followCam = fpsCam.GetComponent<CinemachineVirtualCamera>();
 

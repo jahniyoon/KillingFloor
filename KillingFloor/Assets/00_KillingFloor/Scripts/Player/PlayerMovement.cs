@@ -17,43 +17,42 @@ public class PlayerMovement : MonoBehaviour
     public Animator fpsAnimator;    // 플레이어 FPS 모델 애니메이터
 
     [Header("Player")]
-    [Tooltip("Move speed of the character in m/s")]
+    [Tooltip("플레이어 이동속도 m/s")]
     public float moveSpeed;
-    [Tooltip("Sprint speed of the character in m/s")]
+    [Tooltip("플레이어 대시속도 m/s")]
     public float dashSpeed;
-    [Tooltip("Rotation speed of the character")]
+    [Tooltip("플레이어 회전속도")]
     public float rotationSpeed;
-    [Tooltip("Acceleration and deceleration")]
+    [Tooltip("이동 가속도")]
     public float speedChangeRate;
 
     [Space(10)]
-    [Tooltip("The height the player can jump")]
+    [Tooltip("점프 높이")]
     public float jumpHeight;
-    [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
+    [Tooltip("플레이어 중력 값. 중력 기본값 : -9.81f")]
     public float gravity;
 
     [Space(10)]
-    [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
+    [Tooltip("점프 상태를 확인하는 값. 값이 0이면 바로 점프 가능")]
     public float jumpTimeout;
-    [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
+    [Tooltip("추락 상태를 확인하는 값")]
     public float fallTimeout;
 
     [Header("Player Grounded")]
-    [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
+    [Tooltip("바닥에 있는지 없는지 체크")]
     public bool isGrounded = true;
-    [Tooltip("Useful for rough ground")]
+    [Tooltip("바닥의 오차")]
     public float groundedOffset;
-    [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
+    [Tooltip("바닥 체크 영역")]
     public float groundedRadius;
-    [Tooltip("What layers the character uses as ground")]
-    public LayerMask groundLayers;
+
 
     [Header("Cinemachine")]
-    [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
+    [Tooltip("시네버신 버츄얼 카메라가 따라갈 타겟. FPS 플레이어의 머리 위치")]
     public GameObject cinemachineCameraTarget;
-    [Tooltip("How far in degrees can you move the camera up")]
+    [Tooltip("카메라 최대 각도")]
     public float topClamp;
-    [Tooltip("How far in degrees can you move the camera down")]
+    [Tooltip("카메라 최소 각도")]
     public float bottomClamp;
 
     // cinemachine
@@ -87,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
         GroundedCheck();    // 바닥 체크
         JumpAndGravity();   // 점프와 중력 관련 메서드
         Move();             // 이동 관련 메서드
-        ActiveAnimation();      // 애니메이션 적용
+        ActiveAnimation();  // 애니메이션 적용
     }
     private void LateUpdate()
     {
@@ -97,7 +96,6 @@ public class PlayerMovement : MonoBehaviour
     {
         // set sphere position, with offset
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z);
-        //Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
         isGrounded = controller.isGrounded;
     }
     private void CameraRotation()

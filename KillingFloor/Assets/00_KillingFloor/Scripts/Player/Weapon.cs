@@ -9,6 +9,8 @@ public class Weapon : MonoBehaviour
     public Transform rightHandObj = null;   // ¿À¸¥¼Õ ±×·¦
     public Transform leftHandObj = null;    // ¿Þ¼Õ ±×·¦
 
+    public int weaponID;
+
     float damage;
     float fireRate;
     float ammo;
