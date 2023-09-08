@@ -77,11 +77,8 @@ public class NormalNavigation : MonoBehaviour
             yield return null;
         }
 
-        if (nav.enabled)
-        {
-            nav.SetDestination(targets[minDistanceTarget].transform.position);
-        }   // if: 이동을 제외한 액션
-
+        nav.SetDestination(targets[minDistanceTarget].transform.position);
+        
         CheckIfInRadius();
 
         isCoroutine = false;
@@ -93,13 +90,13 @@ public class NormalNavigation : MonoBehaviour
 
         if (distance <= nav.radius)
         {
-            nav.enabled = false;
+            nav.speed = 0;
 
             isContact = true;
         }
         else
         {
-            nav.enabled = true;
+            nav.speed = 0.1f;
 
             isContact = false;
         }

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.Animations;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -7,6 +9,8 @@ using UnityEngine.AI;
 
 public class NormalZombie : NormalZombieData
 {
+    public List<AnimatorController> controllers = new List<AnimatorController>();
+
     private Coroutine aniCoroutine;
 
     private NormalNavigation navigation;
@@ -16,55 +20,57 @@ public class NormalZombie : NormalZombieData
     private float timeElapsed;
 
     // 현재 애니메이션 좌표
-    private float thisPosX;
-    private float thisPosY;
+    private float thisBlend;
 
     public bool isCoroutine = false;
+    private bool isDeath = false;
 
     private void Awake()
     {
         navigation = GetComponent<NormalNavigation>();
         ani = GetComponent<Animator>();
 
-        // 초기 애니메이션 좌표를 idle로 시작
-        thisPosX = 0.0f;
-        thisPosY = -1.0f;
+        // 초기 애니메이션 좌표를 Idle로 시작
+        thisBlend = 0.0f;
 
-        ani.SetFloat("blendPosX", thisPosX);
-        ani.SetFloat("blendPosY", thisPosY);
+        ani.SetFloat("move", thisBlend);
     }
 
     private void OnEnable()
     {
         ZombieSetting();
-        aniCoroutine = StartCoroutine(AnimationCoroutine(0.0f, 0.0f, 2.0f, true));
+        ani.runtimeAnimatorController = controllers[Random.Range(0, controllers.Count)];
+        aniCoroutine = StartCoroutine(AnimationCoroutine(1.0f, 2.0f, true, "null"));
     }
     private void Start()
     {
         ZombieSetting();
-        aniCoroutine = StartCoroutine(AnimationCoroutine(0.0f, 0.0f, 2.0f, true));
+        ani.runtimeAnimatorController = controllers[Random.Range(0, controllers.Count)];
+        aniCoroutine = StartCoroutine(AnimationCoroutine(1.0f, 2.0f, true, "null"));
     }
 
     private void Update()
     {
-        if (healthBody <= 0 || healthHead <= 0)
+        if (isDeath == false)
         {
-            StopCoroutine(aniCoroutine);
-            StartCoroutine(AnimationCoroutine(0.0f, -1.0f, 0.0f, false));
-            Death();
-        }
-
-        if (isCoroutine == false)
-        {
-            if (navigation.isContact == true)
+            if (healthBody <= 0 || healthHead <= 0)
             {
-                Attack();
+                StopCoroutine(aniCoroutine);
+                StartCoroutine(AnimationCoroutine(1.0f, 2.0f, true, "null"));
+                Death();
             }
-            else
+
+            if (isCoroutine == false)
             {
-                if (ani.GetFloat("blendPosX") != 0.0f && ani.GetFloat("blendPosY") != 0.0f)
+                if (navigation.isContact == true)
                 {
-                    StartCoroutine(AnimationCoroutine(0.0f, 0.0f, 1.0f, true));
+                    ani.SetBool("isAttack", true);
+
+                    Attack();
+                }
+                else
+                {
+                    ani.SetBool("isAttack", false);
                 }
             }
         }
@@ -122,18 +128,17 @@ public class NormalZombie : NormalZombieData
         }
     }
 
-    private IEnumerator AnimationCoroutine(float posX, float posY, float duration, bool isCheck)
+    private IEnumerator AnimationCoroutine(float blend, float duration, bool isBlend, string checkName)
     {
         isCoroutine = true;
 
-        if (!(thisPosX == posX && thisPosY == posY))
+        if (isBlend)
         {
-            if (isCheck == true)
+            if (!(thisBlend == blend))
             {
                 timeElapsed = 0.0f;
 
-                thisPosX = ani.GetFloat("blendPosX");
-                thisPosY = ani.GetFloat("blendPosY");
+                thisBlend = ani.GetFloat("move");
 
                 while (timeElapsed < duration)
                 {
@@ -141,48 +146,69 @@ public class NormalZombie : NormalZombieData
 
                     float time = Mathf.Clamp01(timeElapsed / duration);
 
-                    ani.SetFloat("blendPosX", Mathf.Lerp(thisPosX, posX, time));
-                    ani.SetFloat("blendPosY", Mathf.Lerp(thisPosY, posY, time));
+                    ani.SetFloat("move", Mathf.Lerp(thisBlend, blend, time));
 
                     yield return null;
                 }
             }
-            else
-            {
-                ani.SetFloat("blendPosX", posX);
-                ani.SetFloat("blendPosY", posY);
-            }
         }
-        else { /*No Event*/ }
+        else
+        {
+            ani.SetBool(checkName, true);
+
+            float clipTime = ani.GetCurrentAnimatorClipInfo(0).Length;
+
+            yield return new WaitForSeconds(clipTime);
+
+            ani.SetBool(checkName, false);
+        }
 
         isCoroutine = false;
     }
 
     private void Attack()
     {
-        isCoroutine = true;
+        ani.SetTrigger("isChange");
 
-        int number = Random.Range(0, 1);
+        int number = Random.Range(0, 2);
 
         switch (number)
         {
             case 0:
-                StartCoroutine(AnimationCoroutine(-0.5f, 1.0f, 1.0f, true));
+                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, false, "atk01"));
                 break;
             case 1:
-                StartCoroutine(AnimationCoroutine(0.0f, 1.0f, 1.0f, true));
-                break;
-            case 2:
-                StartCoroutine(AnimationCoroutine(0.5f, 1.0f, 1.0f, true));
+                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, false, "atk02"));
                 break;
         }
+    }
 
-        isCoroutine = false;
+    public void Hit(int number)
+    {
+        ani.SetTrigger("isChange");
+
+        switch (number)
+        {
+            case 0:
+                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, false, "hitHead"));
+                break;
+            case 1:
+                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, false, "hitLeft"));
+                break;
+            case 2:
+                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, false, "hitFront"));
+                break;
+            case 3:
+                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, false, "hitRight"));
+                break;
+        }
     }
 
     private void Death()
     {
-        ani.SetTrigger("isDie");
+        ani.SetTrigger("Dead");
+
+        isDeath = true;
     }
 
     protected virtual (float, float, float, float, int) ZombieWalk()
