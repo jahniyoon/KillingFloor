@@ -5,6 +5,12 @@ using UnityEngine;
 public class PlayerShooter : MonoBehaviour
 {
     private PlayerMovement playerMovement;
+    private CameraSetup cameraSet;
+    int layerMask = (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11);
+
+
+    public float damage = 10f;
+    public float range = 100f;
 
     [Header("Animator IK")]
     protected Animator animator;
@@ -29,15 +35,18 @@ public class PlayerShooter : MonoBehaviour
     public Transform fpsRifleObj;
     public Transform fpsWeapon;
 
+
     // Start is called before the first frame update
     void Start()
     {
+        cameraSet = GetComponent<CameraSetup>();
         animator = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
 
         // TPS 무기 가져오기
         tpsPistol = weaponPosition.GetChild(0).GetComponent<Weapon>();
         tpsRifle = weaponPosition.GetChild(1).GetComponent<Weapon>();
+        tpsPistol.gameObject.SetActive(false);    // 미리 꺼두기
         tpsRifle.gameObject.SetActive(false);    // 미리 꺼두기
 
         tpsWeapon = tpsPistol;                          // 기본총을 권총으로 장착
@@ -46,10 +55,9 @@ public class PlayerShooter : MonoBehaviour
         weaponSlot = 1;                                 // 현재 슬롯 상태
 
         // FPS 무기 가져오기
-        fpsPosition = transform.GetChild(2).GetComponent<Transform>();
-        fpsPistolObj = fpsPosition.transform.GetChild(1).GetComponent<Transform>();
-
-        fpsRifleObj = fpsPosition.transform.GetChild(2).GetComponent<Transform>();  // 라이플은 미리 불러와서 꺼두기
+        fpsPosition = transform.GetChild(0).GetChild(0).GetComponent<Transform>();
+        fpsPistolObj = fpsPosition.transform.GetChild(0).GetComponent<Transform>();
+        fpsRifleObj = fpsPosition.transform.GetChild(1).GetComponent<Transform>();  // 라이플은 미리 불러와서 꺼두기
         fpsRifleObj.gameObject.SetActive(false);
 
         fpsWeapon = fpsPistolObj;
@@ -69,6 +77,43 @@ public class PlayerShooter : MonoBehaviour
     public void OnShoot()
     {
         handAnimator.SetTrigger("isFire");
+        Shoot();
+    }
+    void Shoot()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range, layerMask))
+        {   
+            Debug.DrawRay(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward * 100f, Color.green);
+            GameObject hitObj = hit.transform.gameObject;
+            Damage(hitObj);
+        }
+    }
+
+    void Damage(GameObject _hitObj)
+    {
+        if (_hitObj.layer == 8) // 왼쪽
+        {
+            Debug.Log("왼쪽을 맞았다.");
+            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthBody -= 10f;
+        }
+        else if (_hitObj.layer == 9) // 앞
+        {
+            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthBody -= 10f;
+
+        }
+        else if (_hitObj.layer == 10) // 오른쪽
+        {
+            Debug.Log("오른쪽을 맞았다.");
+            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthBody -= 10f;
+
+        }
+        else if (_hitObj.layer == 11) // 헤드샷
+        {
+            Debug.Log("헤드샷");
+            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthHead -= 10f;
+
+        }
     }
     // 장전 입력
     public void OnReload()
@@ -87,7 +132,6 @@ public class PlayerShooter : MonoBehaviour
             rightHandObj = tpsWeapon.rightHandObj.transform;
             leftHandObj = tpsWeapon.leftHandObj.transform;
             weaponSlot = 1;
-
 
             fpsRifleObj.gameObject.SetActive(false);
             fpsPistolObj.gameObject.SetActive(true);
@@ -117,6 +161,7 @@ public class PlayerShooter : MonoBehaviour
             fpsWeapon = fpsRifleObj;
             handAnimator = fpsWeapon.GetComponent<Animator>();
             playerMovement.fpsAnimator = handAnimator;
+
 
         }
     }

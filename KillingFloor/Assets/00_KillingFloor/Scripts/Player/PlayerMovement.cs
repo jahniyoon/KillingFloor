@@ -18,43 +18,43 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Player")]
     [Tooltip("Move speed of the character in m/s")]
-    public float MoveSpeed;
+    public float moveSpeed;
     [Tooltip("Sprint speed of the character in m/s")]
-    public float SprintSpeed;
+    public float dashSpeed;
     [Tooltip("Rotation speed of the character")]
-    public float RotationSpeed;
+    public float rotationSpeed;
     [Tooltip("Acceleration and deceleration")]
-    public float SpeedChangeRate;
+    public float speedChangeRate;
 
     [Space(10)]
     [Tooltip("The height the player can jump")]
-    public float JumpHeight;
+    public float jumpHeight;
     [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
-    public float Gravity;
+    public float gravity;
 
     [Space(10)]
     [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
-    public float JumpTimeout;
+    public float jumpTimeout;
     [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
-    public float FallTimeout;
+    public float fallTimeout;
 
     [Header("Player Grounded")]
     [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
-    public bool Grounded = true;
+    public bool isGrounded = true;
     [Tooltip("Useful for rough ground")]
-    public float GroundedOffset;
+    public float groundedOffset;
     [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
-    public float GroundedRadius;
+    public float groundedRadius;
     [Tooltip("What layers the character uses as ground")]
-    public LayerMask GroundLayers;
+    public LayerMask groundLayers;
 
     [Header("Cinemachine")]
     [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
-    public GameObject CinemachineCameraTarget;
+    public GameObject cinemachineCameraTarget;
     [Tooltip("How far in degrees can you move the camera up")]
-    public float TopClamp;
+    public float topClamp;
     [Tooltip("How far in degrees can you move the camera down")]
-    public float BottomClamp;
+    public float bottomClamp;
 
     // cinemachine
     private float _cinemachineTargetPitch;
@@ -72,58 +72,22 @@ public class PlayerMovement : MonoBehaviour
     private const float _threshold = 0.01f;
     private bool IsCurrentDeviceMouse;
 
-
-    //[Header("Settings")]
-    //public PlayerSettingsModel playerSettings;
-
-    //private Vector3 newCameraRotation;
-    //private Vector3 newCharacterRotation;
-    //public Transform cameraHolder; // 카메라가 담기는 곳 (플레이어가 보는 방향에 맞게 카메라 방향 변경)
-    //public Transform lookTarget; // 카메라가 담기는 곳 (플레이어가 보는 방향에 맞게 카메라 방향 변경)
-    //public Transform gunPosition;
-
-    //[Header("Player")]
-    //public Vector2 inputMoveVec;
-    //public Vector2 inputViewVec;
-
-    //private float playerJumpVec;      // 현재 점프 힘
-    //private float playerSpeed;  // 플레이어의 현재 속도
-
-    //public float walkSpeed;     // 플레이어 걷는 속도
-    //public float dashSpeed;     // 플레이어 대시 속도
-    //public float rotaionSpeed;  // 회전 속도
-    //public float jumpForce;     // 점프 힘
-    //public float gravity;       // 중력값
-
-    //private float dash;         // 대시버튼 입력 확인
-    //private bool isDash;        // 대시 상태인가
-    //private bool isGrounded = true;    // 바닥인가
-    //public bool isDie;          // 죽었나 ToDo : 리빙 엔티티로 이동
-
-
     // Start is called before the first frame update
     void Start()
     {
         input = GetComponent<PlayerInputs>();
         controller = GetComponent<CharacterController>();
-        _jumpTimeoutDelta = JumpTimeout;
-        _fallTimeoutDelta = FallTimeout;
+        _jumpTimeoutDelta = jumpTimeout;
+        _fallTimeoutDelta = fallTimeout;
     }
 
     // Update is called once per frame
     void Update()
     {
-        JumpAndGravity();
-        GroundedCheck();
-        Move();
-        //Cursor.lockState = CursorLockMode.Locked;   // 마우스 고정
-
-        //if (!isDie)
-        //{
-        //    CalculateMovement();    // 플레이어 이동 계산
-        //    CalculateView();        // 플레이어 시점 계산
-        //    ActiveAnimation();      // 애니메이션 적용
-        //}
+        GroundedCheck();    // 바닥 체크
+        JumpAndGravity();   // 점프와 중력 관련 메서드
+        Move();             // 이동 관련 메서드
+        ActiveAnimation();      // 애니메이션 적용
     }
     private void LateUpdate()
     {
@@ -132,9 +96,9 @@ public class PlayerMovement : MonoBehaviour
     private void GroundedCheck()
     {
         // set sphere position, with offset
-        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z);
         //Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
-        Grounded = controller.isGrounded;
+        isGrounded = controller.isGrounded;
     }
     private void CameraRotation()
     {
@@ -144,14 +108,14 @@ public class PlayerMovement : MonoBehaviour
             //Don't multiply mouse input by Time.deltaTime
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-            _cinemachineTargetPitch += input.look.y * RotationSpeed * deltaTimeMultiplier;
-            _rotationVelocity = input.look.x * RotationSpeed * deltaTimeMultiplier;
+            _cinemachineTargetPitch += input.look.y * rotationSpeed * deltaTimeMultiplier;
+            _rotationVelocity = input.look.x * rotationSpeed * deltaTimeMultiplier;
 
             // clamp our pitch rotation
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, bottomClamp, topClamp);
 
             // Update Cinemachine camera target pitch
-            CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+            cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
 
             // rotate the player left and right
             transform.Rotate(Vector3.up * _rotationVelocity);
@@ -160,7 +124,7 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {
         // set target speed based on move speed, sprint speed and if sprint is pressed
-        float targetSpeed = input.dash ? SprintSpeed : MoveSpeed;
+        float targetSpeed = input.dash ? dashSpeed : moveSpeed;
 
         // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -179,7 +143,7 @@ public class PlayerMovement : MonoBehaviour
         {
             // creates curved result rather than a linear one giving a more organic speed change
             // note T in Lerp is clamped, so we don't need to clamp our speed
-            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
+            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * speedChangeRate);
 
             // round speed to 3 decimal places
             _speed = Mathf.Round(_speed * 1000f) / 1000f;
@@ -205,10 +169,10 @@ public class PlayerMovement : MonoBehaviour
     }
     private void JumpAndGravity()
     {
-        if (Grounded)
+        if (isGrounded)
         {
             // reset the fall timeout timer
-            _fallTimeoutDelta = FallTimeout;
+            _fallTimeoutDelta = fallTimeout;
 
             // stop our velocity dropping infinitely when grounded
             if (_verticalVelocity < 0.0f)
@@ -220,7 +184,7 @@ public class PlayerMovement : MonoBehaviour
             if (input.jump && _jumpTimeoutDelta <= 0.0f)
             {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
-                _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
             }
 
             // jump timeout
@@ -232,7 +196,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             // reset the jump timeout timer
-            _jumpTimeoutDelta = JumpTimeout;
+            _jumpTimeoutDelta = jumpTimeout;
 
             // fall timeout
             if (_fallTimeoutDelta >= 0.0f)
@@ -242,13 +206,12 @@ public class PlayerMovement : MonoBehaviour
 
             // if we are not grounded, do not jump
             input.jump = false;
-            Debug.Log("false가 되긴 하나?");
         }
 
         // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
         if (_verticalVelocity < _terminalVelocity)
         {
-            _verticalVelocity += Gravity * Time.deltaTime;
+            _verticalVelocity += gravity * Time.deltaTime;
         }
     }
 
@@ -264,110 +227,42 @@ public class PlayerMovement : MonoBehaviour
         Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
         Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
 
-        if (Grounded) Gizmos.color = transparentGreen;
+        if (isGrounded) Gizmos.color = transparentGreen;
         else Gizmos.color = transparentRed;
 
         // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
-        Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
+        Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
     }
 
-
-
-
-    //// 플레이어의 이동 계산
-    //private void CalculateMovement()
-    //{
-    //    if (isDash)  
-    //    {
-    //        playerSpeed = dashSpeed;
-    //    }
-    //    else { playerSpeed = walkSpeed; }
-
-    //    Vector3 move = Quaternion.Euler(0, cameraHolder.rotation.eulerAngles.y, 0) * new Vector3(inputMoveVec.x, playerJumpVec, inputMoveVec.y);
-
-    //    //Vector3 move = new Vector3(inputMoveVec.x, jumpVec, inputMoveVec.y);
-    //    characterController.Move(move * Time.deltaTime * playerSpeed);
-    //    playerJumpVec += gravity * Time.deltaTime;                             // 중력 구현
-    //}
-    //// 플레이어의 시점 계산
-    //private void CalculateView()
-    //{
-    //    newCharacterRotation.y += playerSettings.viewYSensitivity * (playerSettings.viewXInverted ? -inputViewVec.x : inputViewVec.x) * Time.deltaTime;
-    //    transform.localRotation = Quaternion.Euler(newCharacterRotation);
-
-    //    newCameraRotation.x += playerSettings.viewYSensitivity * (playerSettings.viewYInverted ? inputViewVec.y : -inputViewVec.y) * Time.deltaTime;
-    //    newCameraRotation.x = Mathf.Clamp(newCameraRotation.x, playerSettings.viewClampYMin, playerSettings.viewClampYMax);
-
-    //    cameraHolder.localRotation = Quaternion.Euler(newCameraRotation);
-    //    lookTarget.localRotation = Quaternion.Euler(newCameraRotation);
-    //    gunPosition.localRotation = Quaternion.Euler(newCameraRotation);
-
-    //}
-
-    //// 플레이어 이동 입력
-    //public void OnMove(InputValue value)
-    //{
-    //    inputMoveVec = value.Get<Vector2>();
-    //    if (inputMoveVec.y <= 0.7) isDash = false;
-    //}
-    //// 플레이어 뷰 마우스 델타값 입력
-    //public void OnView(InputValue value)
-    //{
-    //    inputViewVec = value.Get<Vector2>();
-    //}
-    //// 게임 패드로 적용할 경우
-    //public void OnViewPad(InputValue value)
-    //{
-    //    inputViewVec = value.Get<Vector2>();
-    //}
-    ////점프 입력
-    //public void OnJump()
-    //{
-    //    if (characterController.isGrounded) // 땅에있을때만 점프
-    //    {
-    //        playerJumpVec = jumpForce;
-    //    }
-    //}
-    //// 대시 입력
-    //public void OnDash(InputValue value)
-    //{
-    //    dash = value.Get<float>();
-    //    if (dash != 0 && inputMoveVec.y >= 0.7f)  // 대시 상태이고 앞으로 갈 때만 대시
-    //    {
-    //        isDash = true;
-    //    }
-    //}
-
     //// 애니메이션
-    //public void ActiveAnimation()
-    //{
-    //    //// 걷기 애니메이션 셋팅
-    //    if (inputMoveVec.x != 0 || inputMoveVec.y != 0)
-    //    {
-    //        tpsAnimator.SetBool("isWalk", true);
-    //        fpsAnimator.SetBool("isWalk", true);
-    //    }
-    //    else
-    //    {
-    //        tpsAnimator.SetBool("isWalk", false);
-    //        fpsAnimator.SetBool("isWalk", false);
-    //    }
-    //    tpsAnimator.SetBool("isRun", isDash);
-    //    fpsAnimator.SetBool("isRun", isDash);
+    public void ActiveAnimation()
+    {
+        //// 걷기 애니메이션 셋팅
+        if (input.move.x != 0 || input.move.y != 0)
+        {
+            tpsAnimator.SetBool("isWalk", true);
+            fpsAnimator.SetBool("isWalk", true);
+        }
+        else
+        {
+            tpsAnimator.SetBool("isWalk", false);
+            fpsAnimator.SetBool("isWalk", false);
+        }
+        tpsAnimator.SetBool("isRun", input.dash);
+        fpsAnimator.SetBool("isRun", input.dash);
 
-    //    if(!characterController.isGrounded && isGrounded)
-    //    {   isGrounded = false;
-    //        tpsAnimator.SetBool("isGrounded", isGrounded);
-    //        fpsAnimator.SetBool("isGrounded", isGrounded);
-    //    }
-    //    else if (characterController.isGrounded && !isGrounded)
-    //    { 
-    //        isGrounded = true;
-    //        tpsAnimator.SetBool("isGrounded", isGrounded);
-    //        fpsAnimator.SetBool("isGrounded", isGrounded);
-    //    }
-    //    tpsAnimator.SetFloat("xDir", inputMoveVec.x);
-    //    tpsAnimator.SetFloat("yDir", inputMoveVec.y);
-    //}
+        if (isGrounded)
+        {
+            tpsAnimator.SetBool("isGrounded", isGrounded);
+            fpsAnimator.SetBool("isGrounded", isGrounded);
+        }
+        else if (!isGrounded)
+        {
+            tpsAnimator.SetBool("isGrounded", isGrounded);
+            fpsAnimator.SetBool("isGrounded", isGrounded);
+        }
+        tpsAnimator.SetFloat("xDir", input.move.x);
+        tpsAnimator.SetFloat("yDir", input.move.y);
+    }
 
 }

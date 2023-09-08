@@ -42,7 +42,11 @@ public class PlayerInputs : MonoBehaviour
     {
         dashInput(value.isPressed);
     }
-
+    // 카메라 변경
+    public void OnChangeCamera(InputValue value)
+    {
+        ChangeCameraInput(value.isPressed);
+    }
 
 
     // 인풋을 변환
@@ -63,6 +67,10 @@ public class PlayerInputs : MonoBehaviour
     public void dashInput(bool newDashState)
     {
         dash = newDashState;
+    }
+    public void ChangeCameraInput(bool newCameraState)
+    {
+
     }
 
     private void OnApplicationFocus(bool hasFocus)
