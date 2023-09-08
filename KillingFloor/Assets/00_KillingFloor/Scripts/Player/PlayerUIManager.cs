@@ -26,7 +26,7 @@ public class PlayerUIManager : MonoBehaviour
     // 점수 텍스트 갱신
     public void UpdateHPText(float newHP)
     {
-        hpText.text = "HP : " + newHP;
+        hpText.text = ""+newHP;
     }
 
 
