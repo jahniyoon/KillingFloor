@@ -124,6 +124,8 @@ public class NormalZombieSpawner : MonoBehaviour
                 {
                     CreateZombie();
 
+                    GameManager.instance.PlusCount(1);
+
                     continue;
                 }
                 else
@@ -136,6 +138,8 @@ public class NormalZombieSpawner : MonoBehaviour
                             {
                                 CreateZombie();
 
+                                GameManager.instance.PlusCount(1);
+
                                 break;
                             }
                             else { /*No Event*/ }
@@ -143,6 +147,8 @@ public class NormalZombieSpawner : MonoBehaviour
                         else
                         {
                             zombieSaveList[randZombieNum].GetChild(x).gameObject.SetActive(true);
+
+                            GameManager.instance.PlusCount(1);
 
                             break;
                         }
@@ -159,6 +165,8 @@ public class NormalZombieSpawner : MonoBehaviour
                 {
                     CreateZombie();
 
+                    GameManager.instance.PlusCount(1);
+
                     continue;
                 }
                 else
@@ -171,6 +179,8 @@ public class NormalZombieSpawner : MonoBehaviour
                             {
                                 CreateZombie();
 
+                                GameManager.instance.PlusCount(1);
+
                                 break;
                             }
                             else { /*No Event*/ }
@@ -178,6 +188,8 @@ public class NormalZombieSpawner : MonoBehaviour
                         else
                         {
                             zombieSaveList[randZombieNum].GetChild(x).gameObject.SetActive(true);
+
+                            GameManager.instance.PlusCount(1);
 
                             break;
                         }
