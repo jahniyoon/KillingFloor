@@ -30,23 +30,19 @@ public class NormalZombie : NormalZombieData
         navigation = GetComponent<NormalNavigation>();
         ani = GetComponent<Animator>();
 
-        // 초기 애니메이션 좌표를 Idle로 시작
-        thisBlend = 0.0f;
-
-        ani.SetFloat("move", thisBlend);
     }
 
     private void OnEnable()
     {
         ZombieSetting();
         ani.runtimeAnimatorController = controllers[Random.Range(0, controllers.Count)];
-        aniCoroutine = StartCoroutine(AnimationCoroutine(1.0f, 2.0f, true, "null"));
+        aniCoroutine = StartCoroutine(AnimationCoroutine(0.0f, 1.0f, 2.0f, true, "null"));
     }
     private void Start()
     {
         ZombieSetting();
         ani.runtimeAnimatorController = controllers[Random.Range(0, controllers.Count)];
-        aniCoroutine = StartCoroutine(AnimationCoroutine(1.0f, 2.0f, true, "null"));
+        aniCoroutine = StartCoroutine(AnimationCoroutine(0.0f, 1.0f, 2.0f, true, "null"));
     }
 
     private void Update()
@@ -56,7 +52,7 @@ public class NormalZombie : NormalZombieData
             if (healthBody <= 0 || healthHead <= 0)
             {
                 StopCoroutine(aniCoroutine);
-                StartCoroutine(AnimationCoroutine(1.0f, 2.0f, true, "null"));
+                StartCoroutine(AnimationCoroutine(0.0f, 1.0f, 2.0f, true, "null"));
                 Death();
             }
 
@@ -128,13 +124,13 @@ public class NormalZombie : NormalZombieData
         }
     }
 
-    private IEnumerator AnimationCoroutine(float blend, float duration, bool isBlend, string checkName)
+    private IEnumerator AnimationCoroutine(float startBlend, float endBlend, float duration, bool isBlend, string checkName)
     {
         isCoroutine = true;
 
         if (isBlend)
         {
-            if (!(thisBlend == blend))
+            if (!(thisBlend == endBlend))
             {
                 timeElapsed = 0.0f;
 
@@ -146,7 +142,7 @@ public class NormalZombie : NormalZombieData
 
                     float time = Mathf.Clamp01(timeElapsed / duration);
 
-                    ani.SetFloat("move", Mathf.Lerp(thisBlend, blend, time));
+                    ani.SetFloat("move", Mathf.Lerp(startBlend, endBlend, time));
 
                     yield return null;
                 }
@@ -175,10 +171,10 @@ public class NormalZombie : NormalZombieData
         switch (number)
         {
             case 0:
-                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, false, "atk01"));
+                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, 0.0f, false, "atk01"));
                 break;
             case 1:
-                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, false, "atk02"));
+                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, 0.0f, false, "atk02"));
                 break;
         }
     }
@@ -190,16 +186,16 @@ public class NormalZombie : NormalZombieData
         switch (number)
         {
             case 0:
-                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, false, "hitHead"));
+                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, 0.0f, false, "hitHead"));
                 break;
             case 1:
-                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, false, "hitLeft"));
+                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, 0.0f, false, "hitLeft"));
                 break;
             case 2:
-                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, false, "hitFront"));
+                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, 0.0f, false, "hitFront"));
                 break;
             case 3:
-                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, false, "hitRight"));
+                StartCoroutine(AnimationCoroutine(0.0f, 0.0f, 0.0f, false, "hitRight"));
                 break;
         }
     }

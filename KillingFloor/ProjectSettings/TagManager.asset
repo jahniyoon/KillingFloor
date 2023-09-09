@@ -7,6 +7,7 @@ TagManager:
   - FPS CAM
   - TPS CAM
   - AttackObject
+  - HitDamage
   layers:
   - Default
   - TransparentFX

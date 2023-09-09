@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     // Junoh 추가
     public int round = 1;       // 현재 라운드
     public int player = 4;      // 플레이어 인원 수
+    public int difficulty = 0;  // 난이도 0: 보통 1: 어려움 2: 지옥
     // Junoh 추가
 
     public void Awake()
