@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &197468507
 Transform:
   m_ObjectHideFlags: 0
@@ -245,10 +245,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75af11dafae3505438ef6c0d044f7eb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBody: 0
-  healthHead: 0
+  health: 0
   damage: 0
-  speed: 0
   coin: 0
 --- !u!4 &354424788
 Transform:
@@ -625,7 +623,7 @@ GameObject:
   m_Component:
   - component: {fileID: 721541097}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Players
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1087,6 +1085,7 @@ MonoBehaviour:
   round: 1
   player: 4
   difficulty: 0
+  currentZombieCount: 0
 --- !u!4 &1336404650
 Transform:
   m_ObjectHideFlags: 0

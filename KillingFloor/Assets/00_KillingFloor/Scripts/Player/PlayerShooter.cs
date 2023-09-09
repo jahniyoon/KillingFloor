@@ -83,7 +83,7 @@ public class PlayerShooter : MonoBehaviour
     {
         RaycastHit hit;
         if (Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range, layerMask))
-        {   
+        {
             Debug.DrawRay(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward * 100f, Color.green);
             GameObject hitObj = hit.transform.gameObject;
             Damage(hitObj);

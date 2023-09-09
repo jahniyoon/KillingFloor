@@ -22,6 +22,15 @@ public class NormalZombie : NormalZombieData
     // 현재 애니메이션 좌표
     private float thisBlend;
 
+    public int hitPos;
+
+    /*
+    0: Left
+    1: front
+    2: Right
+    3: Head
+    */
+
     public bool isCoroutine = false;
     private bool isDeath = false;
 
