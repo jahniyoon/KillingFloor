@@ -49,7 +49,7 @@ public class NormalZombie : NormalZombieData
     {
         if (isDeath == false)
         {
-            if (healthBody <= 0 || healthHead <= 0)
+            if (health <= 0)
             {
                 StopCoroutine(aniCoroutine);
                 StartCoroutine(AnimationCoroutine(0.0f, 1.0f, 2.0f, true, "null"));
@@ -79,49 +79,23 @@ public class NormalZombie : NormalZombieData
         switch (number)
         {
             case 0:
-                (healthBody, healthHead, damage, speed, coin) = ZombieWalk();
+                (health, damage, coin) = ZombieWalk();
                 break;
             case 1:
-                (healthBody, healthHead, damage, speed, coin) = ZombieRun();
+                (health, damage, coin) = ZombieRun();
                 break;
             case 2:
-                (healthBody, healthHead, damage, speed, coin) = ZombieSpit();
+                (health, damage, coin) = ZombieSpit();
                 break;
             case 3:
-                (healthBody, healthHead, damage, speed, coin) = ZombieHide();
+                (health, damage, coin) = ZombieHide();
                 break;
             case 4:
-                (healthBody, healthHead, damage, speed, coin) = ZombieNoise();
+                (health, damage, coin) = ZombieNoise();
                 break;
         }
 
         GetComponent<NavMeshAgent>().speed = 0.1f;
-
-        if (!gameObject.GetComponent<CapsuleCollider>())
-        {
-            CapsuleCollider capsuleCollider = gameObject.AddComponent<CapsuleCollider>();
-            capsuleCollider.center = new Vector3(0.0f, 1.0f, 0.0f);
-            capsuleCollider.radius = 0.5f;
-            capsuleCollider.height = 2.0f;
-        }
-        else { /*No Event*/ }
-
-        if (!gameObject.GetComponent<SphereCollider>())
-        {
-            if (number == 2 || number == 3 || number == 4)
-            {
-                SphereCollider sphereCollider = gameObject.AddComponent<SphereCollider>();
-                sphereCollider.center = new Vector3(0.0f, 1.6f, 0.0f);
-                sphereCollider.radius = 7.0f;
-            }
-        }
-        else
-        {
-            if (number == 0 || number == 1)
-            {
-                gameObject.GetComponent<SphereCollider>().enabled = false;
-            }
-        }
     }
 
     private IEnumerator AnimationCoroutine(float startBlend, float endBlend, float duration, bool isBlend, string checkName)
@@ -207,28 +181,28 @@ public class NormalZombie : NormalZombieData
         isDeath = true;
     }
 
-    protected virtual (float, float, float, float, int) ZombieWalk()
+    protected virtual (float, float, int) ZombieWalk()
     {
-        return base.ZombieWalk(healthBody, healthHead, damage, speed, coin);
+        return base.ZombieWalk(health, damage, coin);
     }
 
-    protected virtual (float, float, float, float, int) ZombieRun()
+    protected virtual (float, float, int) ZombieRun()
     {
-        return base.ZombieRun(healthBody, healthHead, damage, speed, coin);
+        return base.ZombieRun(health, damage, coin);
     }
 
-    protected virtual (float, float, float, float, int) ZombieSpit()
+    protected virtual (float, float, int) ZombieSpit()
     {
-        return base.ZombieSpit(healthBody, healthHead, damage, speed, coin);
+        return base.ZombieSpit(health, damage, coin);
     }
 
-    protected virtual (float, float, float, float, int) ZombieHide()
+    protected virtual (float, float, int) ZombieHide()
     {
-        return base.ZombieHide(healthBody, healthHead, damage, speed, coin);
+        return base.ZombieHide(health, damage, coin);
     }
 
-    protected virtual (float, float, float, float, int) ZombieNoise()
+    protected virtual (float, float, int) ZombieNoise()
     {
-        return base.ZombieNoise(healthBody, healthHead, damage, speed, coin);
+        return base.ZombieNoise(health, damage, coin);
     }
 }

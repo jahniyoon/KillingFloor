@@ -95,23 +95,31 @@ public class PlayerShooter : MonoBehaviour
         if (_hitObj.layer == 8) // 왼쪽
         {
             Debug.Log("왼쪽을 맞았다.");
-            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthBody -= 10f;
+            //Legacy:
+            //_hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthBody -= 10f;
+            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().health -= 10f;
         }
         else if (_hitObj.layer == 9) // 앞
         {
-            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthBody -= 10f;
+            //Legacy:
+            //_hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthBody -= 10f;
+            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().health -= 10f;
 
         }
         else if (_hitObj.layer == 10) // 오른쪽
         {
             Debug.Log("오른쪽을 맞았다.");
-            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthBody -= 10f;
+            //Legacy:
+            //_hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthBody -= 10f;
+            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().health -= 10f;
 
         }
         else if (_hitObj.layer == 11) // 헤드샷
         {
             Debug.Log("헤드샷");
-            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthHead -= 10f;
+            //Legacy:
+            //_hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthHead -= 10f;
+            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().health -= 10f * 1.5f;
 
         }
     }
