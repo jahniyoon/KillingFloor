@@ -24,7 +24,8 @@ public class PlayerHealth : LivingEntity
         // 플레이어 조작을 받는 컴포넌트들 활성화
         playerMovement.enabled = true;
         playerShooter.enabled = true;
-        PlayerUIManager.instance.UpdateHPText(startingHealth);
+
+        PlayerUIManager.instance.SetHP(startingHealth);
     }
 
     // 데미지 처리
@@ -40,9 +41,8 @@ public class PlayerHealth : LivingEntity
 
         // LivingEntity의 OnDamage() 실행(데미지 적용)
         base.OnDamage(damage, hitPoint, hitDirection);
-        PlayerUIManager.instance.UpdateHPText(health);
 
-        // 갱신된 체력을 체력 슬라이더에 반영
-        //healthSlider.value = health;
+        // 갱신된 체력 업데이트
+        PlayerUIManager.instance.SetHP(health);
     }
 }

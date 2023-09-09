@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
+using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerUIManager : MonoBehaviour
 {
@@ -20,14 +21,38 @@ public class PlayerUIManager : MonoBehaviour
     }
     private static PlayerUIManager m_instance; // 싱글톤이 할당될 변수
 
-    public TMP_Text hpText; // 탄약 표시용 텍스트
+    public TMP_Text playerLevel;
+    public TMP_Text hpText;         // 체력 표시
+    public TMP_Text shiedldText;    // 실드 표시
+    public TMP_Text ammoText;       // 탄약 표시
+    public TMP_Text totalAmmoText;  // 남은 탄약
+    public TMP_Text grenadeText;    // 남은 수류탄
 
 
-    // 점수 텍스트 갱신
-    public void UpdateHPText(float newHP)
+    // 체력 텍스트 갱신
+    public void SetLevel(float value)
     {
-        hpText.text = ""+newHP;
+        playerLevel.text = string.Format("{0}", value);
     }
-
-
+    public void SetHP(float value)
+    {
+        hpText.text =string.Format("{0}", value) ;
+    }
+    // 실드 텍스트 갱신
+    public void SetShield(float value)
+    {
+        shiedldText.text = string.Format("{0}", value);
+    }
+    public void SetAmmo(float value)
+    {
+        ammoText.text = string.Format("{0}", value);
+    }
+    public void SetTotalAmmo(float value)
+    {
+        totalAmmoText.text = string.Format("{0}", value);
+    }
+    public void SetGrenade(float value)
+    {
+        grenadeText.text = string.Format("{0}", value); 
+    }
 }

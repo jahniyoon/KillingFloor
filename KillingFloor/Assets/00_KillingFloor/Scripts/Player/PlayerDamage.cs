@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerDamageTest : MonoBehaviour
+public class PlayerDamage : MonoBehaviour
 {
 
     public float damage = 20f; // °ø°Ý·Â

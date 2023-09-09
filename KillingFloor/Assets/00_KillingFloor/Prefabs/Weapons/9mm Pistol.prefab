@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 3203160295817193905}
   - component: {fileID: 7086628792285652324}
   m_Layer: 0
-  m_Name: Glock
+  m_Name: 9mm Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -163,6 +163,13 @@ MonoBehaviour:
   targetObj: {fileID: 0}
   rightHandObj: {fileID: 2494820749725679429}
   leftHandObj: {fileID: 2580866488050847003}
+  weaponID: 0
+  damage: 25
+  fireRate: 300
+  reloadRate: 2.17
+  ammo: 15
+  totalAmmo: 60
+  magazineSize: 15
 --- !u!1 &4431287244747059036
 GameObject:
   m_ObjectHideFlags: 0

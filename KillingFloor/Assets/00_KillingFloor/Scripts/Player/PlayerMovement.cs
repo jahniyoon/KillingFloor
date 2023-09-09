@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,8 +7,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.Windows;
-using static PlayerSetting; // 플레이어 모델 셋팅 클래스
-
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -50,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Cinemachine")]
     [Tooltip("시네버신 버츄얼 카메라가 따라갈 타겟. FPS 플레이어의 머리 위치")]
     public GameObject cinemachineCameraTarget;
+    public CinemachineVirtualCamera followCamera;
     [Tooltip("카메라 최대 각도")]
     public float topClamp;
     [Tooltip("카메라 최소 각도")]
@@ -71,7 +71,6 @@ public class PlayerMovement : MonoBehaviour
     private const float _threshold = 0.01f;
     private bool IsCurrentDeviceMouse;
 
-    // Start is called before the first frame update
     void Start()
     {
         input = GetComponent<PlayerInputs>();
@@ -80,7 +79,6 @@ public class PlayerMovement : MonoBehaviour
         _fallTimeoutDelta = fallTimeout;
     }
 
-    // Update is called once per frame
     void Update()
     {
         GroundedCheck();    // 바닥 체크
@@ -92,100 +90,33 @@ public class PlayerMovement : MonoBehaviour
     {
         CameraRotation();
     }
+
+    // 바닥 체크
     private void GroundedCheck()
     {
-        // set sphere position, with offset
-        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z);
         isGrounded = controller.isGrounded;
-    }
-    private void CameraRotation()
-    {
-        // if there is an input
-        if (input.look.sqrMagnitude >= _threshold)
-        {
-            //Don't multiply mouse input by Time.deltaTime
-            float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-
-            _cinemachineTargetPitch += input.look.y * rotationSpeed * deltaTimeMultiplier;
-            _rotationVelocity = input.look.x * rotationSpeed * deltaTimeMultiplier;
-
-            // clamp our pitch rotation
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, bottomClamp, topClamp);
-
-            // Update Cinemachine camera target pitch
-            cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
-
-            // rotate the player left and right
-            transform.Rotate(Vector3.up * _rotationVelocity);
-        }
-    }
-    private void Move()
-    {
-        // set target speed based on move speed, sprint speed and if sprint is pressed
-        float targetSpeed = input.dash ? dashSpeed : moveSpeed;
-
-        // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
-
-        // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-        // if there is no input, set the target speed to 0
-        if (input.move == Vector2.zero) targetSpeed = 0.0f;
-
-        // a reference to the players current horizontal velocity
-        float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
-
-        float speedOffset = 0.1f;
-        float inputMagnitude = input.analogMovement ? input.move.magnitude : 1f;
-
-        // accelerate or decelerate to target speed
-        if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
-        {
-            // creates curved result rather than a linear one giving a more organic speed change
-            // note T in Lerp is clamped, so we don't need to clamp our speed
-            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * speedChangeRate);
-
-            // round speed to 3 decimal places
-            _speed = Mathf.Round(_speed * 1000f) / 1000f;
-        }
-        else
-        {
-            _speed = targetSpeed;
-        }
-
-        // normalise input direction
-        Vector3 inputDirection = new Vector3(input.move.x, 0.0f, input.move.y).normalized;
-
-        // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-        // if there is a move input rotate player when the player is moving
-        if (input.move != Vector2.zero)
-        {
-            // move
-            inputDirection = transform.right * input.move.x + transform.forward * input.move.y;
-        }
-
-        // move the player
-        controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
     }
     private void JumpAndGravity()
     {
         if (isGrounded)
         {
-            // reset the fall timeout timer
+            // 추락 타임아웃 초기화
             _fallTimeoutDelta = fallTimeout;
 
-            // stop our velocity dropping infinitely when grounded
+            // 수직 힘이 0보다 떨어졌을 경우 -2로 제한시켜 속도가 무한하게 떨어지는 것 방지
             if (_verticalVelocity < 0.0f)
             {
                 _verticalVelocity = -2f;
             }
 
-            // Jump
+            // 점프
             if (input.jump && _jumpTimeoutDelta <= 0.0f)
             {
-                // the square root of H * -2 * G = how much velocity needed to reach desired height
+                // H * -2 * G 의 제곱근 = 원하는 높이에 도달하는데 필요한 속도
                 _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
             }
 
-            // jump timeout
+            // 점프 타임아웃
             if (_jumpTimeoutDelta >= 0.0f)
             {
                 _jumpTimeoutDelta -= Time.deltaTime;
@@ -193,16 +124,16 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            // reset the jump timeout timer
+            // 바닥에 닿아있는 상태라면 점프 타임아웃 초기화
             _jumpTimeoutDelta = jumpTimeout;
 
-            // fall timeout
+            // 낙하 상태 타임아웃도 초기화
             if (_fallTimeoutDelta >= 0.0f)
             {
                 _fallTimeoutDelta -= Time.deltaTime;
             }
 
-            // if we are not grounded, do not jump
+            // 바닥이 아니면 점프를 못하게 처리
             input.jump = false;
         }
 
@@ -212,7 +143,74 @@ public class PlayerMovement : MonoBehaviour
             _verticalVelocity += gravity * Time.deltaTime;
         }
     }
+    private void CameraRotation()
+    {
+        // 마우스 입력이 있으면
+        if (input.look.sqrMagnitude >= _threshold)
+        {
+            float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
+            _cinemachineTargetPitch += input.look.y * rotationSpeed * deltaTimeMultiplier;
+            _rotationVelocity = input.look.x * rotationSpeed * deltaTimeMultiplier;
+
+            // 회전값 제한
+            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, bottomClamp, topClamp);
+
+            // 시네머신 카메라 타겟 업데이트
+            cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+            followCamera.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);   // 시네머신 또한 위아래 회전 가능하게 설정. (안하면 고정되어있음)
+
+            // 플레이어 좌우로 회전시키기
+            transform.Rotate(Vector3.up * _rotationVelocity);
+        }
+    }
+    private void Move()
+    {
+        // 타겟 속도를 대시 상태에 따라 달라지게 설정
+        float targetSpeed = input.dash ? dashSpeed : moveSpeed;
+
+        // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
+
+        // Vector2의 ==연산자는 근사치를 사용하므로, 부동소수점 오류가 발생하지 않는다.
+        // 입력이 없으면 속도는 0으로 제한
+        if (input.move == Vector2.zero) targetSpeed = 0.0f;
+
+        // 플레이어의 수평 속도
+        float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
+
+        float speedOffset = 0.1f;
+        float inputMagnitude = input.move.magnitude;
+
+        // 목표 속도까지 가속 또는 감속을 한다
+        if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
+        {
+            // 보다 유기적인 속도 변화를 위해 선형이 아닌 곡선 결과로 생성. 보간?
+            // Lerp의 T가 고정되어있으므로 속도를 따로 고정할 필요가 없다고한다. T는 Time.deltaTime * speedChangeRate
+            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * speedChangeRate);
+
+            // 속도를 소수점 이하 3자리로 반올림
+            _speed = Mathf.Round(_speed * 1000f) / 1000f;
+        }
+        else
+        {
+            _speed = targetSpeed;
+        }
+
+        // 입력 방향 정규화
+        Vector3 inputDirection = new Vector3(input.move.x, 0.0f, input.move.y).normalized;
+
+        // move 입력이 있는 경우 플레이어가 움직일 때 플레이어 회전
+        if (input.move != Vector2.zero)
+        {
+            // 이동
+            inputDirection = transform.right * input.move.x + transform.forward * input.move.y;
+        }
+
+        // 플레이어 위치 이동
+        controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+    }
+   
+    // 카메라 각도 제한
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
     {
         if (lfAngle < -360f) lfAngle += 360f;
@@ -220,6 +218,7 @@ public class PlayerMovement : MonoBehaviour
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 
+    // 바닥과 닿았는지 확인할 수 있는 기즈모
     private void OnDrawGizmosSelected()
     {
         Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
@@ -228,7 +227,7 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded) Gizmos.color = transparentGreen;
         else Gizmos.color = transparentRed;
 
-        // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
+        // 기즈모 그리기
         Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
     }
 
@@ -248,6 +247,9 @@ public class PlayerMovement : MonoBehaviour
         }
         tpsAnimator.SetBool("isRun", input.dash);
         fpsAnimator.SetBool("isRun", input.dash);
+
+        tpsAnimator.SetBool("isJump", input.jump);
+
 
         if (isGrounded)
         {
