@@ -10,7 +10,7 @@ public class NormalNavigation : MonoBehaviour
     private List<GameObject> targets = new List<GameObject>();  // Player가 저장되는 List
 
     private NormalZombie normalZombie;
-    public Transform Players;                                   // Player가 저장되는 부모 오브젝트
+    private Transform Players;                                   // Player가 저장되는 부모 오브젝트
 
     private NavMeshAgent nav;                                   // 네비게이션
 
@@ -26,8 +26,15 @@ public class NormalNavigation : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
     }
 
+    private void OnEnable()
+    {
+        Players = GameObject.Find("Players").transform;
+    }
+
     private void Start()
     {
+        Players = GameObject.Find("Players").transform;
+
         // 좀비 생성시 Players의 자식 오브젝트 갯수만큼 List에 추가
         if (Players.childCount != 0)
         {
@@ -40,7 +47,7 @@ public class NormalNavigation : MonoBehaviour
 
     private void Update()
     {
-        if (0.0f <= normalZombie.healthBody || 0.0f <= normalZombie.healthHead)
+        if (0.0f <= normalZombie.health)
         {
             if (isCoroutine == false)
             {
