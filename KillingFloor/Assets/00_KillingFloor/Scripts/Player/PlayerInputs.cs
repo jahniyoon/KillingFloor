@@ -105,7 +105,6 @@ public class PlayerInputs : MonoBehaviour
     {
         changeCamera = newCameraState;
     }
-
     public void WeaponSlot1Input(bool newSlot)
     {
         weaponSlot1 = newSlot;

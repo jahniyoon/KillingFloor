@@ -10,7 +10,8 @@ public class PlayerShooter : MonoBehaviour
     private CameraSetup cameraSet;
     int layerMask = (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11);    // 데미지 받을 좀비의 레이어 마스크
 
-    public float damage = 10f;
+    public Transform aimTarget;
+    public float damage;
     public float range = 100f;
 
     [Header("Animator IK")]
@@ -22,7 +23,7 @@ public class PlayerShooter : MonoBehaviour
     public Transform targetObj;                // 플레이어 시점
 
     [Header("TPS Weapon")]
-    public Weapon tpsWeapon;
+    public Weapon equipedWeapon;
     public Transform rightHandObj = null;   // 오른손
     public Transform leftHandObj = null;    // 왼손
     private int weaponSlot;
@@ -49,12 +50,11 @@ public class PlayerShooter : MonoBehaviour
         // TPS 무기 가져오기
         tpsPistol = weaponPosition.GetChild(0).GetComponent<Weapon>();
         tpsRifle = weaponPosition.GetChild(1).GetComponent<Weapon>();
-        tpsPistol.gameObject.SetActive(false);    // 미리 꺼두기
         tpsRifle.gameObject.SetActive(false);    // 미리 꺼두기
 
-        tpsWeapon = tpsPistol;                          // 기본총을 권총으로 장착
-        rightHandObj = tpsWeapon.rightHandObj.transform;   // 권총의 오른손 그랩
-        leftHandObj = tpsWeapon.leftHandObj.transform;     // 권총의 왼손 그랩
+        equipedWeapon = tpsPistol;                          // 기본총을 권총으로 장착
+        rightHandObj = equipedWeapon.rightHandObj.transform;   // 권총의 오른손 그랩
+        leftHandObj = equipedWeapon.leftHandObj.transform;     // 권총의 왼손 그랩
         weaponSlot = 1;                                 // 현재 슬롯 상태
 
         // FPS 무기 가져오기
@@ -84,21 +84,33 @@ public class PlayerShooter : MonoBehaviour
 
     void Shoot()
     {
+        RaycastHit hit;
+        Vector3 hitPoint = cameraSet.followCam.transform.forward * 10f;
+        if (Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range))
+        {
+            hitPoint = hit.point;
+        }
+
         if (input.shoot && tpsPistol.ammo > 0)
         {
-            RaycastHit hit;
             if (Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range, layerMask))
             {
                 Debug.DrawRay(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward * 100f, Color.red, 3f);
                 GameObject hitObj = hit.transform.gameObject;
+                hitPoint = hit.point;
                 Damage(hitObj);
             }
             tpsPistol.ammo -= 1;
             PlayerUIManager.instance.SetAmmo(tpsPistol.ammo);
             handAnimator.SetTrigger("isFire");
+            //animator.SetTrigger("isFire");
+            input.shoot = false;
+
         }
-        input.shoot = false;
+
+        aimTarget.transform.position = hitPoint;
     }
+
 
 
     void Damage(GameObject _hitObj)
@@ -174,9 +186,9 @@ public class PlayerShooter : MonoBehaviour
             tpsRifle.gameObject.SetActive(false);
             tpsPistol.gameObject.SetActive(true);
 
-            tpsWeapon = tpsPistol;
-            rightHandObj = tpsWeapon.rightHandObj.transform;
-            leftHandObj = tpsWeapon.leftHandObj.transform;
+            equipedWeapon = tpsPistol;
+            rightHandObj = equipedWeapon.rightHandObj.transform;
+            leftHandObj = equipedWeapon.leftHandObj.transform;
             weaponSlot = 1;
 
             fpsRifleObj.gameObject.SetActive(false);
@@ -197,9 +209,9 @@ public class PlayerShooter : MonoBehaviour
             tpsPistol.gameObject.SetActive(false);
             tpsRifle.gameObject.SetActive(true);
 
-            tpsWeapon = tpsRifle;
-            rightHandObj = tpsWeapon.rightHandObj.transform;
-            leftHandObj = tpsWeapon.leftHandObj.transform;
+            equipedWeapon = tpsRifle;
+            rightHandObj = equipedWeapon.rightHandObj.transform;
+            leftHandObj = equipedWeapon.leftHandObj.transform;
             weaponSlot = 2;
 
             fpsPistolObj.gameObject.SetActive(false);
@@ -219,49 +231,49 @@ public class PlayerShooter : MonoBehaviour
     }
 
 
-    // 무기 IK 애니메이션 처리
-    void OnAnimatorIK()
-    {
-        weaponPosition.position = animator.GetIKHintPosition(AvatarIKHint.RightElbow);
-        if (animator)
-        {
-            //if the IK is active, set the position and rotation directly to the goal. 
-            if (ikActive)
-            {
-                // 플레이어 lookat
-                if (targetObj != null)
-                {
-                    animator.SetLookAtWeight(1);
-                    animator.SetLookAtPosition(targetObj.position);
-                }
-                // 오른손 그랩
-                if (rightHandObj != null)
-                {
-                    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
-                    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
-                    animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandObj.position);
-                    animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandObj.rotation);
-                }
-                // 왼손 그랩
-                if (leftHandObj != null)
-                {
-                    animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
-                    animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
-                    animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandObj.position);
-                    animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandObj.rotation);
-                }
-            }
-            // 그랩에 아무것도 없다면 0
-            else
-            {
-                animator.SetLookAtWeight(0);
+    //// 무기 IK 애니메이션 처리
+    //void OnAnimatorIK()
+    //{
+    //    weaponPosition.position = animator.GetIKHintPosition(AvatarIKHint.RightElbow);
+    //    if (animator)
+    //    {
+    //        //if the IK is active, set the position and rotation directly to the goal. 
+    //        if (ikActive)
+    //        {
+    //            // 플레이어 lookat
+    //            if (targetObj != null)
+    //            {
+    //                animator.SetLookAtWeight(1);
+    //                animator.SetLookAtPosition(targetObj.position);
+    //            }
+    //            // 오른손 그랩
+    //            if (rightHandObj != null)
+    //            {
+    //                animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+    //                animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
+    //                animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandObj.position);
+    //                animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandObj.rotation);
+    //            }
+    //            // 왼손 그랩
+    //            if (leftHandObj != null)
+    //            {
+    //                animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+    //                animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
+    //                animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandObj.position);
+    //                animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandObj.rotation);
+    //            }
+    //        }
+    //        // 그랩에 아무것도 없다면 0
+    //        else
+    //        {
+    //            animator.SetLookAtWeight(0);
 
-                animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0);
-                animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0);
+    //            animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0);
+    //            animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0);
 
-                animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0);
-                animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0);
-            }
-        }
-    }
+    //            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0);
+    //            animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0);
+    //        }
+    //    }
+    //}
 }

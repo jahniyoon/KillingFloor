@@ -12,6 +12,7 @@ public class CameraSetup : MonoBehaviour
     public GameObject tpsPlayerBody;    // 3인칭 플레이어 바디
     public GameObject fpsPlayerBody;    // 1인칭 플레이어 바디
     public bool isFPS;
+    public bool tpsTest;
 
     void Awake()
     {
@@ -31,6 +32,7 @@ public class CameraSetup : MonoBehaviour
         followCam = fpsCam.GetComponent<CinemachineVirtualCamera>();    // FPS 카메라를 팔로우캠으로 설정
         playerMovement.followCamera = followCam;
         CameraSet(followCam);   // 카메라 세팅
+        if (tpsTest){ TPSTest(); }
     }
 
     void Update()
@@ -58,6 +60,25 @@ public class CameraSetup : MonoBehaviour
             CameraSet(followCam);
             input.changeCamera = false; // 카메라가 변경되면 다시 입력 가능
         }
+    }
+
+    public void TPSTest()
+    {
+        tpsCam.SetActive(isFPS);
+        fpsCam.SetActive(!isFPS);
+        tpsPlayerBody.SetActive(isFPS);
+        fpsPlayerBody.SetActive(!isFPS);
+
+        if (isFPS) // 1인칭일 때
+        {
+            followCam = tpsCam.GetComponent<CinemachineVirtualCamera>();
+        }
+        else if (!isFPS) // 3인칭일 때
+        {
+            followCam = fpsCam.GetComponent<CinemachineVirtualCamera>();
+        }
+        CameraSet(followCam);
+        input.changeCamera = false; // 카메라가 변경되면 다시 입력 가능
     }
     // 카메라 변경
     public void CameraSet(CinemachineVirtualCamera _followCam)

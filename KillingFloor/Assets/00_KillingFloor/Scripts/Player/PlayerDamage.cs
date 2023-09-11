@@ -24,7 +24,6 @@ public class PlayerDamage : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log("뭔가 닿았다.");
 
         // 최근 공격 시점에서 timeBetAttack 이상 시간이 지났다면 공격 가능
         if (Time.time >= lastAttackTime + timeBetAttack)
