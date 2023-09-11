@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1045794705898531795
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8927482937426690689}
+  m_Layer: 0
+  m_Name: Skill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8927482937426690689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045794705898531795}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4256926460706373033}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4256926460706201633
 GameObject:
   m_ObjectHideFlags: 0
@@ -1281,7 +1312,7 @@ Transform:
   - {fileID: 4256926460706373031}
   - {fileID: 4256926460706373035}
   m_Father: {fileID: 4256926460706373033}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4256926460706201685
 GameObject:
@@ -1313,7 +1344,7 @@ Transform:
   m_Children:
   - {fileID: 4256926460706372677}
   m_Father: {fileID: 4256926460706373033}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4256926460706201687
 GameObject:
@@ -3955,6 +3986,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8927482937426690689}
   - {fileID: 4256926460706372659}
   - {fileID: 4256926460706372661}
   m_Father: {fileID: 0}
@@ -4001,6 +4033,8 @@ MonoBehaviour:
   - {fileID: 9100000, guid: b31466ab1e449ff418deedd78fbbda69, type: 2}
   - {fileID: 9100000, guid: 66a4c53d87489f545834d05c81e31766, type: 2}
   - {fileID: 9100000, guid: c420879e0a062944a907614b92e04d61, type: 2}
+  skillPrefab: {fileID: 2670914608053251544, guid: 05235217466846f4984225ee7c8c5b57,
+    type: 3}
   hitPos: 0
   isCoroutine: 0
 --- !u!114 &4256926460357450965
