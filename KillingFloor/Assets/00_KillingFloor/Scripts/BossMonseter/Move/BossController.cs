@@ -15,8 +15,10 @@ public class BossController : MonoBehaviour
     private float bossSpeed = 0f;
     private GameObject[] fireBreaths;//브레스 오브젝트 배열
     private ParticleSystem[] fireBreathsParticle;//브레스 파티클 배열
-    private GameObject[] fireBreathHoles;//브레스 오브젝트 배열
-    private ParticleSystem[] fireBreathHoleParticles;//브레스 파티클 배열
+    private GameObject[] fireBreathHoles;//사이렌 오브젝트 배열
+    private ParticleSystem[] fireBreathHoleParticles;//사이렌 파티클 배열
+    private GameObject[] midSphereEffects;//사이렌 오브젝트 베리어배열
+    private ParticleSystem[] midSphereEffectParticles;//사이렌 파티클 베리어배열
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +26,10 @@ public class BossController : MonoBehaviour
         fireBreathHoleParticles = new ParticleSystem[3];
         fireBreaths = new GameObject[4];
         fireBreathsParticle = new ParticleSystem[4];
+        midSphereEffects = new GameObject[4];
+        midSphereEffectParticles = new ParticleSystem[4];
+
+        GameObject midSphere = GameObject.Find("MidSphereEffect");
         GameObject fireBreath = GameObject.Find("FireBreath");
         GameObject fireBreathHole = GameObject.Find("FireBreathHole");
         for (int i = 0; i <= 1; i++) // 샤우팅 파티클배열에 저장하는과정
@@ -31,6 +37,12 @@ public class BossController : MonoBehaviour
             fireBreathHoles[i] = fireBreathHole.transform.GetChild(i).gameObject;
             fireBreathHoleParticles[i] = fireBreathHoles[i].GetComponent<ParticleSystem>();
             fireBreathHoles[i].SetActive(false);
+        }
+        for (int i = 0; i <= 1; i++) // 샤우팅 베리어 파티클배열에 저장하는과정
+        {
+            midSphereEffects[i] = midSphere.transform.GetChild(i).gameObject;
+            midSphereEffectParticles[i] = midSphereEffects[i].GetComponent<ParticleSystem>();
+            midSphereEffects[i].SetActive(false);
         }
 
         for (int i=0; i<=3; i++) // 브레스 파티클배열에 저장하는과정
@@ -94,7 +106,7 @@ public class BossController : MonoBehaviour
                     case 2:
                      
                         animator.SetTrigger("Attack3");//브레스
-                        for(int i =0; i <= 3; i++)
+                        for(int i =0; i <= 2; i++)
                         {
                             fireBreaths[i].SetActive(true);
                             fireBreathsParticle[i].Play();
@@ -109,8 +121,15 @@ public class BossController : MonoBehaviour
                         {
                             fireBreathHoles[i].SetActive(true);
                             fireBreathHoleParticles[i].Play();
-                            StartCoroutine(StopParticle(fireBreathHoleParticles[i], 3.6f));
-
+                            midSphereEffects[i].SetActive(true);
+                            if(i == 1)
+                            {
+                                midSphereEffectParticles[i].Play();
+                                StartCoroutine(StopParticle(midSphereEffectParticles[i], 3.6f));//파티클 정지 코루틴
+                                StartCoroutine(FalseObj(midSphereEffects[0], 3.6f));//오브젝트 정지 코루틴
+                            }                       
+                            StartCoroutine(StopParticle(fireBreathHoleParticles[i], 3.6f));//파티클 정지 코루틴
+                          
 
                         }
 
@@ -137,9 +156,10 @@ public class BossController : MonoBehaviour
         }
 
     }
+    //대상을 바라보는 로직 
     private void LookRotate()
     {
-        if (targetPlayer[randPlayerNum] == null)
+        if (targetPlayer[randPlayerNum] == null) // 대상사라질경우
         {
             targetPlayer = GameObject.FindGameObjectsWithTag("Player");
             randPlayerNum = Random.Range(0, targetPlayer.Length);
@@ -154,24 +174,31 @@ public class BossController : MonoBehaviour
         // 현재 오브젝트의 회전을 대상을 바라보는 회전으로 설정
         transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, 2 * Time.deltaTime);
     }
-
+    //보스 움직임
     private void BossMove()
     {
         if(speed > 10)
         {
-            bossSpeed = 10;
+            bossSpeed = 14;
         }
         else
         {
-            bossSpeed = 5;
+            bossSpeed = 7;
         }
         Vector3 targetVector = transform.position - targetPlayer[randPlayerNum].transform.position;
         transform.Translate(Vector3.forward * bossSpeed * Time.deltaTime); ;
     }
+    //파티클 정지
     private IEnumerator StopParticle(ParticleSystem particle, float num)
     {
         yield return new WaitForSeconds(num);
         particle.Stop();
+    }
+    //오브젝트 비활성화
+    private IEnumerator FalseObj(GameObject gameObj, float num)
+    {
+        yield return new WaitForSeconds(num);
+        gameObj.SetActive(false);
     }
    
 }
