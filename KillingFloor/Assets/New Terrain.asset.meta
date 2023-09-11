@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 836d1487990c3884799dec384441f183
+=======
+guid: 14d4d04ba7174ba498fb73bb5c87a832
+>>>>>>> origin/feature/ssm
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 15600000
