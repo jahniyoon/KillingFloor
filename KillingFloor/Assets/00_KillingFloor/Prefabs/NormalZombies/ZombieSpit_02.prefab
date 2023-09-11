@@ -1818,10 +1818,10 @@ MonoBehaviour:
   damage: 0
   coin: 0
   controllers:
-  - {fileID: 9100000, guid: c22668f17f46f074f979500241f12726, type: 2}
-  - {fileID: 9100000, guid: dd98ff45fe95f4a49a6bdd0073e2fd84, type: 2}
-  - {fileID: 9100000, guid: c259c33597f0a714a99f95ced75eaf3c, type: 2}
-  - {fileID: 9100000, guid: 35fe8df5ec39a824c950eae972926774, type: 2}
+  - {fileID: 9100000, guid: a3181b7c76bba27479314cba9f89cdeb, type: 2}
+  - {fileID: 9100000, guid: b31466ab1e449ff418deedd78fbbda69, type: 2}
+  - {fileID: 9100000, guid: 66a4c53d87489f545834d05c81e31766, type: 2}
+  - {fileID: 9100000, guid: c420879e0a062944a907614b92e04d61, type: 2}
   hitPos: 0
   isCoroutine: 0
 --- !u!114 &5086130994975495339
@@ -1837,6 +1837,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isContact: 0
+  isLongContact: 0
 --- !u!195 &5086130994975495338
 NavMeshAgent:
   m_ObjectHideFlags: 0

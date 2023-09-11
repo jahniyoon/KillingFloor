@@ -44,9 +44,9 @@ public class NormalZombie : NormalZombieData
         navigation = GetComponent<NormalNavigation>();
         ani = GetComponent<Animator>();
         GetComponent<NavMeshAgent>().speed = 0.1f;
-        if (gameObject.name == "ZombieWalk_01" || gameObject.name == "ZombieWalk_02" ||
-            gameObject.name == "ZombieWalk_03" || gameObject.name == "ZombieWalk_04" ||
-            gameObject.name == "ZombieHide_01" || gameObject.name == "ZombieHide_01")
+        if (gameObject.name == "ZombieWalk_01(Clone)" || gameObject.name == "ZombieWalk_02(Clone)" ||
+            gameObject.name == "ZombieWalk_03(Clone)" || gameObject.name == "ZombieWalk_04(Clone)" ||
+            gameObject.name == "ZombieHide_01(Clone)" || gameObject.name == "ZombieHide_01(Clone)")
         {
             isSkill = true;
         }
@@ -96,8 +96,8 @@ public class NormalZombie : NormalZombieData
         ani.runtimeAnimatorController = controllers[Random.Range(0, controllers.Count)];
         blendTreeMove = StartCoroutine(BlendTreeMove(0.0f, 1.0f, 2.0f));
 
-        if (gameObject.name == "ZombieWalk_01" || gameObject.name == "ZombieWalk_02" ||
-            gameObject.name == "ZombieWalk_03" || gameObject.name == "ZombieWalk_04")
+        if (gameObject.name == "ZombieWalk_01(Clone)" || gameObject.name == "ZombieWalk_02(Clone)" ||
+            gameObject.name == "ZombieWalk_03(Clone)" || gameObject.name == "ZombieWalk_04(Clone)")
         {
             int number = Random.Range(0, 2);
 
@@ -111,15 +111,15 @@ public class NormalZombie : NormalZombieData
                     break;
             }
         }
-        else if (gameObject.name == "ZombieHide_01" || gameObject.name == "ZombieHide_01")
+        else if (gameObject.name == "ZombieHide_01(Clone)" || gameObject.name == "ZombieHide_02(Clone)")
         {
             (health, damage, coin) = ZombieHide();
         }
-        else if (gameObject.name == "ZombieSpit_01" || gameObject.name == "ZombieSpit_02")
+        else if (gameObject.name == "ZombieSpit_01(Clone)" || gameObject.name == "ZombieSpit_02(Clone)")
         {
             (health, damage, coin) = ZombieSpit();
         }
-        else if (gameObject.name == "ZombieNoise")
+        else if (gameObject.name == "ZombieNoise(Clone)")
         {
             (health, damage, coin) = ZombieNoise();
         }
@@ -229,7 +229,7 @@ public class NormalZombie : NormalZombieData
 
     private void Death()
     {
-        ani.SetTrigger("Dead");
+        ani.SetTrigger("isDie");
 
         isDeath = true;
     }
