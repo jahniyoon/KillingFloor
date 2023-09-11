@@ -14,11 +14,14 @@ public class NormalNavigation : MonoBehaviour
 
     private NavMeshAgent nav;                                   // 네비게이션
 
+    private float length = 2.0f;                                // 좀비 근접 사정거리
+    private float longLength = 8.0f;
     private float minDistance;                                  // 가장 가까운 오브젝트의 거리
     private int minDistanceTarget;                              // 가장 가까운 오브젝트 List number
 
     private bool isCoroutine;                                   // 코루틴이 끝났는지 체크
     public bool isContact;                                      // 물체와 부딪혔는지 체크
+    public bool isLongContact;
 
     private void Awake()
     {
@@ -83,29 +86,25 @@ public class NormalNavigation : MonoBehaviour
 
             yield return null;
         }
-
-        nav.SetDestination(targets[minDistanceTarget].transform.position);
-        
-        CheckIfInRadius();
-
-        isCoroutine = false;
-    }
-
-    private void CheckIfInRadius()
-    {
-        float distance = Vector3.Distance(transform.position, targets[minDistanceTarget].transform.position);
-
-        if (distance <= nav.radius)
+        if (Vector3.Distance(transform.position, targets[minDistanceTarget].transform.position) <= longLength)
         {
-            nav.speed = 0;
-
+            isLongContact = true;
+        }
+        else
+        {
+            isLongContact = false;
+        }
+        if (Vector3.Distance(transform.position, targets[minDistanceTarget].transform.position) <= length)
+        {
             isContact = true;
         }
         else
         {
-            nav.speed = 0.1f;
-
             isContact = false;
+
+            nav.SetDestination(targets[minDistanceTarget].transform.position);
         }
-    }   // 공격 및 죽음을 확인하기 위해 NavMeshAgent를 끄는 로직
+
+        isCoroutine = false;
+    }
 }
