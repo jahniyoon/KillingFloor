@@ -19,6 +19,9 @@ public class PlayerShooter : MonoBehaviour
     public Animator handAnimator;
 
     public bool ikActive = false;
+    [Range(0,1)]
+    public float handIKAmount = 1;
+    public float elbowIKAmount = 1;
     public Transform weaponPosition = null;    // ¹«±â À§Ä¡ ±âÁØÁ¡
     public Transform targetObj;                // ÇÃ·¹ÀÌ¾î ½ÃÁ¡
 
@@ -26,6 +29,8 @@ public class PlayerShooter : MonoBehaviour
     public Weapon equipedWeapon;
     public Transform rightHandObj = null;   // ¿À¸¥¼Õ
     public Transform leftHandObj = null;    // ¿Þ¼Õ
+    public Transform rightElbowObj = null;   // ¿À¸¥¼Õ ±×·¦
+    public Transform leftElbowObj = null;    // ¿Þ¼Õ ±×·¦
     private int weaponSlot;
 
     Weapon tpsPistol;    // °¡Á®¿Ã ±ÇÃÑ ¹«±â Á¤º¸
@@ -55,6 +60,8 @@ public class PlayerShooter : MonoBehaviour
         equipedWeapon = tpsPistol;                          // ±âº»ÃÑÀ» ±ÇÃÑÀ¸·Î ÀåÂø
         rightHandObj = equipedWeapon.rightHandObj.transform;   // ±ÇÃÑÀÇ ¿À¸¥¼Õ ±×·¦
         leftHandObj = equipedWeapon.leftHandObj.transform;     // ±ÇÃÑÀÇ ¿Þ¼Õ ±×·¦
+        rightElbowObj = equipedWeapon.rightElbowObj.transform;     // ±ÇÃÑÀÇ ¿À¸¥ÆÈ²ÞÄ¡
+        leftElbowObj = equipedWeapon.leftElbowObj.transform;     // ±ÇÃÑÀÇ ¿ÞÆÈ²ÞÄ¡
         weaponSlot = 1;                                 // ÇöÀç ½½·Ô »óÅÂ
 
         // FPS ¹«±â °¡Á®¿À±â
@@ -74,6 +81,9 @@ public class PlayerShooter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        weaponPosition.position = targetObj.position;
+        weaponPosition.rotation = targetObj.rotation;
+
         Shoot();
         Reload();
         ActiveAnimation();
@@ -85,7 +95,7 @@ public class PlayerShooter : MonoBehaviour
     void Shoot()
     {
         RaycastHit hit;
-        Vector3 hitPoint = cameraSet.followCam.transform.forward * 10f;
+        Vector3 hitPoint = cameraSet.followCam.transform.forward * 1f;
         if (Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range))
         {
             hitPoint = hit.point;
@@ -102,7 +112,7 @@ public class PlayerShooter : MonoBehaviour
             }
             tpsPistol.ammo -= 1;
             PlayerUIManager.instance.SetAmmo(tpsPistol.ammo);
-            handAnimator.SetTrigger("isFire");
+            //handAnimator.SetTrigger("isFire");
             //animator.SetTrigger("isFire");
             input.shoot = false;
 
@@ -191,12 +201,12 @@ public class PlayerShooter : MonoBehaviour
             leftHandObj = equipedWeapon.leftHandObj.transform;
             weaponSlot = 1;
 
-            fpsRifleObj.gameObject.SetActive(false);
-            fpsPistolObj.gameObject.SetActive(true);
+            //fpsRifleObj.gameObject.SetActive(false);
+            //fpsPistolObj.gameObject.SetActive(true);
 
-            fpsWeapon = fpsPistolObj;
-            handAnimator = fpsWeapon.GetComponent<Animator>();
-            playerMovement.fpsAnimator = handAnimator;
+            //fpsWeapon = fpsPistolObj;
+            //handAnimator = fpsWeapon.GetComponent<Animator>();
+            //playerMovement.fpsAnimator = handAnimator;
 
             input.weaponSlot1 = false;
         }
@@ -214,12 +224,12 @@ public class PlayerShooter : MonoBehaviour
             leftHandObj = equipedWeapon.leftHandObj.transform;
             weaponSlot = 2;
 
-            fpsPistolObj.gameObject.SetActive(false);
-            fpsRifleObj.gameObject.SetActive(true);
+            //fpsPistolObj.gameObject.SetActive(false);
+            //fpsRifleObj.gameObject.SetActive(true);
 
-            fpsWeapon = fpsRifleObj;
-            handAnimator = fpsWeapon.GetComponent<Animator>();
-            playerMovement.fpsAnimator = handAnimator;
+            //fpsWeapon = fpsRifleObj;
+            //handAnimator = fpsWeapon.GetComponent<Animator>();
+            //playerMovement.fpsAnimator = handAnimator;
 
             input.weaponSlot2 = false;
         }
@@ -231,49 +241,64 @@ public class PlayerShooter : MonoBehaviour
     }
 
 
-    //// ¹«±â IK ¾Ö´Ï¸ÞÀÌ¼Ç Ã³¸®
-    //void OnAnimatorIK()
-    //{
-    //    weaponPosition.position = animator.GetIKHintPosition(AvatarIKHint.RightElbow);
-    //    if (animator)
-    //    {
-    //        //if the IK is active, set the position and rotation directly to the goal. 
-    //        if (ikActive)
-    //        {
-    //            // ÇÃ·¹ÀÌ¾î lookat
-    //            if (targetObj != null)
-    //            {
-    //                animator.SetLookAtWeight(1);
-    //                animator.SetLookAtPosition(targetObj.position);
-    //            }
-    //            // ¿À¸¥¼Õ ±×·¦
-    //            if (rightHandObj != null)
-    //            {
-    //                animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
-    //                animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
-    //                animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandObj.position);
-    //                animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandObj.rotation);
-    //            }
-    //            // ¿Þ¼Õ ±×·¦
-    //            if (leftHandObj != null)
-    //            {
-    //                animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
-    //                animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
-    //                animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandObj.position);
-    //                animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandObj.rotation);
-    //            }
-    //        }
-    //        // ±×·¦¿¡ ¾Æ¹«°Íµµ ¾ø´Ù¸é 0
-    //        else
-    //        {
-    //            animator.SetLookAtWeight(0);
+    // ¹«±â IK ¾Ö´Ï¸ÞÀÌ¼Ç Ã³¸®
+    void OnAnimatorIK()
+    {
+        if (animator)
+        {
+            //if the IK is active, set the position and rotation directly to the goal. 
+            if (ikActive)
+            {
+                // ÇÃ·¹ÀÌ¾î lookat
+                if (targetObj != null)
+                {
+                    animator.SetLookAtWeight(1);
+                    animator.SetLookAtPosition(targetObj.position);
+                }
+                // ¿À¸¥¼Õ ±×·¦
+                if (rightHandObj != null)
+                {
+                    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, handIKAmount);
+                    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, handIKAmount);
+                    animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandObj.position);
+                    animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandObj.rotation);
+                }
+                // ¿Þ¼Õ ±×·¦
+                if (leftHandObj != null)
+                {
+                    animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, handIKAmount);
+                    animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, handIKAmount);
+                    animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandObj.position);
+                    animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandObj.rotation);
+                }
+              
+                // ¿ÞÂÊ ÆÈ²ÞÄ¡
+                if (leftElbowObj != null)
+                {
+                    animator.SetIKHintPosition(AvatarIKHint.LeftElbow, leftElbowObj.position);
+                    animator.SetIKHintPositionWeight(AvatarIKHint.LeftElbow, elbowIKAmount);
+                }
+                // ¿À¸¥ÂÊ ÆÈ²ÞÄ¡
+                if (rightElbowObj != null)
+                {
+                    animator.SetIKHintPosition(AvatarIKHint.RightElbow, rightElbowObj.position);
+                    animator.SetIKHintPositionWeight(AvatarIKHint.RightElbow, elbowIKAmount);
+                }
+            }
+            // ±×·¦¿¡ ¾Æ¹«°Íµµ ¾ø´Ù¸é 0
+            else
+            {
+                //animator.SetLookAtWeight(0);
 
-    //            animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0);
-    //            animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0);
+                //animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0);
+                //animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0);
 
-    //            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0);
-    //            animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0);
-    //        }
-    //    }
-    //}
+                //animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0);
+                //animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0);
+
+                //animator.SetIKHintPositionWeight(AvatarIKHint.RightElbow, 0);
+                //animator.SetIKHintPositionWeight(AvatarIKHint.LeftElbow, 0);
+            }
+        }
+    }
 }

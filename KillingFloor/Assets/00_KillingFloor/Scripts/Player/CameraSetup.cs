@@ -32,7 +32,9 @@ public class CameraSetup : MonoBehaviour
         followCam = fpsCam.GetComponent<CinemachineVirtualCamera>();    // FPS 카메라를 팔로우캠으로 설정
         playerMovement.followCamera = followCam;
         CameraSet(followCam);   // 카메라 세팅
-        if (tpsTest){ TPSTest(); }
+        if (tpsTest){ TPSTest();
+            Destroy(fpsPlayerBody);
+        }
     }
 
     void Update()

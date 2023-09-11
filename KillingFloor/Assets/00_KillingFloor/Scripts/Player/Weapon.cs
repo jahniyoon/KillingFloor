@@ -8,6 +8,8 @@ public class Weapon : MonoBehaviour
     public Transform targetObj;             // ÇÃ·¹ÀÌ¾î ½ÃÁ¡
     public Transform rightHandObj = null;   // ¿À¸¥¼Õ ±×·¦
     public Transform leftHandObj = null;    // ¿Þ¼Õ ±×·¦
+    public Transform rightElbowObj = null;   // ¿À¸¥¼Õ ±×·¦
+    public Transform leftElbowObj = null;    // ¿Þ¼Õ ±×·¦
 
     [Header("Weapon")]
     public int weaponID;

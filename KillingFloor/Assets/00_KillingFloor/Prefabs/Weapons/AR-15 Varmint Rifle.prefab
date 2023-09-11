@@ -37,7 +37,7 @@ Transform:
   - {fileID: 6984062852372181706}
   - {fileID: 8101170500510999670}
   m_Father: {fileID: 454742536493354218}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &517413389207944151
 GameObject:
@@ -192,6 +192,37 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.06061101, y: -0.005367283, z: 0.0012266235}
     m_Extent: {x: 0.05717779, y: 0.035313003, z: 0.012812324}
   m_DirtyAABB: 0
+--- !u!1 &2682195271266406249
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4341266710461404158}
+  m_Layer: 0
+  m_Name: RightElbow
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4341266710461404158
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2682195271266406249}
+  m_LocalRotation: {x: 0.00000000745058, y: 0.15062337, z: -5.820766e-10, w: 0.98859125}
+  m_LocalPosition: {x: 0.0221, y: 0.1366, z: 0.1605}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 454742536493354218}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2756529682263948725
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,7 +233,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9009781727335770029}
   m_Layer: 0
-  m_Name: Left Grab
+  m_Name: LeftGrab
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -285,6 +316,8 @@ Transform:
   m_Children:
   - {fileID: 4437828378179991693}
   - {fileID: 9009781727335770029}
+  - {fileID: 8220368414150401876}
+  - {fileID: 4341266710461404158}
   - {fileID: 1691256086464517818}
   m_Father: {fileID: 6180681707143397750}
   m_RootOrder: 0
@@ -351,6 +384,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 409464912045448280}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5035597257954682579
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8220368414150401876}
+  m_Layer: 0
+  m_Name: LeftElbow
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8220368414150401876
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5035597257954682579}
+  m_LocalRotation: {x: 0.00000000745058, y: 0.15062337, z: -5.820766e-10, w: 0.98859125}
+  m_LocalPosition: {x: -0.2638, y: 0.1366, z: 0.2497}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 454742536493354218}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6159255155525701279
 GameObject:
@@ -577,6 +641,8 @@ MonoBehaviour:
   targetObj: {fileID: 0}
   rightHandObj: {fileID: 4437828378179991693}
   leftHandObj: {fileID: 9009781727335770029}
+  rightElbowObj: {fileID: 4341266710461404158}
+  leftElbowObj: {fileID: 8220368414150401876}
   weaponID: 0
   damage: 30
   fireRate: 500
@@ -926,7 +992,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4437828378179991693}
   m_Layer: 0
-  m_Name: Right Grab
+  m_Name: RightGrab
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0

@@ -55,11 +55,13 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("카메라 최소 각도")]
     public float bottomClamp;
 
+    public Transform weaponTarget;
+
     // cinemachine
     private float _cinemachineTargetPitch;
 
     // player
-    private float _speed;
+    public float _speed;
     private float _rotationVelocity;
     private float _verticalVelocity;
     private float _terminalVelocity = 53.0f;
@@ -70,6 +72,8 @@ public class PlayerMovement : MonoBehaviour
 
     private const float _threshold = 0.01f;
     private bool IsCurrentDeviceMouse;
+
+    private float animMoveSpeed;
 
     void Start()
     {
@@ -103,6 +107,9 @@ public class PlayerMovement : MonoBehaviour
             // 추락 타임아웃 초기화
             _fallTimeoutDelta = fallTimeout;
 
+            tpsAnimator.SetBool("isJump", false);
+            tpsAnimator.SetBool("isAir", false);
+
             // 수직 힘이 0보다 떨어졌을 경우 -2로 제한시켜 속도가 무한하게 떨어지는 것 방지
             if (_verticalVelocity < 0.0f)
             {
@@ -114,6 +121,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 // H * -2 * G 의 제곱근 = 원하는 높이에 도달하는데 필요한 속도
                 _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                tpsAnimator.SetBool("isJump", true);
+
             }
 
             // 점프 타임아웃
@@ -132,6 +141,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 _fallTimeoutDelta -= Time.deltaTime;
             }
+
+            else
+            tpsAnimator.SetBool("isAir", true);
 
             // 바닥이 아니면 점프를 못하게 처리
             input.jump = false;
@@ -158,6 +170,7 @@ public class PlayerMovement : MonoBehaviour
 
             // 시네머신 카메라 타겟 업데이트
             cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+            weaponTarget.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
             followCamera.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);   // 시네머신 또한 위아래 회전 가능하게 설정. (안하면 고정되어있음)
 
             // 플레이어 좌우로 회전시키기
@@ -167,7 +180,10 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {
         // 타겟 속도를 대시 상태에 따라 달라지게 설정
-        float targetSpeed = input.dash ? dashSpeed : moveSpeed;
+        //float targetSpeed = input.dash ? dashSpeed : moveSpeed;
+        float targetSpeed = moveSpeed;
+        if (input.dash & 0.7 <= input.move.y)
+        { targetSpeed = dashSpeed; }
 
         // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -195,6 +211,10 @@ public class PlayerMovement : MonoBehaviour
         {
             _speed = targetSpeed;
         }
+        // 플레이어 이동 애니메이션 블랜드 속도
+        animMoveSpeed = Mathf.Lerp(animMoveSpeed, targetSpeed, Time.deltaTime * speedChangeRate);
+        if (animMoveSpeed < 0.01f) animMoveSpeed = 0f;
+
 
         // 입력 방향 정규화
         Vector3 inputDirection = new Vector3(input.move.x, 0.0f, input.move.y).normalized;
@@ -234,35 +254,35 @@ public class PlayerMovement : MonoBehaviour
     //// 애니메이션
     public void ActiveAnimation()
     {
-        //// 걷기 애니메이션 셋팅
-        if (input.move.x != 0 || input.move.y != 0)
-        {
-            tpsAnimator.SetBool("isWalk", true);
-            fpsAnimator.SetBool("isWalk", true);
-        }
-        else
-        {
-            tpsAnimator.SetBool("isWalk", false);
-            fpsAnimator.SetBool("isWalk", false);
-        }
-        tpsAnimator.SetBool("isRun", input.dash);
-        fpsAnimator.SetBool("isRun", input.dash);
+        ////// 걷기 애니메이션 셋팅
+        //if (input.move.x != 0 || input.move.y != 0)
+        //{
+        //    tpsAnimator.SetBool("isWalk", true);
+        //    //fpsAnimator.SetBool("isWalk", true);
+        //}
+        //else
+        //{
+        //    tpsAnimator.SetBool("isWalk", false);
+        //    //fpsAnimator.SetBool("isWalk", false);
+        //}
+        //tpsAnimator.SetBool("isRun", input.dash);
+        ////fpsAnimator.SetBool("isRun", input.dash);
 
-        tpsAnimator.SetBool("isJump", input.jump);
+        //tpsAnimator.SetBool("isJump", input.jump);
 
 
         if (isGrounded)
         {
             tpsAnimator.SetBool("isGrounded", isGrounded);
-            fpsAnimator.SetBool("isGrounded", isGrounded);
+            //fpsAnimator.SetBool("isGrounded", isGrounded);
         }
         else if (!isGrounded)
         {
             tpsAnimator.SetBool("isGrounded", isGrounded);
-            fpsAnimator.SetBool("isGrounded", isGrounded);
+            //fpsAnimator.SetBool("isGrounded", isGrounded);
         }
-        tpsAnimator.SetFloat("xDir", input.move.x);
-        tpsAnimator.SetFloat("yDir", input.move.y);
+
+        tpsAnimator.SetFloat("Speed", animMoveSpeed);
     }
 
 }
