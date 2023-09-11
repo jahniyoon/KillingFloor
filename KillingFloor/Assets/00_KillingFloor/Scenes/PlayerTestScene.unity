@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18058726, g: 0.22607939, b: 0.30709064, a: 1}
+  m_IndirectSpecularColor: {r: 0.18058695, g: 0.22607905, b: 0.30708987, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -269,6 +269,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   round: 1
   player: 4
+  difficulty: 0
+  currentZombieCount: 0
 --- !u!4 &156583478
 Transform:
   m_ObjectHideFlags: 0
@@ -403,12 +405,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebf55bc78a06bac41813f6fcc36191f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBody: 0
-  healthHead: 0
+  health: 0
   damage: 0
-  speed: 0
   coin: 0
   controllers: []
+  hitPos: 0
   isCoroutine: 0
 --- !u!95 &337715801
 Animator:
@@ -465,7 +466,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddc7ade156a3007409ef2ecf3bc5feef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Players: {fileID: 0}
   isContact: 0
 --- !u!1 &382447323
 GameObject:

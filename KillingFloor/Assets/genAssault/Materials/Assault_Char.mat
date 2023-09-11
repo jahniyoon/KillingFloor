@@ -9,13 +9,12 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Assault_Char
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  m_ValidKeywords: []
-<<<<<<< HEAD:KillingFloor/Assets/genAssault/Materials/Assault_Char.mat
+  m_ValidKeywords:
+  - _DETAIL_MULX2
+  - _METALLICSPECGLOSSMAP
+  - _NORMALMAP
   m_InvalidKeywords:
   - _METALLICGLOSSMAP
-=======
-  m_InvalidKeywords: []
->>>>>>> origin/feature/ssm:KillingFloor/Assets/01_Assets_Import/genAssault/Materials/Assault_Char.mat
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -27,11 +26,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-<<<<<<< HEAD:KillingFloor/Assets/genAssault/Materials/Assault_Char.mat
         m_Texture: {fileID: 2800000, guid: ae24b9ba645f05a40b648b50049a02d1, type: 3}
-=======
-        m_Texture: {fileID: 0}
->>>>>>> origin/feature/ssm:KillingFloor/Assets/01_Assets_Import/genAssault/Materials/Assault_Char.mat
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -55,7 +50,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: ae24b9ba645f05a40b648b50049a02d1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -108,11 +103,7 @@ Material:
     - _Parallax: 0.02
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-<<<<<<< HEAD:KillingFloor/Assets/genAssault/Materials/Assault_Char.mat
     - _Smoothness: 0.71
-=======
-    - _Smoothness: 0.5
->>>>>>> origin/feature/ssm:KillingFloor/Assets/01_Assets_Import/genAssault/Materials/Assault_Char.mat
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -126,11 +117,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
-<<<<<<< HEAD:KillingFloor/Assets/genAssault/Materials/Assault_Char.mat
---- !u!114 &8144002545558086614
-=======
---- !u!114 &1003462817953438510
->>>>>>> origin/feature/ssm:KillingFloor/Assets/01_Assets_Import/genAssault/Materials/Assault_Char.mat
+--- !u!114 &4663151767127485776
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

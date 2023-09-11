@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.WSA;
 
 public class PlayerShooter : MonoBehaviour
 {
+    private PlayerInputs input;
     private PlayerMovement playerMovement;
     private CameraSetup cameraSet;
-    int layerMask = (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11);
-
+    int layerMask = (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11);    // 데미지 받을 좀비의 레이어 마스크
 
     public float damage = 10f;
     public float range = 100f;
@@ -18,7 +19,7 @@ public class PlayerShooter : MonoBehaviour
 
     public bool ikActive = false;
     public Transform weaponPosition = null;    // 무기 위치 기준점
-    public Transform targetObj;             // 플레이어 시점
+    public Transform targetObj;                // 플레이어 시점
 
     [Header("TPS Weapon")]
     public Weapon tpsWeapon;
@@ -36,12 +37,14 @@ public class PlayerShooter : MonoBehaviour
     public Transform fpsWeapon;
 
 
+
     // Start is called before the first frame update
     void Start()
     {
+        input = GetComponent<PlayerInputs>();
+        playerMovement = GetComponent<PlayerMovement>();
         cameraSet = GetComponent<CameraSetup>();
         animator = GetComponent<Animator>();
-        playerMovement = GetComponent<PlayerMovement>();
 
         // TPS 무기 가져오기
         tpsPistol = weaponPosition.GetChild(0).GetComponent<Weapon>();
@@ -64,31 +67,39 @@ public class PlayerShooter : MonoBehaviour
         handAnimator = fpsWeapon.GetComponent<Animator>();
         playerMovement.fpsAnimator = handAnimator;
 
-        
+        PlayerUIManager.instance.SetAmmo(tpsPistol.ammo);
+        PlayerUIManager.instance.SetTotalAmmo(tpsPistol.totalAmmo);
     }
 
     // Update is called once per frame
     void Update()
     {
-        ActiveAnimation ();
+        Shoot();
+        Reload();
+        ActiveAnimation();
+        WeaponSlots();
     }
 
     // 사격 입력
-    public void OnShoot()
-    {
-        handAnimator.SetTrigger("isFire");
-        Shoot();
-    }
+
     void Shoot()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range, layerMask))
+        if (input.shoot && tpsPistol.ammo > 0)
         {
-            Debug.DrawRay(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward * 100f, Color.green);
-            GameObject hitObj = hit.transform.gameObject;
-            Damage(hitObj);
+            RaycastHit hit;
+            if (Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range, layerMask))
+            {
+                Debug.DrawRay(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward * 100f, Color.red, 3f);
+                GameObject hitObj = hit.transform.gameObject;
+                Damage(hitObj);
+            }
+            tpsPistol.ammo -= 1;
+            PlayerUIManager.instance.SetAmmo(tpsPistol.ammo);
+            handAnimator.SetTrigger("isFire");
         }
+        input.shoot = false;
     }
+
 
     void Damage(GameObject _hitObj)
     {
@@ -97,13 +108,13 @@ public class PlayerShooter : MonoBehaviour
             Debug.Log("왼쪽을 맞았다.");
             //Legacy:
             //_hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthBody -= 10f;
-            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().health -= 10f;
+            //_hitObj.transform.parent.parent.GetComponent<NormalZombieData>().health -= tpsPistol.damage;
         }
         else if (_hitObj.layer == 9) // 앞
         {
             //Legacy:
             //_hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthBody -= 10f;
-            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().health -= 10f;
+            //_hitObj.transform.parent.parent.GetComponent<NormalZombieData>().health -= tpsPistol.damage;
 
         }
         else if (_hitObj.layer == 10) // 오른쪽
@@ -111,7 +122,7 @@ public class PlayerShooter : MonoBehaviour
             Debug.Log("오른쪽을 맞았다.");
             //Legacy:
             //_hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthBody -= 10f;
-            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().health -= 10f;
+            //_hitObj.transform.parent.parent.GetComponent<NormalZombieData>().health -= tpsPistol.damage;
 
         }
         else if (_hitObj.layer == 11) // 헤드샷
@@ -119,19 +130,46 @@ public class PlayerShooter : MonoBehaviour
             Debug.Log("헤드샷");
             //Legacy:
             //_hitObj.transform.parent.parent.GetComponent<NormalZombieData>().healthHead -= 10f;
-            _hitObj.transform.parent.parent.GetComponent<NormalZombieData>().health -= 10f * 1.5f;
+            //_hitObj.transform.parent.parent.GetComponent<NormalZombieData>().health -= tpsPistol.damage * 1.5f;
 
         }
     }
-    // 장전 입력
-    public void OnReload()
+    // 장전
+    public void Reload()
     {
-        handAnimator.SetTrigger("isReload");
+        if (input.reload)
+        {
+            if (0 < tpsPistol.totalAmmo && tpsPistol.ammo != tpsPistol.magazineSize)
+            {
+                float newAmmo = tpsPistol.ammo;
+                tpsPistol.ammo = tpsPistol.ammo + tpsPistol.totalAmmo;
+                if (tpsPistol.ammo > tpsPistol.magazineSize)
+                {
+                    tpsPistol.ammo = tpsPistol.magazineSize;
+                }
+
+                tpsPistol.totalAmmo = tpsPistol.totalAmmo - (tpsPistol.magazineSize - newAmmo);
+                if (0 > tpsPistol.totalAmmo)
+                { tpsPistol.totalAmmo = 0; }
+
+                PlayerUIManager.instance.SetAmmo(tpsPistol.ammo);
+                PlayerUIManager.instance.SetTotalAmmo(tpsPistol.totalAmmo);
+                handAnimator.SetTrigger("isReload");
+
+            }
+            input.reload = false;
+        }
     }
 
-    public void OnWeaponSlot1()
+    public void WeaponSlots()
     {
-        if (weaponSlot == 2)
+        WeaponSlot1();
+        WeaponSlot2();
+    }
+
+    public void WeaponSlot1()
+    {
+        if (input.weaponSlot1 && weaponSlot == 2)
         {
             tpsRifle.gameObject.SetActive(false);
             tpsPistol.gameObject.SetActive(true);
@@ -148,12 +186,13 @@ public class PlayerShooter : MonoBehaviour
             handAnimator = fpsWeapon.GetComponent<Animator>();
             playerMovement.fpsAnimator = handAnimator;
 
+            input.weaponSlot1 = false;
         }
     }
 
-    public void OnWeaponSlot2()
+    public void WeaponSlot2()
     {
-        if (weaponSlot == 1)
+        if (input.weaponSlot2 && weaponSlot == 1)
         {
             tpsPistol.gameObject.SetActive(false);
             tpsRifle.gameObject.SetActive(true);
@@ -170,17 +209,17 @@ public class PlayerShooter : MonoBehaviour
             handAnimator = fpsWeapon.GetComponent<Animator>();
             playerMovement.fpsAnimator = handAnimator;
 
-
+            input.weaponSlot2 = false;
         }
     }
 
     public void ActiveAnimation()
     {
-      
+
     }
 
 
-    // 무기 애니메이션 처리
+    // 무기 IK 애니메이션 처리
     void OnAnimatorIK()
     {
         weaponPosition.position = animator.GetIKHintPosition(AvatarIKHint.RightElbow);
