@@ -4,8 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
+<<<<<<< HEAD
+  - FPS CAM
+  - TPS CAM
+  - AttackObject
+  - HitDamage
+=======
   - Boss
-  - Room
+>>>>>>> origin/feature/ssm
   layers:
   - Default
   - TransparentFX
@@ -15,12 +21,12 @@ TagManager:
   - UI
   - Player
   - 
+  - LeftAttack
+  - FrontAttack
+  - RightAttack
+  - HeadAttack
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Weapon
   - 
   - 
   - 

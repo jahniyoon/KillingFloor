@@ -1,9 +1,19 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:KillingFloor/Assets/Hands_Weapons_Animations_Pack_Update/Icons/Automatic_Rifle_01.psd.meta
+guid: e1e5a96b10b9a50408cbac7815368b52
+timeCreated: 1560614687
+licenseType: Store
+========
 guid: 059e9006d57327240b2d3e07a23b5210
+>>>>>>>> origin/feature/ssm:KillingFloor/Assets/FantasySpellsEffectsPack/Textures/Ring_Sprites/Ring_02.png.meta
 TextureImporter:
-  internalIDToNameTable: []
+  fileIDToRecycleName: {}
   externalObjects: {}
+<<<<<<<< HEAD:KillingFloor/Assets/Hands_Weapons_Animations_Pack_Update/Icons/Automatic_Rifle_01.psd.meta
+  serializedVersion: 4
+========
   serializedVersion: 10
+>>>>>>>> origin/feature/ssm:KillingFloor/Assets/FantasySpellsEffectsPack/Textures/Ring_Sprites/Ring_02.png.meta
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
@@ -21,8 +31,11 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+<<<<<<<< HEAD:KillingFloor/Assets/Hands_Weapons_Animations_Pack_Update/Icons/Automatic_Rifle_01.psd.meta
+========
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+>>>>>>>> origin/feature/ssm:KillingFloor/Assets/FantasySpellsEffectsPack/Textures/Ring_Sprites/Ring_02.png.meta
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -33,7 +46,11 @@ TextureImporter:
     serializedVersion: 2
     filterMode: -1
     aniso: -1
+<<<<<<<< HEAD:KillingFloor/Assets/Hands_Weapons_Animations_Pack_Update/Icons/Automatic_Rifle_01.psd.meta
+    mipBias: -1
+========
     mipBias: -100
+>>>>>>>> origin/feature/ssm:KillingFloor/Assets/FantasySpellsEffectsPack/Textures/Ring_Sprites/Ring_02.png.meta
     wrapU: -1
     wrapV: -1
     wrapW: -1
@@ -45,22 +62,29 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spritePixelsToUnits: 100
   alphaUsage: 1
   alphaIsTransparency: 0
   spriteTessellationDetail: -1
   textureType: 0
   textureShape: 1
+<<<<<<<< HEAD:KillingFloor/Assets/Hands_Weapons_Animations_Pack_Update/Icons/Automatic_Rifle_01.psd.meta
+========
   singleChannelComponent: 0
+>>>>>>>> origin/feature/ssm:KillingFloor/Assets/FantasySpellsEffectsPack/Textures/Ring_Sprites/Ring_02.png.meta
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
+<<<<<<<< HEAD:KillingFloor/Assets/Hands_Weapons_Animations_Pack_Update/Icons/Automatic_Rifle_01.psd.meta
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+========
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 4096
+>>>>>>>> origin/feature/ssm:KillingFloor/Assets/FantasySpellsEffectsPack/Textures/Ring_Sprites/Ring_02.png.meta
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -69,6 +93,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+<<<<<<<< HEAD:KillingFloor/Assets/Hands_Weapons_Animations_Pack_Update/Icons/Automatic_Rifle_01.psd.meta
+========
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
@@ -82,22 +108,13 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
+>>>>>>>> origin/feature/ssm:KillingFloor/Assets/FantasySpellsEffectsPack/Textures/Ring_Sprites/Ring_02.png.meta
   spriteSheet:
     serializedVersion: 2
     sprites: []
     outline: []
     physicsShape: []
-    bones: []
-    spriteID: 
-    internalID: 0
-    vertices: []
-    indices: 
-    edges: []
-    weights: []
-    secondaryTextures: []
   spritePackingTag: 
-  pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
