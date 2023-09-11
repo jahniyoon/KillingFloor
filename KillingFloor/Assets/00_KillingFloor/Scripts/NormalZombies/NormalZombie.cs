@@ -8,6 +8,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering.Universal;
+using static UnityEngine.Rendering.DebugUI;
 
 public class NormalZombie : NormalZombieData
 {
@@ -46,7 +47,7 @@ public class NormalZombie : NormalZombieData
         GetComponent<NavMeshAgent>().speed = 0.1f;
         if (gameObject.name == "ZombieWalk_01(Clone)" || gameObject.name == "ZombieWalk_02(Clone)" ||
             gameObject.name == "ZombieWalk_03(Clone)" || gameObject.name == "ZombieWalk_04(Clone)" ||
-            gameObject.name == "ZombieHide_01(Clone)" || gameObject.name == "ZombieHide_01(Clone)")
+            gameObject.name == "ZombieHide_01(Clone)" || gameObject.name == "ZombieHide_02(Clone)")
         {
             isSkill = true;
         }
@@ -81,6 +82,7 @@ public class NormalZombie : NormalZombieData
                 if (navigation.isLongContact == true && isSkill == false)
                 {
                     Skill();
+
                 }
                 else if (navigation.isContact == true)
                 {
