@@ -11,6 +11,7 @@ public class CameraSetup : MonoBehaviour
     public CinemachineVirtualCamera followCam; // 현재 카메라
     public GameObject tpsPlayerBody;    // 3인칭 플레이어 바디
     public GameObject fpsPlayerBody;    // 1인칭 플레이어 바디
+    public GameObject playerSpine;
     public bool isFPS;
     public bool tpsTest;
 
@@ -24,9 +25,11 @@ public class CameraSetup : MonoBehaviour
         tpsCam.transform.parent = this.transform;
         fpsCam = GameObject.FindWithTag("FPS CAM");
         fpsCam.transform.parent = this.transform;
+        playerSpine = this.transform.GetChild(1).gameObject;
 
         tpsCam.SetActive(false);                    // 3인칭은 미리 꺼두기 (Debug용)
         tpsPlayerBody.SetActive(false);
+        playerSpine.SetActive(false);
 
 
         followCam = fpsCam.GetComponent<CinemachineVirtualCamera>();    // FPS 카메라를 팔로우캠으로 설정
@@ -50,6 +53,8 @@ public class CameraSetup : MonoBehaviour
             fpsCam.SetActive(!isFPS);
             tpsPlayerBody.SetActive(isFPS);
             fpsPlayerBody.SetActive(!isFPS);
+            playerSpine.SetActive(isFPS);
+
 
             if (isFPS) // 1인칭일 때
             {

@@ -160,16 +160,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetObj: {fileID: 0}
-  rightHandObj: {fileID: 2494820749725679429}
   leftHandObj: {fileID: 2580866488050847003}
-  rightElbowObj: {fileID: 5530635079174040069}
+  rightHandObj: {fileID: 2494820749725679429}
   leftElbowObj: {fileID: 6150576443196932875}
+  rightElbowObj: {fileID: 5530635079174040069}
   weaponID: 0
+  weaponType: 0
   damage: 25
   fireRate: 300
-  reloadRate: 2.17
+  reloadRate: 3
   ammo: 15
-  totalAmmo: 60
+  remainingAmmo: 60
   magazineSize: 15
 --- !u!1 &4431287244747059036
 GameObject:
@@ -226,7 +227,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4883999604976020654}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.367, y: 0.29, z: 0.25}
+  m_LocalPosition: {x: 0.0264, y: -0.1172, z: -0.1373}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

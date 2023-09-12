@@ -19,7 +19,7 @@ public class Weapon : MonoBehaviour
     public float fireRate;     // 연사속도 : RPM으로 계산
     public float reloadRate;   // 재장전 속도 : 초로 계산
     public float ammo;         // 현재 탄창
-    public float totalAmmo;    // 잔여 탄약
+    public float remainingAmmo;    // 잔여 탄약
     public float magazineSize; // 탄창 용량
 
 }

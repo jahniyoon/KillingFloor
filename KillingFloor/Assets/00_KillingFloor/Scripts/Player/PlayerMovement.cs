@@ -299,32 +299,29 @@ public class PlayerMovement : MonoBehaviour
     //// 애니메이션
     public void ActiveAnimation()
     {
-        ////// 걷기 애니메이션 셋팅
-        //if (input.move.x != 0 || input.move.y != 0)
-        //{
-        //    tpsAnimator.SetBool("isWalk", true);
-        //    //fpsAnimator.SetBool("isWalk", true);
-        //}
-        //else
-        //{
-        //    tpsAnimator.SetBool("isWalk", false);
-        //    //fpsAnimator.SetBool("isWalk", false);
-        //}
-        //tpsAnimator.SetBool("isRun", input.dash);
-        ////fpsAnimator.SetBool("isRun", input.dash);
+        //// 걷기 애니메이션 셋팅
+        if (input.move.x != 0 || input.move.y != 0)
+        {
+            fpsAnimator.SetBool("isWalk", true);
+        }
+        else
+        {
+            fpsAnimator.SetBool("isWalk", false);
+        }
+        fpsAnimator.SetBool("isRun", input.dash);
 
-        //tpsAnimator.SetBool("isJump", input.jump);
+        tpsAnimator.SetBool("isJump", input.jump);
 
 
         if (isGrounded)
         {
             tpsAnimator.SetBool("isGrounded", isGrounded);
-            //fpsAnimator.SetBool("isGrounded", isGrounded);
+            fpsAnimator.SetBool("isGrounded", isGrounded);
         }
         else if (!isGrounded)
         {
             tpsAnimator.SetBool("isGrounded", isGrounded);
-            //fpsAnimator.SetBool("isGrounded", isGrounded);
+            fpsAnimator.SetBool("isGrounded", isGrounded);
         }
 
         tpsAnimator.SetFloat("Speed", animMoveSpeed);
