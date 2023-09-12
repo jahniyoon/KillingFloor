@@ -1176,8 +1176,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 13055188376290308}
-  - component: {fileID: 6194245470429823033}
-  - component: {fileID: 5456139916062419319}
   m_Layer: 0
   m_Name: Wrist_L
   m_TagString: Untagged
@@ -1204,31 +1202,6 @@ Transform:
   m_Father: {fileID: 13055188376290744}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &6194245470429823033
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 13055188376131684}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.1
-  m_Center: {x: 0.1, y: 0, z: 0}
---- !u!114 &5456139916062419319
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 13055188376131684}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9de615b293c36e240b771756d441dbc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &13055188376131686
 GameObject:
   m_ObjectHideFlags: 0
@@ -1554,6 +1527,7 @@ GameObject:
   - component: {fileID: 13055188376290330}
   - component: {fileID: 6826882070443575561}
   - component: {fileID: 7197855171528342436}
+  - component: {fileID: 1201509554837267721}
   m_Layer: 0
   m_Name: Wrist_R
   m_TagString: Untagged
@@ -1605,6 +1579,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de615b293c36e240b771756d441dbc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentObjectAni: {fileID: 13055188368878154}
+--- !u!54 &1201509554837267721
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 13055188376131706}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &13055188376131708
 GameObject:
   m_ObjectHideFlags: 0
@@ -1684,6 +1675,8 @@ MonoBehaviour:
   - {fileID: 9100000, guid: b31466ab1e449ff418deedd78fbbda69, type: 2}
   - {fileID: 9100000, guid: 66a4c53d87489f545834d05c81e31766, type: 2}
   - {fileID: 9100000, guid: c420879e0a062944a907614b92e04d61, type: 2}
+  skills: []
+  skillPrefab: {fileID: 0}
   hitPos: 0
   isCoroutine: 0
 --- !u!114 &13055188284585135

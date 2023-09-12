@@ -15,7 +15,7 @@ public class NormalZombie : NormalZombieData
     public List<AnimatorController> controllers = new List<AnimatorController>();
     public List<GameObject> skills = new List<GameObject>();
 
-    public Transform skillParent;
+    private Transform skillParent;
 
     private Coroutine blendTreeMove;
     private Coroutine animatorController;
@@ -57,7 +57,10 @@ public class NormalZombie : NormalZombieData
         {
             isSkill = true;
         }
-        else { /*No Event*/ }
+        else
+        {
+            skillParent = GameObject.Find("Skills").transform;
+        }
     }
 
     private void OnEnable()
@@ -260,77 +263,86 @@ public class NormalZombie : NormalZombieData
 
         if (skillPrefab.name == "NoiseEffect")
         {
-            if (skillParent.childCount == 0)
-            {
-                GameObject newSkill = Instantiate(skillPrefab, skillParent);
-                skills.Add(newSkill);
-                newSkill.transform.position = gameObject.transform.position;
-                newSkill.transform.rotation = gameObject.transform.rotation;
-                StartCoroutine(SkillTime(newSkill, 5.0f));
-            }
-            else
-            {
-                for (int i = 0; i < skillParent.childCount; i++)
-                {
-                    if (skillParent.GetChild(i).gameObject.activeSelf)
-                    {
-                        if (i == skillParent.childCount - 1)
-                        {
-                            GameObject newSkill = Instantiate(skillPrefab, skillParent);
-                            skills.Add(newSkill);
-                            newSkill.transform.position = gameObject.transform.position;
-                            newSkill.transform.rotation = gameObject.transform.rotation;
-                            StartCoroutine(SkillTime(newSkill, 5.0f));
-
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        skillParent.GetChild(i).gameObject.SetActive(true);
-                        skillParent.GetChild(i).gameObject.transform.position = gameObject.transform.position;
-                        skillParent.GetChild(i).gameObject.transform.rotation = gameObject.transform.rotation;
-                        StartCoroutine(SkillTime(skillParent.GetChild(i).gameObject, 5.0f));
-                    }
-                }
-            }
+            SkillSave("Noise", new Vector3(0.0f, 0.0f, 0.0f));
         }
         else if (skillPrefab.name == "SpitEffect")
         {
-            if (skillParent.childCount == 0)
-            {
-                GameObject newSkill = Instantiate(skillPrefab, skillParent);
-                skills.Add(newSkill);
-                newSkill.transform.position = gameObject.transform.position + new Vector3(0.0f, 1.0f, 0.0f);
-                newSkill.transform.rotation = gameObject.transform.rotation;
-            }
-            else
-            {
-                for (int i = 0; i < skillParent.childCount; i++)
-                {
-                    if (skillParent.GetChild(i).gameObject.activeSelf)
-                    {
-                        if (i == skillParent.childCount - 1)
-                        {
-                            GameObject newSkill = Instantiate(skillPrefab, skillParent);
-                            skills.Add(newSkill);
-                            newSkill.transform.position = gameObject.transform.position + new Vector3(0.0f, 1.0f, 0.0f);
-                            newSkill.transform.rotation = gameObject.transform.rotation;
-                            StartCoroutine(SkillTime(newSkill, 5.0f));
-
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        skillParent.GetChild(i).gameObject.SetActive(true);
-                        skillParent.GetChild(i).gameObject.transform.position = gameObject.transform.position + new Vector3(0.0f, 1.0f, 0.0f);
-                        skillParent.GetChild(i).gameObject.transform.rotation = gameObject.transform.rotation;
-                        StartCoroutine(SkillTime(skillParent.GetChild(i).gameObject, 5.0f));
-                    }
-                }
-            }
+            SkillSave("Spit", new Vector3(0.0f, 1.0f, 0.0f));
         }
+
+        //if (skillPrefab.name == "NoiseEffect")
+        //{
+        //    if (skillParent.childCount == 0)
+        //    {
+        //        GameObject newSkill = Instantiate(skillPrefab, skillParent);
+        //        skills.Add(newSkill);
+        //        newSkill.transform.position = gameObject.transform.position;
+        //        newSkill.transform.rotation = gameObject.transform.rotation;
+        //        StartCoroutine(SkillTime(newSkill, 5.0f));
+        //    }
+        //    else
+        //    {
+        //        for (int i = 0; i < skillParent.childCount; i++)
+        //        {
+        //            if (skillParent.GetChild(i).gameObject.activeSelf)
+        //            {
+        //                if (i == skillParent.childCount - 1)
+        //                {
+        //                    GameObject newSkill = Instantiate(skillPrefab, skillParent);
+        //                    skills.Add(newSkill);
+        //                    newSkill.transform.position = gameObject.transform.position;
+        //                    newSkill.transform.rotation = gameObject.transform.rotation;
+        //                    StartCoroutine(SkillTime(newSkill, 5.0f));
+
+        //                    break;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                skillParent.GetChild(i).gameObject.SetActive(true);
+        //                skillParent.GetChild(i).gameObject.transform.position = gameObject.transform.position;
+        //                skillParent.GetChild(i).gameObject.transform.rotation = gameObject.transform.rotation;
+        //                StartCoroutine(SkillTime(skillParent.GetChild(i).gameObject, 5.0f));
+        //            }
+        //        }
+        //    }
+        //}
+        //else if (skillPrefab.name == "SpitEffect")
+        //{
+        //    if (skillParent.childCount == 0)
+        //    {
+        //        GameObject newSkill = Instantiate(skillPrefab, skillParent);
+        //        skills.Add(newSkill);
+        //        newSkill.transform.position = gameObject.transform.position + new Vector3(0.0f, 1.0f, 0.0f);
+        //        newSkill.transform.rotation = gameObject.transform.rotation;
+        //    }
+        //    else
+        //    {
+        //        for (int i = 0; i < skillParent.childCount; i++)
+        //        {
+        //            if (skillParent.GetChild(i).gameObject.activeSelf)
+        //            {
+        //                if (i == skillParent.childCount - 1)
+        //                {
+        //                    GameObject newSkill = Instantiate(skillPrefab, skillParent);
+        //                    skills.Add(newSkill);
+        //                    newSkill.transform.position = gameObject.transform.position + new Vector3(0.0f, 1.0f, 0.0f);
+        //                    newSkill.transform.rotation = gameObject.transform.rotation;
+        //                    StartCoroutine(SkillTime(newSkill, 5.0f));
+
+        //                    break;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                skillParent.GetChild(i).gameObject.SetActive(true);
+        //                skillParent.GetChild(i).gameObject.transform.position = gameObject.transform.position + new Vector3(0.0f, 1.0f, 0.0f);
+        //                skillParent.GetChild(i).gameObject.transform.rotation = gameObject.transform.rotation;
+        //                StartCoroutine(SkillTime(skillParent.GetChild(i).gameObject, 5.0f));
+        //            }
+        //        }
+        //    }
+        //}
 
         //for (int i = 0; i < transform.childCount; i++)
         //{
@@ -367,6 +379,50 @@ public class NormalZombie : NormalZombieData
         //        }
         //    }
         //}
+    }
+
+    private void SkillSave(string _name, Vector3 _addVector)
+    {
+        for (int i = 0; i < skillParent.childCount; i++)
+        {
+            if (skillParent.GetChild(i).name == _name)
+            {
+                if (skillParent.GetChild(i).childCount == 0)
+                {
+                    GameObject newSkill = Instantiate(skillPrefab, skillParent.GetChild(i));
+                    newSkill.transform.position = gameObject.transform.position + _addVector;
+                    newSkill.transform.rotation = gameObject.transform.rotation;
+                    StartCoroutine(SkillTime(newSkill, 5.0f));
+                }
+                else
+                {
+                    for (int j = 0; j < skillParent.GetChild(i).childCount; j++)
+                    {
+                        if (skillParent.GetChild(i).GetChild(j).gameObject.activeSelf)
+                        {
+                            if (j == skillParent.GetChild(i).childCount - 1)
+                            {
+                                GameObject newSkill = Instantiate(skillPrefab, skillParent.GetChild(i));
+                                newSkill.transform.position = gameObject.transform.position + _addVector;
+                                newSkill.transform.rotation = gameObject.transform.rotation;
+                                StartCoroutine(SkillTime(newSkill, 5.0f));
+
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            skillParent.GetChild(i).GetChild(j).gameObject.SetActive(true);
+                            skillParent.GetChild(i).GetChild(j).gameObject.transform.position = gameObject.transform.position + _addVector;
+                            skillParent.GetChild(i).GetChild(j).gameObject.transform.rotation = gameObject.transform.rotation;
+                            StartCoroutine(SkillTime(skillParent.GetChild(i).GetChild(j).gameObject, 5.0f));
+
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void Death()

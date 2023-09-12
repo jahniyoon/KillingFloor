@@ -1,18 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AttackNoise : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private float timeElapsed = 0.0f;
+    private List<GameObject> targets = new List<GameObject>();
+    private Transform players;
+
+    private bool isCoroutine = false;
+
+    private void Awake()
     {
-        
+        players = GameObject.Find("Players").transform;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-        
+        if (isCoroutine == false)
+        {
+            StartCoroutine(Attack());
+        }
+    }
+    private void Start()
+    {
+        if (isCoroutine == false)
+        {
+            StartCoroutine(Attack());
+        }
+    }
+
+    private IEnumerator Attack()
+    {
+        isCoroutine = true;
+
+        if (players.childCount != targets.Count)
+        {
+            for (int i = 0; i < players.childCount; i++)
+            {
+                targets.Add(players.GetChild(i).gameObject);
+            }
+        }
+
+        timeElapsed = 0.0f;
+
+        while (timeElapsed < 1.0f)
+        {
+            for (int i = 0; i < targets.Count; i++)
+            {
+                if (Vector3.Distance(gameObject.transform.position, targets[i].transform.position) <= 8.0f)
+                {
+                    targets[i].GetComponent<PlayerHealth>().startingHealth -= 1.0f;
+                }
+            }
+
+            yield return new WaitForSeconds(0.1f);
+
+            timeElapsed += 0.1f;
+        }
+
+        isCoroutine = false;
     }
 }

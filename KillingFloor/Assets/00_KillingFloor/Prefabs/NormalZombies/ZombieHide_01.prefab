@@ -3854,8 +3854,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8823769118036422419}
-  - component: {fileID: 7481734759238189951}
-  - component: {fileID: 289128887812526677}
   m_Layer: 0
   m_Name: Wrist_L
   m_TagString: Untagged
@@ -3882,31 +3880,6 @@ Transform:
   m_Father: {fileID: 8823769118036422325}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7481734759238189951
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8823769118035997555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9de615b293c36e240b771756d441dbc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!135 &289128887812526677
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8823769118035997555}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.1
-  m_Center: {x: 0.1, y: 0, z: 0}
 --- !u!1 &8823769118035997557
 GameObject:
   m_ObjectHideFlags: 0
@@ -3918,6 +3891,7 @@ GameObject:
   - component: {fileID: 8823769118036422421}
   - component: {fileID: 1602766477100792383}
   - component: {fileID: 8489408023816856451}
+  - component: {fileID: 5320652721136652623}
   m_Layer: 0
   m_Name: Wrist_R
   m_TagString: Untagged
@@ -3956,6 +3930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de615b293c36e240b771756d441dbc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentObjectAni: {fileID: 8823769118026596673}
 --- !u!135 &8489408023816856451
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3969,6 +3944,22 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.1
   m_Center: {x: -0.1, y: 0, z: 0}
+--- !u!54 &5320652721136652623
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8823769118035997557}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &8823769118035997559
 GameObject:
   m_ObjectHideFlags: 0
@@ -4086,6 +4077,8 @@ MonoBehaviour:
   coin: 0
   controllers:
   - {fileID: 9100000, guid: 3958d5d0434cd1b4aaae1fcb3740757b, type: 2}
+  skills: []
+  skillPrefab: {fileID: 0}
   hitPos: 0
   isCoroutine: 0
 --- !u!114 &8823769117903065349
