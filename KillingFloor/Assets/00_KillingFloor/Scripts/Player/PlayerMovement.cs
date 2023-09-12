@@ -74,13 +74,24 @@ public class PlayerMovement : MonoBehaviour
     private bool IsCurrentDeviceMouse;
 
     private float animMoveSpeed;
+    private AudioSource m_AudioSource;
+    [SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
+    [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
+    [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
+    private float m_StepCycle;
+    private float m_NextStep;
+
 
     void Start()
     {
         input = GetComponent<PlayerInputs>();
         controller = GetComponent<CharacterController>();
+        m_AudioSource = GetComponent<AudioSource>();
         _jumpTimeoutDelta = jumpTimeout;
         _fallTimeoutDelta = fallTimeout;
+        m_StepCycle = 0f;
+        m_NextStep = m_StepCycle / 2f;
+
     }
 
     void Update()
@@ -170,7 +181,7 @@ public class PlayerMovement : MonoBehaviour
 
             // 시네머신 카메라 타겟 업데이트
             cinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
-            weaponTarget.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+            weaponTarget.localRotation = Quaternion.Euler(_cinemachineTargetPitch * -1, 0.0f, 0.0f);    // 모델링이 반대로 값을 받아서 -1을 곱함
             followCamera.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);   // 시네머신 또한 위아래 회전 가능하게 설정. (안하면 고정되어있음)
 
             // 플레이어 좌우로 회전시키기
@@ -228,8 +239,42 @@ public class PlayerMovement : MonoBehaviour
 
         // 플레이어 위치 이동
         controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        ProgressStepCycle(moveSpeed);
+
     }
-   
+
+    private void ProgressStepCycle(float speed)
+    {
+        if (controller.velocity.sqrMagnitude > 0 && (input.move.x != 0 || input.move.y != 0))
+        {
+            m_StepCycle += (controller.velocity.magnitude + (speed * (input.dash ? 0.3f : 0))) *
+                         Time.fixedDeltaTime;
+        }
+
+        if (!(m_StepCycle > m_NextStep))
+        {
+            return;
+        }
+
+        m_NextStep = m_StepCycle + 5;
+
+        PlayFootStepAudio();
+    }
+    private void PlayFootStepAudio()
+    {
+        if (!controller.isGrounded)
+        {
+            return;
+        }
+        // pick & play a random footstep sound from the array,
+        // excluding sound at index 0
+        int n = Random.Range(1, m_FootstepSounds.Length);
+        m_AudioSource.clip = m_FootstepSounds[n];
+        m_AudioSource.PlayOneShot(m_AudioSource.clip);
+        // move picked sound to index 0 so it's not picked next time
+        m_FootstepSounds[n] = m_FootstepSounds[0];
+        m_FootstepSounds[0] = m_AudioSource.clip;
+    }
     // 카메라 각도 제한
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
     {
