@@ -26,7 +26,7 @@ public class StartColiderScripts : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(playersInTrigger);
+       
         if(playersInTrigger.Count >= targetPlayer.Length) //플레이어가 모두 입장시 보스 Active
         {
             if (!Boss.activeSelf)

@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class BossController : MonoBehaviour
 {
+    private float bossHp = 3500f;//보스 hp;
     private GameObject[] targetPlayer;
     private int randPlayerNum;//타겟플레이어
     private Animator animator;
@@ -12,8 +13,6 @@ public class BossController : MonoBehaviour
     private float currentTime = 0f;
     private float setTime = 6.5f;
     private int saveFattern = 0;//이전패턴
-    private float speed = 3f;//보스걷는애니메이션
-    private float bossSpeed = 0f;
     private GameObject[] fireBreaths;//브레스 오브젝트 배열
     private ParticleSystem[] fireBreathsParticle;//브레스 파티클 배열
     private GameObject[] fireBreathHoles;//사이렌 오브젝트 배열
@@ -22,7 +21,23 @@ public class BossController : MonoBehaviour
     private ParticleSystem[] midSphereEffectParticles;//사이렌 파티클 베리어배열
     private GameObject[] fireRings;// 첨프충격 오브젝트 배열
     private ParticleSystem[] fireRingParticles;//점프충격 파티클 베리어배열
+    private GameObject[] meteors;//메테오
+
+
     private NavMeshAgent agent;
+    private void Awake()
+    {
+        meteors = new GameObject[4];
+        GameObject meteor = GameObject.Find("Meteor");
+
+
+
+        for (int i = 0; i <= 1; i++) // 메테오 배열에 저장하는과정
+        {
+            meteors[i] = meteor.transform.GetChild(i).gameObject;        
+            meteors[i].SetActive(false);
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -35,12 +50,13 @@ public class BossController : MonoBehaviour
         midSphereEffectParticles = new ParticleSystem[4];
         fireRings = new GameObject[4];
         fireRingParticles = new ParticleSystem[4];
-
+       
         GameObject midSphere = GameObject.Find("MidSphereEffect");
         GameObject fireBreath = GameObject.Find("FireBreath");
         GameObject fireBreathHole = GameObject.Find("FireBreathHole");
         GameObject fireRing = GameObject.Find("FireRing");
 
+      
         for (int i = 0; i <= 2; i++) // 점프 충격 배열에 저장하는과정
         {
             fireRings[i] = fireRing.transform.GetChild(i).gameObject;
@@ -76,6 +92,10 @@ public class BossController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(bossHp <= 0)
+        {
+            return;
+        }
         currentTime += Time.deltaTime;
         if (currentTime >= setTime)
         {
@@ -91,8 +111,7 @@ public class BossController : MonoBehaviour
                 agent.updatePosition = false;
                 agent.updateRotation = false;
                 agent.velocity = Vector3.zero;
-
-                speed = 0;
+             
                 randomFattern = Random.Range(0, 6);
                 if (randomFattern != saveFattern)// 공격패턴 중복체크, 중복패턴 변경
                 {
@@ -163,34 +182,40 @@ public class BossController : MonoBehaviour
                         currentTime = 0;
                         setTime = 3.6f;
                         break;
-                    case 4:
+                    case 4://점프공격
                         animator.SetTrigger("Jump");
                         Invoke("JumpImpt", 1.1f);
-                        currentTime = 0;
-                       
+                        currentTime = 0;                      
                         setTime = 3f;
                         break;
-                    case 5:
+                    case 5://긴브레스
                         animator.SetTrigger("Breath");
                         Invoke("fireBreathImpt", 1f);
                         currentTime = 0;
                        
                         setTime = 5.8f;
                         break;
+                  
+
                 }
             }//보스 공격패턴End
             else//원거리 애니메이션
             {
-            
+                animator.SetTrigger("Meteor");
+                Invoke("fireBreathImpt", 1f);
+                
+                meteors[0].SetActive(true);
+                currentTime = 0;
+
+                setTime = 6f;
+
+
                 AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("idle"))// 속도 변화
                 {
                     agent.isStopped = false;
                     agent.updatePosition = true;
-                    agent.updateRotation = true;
-                    speed = (distance / 2) * 4;
-                 
-                   // LookRotate();
+                    agent.updateRotation = true;                    
                     BossMove();
                 }
                 animator.SetFloat("Speed", agent.speed);
@@ -263,5 +288,22 @@ public class BossController : MonoBehaviour
             StartCoroutine(StopParticle(fireBreathsParticle[i], 4f));
         }
     }
- 
+    private void OnAnimatorIK()
+    {
+        if(animator)
+        {
+            if (meteors[0]!= null)
+            {
+                animator.SetLookAtWeight(1);
+                animator.SetLookAtPosition(meteors[0].transform.position);
+            }
+            else
+            {
+                animator.SetLookAtWeight(0);
+            }
+                
+                
+        }
+    }
+
 }
