@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1045794705898531795
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8927482937426690689}
+  m_Layer: 0
+  m_Name: Skill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8927482937426690689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045794705898531795}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4256926460706373033}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4256926460706201633
 GameObject:
   m_ObjectHideFlags: 0
@@ -1281,7 +1312,7 @@ Transform:
   - {fileID: 4256926460706373031}
   - {fileID: 4256926460706373035}
   m_Father: {fileID: 4256926460706373033}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4256926460706201685
 GameObject:
@@ -1313,7 +1344,7 @@ Transform:
   m_Children:
   - {fileID: 4256926460706372677}
   m_Father: {fileID: 4256926460706373033}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4256926460706201687
 GameObject:
@@ -3648,8 +3679,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4256926460706373027}
-  - component: {fileID: 963521709914437937}
-  - component: {fileID: 1687435194867515997}
   m_Layer: 0
   m_Name: Wrist_L
   m_TagString: Untagged
@@ -3676,31 +3705,6 @@ Transform:
   m_Father: {fileID: 4256926460706372611}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &963521709914437937
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4256926460706202051}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9de615b293c36e240b771756d441dbc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!135 &1687435194867515997
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4256926460706202051}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.1
-  m_Center: {x: 0.1, y: 0, z: 0}
 --- !u!1 &4256926460706202053
 GameObject:
   m_ObjectHideFlags: 0
@@ -3712,6 +3716,7 @@ GameObject:
   - component: {fileID: 4256926460706373029}
   - component: {fileID: 7533949145827790253}
   - component: {fileID: 3373452453173700376}
+  - component: {fileID: 4006559923089237459}
   m_Layer: 0
   m_Name: Wrist_R
   m_TagString: Untagged
@@ -3750,6 +3755,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de615b293c36e240b771756d441dbc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentObjectAni: {fileID: 4256926460713620465}
 --- !u!135 &3373452453173700376
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3763,6 +3769,22 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.1
   m_Center: {x: -0.1, y: 0, z: 0}
+--- !u!54 &4006559923089237459
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4256926460706202053}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &4256926460706202055
 GameObject:
   m_ObjectHideFlags: 0
@@ -3955,6 +3977,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8927482937426690689}
   - {fileID: 4256926460706372659}
   - {fileID: 4256926460706372661}
   m_Father: {fileID: 0}
@@ -3997,10 +4020,13 @@ MonoBehaviour:
   damage: 0
   coin: 0
   controllers:
-  - {fileID: 9100000, guid: c22668f17f46f074f979500241f12726, type: 2}
-  - {fileID: 9100000, guid: dd98ff45fe95f4a49a6bdd0073e2fd84, type: 2}
-  - {fileID: 9100000, guid: c259c33597f0a714a99f95ced75eaf3c, type: 2}
-  - {fileID: 9100000, guid: 35fe8df5ec39a824c950eae972926774, type: 2}
+  - {fileID: 9100000, guid: a3181b7c76bba27479314cba9f89cdeb, type: 2}
+  - {fileID: 9100000, guid: b31466ab1e449ff418deedd78fbbda69, type: 2}
+  - {fileID: 9100000, guid: 66a4c53d87489f545834d05c81e31766, type: 2}
+  - {fileID: 9100000, guid: c420879e0a062944a907614b92e04d61, type: 2}
+  skills: []
+  skillPrefab: {fileID: 2670914608053251544, guid: 05235217466846f4984225ee7c8c5b57,
+    type: 3}
   hitPos: 0
   isCoroutine: 0
 --- !u!114 &4256926460357450965
@@ -4016,6 +4042,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isContact: 0
+  isLongContact: 0
 --- !u!195 &4256926460357450964
 NavMeshAgent:
   m_ObjectHideFlags: 0

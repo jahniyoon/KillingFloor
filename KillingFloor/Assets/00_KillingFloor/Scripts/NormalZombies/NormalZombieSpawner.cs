@@ -112,8 +112,6 @@ public class NormalZombieSpawner : MonoBehaviour
 
     public IEnumerator SpawnZombie(int _zombieCount, int _roundPointCount)
     {
-        
-        
         for (int i = 0; i < _roundPointCount; i++)
         {
             for (int j = 0; j < _zombieCount / _roundPointCount * 0.8f; j++)

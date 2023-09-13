@@ -3805,6 +3805,7 @@ GameObject:
   - component: {fileID: 7909920428136706445}
   - component: {fileID: 808005538864340092}
   - component: {fileID: 8121262499009080208}
+  - component: {fileID: 1172118596283897060}
   m_Layer: 0
   m_Name: Wrist_R
   m_TagString: Untagged
@@ -3856,6 +3857,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de615b293c36e240b771756d441dbc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentObjectAni: {fileID: 7909920428127641539}
+--- !u!54 &1172118596283897060
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7909920428137000429}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7909920428137000431
 GameObject:
   m_ObjectHideFlags: 0
@@ -3865,8 +3883,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7909920428136706447}
-  - component: {fileID: 298206514986247782}
-  - component: {fileID: 7977598385310775999}
   m_Layer: 0
   m_Name: Wrist_L
   m_TagString: Untagged
@@ -3893,31 +3909,6 @@ Transform:
   m_Father: {fileID: 7909920428136706097}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &298206514986247782
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7909920428137000431}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.1
-  m_Center: {x: 0.1, y: 0, z: 0}
---- !u!114 &7977598385310775999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7909920428137000431}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9de615b293c36e240b771756d441dbc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7909920428137000433
 GameObject:
   m_ObjectHideFlags: 0
@@ -4192,11 +4183,13 @@ MonoBehaviour:
   damage: 0
   coin: 0
   controllers:
-  - {fileID: 9100000, guid: c22668f17f46f074f979500241f12726, type: 2}
-  - {fileID: 9100000, guid: dd98ff45fe95f4a49a6bdd0073e2fd84, type: 2}
-  - {fileID: 9100000, guid: c259c33597f0a714a99f95ced75eaf3c, type: 2}
-  - {fileID: 9100000, guid: 35fe8df5ec39a824c950eae972926774, type: 2}
-  - {fileID: 9100000, guid: 5e43af3d91d74124190d26f413efd15b, type: 2}
+  - {fileID: 9100000, guid: 3958d5d0434cd1b4aaae1fcb3740757b, type: 2}
+  - {fileID: 9100000, guid: a3181b7c76bba27479314cba9f89cdeb, type: 2}
+  - {fileID: 9100000, guid: b31466ab1e449ff418deedd78fbbda69, type: 2}
+  - {fileID: 9100000, guid: 66a4c53d87489f545834d05c81e31766, type: 2}
+  - {fileID: 9100000, guid: c420879e0a062944a907614b92e04d61, type: 2}
+  skills: []
+  skillPrefab: {fileID: 0}
   hitPos: 0
   isCoroutine: 0
 --- !u!114 &7909920429301382986
@@ -4212,6 +4205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isContact: 0
+  isLongContact: 0
 --- !u!195 &7909920429301382989
 NavMeshAgent:
   m_ObjectHideFlags: 0
