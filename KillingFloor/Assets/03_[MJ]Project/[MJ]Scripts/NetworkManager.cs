@@ -53,7 +53,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         var request = new RegisterPlayFabUserRequest
         { Email = EmailInput.text, Password = PasswordInput.text, Username = UsernameInput.text, DisplayName = UsernameInput.text };
         //PlayFabClientAPI.RegisterPlayFabUser(request, (result) => Debug.Log("회원가입 성공"), (error) => Debug.Log("회원가입 실패"));
-        PlayFabClientAPI.RegisterPlayFabUser(request, (result) => { Debug.Log("회원가입 성공"); SetStat(); SetData("default"); },
+        PlayFabClientAPI.RegisterPlayFabUser(request, (result) => { Debug.Log("회원가입 성공"); SetStat(); SetData("Lv.0"); },
             (error) => Debug.Log("회원가입 실패"));
 
     }
@@ -94,7 +94,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         var request = new UpdateUserDataRequest()
         {
-            Data = new Dictionary<string, string>() { { "Home", curData } },
+            Data = new Dictionary<string, string>() { { "HomeLevel", curData } },
             Permission = UserDataPermission.Public
         };
         PlayFabClientAPI.UpdateUserData(request, (result) => { }, (error) => Debug.Log("데이터 저장 실패"));
@@ -103,7 +103,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     void GetData(string curID)
     {
         PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = curID }, (result) =>
-        UserRoomDataText.text = curID + "\n" + result.Data["Home"].Value,
+        UserRoomDataText.text = "고유ID" + curID + "\n" + result.Data["HomeLevel"].Value,
         (error) => Debug.Log("데이터 불러오기 실패"));
     }
     #endregion
@@ -241,8 +241,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     void RoomRenewal()
     {
         UserNickNameText.text = "";
+
+        PlayFabClientAPI.GetUserData(new GetUserDataRequest(), (result) =>
+            {
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-            UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + "\n";
+        {
+            UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
+        }
+        },
+        (error) => { Debug.Log("레벨 불러오지 못함"); }
+        );
+
+        //UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + "\n" + result.Data["HomeLevel"].Value;
         RoomNumInfoText.text = PhotonNetwork.CurrentRoom.PlayerCount + "명 / " + PhotonNetwork.CurrentRoom.MaxPlayers + "최대 인원";
     }
 
