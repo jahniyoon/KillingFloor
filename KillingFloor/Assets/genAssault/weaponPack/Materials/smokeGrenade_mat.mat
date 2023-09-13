@@ -1,10 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
-<<<<<<< HEAD:KillingFloor/Assets/genAssault/weaponPack/Materials/smokeGrenade_mat.mat
---- !u!114 &-1057777719253930871
-=======
 --- !u!114 &-6895449819248013069
->>>>>>> origin/feature/ssm:KillingFloor/Assets/01_Assets_Import/genAssault/weaponPack/Materials/smokeGrenade_mat.mat
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -17,6 +13,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 5
+--- !u!114 &-1057777719253930871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -28,12 +36,9 @@ Material:
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_ValidKeywords:
   - _EMISSION
-<<<<<<< HEAD:KillingFloor/Assets/genAssault/weaponPack/Materials/smokeGrenade_mat.mat
   - _METALLICSPECGLOSSMAP
   - _NORMALMAP
   - _OCCLUSIONMAP
-=======
->>>>>>> origin/feature/ssm:KillingFloor/Assets/01_Assets_Import/genAssault/weaponPack/Materials/smokeGrenade_mat.mat
   - _SPECGLOSSMAP
   - _SPECULAR_SETUP
   m_InvalidKeywords: []
@@ -48,11 +53,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-<<<<<<< HEAD:KillingFloor/Assets/genAssault/weaponPack/Materials/smokeGrenade_mat.mat
         m_Texture: {fileID: 2800000, guid: 2f1092463b3777b4585b51ec6e33c882, type: 3}
-=======
-        m_Texture: {fileID: 0}
->>>>>>> origin/feature/ssm:KillingFloor/Assets/01_Assets_Import/genAssault/weaponPack/Materials/smokeGrenade_mat.mat
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -76,11 +77,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 2f1092463b3777b4585b51ec6e33c882, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -134,11 +131,7 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Shininess: 0.078125
-<<<<<<< HEAD:KillingFloor/Assets/genAssault/weaponPack/Materials/smokeGrenade_mat.mat
     - _Smoothness: 1
-=======
-    - _Smoothness: 0.5
->>>>>>> origin/feature/ssm:KillingFloor/Assets/01_Assets_Import/genAssault/weaponPack/Materials/smokeGrenade_mat.mat
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

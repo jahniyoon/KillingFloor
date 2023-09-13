@@ -643,7 +643,7 @@ MonoBehaviour:
   leftElbowObj: {fileID: 8220368414150401876}
   rightElbowObj: {fileID: 4341266710461404158}
   weaponID: 0
-  weaponType: 0
+  weaponType: 1
   damage: 30
   fireRate: 500
   reloadRate: 3.07

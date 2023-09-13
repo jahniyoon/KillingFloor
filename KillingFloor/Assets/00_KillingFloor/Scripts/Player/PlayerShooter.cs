@@ -25,16 +25,17 @@ public class PlayerShooter : MonoBehaviour
     public bool isAnimation;
 
     [Header("Weapon Info")]
-    public Type weaponType;
     public Weapon equipedWeapon;
-    [Range(0, 5)]
-    public int weaponSlot;
+    [Range(1, 4)]
+    public int weaponSlot = 1;
     public float damage;        // 총기 데미지
     public float range = 100f;  // 사거리
     public float reloadRate;    // 재장전 속도
     public float fireRate;      // 사격 속도
     public bool isReloading;    // 가능 여부
     public bool isFireReady;
+    public int grenade;
+    public bool isGrenade;
 
     
     [Header("TPS Weapon")]
@@ -45,7 +46,9 @@ public class PlayerShooter : MonoBehaviour
     public Transform fpsPosition;
     public Transform fpsPistol;
     public Transform fpsRifle;
-    public Transform fpsWeapon;
+    public Transform fpsMelee;
+    public Transform fpsHeal;
+    public Transform fpsGrenade;
 
     [Header("Animator IK")]
     public Animator handAnimator;
@@ -81,12 +84,19 @@ public class PlayerShooter : MonoBehaviour
         fpsPosition = transform.GetChild(0).GetChild(0).GetComponent<Transform>();
         fpsPistol = fpsPosition.transform.GetChild(0).GetComponent<Transform>();
         fpsRifle = fpsPosition.transform.GetChild(1).GetComponent<Transform>();  // 라이플은 미리 불러와서 꺼두기
+        fpsMelee = fpsPosition.transform.GetChild(2).GetComponent<Transform>();  
+        fpsHeal = fpsPosition.transform.GetChild(3).GetComponent<Transform>();  
+        fpsGrenade = fpsPosition.transform.GetChild(4).GetComponent<Transform>();  
+
         fpsRifle.gameObject.SetActive(false);
+        fpsMelee.gameObject.SetActive(false);
+        fpsHeal.gameObject.SetActive(false);
+        fpsGrenade.gameObject.SetActive(false);
+
 
         SetWeapon(tpsPistol, fpsPistol); // 무기 장착
         animator.SetBool("isWeaponPistol", true);
         animator.SetBool("isWeaponRifle", false);
-        weaponSlot = 1;       // 현재 슬롯 상태
     }
 
     // Update is called once per frame
@@ -95,7 +105,7 @@ public class PlayerShooter : MonoBehaviour
         HandSet();
         Shoot();
         Reload();
-        WeaponSlots();
+        Weapons();
     }
 
     // 사격 입력
@@ -123,13 +133,13 @@ public class PlayerShooter : MonoBehaviour
             
 
             // 만약 닿은게 있으면 데미지
-            if (Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range, layerMask))
+            if (Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range, layerMask) && weaponSlot < 3)
             {
                 GameObject hitObj = hit.transform.gameObject;
                 Damage(hitObj);
                 hitPoint = hit.point;
             }
-            else if(Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range))
+            else if(Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range) && weaponSlot < 3)
             {
                 hitPoint = hit.point;
 
@@ -212,46 +222,142 @@ public class PlayerShooter : MonoBehaviour
         isAnimation = false;
     }
 
-    public void WeaponSlots()
+    public void Weapons()
     {
-        WeaponSlot1();
-        WeaponSlot2();
-    }
+        WeaponInput();
 
-    public void WeaponSlot1()
-    {
-        if (input.weaponSlot1 && weaponSlot == 2)
+        if(weaponSlot == 1 && !isGrenade)
         {
             tpsRifle.gameObject.SetActive(false);
             tpsPistol.gameObject.SetActive(true);
             fpsRifle.gameObject.SetActive(false);
             fpsPistol.gameObject.SetActive(true);
-
+            fpsMelee.gameObject.SetActive(false);
+            fpsHeal.gameObject.SetActive(false);
+            fpsGrenade.gameObject.SetActive(false);
             SetWeapon(tpsPistol, fpsPistol); // 무기 장착
-            weaponSlot = 1;
             animator.SetBool("isWeaponPistol", true);
             animator.SetBool("isWeaponRifle", false);
-
-            input.weaponSlot1 = false;
+            Debug.Log("얼마나 호출되는가?");
         }
-    }
-
-    public void WeaponSlot2()
-    {
-        if (input.weaponSlot2 && weaponSlot == 1)
+        if(weaponSlot == 2 && !isGrenade)
         {
             tpsPistol.gameObject.SetActive(false);
             tpsRifle.gameObject.SetActive(true);
             fpsPistol.gameObject.SetActive(false);
             fpsRifle.gameObject.SetActive(true);
-
+            fpsMelee.gameObject.SetActive(false);
+            fpsHeal.gameObject.SetActive(false);
+            fpsGrenade.gameObject.SetActive(false);
             SetWeapon(tpsRifle, fpsRifle); // 무기 장착
-            weaponSlot = 2;
-            animator.SetBool("isWeaponPistol",false);
-            animator.SetBool("isWeaponRifle",true);
+            animator.SetBool("isWeaponPistol", false);
+            animator.SetBool("isWeaponRifle", true);
+        }
+        if (weaponSlot == 3 && !isGrenade)
+        {
+            tpsPistol.gameObject.SetActive(false);
+            tpsRifle.gameObject.SetActive(false);
+            fpsPistol.gameObject.SetActive(false);
+            fpsRifle.gameObject.SetActive(false);
+            fpsMelee.gameObject.SetActive(true);
+            fpsHeal.gameObject.SetActive(false);
+            fpsGrenade.gameObject.SetActive(false);
+            SetWeapon(tpsRifle, fpsMelee); // 무기 장착
+            animator.SetBool("isWeaponPistol", false);
+            animator.SetBool("isWeaponRifle", false);
+        }
+        if (weaponSlot == 4 && !isGrenade)
+        {
+            tpsPistol.gameObject.SetActive(false);
+            tpsRifle.gameObject.SetActive(false);
+            fpsPistol.gameObject.SetActive(false);
+            fpsRifle.gameObject.SetActive(false);
+            fpsMelee.gameObject.SetActive(false);
+            fpsHeal.gameObject.SetActive(true);
+            fpsGrenade.gameObject.SetActive(false);
+            SetWeapon(tpsRifle, fpsHeal); // 무기 장착
+            animator.SetBool("isWeaponPistol", false);
+            animator.SetBool("isWeaponRifle", false);
+        }
+        if(isGrenade)
+        {
+            tpsPistol.gameObject.SetActive(false);
+            tpsRifle.gameObject.SetActive(false);
+            fpsPistol.gameObject.SetActive(false);
+            fpsRifle.gameObject.SetActive(false);
+            fpsMelee.gameObject.SetActive(false);
+            fpsHeal.gameObject.SetActive(false);
+            fpsGrenade.gameObject.SetActive(true);
 
+        }
+
+        if (input.scroll > 0)
+        {
+            weaponSlot += 1;
+            if (4 < weaponSlot) weaponSlot = 1;
+        }
+        if (input.scroll < 0)
+        {
+            weaponSlot -= 1;
+            if (0 >= weaponSlot) weaponSlot = 4;
+        }
+    }
+
+    public void WeaponInput()
+    {
+        if (input.weaponSlot1)
+        {
+            if (weaponSlot != 1)
+            {
+                weaponSlot = 1;
+            }
+            input.weaponSlot1 = false;
+        }
+        if (input.weaponSlot2)
+        {
+            if (weaponSlot != 2)
+            {
+                weaponSlot = 2;
+            }
             input.weaponSlot2 = false;
         }
+        if (input.weaponSlot3)
+        {
+            if (weaponSlot != 3)
+            {
+                weaponSlot = 3;
+            }
+            input.weaponSlot3 = false;
+        }
+        if (input.weaponSlot4)
+        {
+            if (weaponSlot != 4)
+            {
+                weaponSlot = 4;
+            }
+            input.weaponSlot4 = false;
+        }
+        if(input.grenade)
+        {
+            if (!isGrenade && 0 < grenade)
+            { 
+                isGrenade = true;
+                isFireReady = true;
+                StartCoroutine(Grenade());
+            }
+
+            input.grenade = false;
+
+        }
+    }
+    IEnumerator Grenade()
+    {
+        yield return new WaitForSeconds(2.1f);
+        grenade -= 1;
+        PlayerUIManager.instance.SetGrenade(grenade);
+        isGrenade = false;
+        isFireReady = false;
+
     }
 
     public void SetWeapon(Weapon _tpsweapon, Transform _fpsWeapon)
@@ -275,7 +381,6 @@ public class PlayerShooter : MonoBehaviour
                 animator.SetBool("isWeaponRifle", true);
                 animator.SetBool("isWeaponPistol", false);
                 equipedWeapon.weaponType = Weapon.Type.Rifle;
-
                 break;
         }
         damage = equipedWeapon.damage;
@@ -283,12 +388,11 @@ public class PlayerShooter : MonoBehaviour
         fireRate = equipedWeapon.fireRate;
         animator.SetFloat("ReloadSpeed", reloadRate);
 
-        // 애니메이션 발사속도
         PlayerUIManager.instance.SetAmmo(_tpsweapon.ammo);           // 현재 탄 UI 세팅
         PlayerUIManager.instance.SetTotalAmmo(_tpsweapon.remainingAmmo); // 현재 남은 탄 UI 세팅
+        PlayerUIManager.instance.SetGrenade(grenade);
 
         // FPS상태도 세팅
-        fpsWeapon = _fpsWeapon;
         handAnimator = _fpsWeapon.GetComponent<Animator>();
         handAnimator.SetFloat("ReloadSpeed", reloadRate);
         playerMovement.fpsAnimator = handAnimator;
@@ -296,16 +400,6 @@ public class PlayerShooter : MonoBehaviour
     }
     void HandSet()
     {
-        //if (!isAnimation)
-        //{
-        //    weaponPosition.position = targetObj.position;
-        //    weaponPosition.rotation = targetObj.rotation;
-        //}
-        //else
-        //{
-        //    weaponPosition.position = rightHandPosition.position;
-        //    weaponPosition.rotation = rightHandPosition.rotation;
-        //}
         weaponPosition.position = targetObj.position;
         weaponPosition.rotation = targetObj.rotation;
     }

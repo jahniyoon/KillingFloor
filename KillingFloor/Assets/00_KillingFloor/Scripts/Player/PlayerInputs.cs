@@ -15,6 +15,11 @@ public class PlayerInputs : MonoBehaviour
     public bool changeCamera;
     public bool weaponSlot1;
     public bool weaponSlot2;
+    public bool weaponSlot3;
+    public bool weaponSlot4;
+    public float scroll;
+    public bool grenade;
+    public bool equip;
 
     [Header("Mouse Cursor Settings")]
     public bool cursorLocked = true;
@@ -57,6 +62,10 @@ public class PlayerInputs : MonoBehaviour
     {
         ReloadInput(value.isPressed);
     }
+    public void OnGrenade(InputValue value)
+    {
+        GrenadeInput(value.isPressed);
+    }
 
     // 카메라 변경
     public void OnChangeCamera(InputValue value)
@@ -71,6 +80,22 @@ public class PlayerInputs : MonoBehaviour
     public void OnWeaponSlot2(InputValue value)
     {
         WeaponSlot2Input(value.isPressed);
+    }
+    public void OnWeaponSlot3(InputValue value)
+    {
+        WeaponSlot3Input(value.isPressed);
+    }
+    public void OnWeaponSlot4(InputValue value)
+    {
+        WeaponSlot4Input(value.isPressed);
+    }
+    public void OnScroll(InputValue value)
+    {
+        ScrollInput(value.Get<float>()); ;
+    }
+    public void OnEquip(InputValue value)
+    {
+        EquipInput(value.isPressed);
     }
 
     // 입력을 변환 ================================================
@@ -112,6 +137,27 @@ public class PlayerInputs : MonoBehaviour
     public void WeaponSlot2Input(bool newSlot)
     {
         weaponSlot2 = newSlot;
+    }
+    public void WeaponSlot3Input(bool newSlot)
+    {
+        weaponSlot3 = newSlot;
+    }
+    public void WeaponSlot4Input(bool newSlot)
+    {
+        weaponSlot4 = newSlot;
+    }
+    public void ScrollInput(float newScroll)
+    {
+        scroll = newScroll;
+    }
+    public void GrenadeInput(bool newGrenade)
+    {
+        grenade = newGrenade;
+    }
+
+    public void EquipInput(bool newEquip)
+    {
+        equip = newEquip;
     }
     // 카메라 마우스 관련 ================================================
     private void OnApplicationFocus(bool hasFocus)
