@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BossController : MonoBehaviour
 {
@@ -19,19 +20,33 @@ public class BossController : MonoBehaviour
     private ParticleSystem[] fireBreathHoleParticles;//사이렌 파티클 배열
     private GameObject[] midSphereEffects;//사이렌 오브젝트 베리어배열
     private ParticleSystem[] midSphereEffectParticles;//사이렌 파티클 베리어배열
+    private GameObject[] fireRings;// 첨프충격 오브젝트 배열
+    private ParticleSystem[] fireRingParticles;//점프충격 파티클 베리어배열
+    private NavMeshAgent agent;
     // Start is called before the first frame update
     void Start()
     {
+        agent = GetComponent<NavMeshAgent>();
         fireBreathHoles = new GameObject[3];
         fireBreathHoleParticles = new ParticleSystem[3];
         fireBreaths = new GameObject[4];
         fireBreathsParticle = new ParticleSystem[4];
         midSphereEffects = new GameObject[4];
         midSphereEffectParticles = new ParticleSystem[4];
+        fireRings = new GameObject[4];
+        fireRingParticles = new ParticleSystem[4];
 
         GameObject midSphere = GameObject.Find("MidSphereEffect");
         GameObject fireBreath = GameObject.Find("FireBreath");
-        GameObject fireBreathHole = GameObject.Find("FireBreathHole");
+        GameObject fireBreathHole = GameObject.Find("FireBreathHole"); 
+        GameObject fireRing = GameObject.Find("FireRing"); 
+
+        for (int i = 0; i <= 2; i++) // 점프 충격 배열에 저장하는과정
+        {
+            fireRings[i] = fireRing.transform.GetChild(i).gameObject;
+            fireRingParticles[i] = fireRings[i].GetComponent<ParticleSystem>();
+            fireRings[i].SetActive(false);
+        }
         for (int i = 0; i <= 1; i++) // 샤우팅 파티클배열에 저장하는과정
         {
             fireBreathHoles[i] = fireBreathHole.transform.GetChild(i).gameObject;
@@ -67,7 +82,7 @@ public class BossController : MonoBehaviour
 
             // 플레이어와 보스 사이의 거리를 계산합니다.
             float distance = Vector3.Distance(targetPlayer[randPlayerNum].transform.position, transform.position);
-            speed = (distance/2)*2;
+            speed = (distance/2)*4;
             if (distance < 6f)//근거리 애니메이션
             {   
                 randomFattern = Random.Range(0, 4);
@@ -139,8 +154,18 @@ public class BossController : MonoBehaviour
                     case 4:
                    
                         animator.SetTrigger("Jump");
+                        Invoke("JumpImpt", 1.5f);
                         currentTime = 0;
                         setTime = 2;
+                        break;
+                    case 5:
+                        for (int i = 0; i <= 2; i++)
+                        {
+                            fireBreaths[i].SetActive(true);
+                            fireBreathsParticle[i].Play();
+                        }
+                        currentTime = 0;
+                        setTime = 5.75f;
                         break;
                 }
             }//보스 공격패턴End
@@ -177,16 +202,11 @@ public class BossController : MonoBehaviour
     //보스 움직임
     private void BossMove()
     {
-        if(speed > 10)
+      if(targetPlayer[randPlayerNum] != null)
         {
-            bossSpeed = 14;
+            agent.destination = targetPlayer[randPlayerNum].transform.position;
         }
-        else
-        {
-            bossSpeed = 7;
-        }
-        Vector3 targetVector = transform.position - targetPlayer[randPlayerNum].transform.position;
-        transform.Translate(Vector3.forward * bossSpeed * Time.deltaTime); ;
+     
     }
     //파티클 정지
     private IEnumerator StopParticle(ParticleSystem particle, float num)
@@ -199,6 +219,17 @@ public class BossController : MonoBehaviour
     {
         yield return new WaitForSeconds(num);
         gameObj.SetActive(false);
+    }
+    //점프 충격
+    private void JumpImpt()
+    {
+        for (int i = 0; i <= 2; i++)
+        {
+            fireRings[i].SetActive(true);
+            fireRingParticles[i].Play();
+            StartCoroutine(StopParticle(fireRingParticles[i], 1f));
+        }
+        
     }
    
 }
