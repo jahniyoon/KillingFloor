@@ -68,6 +68,10 @@ public class LivingEntity : MonoBehaviour, IDamageable
             return;
         }
         health += newHealth;
+        if (health > startingHealth)
+        {
+            health = startingHealth;
+        }
         // 호스트만 체력을 직접 갱신 가능
         //if (PhotonNetwork.IsMasterClient)
         //{

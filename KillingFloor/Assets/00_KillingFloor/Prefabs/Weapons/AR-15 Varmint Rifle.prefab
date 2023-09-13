@@ -646,7 +646,7 @@ MonoBehaviour:
   weaponType: 1
   damage: 30
   fireRate: 500
-  reloadRate: 3.07
+  reloadRate: 2
   ammo: 20
   remainingAmmo: 120
   magazineSize: 20
