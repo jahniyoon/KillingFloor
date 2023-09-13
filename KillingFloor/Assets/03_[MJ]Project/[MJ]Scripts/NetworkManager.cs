@@ -30,7 +30,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     void Awake()
     {
-        // 포톤 최적화
+        // 포톤 네트워크 속도 최적화 설정
         PhotonNetwork.SendRate = 60;
         PhotonNetwork.SerializationRate = 30;
     }
@@ -41,67 +41,97 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // 이름 충족 조건 : 3~20 자의 문자
     public void Login()
     {
+        // 이메일과 비밀번호 사용해서 로그인 요청
         var request = new LoginWithEmailAddressRequest { Email = EmailInput.text, Password = PasswordInput.text };
-        //PlayFabClientAPI.LoginWithEmailAddress(request, (result) => Debug.Log("로그인 성공"), (error) => Debug.Log("로그인 실패"));
-        PlayFabClientAPI.LoginWithEmailAddress(request, (result) => { GetLeaderboard(result.PlayFabId); PhotonNetwork.ConnectUsingSettings(); },
+
+        PlayFabClientAPI.LoginWithEmailAddress(request, (result) =>
+        {
+            // 로그인 성공시 실행
+            GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+        },
             (error) => Debug.Log("로그인 실패"));
 
     }
 
     public void Register()
     {
+        // 이메일, 비밀번호, 유저 이름으로 등록 요청 생성
         var request = new RegisterPlayFabUserRequest
         { Email = EmailInput.text, Password = PasswordInput.text, Username = UsernameInput.text, DisplayName = UsernameInput.text };
-        //PlayFabClientAPI.RegisterPlayFabUser(request, (result) => Debug.Log("회원가입 성공"), (error) => Debug.Log("회원가입 실패"));
-        PlayFabClientAPI.RegisterPlayFabUser(request, (result) => { Debug.Log("회원가입 성공"); SetStat(); SetData("Lv.0"); },
+
+        PlayFabClientAPI.RegisterPlayFabUser(request, (result) =>
+        {
+            Debug.Log("회원가입 성공");
+            SetStat();          // 통계 초기화
+            SetData("Lv.0");    // 유저 데이터 초기화
+        },
             (error) => Debug.Log("회원가입 실패"));
 
     }
+
+    // 유저 통계 초기화
     void SetStat()
     {
         var request = new UpdatePlayerStatisticsRequest { Statistics = new List<StatisticUpdate> { new StatisticUpdate { StatisticName = "IDInfo", Value = 0 } } };
         PlayFabClientAPI.UpdatePlayerStatistics(request, (result) => { }, (error) => Debug.Log("값 저장실패"));
     }
+
+    // PlayFab 리더보드 정보 가져오는 메서드
     void GetLeaderboard(string myID)
     {
+        // PlayFab 유저 리스트 초기화
         PlayFabUserList.Clear();
 
         for (int i = 0; i < 10; i++)
         {
+            // 리더보드 정보 가져올 요청 생성
             var request =
                 new GetLeaderboardRequest
                 {
-                    StartPosition = i * 100,
-                    StatisticName = "IDInfo",
-                    MaxResultsCount = 100,
+                    StartPosition = i * 100,    // 결과 시작 위치
+                    StatisticName = "IDInfo",   // 통계 이름
+                    MaxResultsCount = 100,      // 최대 결과 개수
                     ProfileConstraints =
-                    new PlayerProfileViewConstraints() { ShowDisplayName = true }
+                    new PlayerProfileViewConstraints() { ShowDisplayName = true }   // 플레이어의 디스플레이 이름 표시
                 };
 
+            // PlayFab 통해 리더보드 정보 요청 전송
             PlayFabClientAPI.GetLeaderboard(request, (result) =>
             {
                 if (result.Leaderboard.Count == 0) return;
+
+                // 플레이어 정보를 PlayFabUserList에 추가하기 위해 리더보드 결과 반복
                 for (int j = 0; j < result.Leaderboard.Count; j++)
                 {
                     PlayFabUserList.Add(result.Leaderboard[j]);
+
+                    // 내 PlayFab ID를 찾아 MyPlayFabInfo 변수에 저장
                     if (result.Leaderboard[j].PlayFabId == myID) MyPlayFabInfo = result.Leaderboard[j];
                 }
             },
             (error) => { });
         }
     }
+
+    // 유저 데이터 설정하는 메서드
     void SetData(string curData)
     {
+        // 업데이트할 사용자 데이터 요청 생성
         var request = new UpdateUserDataRequest()
         {
-            Data = new Dictionary<string, string>() { { "HomeLevel", curData } },
-            Permission = UserDataPermission.Public
+            Data = new Dictionary<string, string>() { { "HomeLevel", curData } },   // "HomeLevel" 키를 가진 데이터 설정
+            Permission = UserDataPermission.Public      // 데이터 공개
         };
+
+        // PlayFab를 통해 사용자 데이터 업데이트 요청 전송
         PlayFabClientAPI.UpdateUserData(request, (result) => { }, (error) => Debug.Log("데이터 저장 실패"));
     }
 
+    // 유저 데이터 가져오는 메서드
     void GetData(string curID)
     {
+        // 사용자 데이터를 가져올 요청 생성
         PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = curID }, (result) =>
         UserRoomDataText.text = "고유ID" + curID + "\n" + result.Data["HomeLevel"].Value,
         (error) => Debug.Log("데이터 불러오기 실패"));
@@ -121,9 +151,39 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     #region Lobby
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
-    void Update() => LobbyInfoText.text =
-        "로비 : " + (PhotonNetwork.CountOfPlayers - PhotonNetwork.CountOfPlayersInRooms)
-        + " / 접속 : " + PhotonNetwork.CountOfPlayers;
+
+    //LEGACY:
+    //void Update()
+    //{
+    //    LobbyInfoText.text =
+    //    "로비 : " + (PhotonNetwork.CountOfPlayers - PhotonNetwork.CountOfPlayersInRooms)
+    //    + " / 접속 : " + PhotonNetwork.CountOfPlayers;
+    //}
+
+    // Photon 서버와의 동기화가 완료 후 CountOfPlayers를 업데이트하도록 코르틴 사용
+    private int currentPlayerCount = 0;
+
+    void Start()
+    {
+        StartCoroutine(UpdatePlayerCount());
+    }
+
+    private IEnumerator UpdatePlayerCount()
+    {
+        while (true)
+        {
+            int newPlayerCount = PhotonNetwork.CountOfPlayers - PhotonNetwork.CountOfPlayersInRooms;
+
+            if (newPlayerCount != currentPlayerCount)
+            {
+                LobbyInfoText.text = "로비 : " + newPlayerCount + " / 접속 : " + PhotonNetwork.CountOfPlayers;
+                currentPlayerCount = newPlayerCount;
+            }
+
+            yield return new WaitForSeconds(1f); // 1초마다 업데이트
+        }
+    }
+
     public override void OnJoinedLobby()
     {
         // 방에서 로비로 올 땐 딜레이없고, 로그인해서 로비로 올 땐 PlayFabUserList가 채워질 시간동안 딜레이
@@ -244,11 +304,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         PlayFabClientAPI.GetUserData(new GetUserDataRequest(), (result) =>
             {
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        {
-            UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
-        }
-        },
+                for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+                {
+                    UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
+                }
+            },
         (error) => { Debug.Log("레벨 불러오지 못함"); }
         );
 
