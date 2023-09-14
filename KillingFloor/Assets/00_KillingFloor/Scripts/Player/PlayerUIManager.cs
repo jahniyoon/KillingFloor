@@ -29,6 +29,7 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text totalAmmoText;  // 남은 탄약
     public TMP_Text grenadeText;    // 남은 수류탄
     public Slider healSlider;        // 힐 슬라이더
+    public GameObject equipUI;
 
     // 체력 텍스트 갱신
     public void SetLevel(float value)
@@ -51,7 +52,7 @@ public class PlayerUIManager : MonoBehaviour
         else
         ammoText.text = string.Format("{0}", value);
     }
-    public void SetTotalAmmo(float value)
+    public void SetRemainingAmmo(float value)
     {
         if (value == 999)
         { totalAmmoText.text = string.Format("∞"); }

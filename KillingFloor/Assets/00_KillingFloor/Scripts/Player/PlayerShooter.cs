@@ -187,7 +187,7 @@ public class PlayerShooter : MonoBehaviour
         }
 
         // 힐
-        if (input.shoot && weaponSlot == 4 && !isFireReady && 15 <= healCoolDown)
+        if (input.shoot && weaponSlot == 4 && !isFireReady && 15 <= healCoolDown && playerHealth.health != 100)
         {
             isFireReady = true;
             handAnimator.SetTrigger("isFire");
@@ -264,7 +264,7 @@ public class PlayerShooter : MonoBehaviour
         equipedWeapon.remainingAmmo = Mathf.Max(0, remainingAmmo);                                                      // 남은 탄 세팅
 
         PlayerUIManager.instance.SetAmmo(equipedWeapon.ammo);
-        PlayerUIManager.instance.SetTotalAmmo(equipedWeapon.remainingAmmo);
+        PlayerUIManager.instance.SetRemainingAmmo(equipedWeapon.remainingAmmo);
 
         handIKAmount = 1f;
         elbowIKAmount = 1f;
@@ -434,7 +434,7 @@ public class PlayerShooter : MonoBehaviour
         animator.SetFloat("ReloadSpeed", reloadRate);
 
         PlayerUIManager.instance.SetAmmo(_tpsweapon.ammo);           // 현재 탄 UI 세팅
-        PlayerUIManager.instance.SetTotalAmmo(_tpsweapon.remainingAmmo); // 현재 남은 탄 UI 세팅
+        PlayerUIManager.instance.SetRemainingAmmo(_tpsweapon.remainingAmmo); // 현재 남은 탄 UI 세팅
         PlayerUIManager.instance.SetGrenade(grenade);
 
         // FPS상태도 세팅
@@ -442,6 +442,11 @@ public class PlayerShooter : MonoBehaviour
         handAnimator.SetFloat("ReloadSpeed", reloadRate);
         playerMovement.fpsAnimator = handAnimator;
 
+    }
+    public void GetAmmo(int value)
+    {
+        equipedWeapon.remainingAmmo += value;
+        PlayerUIManager.instance.SetRemainingAmmo(equipedWeapon.remainingAmmo);
     }
     void HandSet()
     {

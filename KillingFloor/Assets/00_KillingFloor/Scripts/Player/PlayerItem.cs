@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class PlayerItem : MonoBehaviour
 {
-    private PlayerShooter playerShooter;
+    private PlayerShooter shooter;
     private PlayerInputs input;
-    private GameObject nearObject;
+    public ItemObject nearObject;
+    public int itemValue;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        playerShooter = GetComponent<PlayerShooter>();
+        shooter = GetComponent<PlayerShooter>();
+        input = GetComponent<PlayerInputs>();
     }
 
     // Update is called once per frame
@@ -23,24 +25,32 @@ public class PlayerItem : MonoBehaviour
 
     public void PlayerInput()
     {
-        if(input.equip)
+        if(input.equip )
         {
+            if(nearObject != null)
+            {
+                shooter.GetAmmo(nearObject.value);
+                Destroy(nearObject.gameObject);
+                nearObject = null;
+                PlayerUIManager.instance.equipUI.SetActive(false);
+            }
 
             input.equip = false;
         }
 
     }
 
-    private void OnTriggerStay(Collider other)
+    public void OnTriggerStay(Collider other)
     {
         if (other.tag.Equals("Item"))
         {
-            nearObject = other.GetComponent<GameObject>();
-            
+            nearObject = other.GetComponent<ItemObject>();
+            PlayerUIManager.instance.equipUI.SetActive(true);
         }
     }
-    private void OnTriggerExit(Collider other)
+    public void OnTriggerExit(Collider other)
     {
+        PlayerUIManager.instance.equipUI.SetActive(false);
         nearObject = null;
     }
 }
