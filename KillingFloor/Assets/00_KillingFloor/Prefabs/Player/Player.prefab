@@ -1849,7 +1849,6 @@ GameObject:
   - component: {fileID: 4861928655055331823}
   - component: {fileID: 4861928655055331809}
   - component: {fileID: 4861928655055331822}
-  - component: {fileID: 167310122}
   - component: {fileID: 3189699838051778081}
   - component: {fileID: 4861928655055331820}
   - component: {fileID: 6144442711703300728}
@@ -2048,20 +2047,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 055a9101f8952e147b1001ec72ad605e, type: 3}
   m_JumpSound: {fileID: 0}
   m_LandSound: {fileID: 0}
---- !u!114 &167310122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4861928655055331811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1c9a5186c539f943a0f5856360ad27c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nearObject: {fileID: 0}
-  itemValue: 0
 --- !u!114 &3189699838051778081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2145,6 +2130,7 @@ MonoBehaviour:
   scroll: 0
   grenade: 0
   equip: 0
+  cancle: 0
   cursorLocked: 1
   cursorInputForLook: 1
 --- !u!114 &2221108193076978013

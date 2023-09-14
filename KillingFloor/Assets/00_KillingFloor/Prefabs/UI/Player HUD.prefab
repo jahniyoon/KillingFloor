@@ -655,7 +655,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Get Item
+  m_text: GET AMMO
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a0a710726aaad0b488e2a156b387206b, type: 2}
   m_sharedMaterial: {fileID: -1339263863704012570, guid: a0a710726aaad0b488e2a156b387206b,
@@ -1856,7 +1856,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: OPEN SHOP
+  m_text: INTO SHOP
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a0a710726aaad0b488e2a156b387206b, type: 2}
   m_sharedMaterial: {fileID: -1339263863704012570, guid: a0a710726aaad0b488e2a156b387206b,
