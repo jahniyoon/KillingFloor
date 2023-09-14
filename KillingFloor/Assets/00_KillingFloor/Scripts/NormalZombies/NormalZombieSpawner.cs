@@ -39,51 +39,51 @@ public class NormalZombieSpawner : MonoBehaviour
 
     private void Update()
     {
-        //if (GameManager.instance.round == 1 && isCheck)
-        //{
-        //    isCheck = false;
-        //    roundPointCount = 4;
+        if (GameManager.instance.round == 1 && isCheck)
+        {
+            isCheck = false;
+            roundPointCount = 4;
 
-        //    Count();
+            Count();
 
-        //    StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-        //}
-        //else if (GameManager.instance.round == 2 && isCheck)
-        //{
-        //    isCheck = false;
-        //    roundPointCount = 5;
+            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+        }
+        else if (GameManager.instance.round == 2 && isCheck)
+        {
+            isCheck = false;
+            roundPointCount = 5;
 
-        //    Count();
+            Count();
 
-        //    StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-        //}
-        //else if (GameManager.instance.round == 3 && isCheck)
-        //{
-        //    isCheck = false;
-        //    roundPointCount = 5;
+            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+        }
+        else if (GameManager.instance.round == 3 && isCheck)
+        {
+            isCheck = false;
+            roundPointCount = 5;
 
-        //    Count();
+            Count();
 
-        //    StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-        //}
-        //else if (GameManager.instance.round == 4 && isCheck)
-        //{
-        //    isCheck = false;
-        //    roundPointCount = 4;
+            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+        }
+        else if (GameManager.instance.round == 4 && isCheck)
+        {
+            isCheck = false;
+            roundPointCount = 4;
 
-        //    Count();
+            Count();
 
-        //    StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-        //}
-        //else if (GameManager.instance.round == 5 && isCheck)
-        //{
-        //    isCheck = false;
-        //    roundPointCount = 2;
+            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+        }
+        else if (GameManager.instance.round == 5 && isCheck)
+        {
+            isCheck = false;
+            roundPointCount = 2;
 
-        //    Count();
+            Count();
 
-        //    StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-        //}
+            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+        }
     }
 
     private void Count()

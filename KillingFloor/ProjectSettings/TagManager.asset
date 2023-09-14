@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - TPS CAM
   - FPS CAM
+  - TPS CAM
   - AttackObject
   - HitDamage
   - Boss

@@ -28,10 +28,20 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text ammoText;       // 탄약 표시
     public TMP_Text totalAmmoText;  // 남은 탄약
     public TMP_Text grenadeText;    // 남은 수류탄
+<<<<<<< HEAD
     public Slider healSlider;        // 힐 슬라이더
     public GameObject equipUI;
     public GameObject shopUI;
     public GameObject shopOpenUI;
+=======
+
+    //JunOh
+    public TMP_Text NoticeText;       // 알림 내용
+    public TMP_Text NoticeWaveText;   // 알림 웨이브 정보
+    public TMP_Text ZombieCountText;  // 좀비 수
+    public TMP_Text ZombieWaveText;   // 좀비 웨이브 정보
+    //JunOh
+>>>>>>> origin/feature/junoh
 
     // 체력 텍스트 갱신
     public void SetLevel(float value)
@@ -40,7 +50,7 @@ public class PlayerUIManager : MonoBehaviour
     }
     public void SetHP(float value)
     {
-        hpText.text =string.Format("{0}", value) ;
+        hpText.text = string.Format("{0}", value);
     }
     // 실드 텍스트 갱신
     public void SetArmor(float value)
@@ -63,10 +73,41 @@ public class PlayerUIManager : MonoBehaviour
     }
     public void SetGrenade(float value)
     {
-        grenadeText.text = string.Format("{0}", value); 
+        grenadeText.text = string.Format("{0}", value);
     }
+<<<<<<< HEAD
     public void SetHeal(float value)
     {
         healSlider.value = value;
     }
+=======
+
+    //JunOh
+    public void SetNotice(string value)
+    {
+        NoticeText.text = string.Format("{0}", value);
+    }
+    public void SetNoticeWave(float stageValue, float waveValue)
+    {
+        NoticeWaveText.text = string.Format("[ {0}/ {1} ]", stageValue, waveValue);
+    }
+
+    public void SetZombieCount(float countValue, float minValue, float secValue, bool isZombie)
+    {
+        if (isZombie)
+        {
+            ZombieCountText.text = string.Format("{0}", countValue);
+        }
+        else
+        {
+            ZombieCountText.text = string.Format("{0:00}:{1:00}", minValue, secValue);
+        }
+    }
+
+    public void SetZombieWave(float stageValue, float waveValue)
+    {
+        ZombieWaveText.text = string.Format("{0}/ {1}", stageValue, waveValue);
+    }
+    //JunOh
+>>>>>>> origin/feature/junoh
 }
