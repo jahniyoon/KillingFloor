@@ -8,6 +8,8 @@ TagManager:
   - TPS CAM
   - AttackObject
   - HitDamage
+  - Boss
+  - Item
   layers:
   - Default
   - TransparentFX
