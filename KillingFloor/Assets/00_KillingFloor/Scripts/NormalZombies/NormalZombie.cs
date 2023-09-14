@@ -1,18 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Collections;
-using Unity.VisualScripting;
-using UnityEditor.Animations;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.SceneManagement;
+
+
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Rendering.Universal;
-using static UnityEngine.Rendering.DebugUI;
+
+
+#if UNITY_EDITOR 
+
+#endif
+
 
 public class NormalZombie : NormalZombieData
 {
-    public List<AnimatorController> controllers = new List<AnimatorController>();
+#if UNITY_EDITOR
+    public List<RuntimeAnimatorController> controllers = new List<RuntimeAnimatorController>();
+
+#endif
+
     public List<GameObject> skills = new List<GameObject>();
 
     private Transform skillParent;
@@ -104,7 +109,7 @@ public class NormalZombie : NormalZombieData
 
     private void ZombieSetting()
     {
-        ani.runtimeAnimatorController = controllers[Random.Range(0, controllers.Count)];
+        //ani.runtimeAnimatorController = controllers[Random.Range(0, controllers.Count)];
         blendTreeMove = StartCoroutine(BlendTreeMove(0.0f, 1.0f, 2.0f));
 
         if (gameObject.name == "ZombieWalk_01(Clone)" || gameObject.name == "ZombieWalk_02(Clone)" ||

@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Windows;
-using UnityEngine.WSA;
-using static UnityEditor.Progress;
-using static UnityEngine.ParticleSystem;
-using static UnityEngine.UI.Image;
+
 
 public class PlayerShooter : MonoBehaviour
 {
