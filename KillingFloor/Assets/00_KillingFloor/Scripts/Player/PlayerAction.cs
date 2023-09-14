@@ -179,6 +179,15 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancle"",
+                    ""type"": ""Button"",
+                    ""id"": ""241b3356-95ae-4a4d-86f4-1adf0ac32e11"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -467,6 +476,17 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""action"": ""Equip"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f56b0266-c7e8-405e-b845-9c0d9329fcc6"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -492,6 +512,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         m_Player_Scroll = m_Player.FindAction("Scroll", throwIfNotFound: true);
         m_Player_Grenade = m_Player.FindAction("Grenade", throwIfNotFound: true);
         m_Player_Equip = m_Player.FindAction("Equip", throwIfNotFound: true);
+        m_Player_Cancle = m_Player.FindAction("Cancle", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -570,6 +591,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Scroll;
     private readonly InputAction m_Player_Grenade;
     private readonly InputAction m_Player_Equip;
+    private readonly InputAction m_Player_Cancle;
     public struct PlayerActions
     {
         private @PlayerAction m_Wrapper;
@@ -591,6 +613,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         public InputAction @Scroll => m_Wrapper.m_Player_Scroll;
         public InputAction @Grenade => m_Wrapper.m_Player_Grenade;
         public InputAction @Equip => m_Wrapper.m_Player_Equip;
+        public InputAction @Cancle => m_Wrapper.m_Player_Cancle;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -651,6 +674,9 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @Equip.started += instance.OnEquip;
             @Equip.performed += instance.OnEquip;
             @Equip.canceled += instance.OnEquip;
+            @Cancle.started += instance.OnCancle;
+            @Cancle.performed += instance.OnCancle;
+            @Cancle.canceled += instance.OnCancle;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -706,6 +732,9 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @Equip.started -= instance.OnEquip;
             @Equip.performed -= instance.OnEquip;
             @Equip.canceled -= instance.OnEquip;
+            @Cancle.started -= instance.OnCancle;
+            @Cancle.performed -= instance.OnCancle;
+            @Cancle.canceled -= instance.OnCancle;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -742,5 +771,6 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         void OnScroll(InputAction.CallbackContext context);
         void OnGrenade(InputAction.CallbackContext context);
         void OnEquip(InputAction.CallbackContext context);
+        void OnCancle(InputAction.CallbackContext context);
     }
 }

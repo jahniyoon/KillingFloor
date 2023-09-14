@@ -96,13 +96,16 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        GroundedCheck();    // 바닥 체크
-        JumpAndGravity();   // 점프와 중력 관련 메서드
-        Move();             // 이동 관련 메서드
-        ActiveAnimation();  // 애니메이션 적용
+        // 입력 가능여부 확인
+       
+            GroundedCheck();    // 바닥 체크
+            JumpAndGravity();   // 점프와 중력 관련 메서드
+            Move();             // 이동 관련 메서드
+            ActiveAnimation();  // 애니메이션 적용
     }
     private void LateUpdate()
     {
+
         CameraRotation();
     }
 
@@ -113,6 +116,9 @@ public class PlayerMovement : MonoBehaviour
     }
     private void JumpAndGravity()
     {
+        if (GameManager.instance != null && !GameManager.instance.inputEnable)
+            return;
+
         if (isGrounded)
         {
             // 추락 타임아웃 초기화
@@ -168,6 +174,8 @@ public class PlayerMovement : MonoBehaviour
     }
     private void CameraRotation()
     {
+        if (GameManager.instance != null && !GameManager.instance.inputEnable)
+            return;
         // 마우스 입력이 있으면
         if (input.look.sqrMagnitude >= _threshold)
         {
@@ -195,6 +203,9 @@ public class PlayerMovement : MonoBehaviour
         float targetSpeed = moveSpeed;
         if (input.dash & 0.7 <= input.move.y)
         { targetSpeed = dashSpeed; }
+
+        if (GameManager.instance != null && !GameManager.instance.inputEnable)
+        { input.move = Vector2.zero; }
 
         // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -236,13 +247,14 @@ public class PlayerMovement : MonoBehaviour
             // 이동
             inputDirection = transform.right * input.move.x + transform.forward * input.move.y;
         }
+   
 
         // 플레이어 위치 이동
         controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         ProgressStepCycle(moveSpeed);
 
     }
-
+    // 발자국 소리
     private void ProgressStepCycle(float speed)
     {
         if (controller.velocity.sqrMagnitude > 0 && (input.move.x != 0 || input.move.y != 0))
@@ -260,6 +272,7 @@ public class PlayerMovement : MonoBehaviour
 
         PlayFootStepAudio();
     }
+    // 발자국 소리 재생
     private void PlayFootStepAudio()
     {
         if (!controller.isGrounded)

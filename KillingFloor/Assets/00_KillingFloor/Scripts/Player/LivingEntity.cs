@@ -7,7 +7,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
 {
     public float startingHealth = 100f; // 시작 체력
     public float health { get; protected set; } // 현재 체력
-    public float shield { get; protected set; }
+    public float armor { get; protected set; }
     public bool dead { get; protected set; } // 사망 상태
     public event Action onDeath; // 사망시 발동할 이벤트
 
@@ -46,8 +46,31 @@ public class LivingEntity : MonoBehaviour, IDamageable
         //    photonView.RPC("OnDamage", RpcTarget.Others, damage, hitPoint, hitNormal);
         //}
 
+        // 아머가 75이상이면 75% 데미지 상쇄
+        if(armor >= 75)
+        {
+            armor -= Mathf.RoundToInt(damage * 0.75f);
+            health -= Mathf.RoundToInt(damage * 0.25f);
+            if (0 <= armor) armor = 0;
+        }
+        else if (75>= armor && armor > 50)
+        {
+            armor -= Mathf.RoundToInt(damage * 0.65f);
+            health -= Mathf.RoundToInt(damage * 0.35f);
+            if (0 <= armor) armor = 0;
+        }
+        else if (50>= armor && armor > 0)
+        {
+            armor -= Mathf.RoundToInt(damage * 0.55f);
+            health -= Mathf.RoundToInt(damage * 0.45f);
+            if (0 <= armor) armor = 0;
+        }
+        else
+        {
+            health -= damage;
+        }
 
-        health -= damage;
+
         // 체력이 0 이하 && 아직 죽지 않았다면 사망 처리 실행
         //if (health <= 0 && !dead)
         if (health <= 0)

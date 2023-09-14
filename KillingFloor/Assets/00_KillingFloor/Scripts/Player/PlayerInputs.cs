@@ -20,6 +20,7 @@ public class PlayerInputs : MonoBehaviour
     public float scroll;
     public bool grenade;
     public bool equip;
+    public bool cancle;
 
     [Header("Mouse Cursor Settings")]
     public bool cursorLocked = true;
@@ -97,6 +98,10 @@ public class PlayerInputs : MonoBehaviour
     {
         EquipInput(value.isPressed);
     }
+    public void OnCancle(InputValue value)
+    {
+        CancleInput(value.isPressed);
+    }
 
     // 입력을 변환 ================================================
     public void MoveInput(Vector2 newMoveDirection)
@@ -154,10 +159,13 @@ public class PlayerInputs : MonoBehaviour
     {
         grenade = newGrenade;
     }
-
     public void EquipInput(bool newEquip)
     {
         equip = newEquip;
+    }
+    public void CancleInput(bool newCancle)
+    {
+        cancle = newCancle;
     }
     // 카메라 마우스 관련 ================================================
     private void OnApplicationFocus(bool hasFocus)
@@ -166,7 +174,7 @@ public class PlayerInputs : MonoBehaviour
     }
     private void SetCursorState(bool newState)
     {
-        Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
 }

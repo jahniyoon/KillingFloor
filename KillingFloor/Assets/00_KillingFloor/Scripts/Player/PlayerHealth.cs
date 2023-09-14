@@ -44,6 +44,7 @@ public class PlayerHealth : LivingEntity
 
         // 갱신된 체력 업데이트
         PlayerUIManager.instance.SetHP(health);
+        PlayerUIManager.instance.SetArmor(armor);
     }
 
     public override void RestoreHealth(float newHealth)

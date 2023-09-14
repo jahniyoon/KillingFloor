@@ -6,6 +6,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    // 지환 추가 : 플레이어 조작 가능여부
+    public bool inputEnable = true;
+    // 지환 추가
+
+
     // Junoh 추가
     public int round = 1;       // 현재 라운드
     public int player = 4;      // 플레이어 인원 수

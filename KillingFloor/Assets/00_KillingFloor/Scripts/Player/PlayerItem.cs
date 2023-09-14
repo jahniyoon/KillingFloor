@@ -20,26 +20,9 @@ public class PlayerItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PlayerInput();
     }
 
-    public void PlayerInput()
-    {
-        if(input.equip )
-        {
-            if(nearObject != null)
-            {
-                shooter.GetAmmo(nearObject.value);
-                Destroy(nearObject.gameObject);
-                nearObject = null;
-                PlayerUIManager.instance.equipUI.SetActive(false);
-            }
-
-            input.equip = false;
-        }
-
-    }
-
+  
     public void OnTriggerStay(Collider other)
     {
         if (other.tag.Equals("Item"))

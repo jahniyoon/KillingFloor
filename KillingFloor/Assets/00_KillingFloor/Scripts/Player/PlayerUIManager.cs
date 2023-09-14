@@ -30,6 +30,8 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text grenadeText;    // 남은 수류탄
     public Slider healSlider;        // 힐 슬라이더
     public GameObject equipUI;
+    public GameObject shopUI;
+    public GameObject shopOpenUI;
 
     // 체력 텍스트 갱신
     public void SetLevel(float value)
@@ -41,7 +43,7 @@ public class PlayerUIManager : MonoBehaviour
         hpText.text =string.Format("{0}", value) ;
     }
     // 실드 텍스트 갱신
-    public void SetShield(float value)
+    public void SetArmor(float value)
     {
         shiedldText.text = string.Format("{0}", value);
     }

@@ -111,11 +111,15 @@ public class PlayerShooter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        HandSet();
-        Shoot();
-        Reload();
-        Weapons();
-        Heal();
+        // 입력 가능여부 확인
+        if (GameManager.instance != null && GameManager.instance.inputEnable)
+        {
+            HandSet();
+            Shoot();
+            Reload();
+            Weapons();
+            Heal();
+        }
     }
 
     // 사격 입력
