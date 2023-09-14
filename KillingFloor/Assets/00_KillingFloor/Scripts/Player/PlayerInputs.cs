@@ -11,6 +11,7 @@ public class PlayerInputs : MonoBehaviour
     public bool jump;
     public bool dash;
     public bool shoot;
+    public bool aim;
     public bool reload;
     public bool changeCamera;
     public bool weaponSlot1;
@@ -57,6 +58,10 @@ public class PlayerInputs : MonoBehaviour
     public void OnShoot(InputValue value)
     {
         ShootInput(value.isPressed);
+    }
+    public void OnAim(InputValue value)
+    {
+        AimInput(value.isPressed);
     }
     // 재장전 입력
     public void OnReload(InputValue value)
@@ -126,6 +131,11 @@ public class PlayerInputs : MonoBehaviour
     public void ShootInput(bool newShoot)
     {
         shoot = newShoot;
+    }
+
+    public void AimInput(bool newAim)
+    {
+        aim = newAim;
     }
     public void ReloadInput(bool newReload)
     {

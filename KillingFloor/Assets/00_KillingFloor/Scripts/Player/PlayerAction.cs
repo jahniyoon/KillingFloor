@@ -100,15 +100,6 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ChangeCamera"",
-                    ""type"": ""Button"",
-                    ""id"": ""646a377b-ca3c-43a0-b6f5-f75a8e612d36"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Aim"",
                     ""type"": ""PassThrough"",
                     ""id"": ""b823918c-087e-4ff4-bb4d-9e0a74c3fd18"",
@@ -184,6 +175,15 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""name"": ""Cancle"",
                     ""type"": ""Button"",
                     ""id"": ""241b3356-95ae-4a4d-86f4-1adf0ac32e11"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeCamera"",
+                    ""type"": ""Button"",
+                    ""id"": ""646a377b-ca3c-43a0-b6f5-f75a8e612d36"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -347,39 +347,6 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""3c3f3934-3666-487a-90e8-b975be9cb262"",
-                    ""path"": ""<Keyboard>/i"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeCamera"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fc102eb1-3858-4413-83cc-d46de5ee2c37"",
-                    ""path"": ""<XInputController>/rightStickPress"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeCamera"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c7779095-2879-4adb-bbd3-aa9f883a1469"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Aim"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""788d0daf-54d3-4e40-b1ab-5b9a21222573"",
                     ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
@@ -487,6 +454,39 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""action"": ""Cancle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c7779095-2879-4adb-bbd3-aa9f883a1469"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3c3f3934-3666-487a-90e8-b975be9cb262"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fc102eb1-3858-4413-83cc-d46de5ee2c37"",
+                    ""path"": ""<XInputController>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -503,7 +503,6 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
         m_Player_Melee = m_Player.FindAction("Melee", throwIfNotFound: true);
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
-        m_Player_ChangeCamera = m_Player.FindAction("ChangeCamera", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_WeaponSlot1 = m_Player.FindAction("WeaponSlot1", throwIfNotFound: true);
         m_Player_WeaponSlot2 = m_Player.FindAction("WeaponSlot2", throwIfNotFound: true);
@@ -513,6 +512,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         m_Player_Grenade = m_Player.FindAction("Grenade", throwIfNotFound: true);
         m_Player_Equip = m_Player.FindAction("Equip", throwIfNotFound: true);
         m_Player_Cancle = m_Player.FindAction("Cancle", throwIfNotFound: true);
+        m_Player_ChangeCamera = m_Player.FindAction("ChangeCamera", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -582,7 +582,6 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Reload;
     private readonly InputAction m_Player_Melee;
     private readonly InputAction m_Player_Shoot;
-    private readonly InputAction m_Player_ChangeCamera;
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_WeaponSlot1;
     private readonly InputAction m_Player_WeaponSlot2;
@@ -592,6 +591,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Grenade;
     private readonly InputAction m_Player_Equip;
     private readonly InputAction m_Player_Cancle;
+    private readonly InputAction m_Player_ChangeCamera;
     public struct PlayerActions
     {
         private @PlayerAction m_Wrapper;
@@ -604,7 +604,6 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         public InputAction @Reload => m_Wrapper.m_Player_Reload;
         public InputAction @Melee => m_Wrapper.m_Player_Melee;
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
-        public InputAction @ChangeCamera => m_Wrapper.m_Player_ChangeCamera;
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputAction @WeaponSlot1 => m_Wrapper.m_Player_WeaponSlot1;
         public InputAction @WeaponSlot2 => m_Wrapper.m_Player_WeaponSlot2;
@@ -614,6 +613,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         public InputAction @Grenade => m_Wrapper.m_Player_Grenade;
         public InputAction @Equip => m_Wrapper.m_Player_Equip;
         public InputAction @Cancle => m_Wrapper.m_Player_Cancle;
+        public InputAction @ChangeCamera => m_Wrapper.m_Player_ChangeCamera;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -647,9 +647,6 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @Shoot.started += instance.OnShoot;
             @Shoot.performed += instance.OnShoot;
             @Shoot.canceled += instance.OnShoot;
-            @ChangeCamera.started += instance.OnChangeCamera;
-            @ChangeCamera.performed += instance.OnChangeCamera;
-            @ChangeCamera.canceled += instance.OnChangeCamera;
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
@@ -677,6 +674,9 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @Cancle.started += instance.OnCancle;
             @Cancle.performed += instance.OnCancle;
             @Cancle.canceled += instance.OnCancle;
+            @ChangeCamera.started += instance.OnChangeCamera;
+            @ChangeCamera.performed += instance.OnChangeCamera;
+            @ChangeCamera.canceled += instance.OnChangeCamera;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -705,9 +705,6 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @Shoot.started -= instance.OnShoot;
             @Shoot.performed -= instance.OnShoot;
             @Shoot.canceled -= instance.OnShoot;
-            @ChangeCamera.started -= instance.OnChangeCamera;
-            @ChangeCamera.performed -= instance.OnChangeCamera;
-            @ChangeCamera.canceled -= instance.OnChangeCamera;
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
@@ -735,6 +732,9 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @Cancle.started -= instance.OnCancle;
             @Cancle.performed -= instance.OnCancle;
             @Cancle.canceled -= instance.OnCancle;
+            @ChangeCamera.started -= instance.OnChangeCamera;
+            @ChangeCamera.performed -= instance.OnChangeCamera;
+            @ChangeCamera.canceled -= instance.OnChangeCamera;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -762,7 +762,6 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         void OnReload(InputAction.CallbackContext context);
         void OnMelee(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
-        void OnChangeCamera(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnWeaponSlot1(InputAction.CallbackContext context);
         void OnWeaponSlot2(InputAction.CallbackContext context);
@@ -772,5 +771,6 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         void OnGrenade(InputAction.CallbackContext context);
         void OnEquip(InputAction.CallbackContext context);
         void OnCancle(InputAction.CallbackContext context);
+        void OnChangeCamera(InputAction.CallbackContext context);
     }
 }

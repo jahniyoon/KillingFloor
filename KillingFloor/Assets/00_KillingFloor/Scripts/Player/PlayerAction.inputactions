@@ -78,15 +78,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangeCamera",
-                    "type": "Button",
-                    "id": "646a377b-ca3c-43a0-b6f5-f75a8e612d36",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Aim",
                     "type": "PassThrough",
                     "id": "b823918c-087e-4ff4-bb4d-9e0a74c3fd18",
@@ -162,6 +153,15 @@
                     "name": "Cancle",
                     "type": "Button",
                     "id": "241b3356-95ae-4a4d-86f4-1adf0ac32e11",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ChangeCamera",
+                    "type": "Button",
+                    "id": "646a377b-ca3c-43a0-b6f5-f75a8e612d36",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -325,39 +325,6 @@
                 },
                 {
                     "name": "",
-                    "id": "3c3f3934-3666-487a-90e8-b975be9cb262",
-                    "path": "<Keyboard>/i",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "fc102eb1-3858-4413-83cc-d46de5ee2c37",
-                    "path": "<XInputController>/rightStickPress",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c7779095-2879-4adb-bbd3-aa9f883a1469",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "788d0daf-54d3-4e40-b1ab-5b9a21222573",
                     "path": "<Keyboard>/1",
                     "interactions": "",
@@ -463,6 +430,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Cancle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c7779095-2879-4adb-bbd3-aa9f883a1469",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3c3f3934-3666-487a-90e8-b975be9cb262",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fc102eb1-3858-4413-83cc-d46de5ee2c37",
+                    "path": "<XInputController>/rightStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

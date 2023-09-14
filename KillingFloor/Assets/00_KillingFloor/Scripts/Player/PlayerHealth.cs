@@ -62,7 +62,8 @@ public class PlayerHealth : LivingEntity
     public override void GetCoin(int newCoin)
     {
         base.GetCoin(newCoin);
-        CoinUpdate();
+        PlayerUIManager.instance.SetCoin(coin);
+
     }
     // 코인 소비
     public override void SpendCoin(int newCoin)
@@ -70,12 +71,5 @@ public class PlayerHealth : LivingEntity
         base.SpendCoin(newCoin);
         PlayerUIManager.instance.SetCoin(coin);
     }
-
-    public void CoinUpdate()
-    {
-        PlayerUIManager.instance.SetCoin(coin);
-    }
-
-
 
 }

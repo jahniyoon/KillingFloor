@@ -115,6 +115,7 @@ public class PlayerShooter : MonoBehaviour
         if (GameManager.instance != null && GameManager.instance.inputEnable)
         {
             HandSet();
+            Aim();
             Shoot();
             Reload();
             Weapons();
@@ -133,7 +134,7 @@ public class PlayerShooter : MonoBehaviour
             hitPoint = hit.point;
         }
         // 사격
-        if (input.shoot && 0 < equipedWeapon.ammo&& !isReloading && !isFireReady && weaponSlot < 3)
+        if (input.shoot && 0 < equipedWeapon.ammo&& !isReloading && !isFireReady && weaponSlot < 3 && !input.dash)
         {
             isFireReady = true;
             isAnimation = true;
@@ -167,14 +168,14 @@ public class PlayerShooter : MonoBehaviour
 
         }
         // 남은 총알이 있을 때
-        else if (input.shoot && equipedWeapon.ammo == 0 && equipedWeapon.remainingAmmo >= 0)
+        else if (input.shoot && equipedWeapon.ammo == 0 && equipedWeapon.remainingAmmo >= 0 && !input.dash)
         {
             input.reload = true; // 재장전 버튼 눌러주기
             input.shoot = false;
         }
 
         // 남은 총알도 없을 때
-        else if(input.shoot && equipedWeapon.ammo == 0 && equipedWeapon.remainingAmmo == 0)
+        else if(input.shoot && equipedWeapon.ammo == 0 && equipedWeapon.remainingAmmo == 0 && !input.dash)
         {
             // ToDo : 틱 사운드 플레이되도록 하기 (총알 없음)
 
@@ -182,30 +183,56 @@ public class PlayerShooter : MonoBehaviour
         }
 
         // 근접공격
-        if(input.shoot && weaponSlot == 3 && !isFireReady)
+        if(input.shoot && weaponSlot == 3 && !isFireReady && !input.dash)
         {
             isFireReady = true;
             handAnimator.SetTrigger("isFire");
-            StartCoroutine(WeaponDelay());
+            StartCoroutine(WeaponDelay(reloadRate));
             input.shoot = false;
         }
 
         // 힐
-        if (input.shoot && weaponSlot == 4 && !isFireReady && 15 <= healCoolDown && playerHealth.health != 100)
+        if (input.shoot && weaponSlot == 4 && !isFireReady && 15 <= healCoolDown && playerHealth.health != 100 && !input.dash)
         {
             isFireReady = true;
             handAnimator.SetTrigger("isFire");
             healCoolDown = -0.1f;
-            StartCoroutine(WeaponDelay());
+            StartCoroutine(WeaponDelay(reloadRate));
             playerHealth.RestoreHealth(damage);
             input.shoot = false;
         }
         aimTarget.transform.position = hitPoint;    // 플레이어 조준 포지션
     }
 
+    void Aim()
+    {
+        if (input.dash)
+        {
+            if (weaponSlot <= 2)
+            {
+                handAnimator.SetBool("isAim", false);
+            }
+            return; 
+        }
+
+        if (weaponSlot <= 2 && !isReloading && !input.dash)
+        {
+            handAnimator.SetBool("isAim", input.aim);
+        }
+        if (weaponSlot == 3 && !isFireReady && input.aim)
+        {
+            input.aim = false;
+            isFireReady = true;
+            handAnimator.SetTrigger("isAim");
+            StartCoroutine(WeaponDelay(reloadRate * 2));
+        }
+
+
+    }
+
     IEnumerator ShootCoroutine()
     {
-        yield return new WaitForSeconds(1 / (fireRate/60)); // fireRate 는 RPM
+        yield return new WaitForSeconds(1 / (fireRate/90)); // fireRate 는 RPM
         handIKAmount = 1f;
         elbowIKAmount = 1f;
         equipedWeapon.ammo -= 1;
@@ -215,9 +242,9 @@ public class PlayerShooter : MonoBehaviour
 
     }
 
-    IEnumerator WeaponDelay()
+    IEnumerator WeaponDelay(float _reloadRate)
     {
-        yield return new WaitForSeconds(reloadRate);
+        yield return new WaitForSeconds(_reloadRate);
         isFireReady = false;
         isAnimation = false;
 
@@ -265,6 +292,8 @@ public class PlayerShooter : MonoBehaviour
             {
                 isReloading = true;
                 isAnimation = true;
+                input.dash = false;
+
                 // 애니메이션 작동 후 잠깐 IK 풀어주기
                 handAnimator.SetTrigger("isReload");
                 animator.SetTrigger("isReload");
