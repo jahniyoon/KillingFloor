@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - FPS CAM
+  - TPS CAM
+  - AttackObject
+  - HitDamage
   layers:
   - Default
   - TransparentFX
@@ -11,14 +15,14 @@ TagManager:
   - 
   - Water
   - UI
+  - Player
   - 
+  - LeftAttack
+  - FrontAttack
+  - RightAttack
+  - HeadAttack
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Weapon
   - 
   - 
   - 
