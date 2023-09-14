@@ -28,7 +28,9 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text ammoText;       // 탄약 표시
     public TMP_Text totalAmmoText;  // 남은 탄약
     public TMP_Text grenadeText;    // 남은 수류탄
-    public Slider healSlider;        // 힐 슬라이더
+    public TMP_Text coinText;       // 현재 재화
+    public TMP_Text weightText;     // 현재 무게
+    public Slider healSlider;       // 힐 슬라이더
     public GameObject equipUI;
     public GameObject shopUI;
     public GameObject shopOpenUI;
@@ -76,7 +78,14 @@ public class PlayerUIManager : MonoBehaviour
     {
         healSlider.value = value;
     }
-
+    public void SetCoin(float value)
+    {
+        coinText.text = string.Format("{0}", value);
+    }
+    public void SetWeight(float value)
+    {
+        weightText.text = string.Format("{0}", value);
+    }
 
     //JunOh
     public void SetNotice(string value)

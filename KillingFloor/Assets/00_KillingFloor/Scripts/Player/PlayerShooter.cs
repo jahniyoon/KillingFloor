@@ -135,7 +135,6 @@ public class PlayerShooter : MonoBehaviour
         // 사격
         if (input.shoot && 0 < equipedWeapon.ammo&& !isReloading && !isFireReady && weaponSlot < 3)
         {
-
             isFireReady = true;
             isAnimation = true;
             // 애니메이션 작동 후 잠깐 IK 풀어주기
@@ -151,6 +150,7 @@ public class PlayerShooter : MonoBehaviour
                 GameObject hitObj = hit.transform.gameObject;
                 Damage(hitObj);
                 hitPoint = hit.point;
+
             }
             else if(Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range))
             {
@@ -233,7 +233,26 @@ public class PlayerShooter : MonoBehaviour
     }
     void Damage(GameObject _hitObj)
     {
-        //_hitObj.transform.GetComponent<HitPoint>().Hit(damage); // 좀비에게 데미지
+        if (_hitObj.transform.GetComponent<HitPoint>() == null)
+        {
+            playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
+            return;
+        }
+        if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health > 0)
+        {
+            _hitObj.transform.GetComponent<HitPoint>().Hit(damage); // 좀비에게 데미지
+
+            // 만약 좀비가 죽는다면
+            if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health <= 0)
+            {
+                // 코인 먹이고
+                playerHealth.GetCoin(_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin);
+
+                // 코인값 초기화
+                _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin = 0;
+                //coin += _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin;
+            }
+        }
     }
 
     // 장전

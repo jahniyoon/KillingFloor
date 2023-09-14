@@ -68,4 +68,10 @@ public class Shop : MonoBehaviour
         PlayerUIManager.instance.shopUI.SetActive(false);
         isShopOpen = false;
     }
+
+
+    public void BuyArmor()
+    {
+        
+    }
 }

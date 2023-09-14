@@ -52,4 +52,30 @@ public class PlayerHealth : LivingEntity
         base.RestoreHealth(newHealth);
         PlayerUIManager.instance.SetHP(health);
     }
+    public override void RestoreArmor(float newArmor)
+    {
+        base.RestoreArmor(newArmor);
+        PlayerUIManager.instance.SetArmor(armor);
+    }
+
+    // ÄÚÀÎ È¹µæ
+    public override void GetCoin(int newCoin)
+    {
+        base.GetCoin(newCoin);
+        CoinUpdate();
+    }
+    // ÄÚÀÎ ¼Òºñ
+    public override void SpendCoin(int newCoin)
+    {
+        base.SpendCoin(newCoin);
+        PlayerUIManager.instance.SetCoin(coin);
+    }
+
+    public void CoinUpdate()
+    {
+        PlayerUIManager.instance.SetCoin(coin);
+    }
+
+
+
 }
