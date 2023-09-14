@@ -6,13 +6,19 @@ public class Meteor : MonoBehaviour
     private float MeteorHP = 300;
     GameObject meteorsField;
 
+  
     private ParticleSystem[] meteorsParticle;//브레스 파티클 배열
                                              // Start is called before the first frame update
-    private void Awake()
+
+    void Start()
     {
 
-         meteorsField = GameObject.Find("FireBreathField");
+       
+        meteorsField = GameObject.Find("FireBreathField");
+      
         meteorsParticle = new ParticleSystem[5];
+
+        
 
         for (int i = 0; i < 4; i++) // 메테오파티클 배열에 저장하는과정
         {
@@ -24,12 +30,9 @@ public class Meteor : MonoBehaviour
         {
             meteorsParticle[i].Stop();
         }
-        orgPos = meteorsField.transform;
-    }
-    void Start()
-    {
-        Debug.Log(meteorsParticle.Length);
+        meteorsField.SetActive(false);
 
+        orgPos = meteorsField.transform;
 
     }
 
@@ -39,20 +42,25 @@ public class Meteor : MonoBehaviour
         if(MeteorHP < 0)
         {
             //원래 위치로 이동
-            transform.position =new Vector3(orgPos.position.x, orgPos.position.y + 15f,orgPos.position.z);
-            gameObject.SetActive(false);
+          
             return;
         }
-    
-         
+
+      
         if (transform.position.y < orgPos.transform.position.y)
         {
-            for (int i = 0; i < meteorsParticle.Length-1; i++)
+          
+            
+
+       
+            transform.position = new Vector3(orgPos.transform.position.x-9.51f, orgPos.transform.position.y +15f, orgPos.transform.position.z-2.25f);
+            gameObject.SetActive(false);
+            for (int i = 0; i < 4; i++)
             {
                 meteorsField.SetActive(true);
 
             }
-            for (int i = 0; i < meteorsParticle.Length-1; i++)
+            for (int i = 0; i < 4; i++)
             {
                 meteorsParticle[i].Play();
             }

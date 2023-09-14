@@ -22,11 +22,12 @@ public class BossController : MonoBehaviour
     private GameObject[] fireRings;// 첨프충격 오브젝트 배열
     private ParticleSystem[] fireRingParticles;//점프충격 파티클 베리어배열
     private GameObject[] meteors;//메테오
-
-
+    private int mereorCount = 0;
+    private float[] meteorFattern;
     private NavMeshAgent agent;
     private void Awake()
     {
+        meteorFattern = new float[] {70, 50, 20, 10,0,-10,-10,-10 };
         meteors = new GameObject[4];
         GameObject meteor = GameObject.Find("Meteor");
 
@@ -131,6 +132,11 @@ public class BossController : MonoBehaviour
                     }
                 }// 공격패턴 중복체크, 중복패턴 변경 End
 
+                if(bossHp< meteorFattern[mereorCount])
+                {
+                    mereorCount++;
+                    randomFattern = 6;
+                }
                 switch (randomFattern)//보스 공격패턴
                 {
                     case 0:
@@ -195,20 +201,25 @@ public class BossController : MonoBehaviour
                        
                         setTime = 5.8f;
                         break;
-                  
+                    case 6://메테오
+                        animator.SetTrigger("Meteor");
+
+
+                        for (int i = 0; i <= 1; i++) 
+                        {
+                            meteors[i].SetActive(true);
+
+                        }
+
+                        currentTime = 0;
+
+                        setTime = 11f;
+                        break;
 
                 }
             }//보스 공격패턴End
             else//원거리 애니메이션
             {
-                animator.SetTrigger("Meteor");
-                Invoke("fireBreathImpt", 1f);
-                
-                meteors[0].SetActive(true);
-                currentTime = 0;
-
-                setTime = 6f;
-
 
                 AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("idle"))// 속도 변화
@@ -288,22 +299,6 @@ public class BossController : MonoBehaviour
             StartCoroutine(StopParticle(fireBreathsParticle[i], 4f));
         }
     }
-    private void OnAnimatorIK()
-    {
-        if(animator)
-        {
-            if (meteors[0]!= null)
-            {
-                animator.SetLookAtWeight(1);
-                animator.SetLookAtPosition(meteors[0].transform.position);
-            }
-            else
-            {
-                animator.SetLookAtWeight(0);
-            }
-                
-                
-        }
-    }
+    
 
 }
