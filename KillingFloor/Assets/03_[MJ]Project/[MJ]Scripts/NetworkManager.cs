@@ -335,4 +335,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     void SetDataBtnDelay() => GetData(PhotonNetwork.CurrentRoom.CustomProperties["PlayFabID"].ToString());
     #endregion
+
+    #region PlayScene Load
+    public void OnPlayScene()
+    {
+        if(PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("PlayerTestScene");
+        }
+
+        Debug.Log(UserNickNameText.text);
+    }
+    #endregion
 }
