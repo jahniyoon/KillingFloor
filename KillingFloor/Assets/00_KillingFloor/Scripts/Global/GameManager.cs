@@ -2,9 +2,10 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     public static GameManager instance;
 
@@ -52,7 +53,12 @@ public class GameManager : MonoBehaviour
             PhotonNetwork.LeaveRoom();
         }
     }
-
+    // 룸을 나갈때 자동 실행되는 메서드
+    public override void OnLeftRoom()
+    {
+        // 룸을 나가면 로비 씬으로 돌아감
+        SceneManager.LoadScene("Lobby");
+    }
 
 
     // 주기적으로 자동 실행되는, 동기화 메서드
