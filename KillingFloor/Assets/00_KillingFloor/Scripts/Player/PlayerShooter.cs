@@ -284,7 +284,8 @@ public class PlayerShooter : MonoBehaviour
         // 보스일 경우
         if (_hitObj.transform.GetComponent<BossController>() != null)
         {
-
+            // 보스 데미지 넣어야하는 부분
+            //_hitObj.transform.GetComponent<BossController>().bossHp -= damage;
         }
     }
 
