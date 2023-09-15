@@ -33,7 +33,6 @@ public class PlayerUIManager : MonoBehaviour
     public Slider healSlider;        // 힐 슬라이더
     public GameObject equipUI;
     public GameObject shopUI;
-    public GameObject shopOpenUI;
 
     // 코인 증가효과 계산용 변수
     private int coin;
@@ -91,11 +90,11 @@ public class PlayerUIManager : MonoBehaviour
     public void SetCoin(int value)
     {
         targetCoin = value;
-        //coinText.text = string.Format("{0}", value);
     }
     // 코인 증가 업데이트
     public void CoinUpdate()
     {
+        // 코인이 올라갈 때만 업데이트
         if (coin < targetCoin)
         {
             coin += Mathf.CeilToInt(1f * Time.deltaTime); // 초당 코인 업데이트
@@ -105,6 +104,16 @@ public class PlayerUIManager : MonoBehaviour
             }
             coinText.text = string.Format("{0}", coin);
         }
+        else
+        {
+            coin -= Mathf.CeilToInt(1f * Time.deltaTime); // 초당 코인 업데이트
+            if (coin <= targetCoin)
+            {
+                coin = targetCoin; // 현재 코인에 도달하면 멈춤
+            }
+            coinText.text = string.Format("{0}", coin);
+        }
+
     }
     public void SetWeight(float value)
     {
