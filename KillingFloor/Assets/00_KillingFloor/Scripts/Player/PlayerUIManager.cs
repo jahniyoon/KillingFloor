@@ -38,13 +38,21 @@ public class PlayerUIManager : MonoBehaviour
     private int coin;
     private int targetCoin;
 
+    // 코인 증가효과 계산용 변수
+    private int coin;
+    private int targetCoin;
+
     //JunOh
     public TMP_Text WarningSubText;   // 알림 내용
     public TMP_Text NoticeTextText;   // 알림 로고 정보
     public TMP_Text NoticeCountText;  // 알림 웨이브 정보
     public TMP_Text ZombieCountText;  // 좀비 수
     public TMP_Text ZombieWaveText;   // 좀비 웨이브 정보
+<<<<<<< HEAD
     //JunOh
+=======
+                                      //JunOh
+>>>>>>> origin/feature/ssm
     public void Update()
     {
         CoinUpdate();
@@ -91,11 +99,18 @@ public class PlayerUIManager : MonoBehaviour
     public void SetCoin(int value)
     {
         targetCoin = value;
+<<<<<<< HEAD
+=======
+        //coinText.text = string.Format("{0}", value);
+>>>>>>> origin/feature/ssm
     }
     // 코인 증가 업데이트
     public void CoinUpdate()
     {
+<<<<<<< HEAD
         // 코인이 올라갈 때만 업데이트
+=======
+>>>>>>> origin/feature/ssm
         if (coin < targetCoin)
         {
             coin += Mathf.CeilToInt(1f * Time.deltaTime); // 초당 코인 업데이트
@@ -105,6 +120,7 @@ public class PlayerUIManager : MonoBehaviour
             }
             coinText.text = string.Format("{0}", coin);
         }
+<<<<<<< HEAD
         else
         {
             coin -= Mathf.CeilToInt(1f * Time.deltaTime); // 초당 코인 업데이트
@@ -115,6 +131,8 @@ public class PlayerUIManager : MonoBehaviour
             coinText.text = string.Format("{0}", coin);
         }
 
+=======
+>>>>>>> origin/feature/ssm
     }
     public void SetWeight(float value)
     {
