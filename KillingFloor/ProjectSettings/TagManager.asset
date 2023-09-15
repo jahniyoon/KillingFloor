@@ -10,6 +10,7 @@ TagManager:
   - HitDamage
   - Boss
   - Item
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX
@@ -25,7 +26,7 @@ TagManager:
   - HeadAttack
   - 
   - Weapon
-  - 
+  - Boss
   - 
   - 
   - 

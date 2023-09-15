@@ -39,11 +39,12 @@ public class PlayerUIManager : MonoBehaviour
     private int targetCoin;
 
     //JunOh
-    public TMP_Text NoticeText;       // 알림 내용
-    public TMP_Text NoticeWaveText;   // 알림 웨이브 정보
+    public TMP_Text WarningSubText;   // 알림 내용
+    public TMP_Text NoticeTextText;   // 알림 로고 정보
+    public TMP_Text NoticeCountText;  // 알림 웨이브 정보
     public TMP_Text ZombieCountText;  // 좀비 수
     public TMP_Text ZombieWaveText;   // 좀비 웨이브 정보
-                                      //JunOh
+    //JunOh
     public void Update()
     {
         CoinUpdate();
@@ -65,17 +66,17 @@ public class PlayerUIManager : MonoBehaviour
     }
     public void SetAmmo(float value)
     {
-        if(value == 999)
+        if (value == 999)
         { ammoText.text = string.Format("∞"); }
         else
-        ammoText.text = string.Format("{0}", value);
+            ammoText.text = string.Format("{0}", value);
     }
     public void SetRemainingAmmo(float value)
     {
         if (value == 999)
         { totalAmmoText.text = string.Format("∞"); }
         else
-        totalAmmoText.text = string.Format("{0}", value);
+            totalAmmoText.text = string.Format("{0}", value);
     }
     public void SetGrenade(float value)
     {
@@ -123,11 +124,16 @@ public class PlayerUIManager : MonoBehaviour
     //JunOh
     public void SetNotice(string value)
     {
-        NoticeText.text = string.Format("{0}", value);
+        WarningSubText.text = string.Format("{0}", value);
     }
     public void SetNoticeWave(float stageValue, float waveValue)
     {
-        NoticeWaveText.text = string.Format("[ {0}/ {1} ]", stageValue, waveValue);
+        NoticeCountText.text = string.Format("[ {0}/ {1} ]", stageValue, waveValue);
+    }
+
+    public void SetNoticeLogo(string NoticeTextValue)
+    { 
+    
     }
 
     public void SetZombieCount(float countValue, float minValue, float secValue, bool isZombie)
