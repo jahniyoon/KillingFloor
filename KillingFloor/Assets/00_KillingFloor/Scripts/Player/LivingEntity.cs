@@ -50,21 +50,24 @@ public class LivingEntity : MonoBehaviour, IDamageable
         // 아머가 75이상이면 75% 데미지 상쇄
         if(armor >= 75)
         {
+            int armorDamage = Mathf.RoundToInt(damage * 0.75f);
+            Debug.Log(armorDamage);
+
             armor -= Mathf.RoundToInt(damage * 0.75f);
             health -= Mathf.RoundToInt(damage * 0.25f);
-            if (0 <= armor) armor = 0;
+            if (0 >= armor) armor = 0;
         }
         else if (75>= armor && armor > 50)
         {
             armor -= Mathf.RoundToInt(damage * 0.65f);
             health -= Mathf.RoundToInt(damage * 0.35f);
-            if (0 <= armor) armor = 0;
+            if (0 >= armor) armor = 0;
         }
         else if (50>= armor && armor > 0)
         {
             armor -= Mathf.RoundToInt(damage * 0.55f);
             health -= Mathf.RoundToInt(damage * 0.45f);
-            if (0 <= armor) armor = 0;
+            if (0 >= armor) armor = 0;
         }
         else
         {

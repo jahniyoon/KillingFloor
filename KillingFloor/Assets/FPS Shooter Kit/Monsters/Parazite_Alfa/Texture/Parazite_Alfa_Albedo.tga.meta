@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:KillingFloor/Assets/00_KillingFloor/Animation/NormalZombies/Models/ZombieAB/Model/Materials/ZombieAB_MAT3_AlbedoTransparency.tif.meta
-guid: af59dcbbb705e394e9070705fd4b81d9
-========
 guid: ff8bc41f386a5fe489de68ffb0564277
->>>>>>>> origin/feature/ssm:KillingFloor/Assets/FPS Shooter Kit/Monsters/Parazite_Alfa/Texture/Parazite_Alfa_Albedo.tga.meta
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -106,31 +102,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: iPhone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
     buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Windows Store Apps
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1

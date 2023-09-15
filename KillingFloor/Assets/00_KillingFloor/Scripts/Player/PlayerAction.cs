@@ -164,7 +164,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Equip"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""93817ded-a93e-464e-b1f2-2fa2892cb3e2"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -173,7 +173,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Cancle"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""241b3356-95ae-4a4d-86f4-1adf0ac32e11"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",

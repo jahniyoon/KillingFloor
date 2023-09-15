@@ -1,131 +1,258 @@
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEditor.Experimental.GraphView;
-//using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine;
 
-//public class NoticeController : MonoBehaviour
-//{
-//    public RectTransform warningMain;
+public class NoticeController : MonoBehaviour
+{
+    public RectTransform warningMain;
 
-//    public RectTransform warningSubLeft;
-//    public RectTransform warningSubMiddle;
-//    public RectTransform warningSubRight;
+    public RectTransform warningSubLeft;
+    public RectTransform warningSubMiddle;
+    public RectTransform warningSubRight;
 
-//    public RectTransform noticeLeft;
-//    public RectTransform noticeMiddle;
-//    public RectTransform noticeRight;
+    public RectTransform noticeLeft;
+    public RectTransform noticeMiddle;
+    public RectTransform noticeRight;
 
-//    private Vector2 initalLeft;
-//    private Vector2 initalRight;
-//    private Vector2 initalMiddle;
+    private Vector2 initalLeft;
+    private Vector2 initalRight;
+    private Vector2 initalMiddle;
 
-//    private float timeElapsed = 0.0f;
+    private float timeElapsed = 0.0f;
 
-//    private bool isCheck = false;
-//    public bool isText = true;
+    private bool isCoroutine = false;
+    private bool isCheck = false;
+    public bool isText = true;
 
-//    private void Awake()
-//    {
+    private void Awake()
+    {
+        warningMain.localScale = new Vector2(0.0f, 0.0f);
+        warningSubLeft.localScale = new Vector2(0.0f, 0.0f);
+        warningSubMiddle.localScale = new Vector2(0.0f, 0.0f);
+        warningSubRight.localScale = new Vector2(0.0f, 0.0f);
+        noticeLeft.localScale = new Vector2(0.0f, 0.0f);
+        noticeMiddle.localScale = new Vector2(0.0f, 0.0f);
+        noticeRight.localScale = new Vector2(0.0f, 0.0f);
+    }
 
-//    }
+    private void OnEnable()
+    {
 
-//    private void OnEnable()
-//    {
+    }
 
-//    }
+    private void Start()
+    {
+        //StartCoroutine(StartMotion());
+    }
 
-//    private void Start()
-//    {
-//        //StartCoroutine(StartMotion());
-//    }
+    private void Update()
+    {
+        if (isCoroutine == false)
+        {
+            if (Input.GetKey(KeyCode.V) && isCheck == false)
+            {
+                isCheck = true;
+                StartCoroutine(CoroutineManager(true));
+            }
+            if (Input.GetKey(KeyCode.Z))
+            {
+                isCheck = false;
+            }
+        }
+    }
 
-//    private void Update()
-//    {
-//        if (Input.GetKey(KeyCode.V) && isCheck == false)
-//        {
-//            isCheck = true;
-//            StartCoroutine(StartMove(new Vector2(-300, 0), new Vector2(300, 0), new Vector2(60, 0), 0.2f));
-//        }
-//        if (Input.GetKey(KeyCode.Z))
-//        {
-//            isCheck = false;
-//        }
-//    }
+    private void SetNotice()
+    {
 
-//    private IEnumerator CoroutineManager()
-//    {
-//        StartCoroutine(WarningSubScale(Vector2.zero, Vector2.zero, Vector2.zero, 0.1f, false));
-//    }
+    }
 
-//    private IEnumerator WarningSubScale(Vector2 _left, Vector2 _right, Vector2 _middle, float _duration, bool isEnd)
-//    {
-//        timeElapsed = 0.0f;
 
-//        initalLeft = new Vector2(0.7f, 0.7f);
-//        initalMiddle = new Vector2(0.7f, 0.7f);
-//        initalRight = new Vector2(0.7f, 0.7f);
+    private IEnumerator CoroutineManager(bool _isText)
+    {
+        isCoroutine = true;
+        StartCoroutine(WarningMainScale(0.1f));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(WarningSubScale(0.1f, false));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(WarningSubMove(new Vector2(-300.0f, 0.0f), new Vector2(300.0f, 0.0f), new Vector2(60.0f, 0.0f), 0.1f));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(NoticeScale(0.1f, false, _isText));
+        yield return new WaitForSeconds(0.1f);
+        if (_isText) { StartCoroutine(NoticeMove(new Vector2(-300.0f, 0.0f), new Vector2(300.0f, 0.0f), new Vector2(60.0f, 0.0f), 0.1f)); }
+        else { StartCoroutine(NoticeMove(new Vector2(-100.0f, 0.0f), new Vector2(100.0f, 0.0f), new Vector2(20.0f, 0.0f), 0.1f)); }
+        yield return new WaitForSeconds(5.0f);
+        if (_isText) { StartCoroutine(NoticeMove(new Vector2(300.0f, 0.0f), new Vector2(-300.0f, 0.0f), new Vector2(-60.0f, 0.0f), 0.1f)); }
+        else { StartCoroutine(NoticeMove(new Vector2(100.0f, 0.0f), new Vector2(-100.0f, 0.0f), new Vector2(-20.0f, 0.0f), 0.1f)); }
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(NoticeScale(0.1f, true, _isText));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(WarningSubMove(new Vector2(300.0f, 0.0f), new Vector2(-300.0f, 0.0f), new Vector2(-60.0f, 0.0f), 0.1f));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(WarningSubScale(0.1f, true));
 
-//        while (timeElapsed < _duration)
-//        {
-//            timeElapsed += Time.deltaTime;
+        isCoroutine = false;
+        yield break;
+    }
 
-//            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / _duration), 2);
+    private IEnumerator WarningMainScale(float _duration)
+    {
+        timeElapsed = 0.0f;
 
-//            if (isEnd)
-//            {
-//                warningSubLeft.localScale = Vector2.Lerp(initalLeft, _left, time);
-//                warningSubRight.localScale = Vector2.Lerp(initalRight, _right, time);
-//                warningSubMiddle.localScale = Vector2.Lerp(initalMiddle, _middle, time);
-//            }
-//            else
-//            { 
-//                warningSubLeft.localScale = Vector2.Lerp(_left, initalLeft, time);
-//                warningSubRight.localScale = Vector2.Lerp(_right, initalRight, time);
-//                warningSubMiddle.localScale = Vector2.Lerp(_middle, initalMiddle, time);
-//            }
+        warningMain.localScale = new Vector2(1.2f, 1.2f);
 
-//            yield return null;
-//        }
-//    }
+        for (int i = 0; i < 3; i++)
+        {
+            while (timeElapsed < _duration * 0.1f)
+            {
+                timeElapsed += Time.deltaTime;
 
-//    private IEnumerator StartMove(Vector2 _left, Vector2 _right, Vector2 _middle, float _duration)
-//    {
-//        timeElapsed = 0.0f;
+                float time = Mathf.Clamp01(timeElapsed / _duration * 0.1f);
 
-//        initalLeft = warningSubLeft.anchoredPosition;
-//        initalRight = warningSubRight.anchoredPosition;
-//        initalMiddle = warningSubMiddle.localScale;
+                warningMain.GetComponent<CanvasGroup>().alpha = Mathf.Lerp(0.0f, 1.0f, time);
 
-//        while (timeElapsed < _duration)
-//        {
-//            timeElapsed += Time.deltaTime;
+                yield return null;
+            }
+            while (timeElapsed < _duration * 0.1f)
+            {
+                timeElapsed += Time.deltaTime;
 
-//            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / _duration), 2);
+                float time = Mathf.Clamp01(timeElapsed / _duration * 0.1f);
 
-//            warningSubLeft.anchoredPosition = Vector2.Lerp(initalLeft, initalLeft + _leftPos, time);
-//            warningSubRight.anchoredPosition = Vector2.Lerp(initalRight, initalRight + _rightPos, time);
-//            warningSubMiddle.localScale = Vector2.Lerp(initalMiddle, initalMiddle + _middleScale, time);
+                warningMain.GetComponent<CanvasGroup>().alpha = Mathf.Lerp(1.0f, 0.0f, time);
 
-//            yield return null;
-//        }
+                yield return null;
+            }
 
-//        timeElapsed = 0.0f;
+            i += 1;
+        }
 
-//        ScaleChange();
-//    }
-//    private void ScaleChange()
-//    {
-//        if (isText)
-//        {
-//            noticeLeft.localScale = new Vector2(0.7f, 0.8f);
-//            noticeMiddle.localScale = new Vector2(0.7f, 0.8f);
-//            noticeRight.localScale = new Vector2(0.7f, 0.8f);
-//        }
-//        else
-//        {
-//            noticeLeft.localScale = new Vector2(0.7f, 0.5f);
-//            noticeMiddle.localScale = new Vector2(0.7f, 0.5f);
-//            noticeRight.localScale = new Vector2(0.7f, 0.5f);
-//        }
-//    }
-//}
+        timeElapsed = 0.0f;
+
+        while (timeElapsed < _duration * 0.4f)
+        {
+            timeElapsed += Time.deltaTime;
+
+            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / (_duration / 2)), 2);
+
+            warningMain.localScale = Vector2.Lerp(new Vector2(1.2f, 1.2f), new Vector2(0.0f, 0.0f), time);
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator WarningSubScale(float _duration, bool _isEnd)
+    {
+        timeElapsed = 0.0f;
+
+        initalLeft = new Vector2(0.7f, 0.7f);
+        initalMiddle = new Vector2(0.7f, 0.7f);
+        initalRight = new Vector2(0.7f, 0.7f);
+
+        while (timeElapsed < _duration)
+        {
+            timeElapsed += Time.deltaTime;
+
+            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / _duration), 2);
+
+            if (_isEnd)
+            {
+                warningSubLeft.localScale = Vector2.Lerp(initalLeft, new Vector2(0.7f, 0.0f), time);
+                warningSubRight.localScale = Vector2.Lerp(initalRight, new Vector2(0.7f, 0.0f), time);
+                warningSubMiddle.localScale = Vector2.Lerp(initalMiddle, new Vector2(0.7f, 0.0f), time);
+            }   // isEnd: true
+            else
+            {
+                warningSubLeft.localScale = Vector2.Lerp(new Vector2(0.7f, 0.0f), initalLeft, time);
+                warningSubRight.localScale = Vector2.Lerp(new Vector2(0.7f, 0.0f), initalRight, time);
+                warningSubMiddle.localScale = Vector2.Lerp(new Vector2(0.7f, 0.0f), initalMiddle, time);
+            }   // isEnd: false
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator NoticeScale(float _duration, bool _isEnd, bool _isText)
+    {
+        timeElapsed = 0.0f;
+
+        if (_isText)
+        {
+            initalLeft = new Vector2(0.7f, 0.5f);
+            initalMiddle = new Vector2(0.7f, 0.5f);
+            initalRight = new Vector2(0.7f, 0.5f);
+        }   // isText: true
+        else
+        {
+            initalLeft = new Vector2(0.7f, 0.7f);
+            initalMiddle = new Vector2(0.7f, 0.7f);
+            initalRight = new Vector2(0.7f, 0.7f);
+        }   // isText: false
+
+        while (timeElapsed < _duration)
+        {
+            timeElapsed += Time.deltaTime;
+
+            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / _duration), 2);
+
+            if (_isEnd)
+            {
+                noticeLeft.localScale = Vector2.Lerp(initalLeft, new Vector2(0.7f, 0.0f), time);
+                noticeRight.localScale = Vector2.Lerp(initalRight, new Vector2(0.7f, 0.0f), time);
+                noticeMiddle.localScale = Vector2.Lerp(initalMiddle, new Vector2(0.7f, 0.0f), time);
+            }   // isEnd: true
+            else
+            {
+                noticeLeft.localScale = Vector2.Lerp(new Vector2(0.7f, 0.0f), initalLeft, time);
+                noticeRight.localScale = Vector2.Lerp(new Vector2(0.7f, 0.0f), initalRight, time);
+                noticeMiddle.localScale = Vector2.Lerp(new Vector2(0.7f, 0.0f), initalMiddle, time);
+            }   // isEnd: false
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator WarningSubMove(Vector2 _left, Vector2 _right, Vector2 _middle, float _duration)
+    {
+        timeElapsed = 0.0f;
+
+        initalLeft = warningSubLeft.anchoredPosition;
+        initalRight = warningSubRight.anchoredPosition;
+        initalMiddle = warningSubMiddle.localScale;
+
+        while (timeElapsed < _duration)
+        {
+            timeElapsed += Time.deltaTime;
+
+            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / _duration), 2);
+
+            warningSubLeft.anchoredPosition = Vector2.Lerp(initalLeft, initalLeft + _left, time);
+            warningSubRight.anchoredPosition = Vector2.Lerp(initalRight, initalRight + _right, time);
+            warningSubMiddle.localScale = Vector2.Lerp(initalMiddle, initalMiddle + _middle, time);
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator NoticeMove(Vector2 _left, Vector2 _right, Vector2 _middle, float _duration)
+    {
+        timeElapsed = 0.0f;
+
+        initalLeft = noticeLeft.anchoredPosition;
+        initalRight = noticeRight.anchoredPosition;
+        initalMiddle = noticeMiddle.localScale;
+
+        while (timeElapsed < _duration)
+        {
+            timeElapsed += Time.deltaTime;
+
+            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / _duration), 2);
+
+            noticeLeft.anchoredPosition = Vector2.Lerp(initalLeft, initalLeft + _left, time);
+            noticeRight.anchoredPosition = Vector2.Lerp(initalRight, initalRight + _right, time);
+            noticeMiddle.localScale = Vector2.Lerp(initalMiddle, initalMiddle + _middle, time);
+
+            yield return null;
+        }
+    }
+}

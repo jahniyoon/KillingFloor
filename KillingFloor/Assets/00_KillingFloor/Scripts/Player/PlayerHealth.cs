@@ -24,7 +24,6 @@ public class PlayerHealth : LivingEntity
         // 플레이어 조작을 받는 컴포넌트들 활성화
         playerMovement.enabled = true;
         playerShooter.enabled = true;
-
         PlayerUIManager.instance.SetHP(startingHealth);
     }
 

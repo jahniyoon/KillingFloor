@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AttackSpit : MonoBehaviour
 {
-    private CapsuleCollider collider;
+    private CapsuleCollider capsuleCollider;
 
     private float timeElapsed = 0.0f;
     private float time = 0.0f;
@@ -13,8 +13,8 @@ public class AttackSpit : MonoBehaviour
 
     private void Awake()
     {
-        collider = GetComponent<CapsuleCollider>();
-        collider.enabled = false;
+        capsuleCollider = GetComponent<CapsuleCollider>();
+        capsuleCollider.enabled = false;
     }
 
     private void OnEnable()
@@ -38,7 +38,7 @@ public class AttackSpit : MonoBehaviour
 
         timeElapsed = 0.0f;
 
-        collider.enabled = true;
+        capsuleCollider.enabled = true;
 
         while (timeElapsed < 0.8f)
         {
@@ -46,8 +46,8 @@ public class AttackSpit : MonoBehaviour
 
             time = Mathf.Clamp01(timeElapsed / 0.8f);
 
-            collider.center = new Vector3(0.0f, 0.0f, Mathf.Lerp(0.0f, 15.0f, time));
-            collider.height = Mathf.Lerp(0.0f, 30.0f, time);
+            capsuleCollider.center = new Vector3(0.0f, 0.0f, Mathf.Lerp(0.0f, 15.0f, time));
+            capsuleCollider.height = Mathf.Lerp(0.0f, 30.0f, time);
 
             yield return null;
         }
@@ -60,7 +60,7 @@ public class AttackSpit : MonoBehaviour
 
             time = Mathf.Clamp01(timeElapsed / 0.6f);
 
-            collider.center = new Vector3(0.0f, 0.0f, Mathf.Lerp(15.0f, 30.0f, time));
+            capsuleCollider.center = new Vector3(0.0f, 0.0f, Mathf.Lerp(15.0f, 30.0f, time));
 
             yield return null;
         }
@@ -73,13 +73,13 @@ public class AttackSpit : MonoBehaviour
 
             time = Mathf.Clamp01(timeElapsed / 0.8f);
 
-            collider.center = new Vector3(0.0f, 0.0f, Mathf.Lerp(30.0f, 45.0f, time));
-            collider.height = Mathf.Lerp(30.0f, 5.0f, time);
+            capsuleCollider.center = new Vector3(0.0f, 0.0f, Mathf.Lerp(30.0f, 45.0f, time));
+            capsuleCollider.height = Mathf.Lerp(30.0f, 5.0f, time);
 
             yield return null;
         }
 
-        collider.enabled = false;
+        capsuleCollider.enabled = false;
 
         isCoroutine = false;
     }
