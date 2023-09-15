@@ -13,7 +13,7 @@ public class PlayerShooter : MonoBehaviour
     private PlayerHealth playerHealth;
     private CameraSetup cameraSet;
     protected Animator animator;
-    int layerMask = (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11);    // 데미지 받을 좀비의 레이어 마스크
+    int layerMask = (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11) | (1 << 14);    // 데미지 받을 좀비의 레이어 마스크
 
 
     public Transform aimTarget; // 플레이어가 보는 방향
@@ -262,20 +262,29 @@ public class PlayerShooter : MonoBehaviour
             playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
             return;
         }
-        if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health > 0)
+        // 좀비일 경우
+        else if (_hitObj.transform.GetComponent<HitPoint>() != null)
         {
-            _hitObj.transform.GetComponent<HitPoint>().Hit(damage); // 좀비에게 데미지
-
-            // 만약 좀비가 죽는다면
-            if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health <= 0)
+            if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health > 0)
             {
-                // 코인 먹이고
-                playerHealth.GetCoin(_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin);
+                _hitObj.transform.GetComponent<HitPoint>().Hit(damage); // 좀비에게 데미지
 
-                // 코인값 초기화
-                _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin = 0;
-                //coin += _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin;
+                // 만약 좀비가 죽는다면
+                if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health <= 0)
+                {
+                    // 코인 먹이고
+                    playerHealth.GetCoin(_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin);
+
+                    // 코인값 초기화
+                    _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin = 0;
+                    //coin += _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin;
+                }
             }
+        }
+        // 보스일 경우
+        if (_hitObj.transform.GetComponent<BossController>() != null)
+        {
+
         }
     }
 
