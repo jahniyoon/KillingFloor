@@ -54,6 +54,49 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     }
 
+    #region TestLogin
+    //[Mijeong]230915 테스트용 로그인 메서드 추가
+    public void OnLoginTest01()
+    {
+        // 이메일과 비밀번호 사용해서 로그인 요청
+        var request = new LoginWithEmailAddressRequest { Email = "test01@test.com", Password = "000000" };
+
+        PlayFabClientAPI.LoginWithEmailAddress(request, (result) =>
+        {
+            // 로그인 성공시 실행
+            GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+        },
+            (error) => Debug.Log("로그인 실패"));
+    }
+    public void OnLoginTest02()
+    {
+        // 이메일과 비밀번호 사용해서 로그인 요청
+        var request = new LoginWithEmailAddressRequest { Email = "test02@test.com", Password = "000000" };
+
+        PlayFabClientAPI.LoginWithEmailAddress(request, (result) =>
+        {
+            // 로그인 성공시 실행
+            GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+        },
+            (error) => Debug.Log("로그인 실패"));
+    }
+    public void OnLoginTest03()
+    {
+        // 이메일과 비밀번호 사용해서 로그인 요청
+        var request = new LoginWithEmailAddressRequest { Email = "test03@test.com", Password = "000000" };
+
+        PlayFabClientAPI.LoginWithEmailAddress(request, (result) =>
+        {
+            // 로그인 성공시 실행
+            GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+        },
+            (error) => Debug.Log("로그인 실패"));
+    }
+    #endregion
+
     public void Register()
     {
         // 이메일, 비밀번호, 유저 이름으로 등록 요청 생성
