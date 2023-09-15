@@ -25,6 +25,7 @@ public class BossController : MonoBehaviour
     private int mereorCount = 0;
     private float[] meteorFattern;
     private NavMeshAgent agent;
+    private bool dieChk = false;
     private void Awake()
     {
         meteorFattern = new float[] {70, 50, 20, 10,0,-10,-10,-10 };
@@ -95,6 +96,12 @@ public class BossController : MonoBehaviour
     {
         if(bossHp <= 0)
         {
+            if(dieChk == false)
+            {
+                animator.SetTrigger("Die");//Á×À½
+                dieChk = true;
+            }
+
             return;
         }
         currentTime += Time.deltaTime;

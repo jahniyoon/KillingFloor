@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerUIManager : MonoBehaviour
@@ -27,16 +28,10 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text ammoText;       // 탄약 표시
     public TMP_Text totalAmmoText;  // 남은 탄약
     public TMP_Text grenadeText;    // 남은 수류탄
-    public TMP_Text coinText;       // 현재 재화
-    public TMP_Text weightText;     // 현재 무게
-    public Slider healSlider;       // 힐 슬라이더
+    public Slider healSlider;        // 힐 슬라이더
     public GameObject equipUI;
     public GameObject shopUI;
     public GameObject shopOpenUI;
-
-    // 코인 증가효과 계산용 변수
-    private int coin;
-    private int targetCoin;
 
     //JunOh
     public TMP_Text NoticeText;       // 알림 내용
@@ -44,11 +39,6 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text ZombieCountText;  // 좀비 수
     public TMP_Text ZombieWaveText;   // 좀비 웨이브 정보
     //JunOh
-
-    public void Update()
-    {
-        CoinUpdate();
-    }
 
     // 체력 텍스트 갱신
     public void SetLevel(float value)
@@ -87,29 +77,6 @@ public class PlayerUIManager : MonoBehaviour
         healSlider.value = value;
     }
 
-    // 코인 획득
-    public void SetCoin(int value)
-    {
-        targetCoin = value;
-        //coinText.text = string.Format("{0}", value);
-    }
-    // 코인 증가 업데이트
-    public void CoinUpdate()
-    {
-        if (coin < targetCoin)
-        {
-            coin += Mathf.CeilToInt(1f * Time.deltaTime); // 초당 코인 업데이트
-            if (coin >= targetCoin)
-            {
-                coin = targetCoin; // 현재 코인에 도달하면 멈춤
-            }
-            coinText.text = string.Format("{0}", coin);
-        }
-    }
-    public void SetWeight(float value)
-    {
-        weightText.text = string.Format("{0}", value);
-    }
 
     //JunOh
     public void SetNotice(string value)
