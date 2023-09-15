@@ -8,7 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/03_[MJ]Project/[MJ]Scenes/LoginScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 0
+    path: Assets/03_[MJ]Project/[MJ]Scenes/LocalizationScene.unity
+    guid: d765e37e38377bc4ebe0aec9438740a4
+  - enabled: 0
+    path: Assets/03_[MJ]Project/[MJ]Scenes/LobbyScene.unity
+    guid: 2a904c960d452324ea881bf3947841a5
   - enabled: 1
-    path: Assets/00_KillingFloor/Scenes/PlayerTestScene.unity
-    guid: a03856037cb863441bfff0ddf0ec6d96
+    path: Assets/00_KillingFloor/Scenes/ZombieTestScene.unity
+    guid: c9107cdb6d79c424894cf2ac2aa3cf6f
   m_configObjects: {}

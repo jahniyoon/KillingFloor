@@ -72,10 +72,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Glow_Size: 1.2
+    - _Glow_Size: 0.95
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Split_Value: 1.5
+    - _Split_Value: 1.29
     m_Colors:
     - _Emission_Color: {r: 0, g: 0, b: 0, a: 0}
     - _Glow_Color: {r: 0.0627451, g: 0, b: 0, a: 0}

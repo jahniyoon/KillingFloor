@@ -1,18 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Collections;
-using Unity.VisualScripting;
-using UnityEditor.Animations;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Rendering.Universal;
-using static UnityEngine.Rendering.DebugUI;
 
 public class NormalZombie : NormalZombieData
 {
-    public List<AnimatorController> controllers = new List<AnimatorController>();
+    public List<RuntimeAnimatorController> controllers = new List<RuntimeAnimatorController>();
     public List<GameObject> skills = new List<GameObject>();
 
     private Transform skillParent;
