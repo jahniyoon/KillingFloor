@@ -1,4 +1,5 @@
 using Cinemachine;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +9,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.Windows;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviourPun
 {
     private PlayerInputs input; 
     private CharacterController controller; 
@@ -97,7 +98,8 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // 입력 가능여부 확인
-       
+        if (!photonView.IsMine) { return; } // 로컬 플레이어가 아닌 경우 입력을 받지 않는다.
+
             GroundedCheck();    // 바닥 체크
             JumpAndGravity();   // 점프와 중력 관련 메서드
             Move();             // 이동 관련 메서드
@@ -105,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void LateUpdate()
     {
-
+        if (!photonView.IsMine) { return; } // 로컬 플레이어가 아닌 경우 입력을 받지 않는다.
         CameraRotation();
     }
 
@@ -312,29 +314,36 @@ public class PlayerMovement : MonoBehaviour
     //// 애니메이션
     public void ActiveAnimation()
     {
-        //// 걷기 애니메이션 셋팅
-        if (input.move.x != 0 || input.move.y != 0)
+        if (fpsAnimator != null)
         {
-            fpsAnimator.SetBool("isWalk", true);
+            //// 걷기 애니메이션 셋팅
+            if (input.move.x != 0 || input.move.y != 0)
+            {
+                fpsAnimator.SetBool("isWalk", true);
+            }
+            else
+            {
+                fpsAnimator.SetBool("isWalk", false);
+            }
+            fpsAnimator.SetBool("isRun", input.dash);
+            if (isGrounded)
+            {
+                fpsAnimator.SetBool("isGrounded", isGrounded);
+            }
+            else if (!isGrounded)
+            {
+                fpsAnimator.SetBool("isGrounded", isGrounded);
+            }
         }
-        else
-        {
-            fpsAnimator.SetBool("isWalk", false);
-        }
-        fpsAnimator.SetBool("isRun", input.dash);
-
-        tpsAnimator.SetBool("isJump", input.jump);
-
+            tpsAnimator.SetBool("isJump", input.jump);
 
         if (isGrounded)
         {
             tpsAnimator.SetBool("isGrounded", isGrounded);
-            fpsAnimator.SetBool("isGrounded", isGrounded);
         }
         else if (!isGrounded)
         {
             tpsAnimator.SetBool("isGrounded", isGrounded);
-            fpsAnimator.SetBool("isGrounded", isGrounded);
         }
 
         tpsAnimator.SetFloat("Speed", animMoveSpeed);

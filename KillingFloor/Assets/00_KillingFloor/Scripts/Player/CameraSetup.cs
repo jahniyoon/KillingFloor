@@ -1,8 +1,9 @@
 using Cinemachine; // 시네머신 관련 코드
+using Photon.Pun;
 using UnityEngine;
 
 // 시네머신 카메라가 로컬 플레이어를 추적하도록 설정
-public class CameraSetup : MonoBehaviour
+public class CameraSetup : MonoBehaviourPun
 {
     PlayerInputs input;
     PlayerMovement playerMovement;
@@ -17,27 +18,33 @@ public class CameraSetup : MonoBehaviour
 
     void Awake()
     {
-        playerMovement = GetComponent<PlayerMovement>();
-        input = GetComponent<PlayerInputs>();
+        if (photonView.IsMine)
+        {
+            playerMovement = GetComponent<PlayerMovement>();
+            input = GetComponent<PlayerInputs>();
 
-        // 씬에 있는 시네 머신 가상 카메라를 찾고 플레이어 하위에 넣기
-        tpsCam = GameObject.FindWithTag("TPS CAM");
-        tpsCam.transform.parent = this.transform;
-        fpsCam = GameObject.FindWithTag("FPS CAM");
-        fpsCam.transform.parent = this.transform;
-        playerSpine = this.transform.GetChild(1).gameObject;
+            // 씬에 있는 시네 머신 가상 카메라를 찾고 플레이어 하위에 넣기
+            tpsCam = GameObject.FindWithTag("TPS CAM");
+            tpsCam.transform.parent = this.transform;
+            fpsCam = GameObject.FindWithTag("FPS CAM");
+            fpsCam.transform.parent = this.transform;
+            playerSpine = this.transform.GetChild(1).gameObject;
 
-        tpsCam.SetActive(false);                    // 3인칭은 미리 꺼두기 (Debug용)
-        tpsPlayerBody.SetActive(false);
-        playerSpine.SetActive(false);
+            tpsCam.SetActive(false);                    // 3인칭은 미리 꺼두기 (Debug용)
 
-
-        followCam = fpsCam.GetComponent<CinemachineVirtualCamera>();    // FPS 카메라를 팔로우캠으로 설정
-        playerMovement.followCamera = followCam;
-        CameraSet(followCam);   // 카메라 세팅
-        if (tpsTest){ TPSTest();
-            Destroy(fpsPlayerBody);
+            followCam = fpsCam.GetComponent<CinemachineVirtualCamera>();    // FPS 카메라를 팔로우캠으로 설정
+            playerMovement.followCamera = followCam;
+            CameraSet(followCam);   // 카메라 세팅
+            if (tpsTest)
+            {
+                TPSTest();
+                Destroy(fpsPlayerBody);
+            }
         }
+            fpsPlayerBody.SetActive(photonView.IsMine);
+            tpsPlayerBody.SetActive(!photonView.IsMine);
+            playerSpine.SetActive(!photonView.IsMine);
+        
     }
 
     void Update()
@@ -47,25 +54,28 @@ public class CameraSetup : MonoBehaviour
 
     public void ChangeCamera()
     {
-        if (input.changeCamera) // 버튼이 눌리면 실행
+        if (photonView.IsMine)
         {
-            tpsCam.SetActive(isFPS);
-            fpsCam.SetActive(!isFPS);
-            tpsPlayerBody.SetActive(isFPS);
-            fpsPlayerBody.SetActive(!isFPS);
-            playerSpine.SetActive(isFPS);
+            if (input.changeCamera) // 버튼이 눌리면 실행
+            {
+                tpsCam.SetActive(isFPS);
+                fpsCam.SetActive(!isFPS);
+                tpsPlayerBody.SetActive(isFPS);
+                fpsPlayerBody.SetActive(!isFPS);
+                playerSpine.SetActive(isFPS);
 
 
-            if (isFPS) // 1인칭일 때
-            {
-                followCam = tpsCam.GetComponent<CinemachineVirtualCamera>();
+                if (isFPS) // 1인칭일 때
+                {
+                    followCam = tpsCam.GetComponent<CinemachineVirtualCamera>();
+                }
+                else if (!isFPS) // 3인칭일 때
+                {
+                    followCam = fpsCam.GetComponent<CinemachineVirtualCamera>();
+                }
+                CameraSet(followCam);
+                input.changeCamera = false; // 카메라가 변경되면 다시 입력 가능
             }
-            else if (!isFPS) // 3인칭일 때
-            {
-                followCam = fpsCam.GetComponent<CinemachineVirtualCamera>();
-            }
-            CameraSet(followCam);
-            input.changeCamera = false; // 카메라가 변경되면 다시 입력 가능
         }
     }
 

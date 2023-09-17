@@ -93,7 +93,15 @@ public class Shop : MonoBehaviour
         {
             if (playerInfo.coin >= 100 && playerInfo.armor != 100)
             {
-                playerInfo.RestoreArmor(100);
+                if (playerInfo.armor >= 100)
+                {
+                    float _armor = 100 - playerInfo.health;
+                    playerInfo.RestoreArmor(_armor);
+                    playerInfo.SpendCoin(Mathf.CeilToInt(_armor));
+                }
+
+                else
+                    playerInfo.RestoreArmor(100);
                 playerInfo.SpendCoin(100);
             }
         }

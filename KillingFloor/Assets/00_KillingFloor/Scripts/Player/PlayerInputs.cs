@@ -1,9 +1,10 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInputs : MonoBehaviour
+public class PlayerInputs : MonoBehaviourPun
 {
     [Header("Player Input Values")]
     public Vector2 move;
@@ -184,7 +185,9 @@ public class PlayerInputs : MonoBehaviour
     }
     private void SetCursorState(bool newState)
     {
-            Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+        if (!photonView.IsMine) { return; } // 로컬 플레이어가 아닌 경우 입력을 받지 않는다.
+
+        Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
 }

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine.UIElements;
 using UnityEngine.Windows;
 
 
-public class PlayerShooter : MonoBehaviour
+public class PlayerShooter : MonoBehaviourPun
 {
     public enum Type { Pistol, Rifle, Melee, Heal };
     private PlayerInputs input;
@@ -108,6 +109,8 @@ public class PlayerShooter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!photonView.IsMine) { return; } // 로컬 플레이어가 아닌 경우 입력을 받지 않는다.
+
         // 입력 가능여부 확인
         if (GameManager.instance != null && GameManager.instance.inputEnable)
         {
@@ -195,7 +198,10 @@ public class PlayerShooter : MonoBehaviour
             handAnimator.SetTrigger("isFire");
             healCoolDown = -0.1f;
             StartCoroutine(WeaponDelay(reloadRate));
-            playerHealth.RestoreHealth(damage);
+            float heal = damage;
+            if (heal+playerHealth.health >= 100)
+            { heal -= ((heal+playerHealth.health)-100);}
+            playerHealth.RestoreHealth(heal);
             input.shoot = false;
         }
         aimTarget.transform.position = hitPoint;    // 플레이어 조준 포지션

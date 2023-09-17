@@ -382,12 +382,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #region PlayScene Load
     public void OnPlayScene()
     {
-        if(PhotonNetwork.IsMasterClient)
-        {
+        // 지환 : 마스터만 테스트씬으로 이동하여 잠시 주석처리했습니다.
+        //if(PhotonNetwork.IsMasterClient)
+        //{
             PhotonNetwork.LoadLevel("PlayerTestScene");
-        }
+        //}
 
         Debug.Log(UserNickNameText.text);
+        if (PhotonNetwork.IsMasterClient)
+        { Debug.Log("마스터 클라이언트 :" + UserNickNameText.text); }
+
     }
     #endregion
 }

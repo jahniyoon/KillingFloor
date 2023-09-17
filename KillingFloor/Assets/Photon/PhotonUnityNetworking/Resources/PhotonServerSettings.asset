@@ -39,6 +39,11 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - ApplyUpdatedHealth
+  - OnDamage
+  - RestoreArmor
+  - RestoreHealth
+  - GetCoin
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
