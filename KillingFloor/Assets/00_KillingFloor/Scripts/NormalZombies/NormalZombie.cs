@@ -423,6 +423,24 @@ public class NormalZombie : NormalZombieData
         ani.SetTrigger("isDie");
 
         isDeath = true;
+
+        StartCoroutine(DeathEnd());
+    }
+
+    private IEnumerator DeathEnd()
+    {
+        while (ani.GetNextAnimatorStateInfo(0).IsName("Dead") == false)
+        {
+            yield return null;
+        }
+        while (1 <= ani.GetNextAnimatorStateInfo(0).normalizedTime)
+        {
+            yield return null;
+
+            break;
+        }
+
+        gameObject.SetActive(false);
     }
 
     protected virtual (float, float, int) ZombieWalk()

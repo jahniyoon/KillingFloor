@@ -15,6 +15,10 @@ public class NoticeController : MonoBehaviour
     public RectTransform noticeMiddle;
     public RectTransform noticeRight;
 
+    public CanvasGroup warningSubText;
+    public CanvasGroup noticeTextText;
+    public CanvasGroup noticeTextCount;
+
     private Vector2 initalLeft;
     private Vector2 initalRight;
     private Vector2 initalMiddle;
@@ -23,7 +27,7 @@ public class NoticeController : MonoBehaviour
 
     private bool isCoroutine = false;
     private bool isCheck = false;
-    public bool isText = true;
+    public bool isText = false;
 
     private void Awake()
     {
@@ -34,16 +38,9 @@ public class NoticeController : MonoBehaviour
         noticeLeft.localScale = new Vector2(0.0f, 0.0f);
         noticeMiddle.localScale = new Vector2(0.0f, 0.0f);
         noticeRight.localScale = new Vector2(0.0f, 0.0f);
-    }
-
-    private void OnEnable()
-    {
-
-    }
-
-    private void Start()
-    {
-        //StartCoroutine(StartMotion());
+        warningSubText.alpha = 0.0f;
+        noticeTextText.alpha = 0.0f;
+        noticeTextCount.alpha = 0.0f;
     }
 
     private void Update()
@@ -53,7 +50,7 @@ public class NoticeController : MonoBehaviour
             if (Input.GetKey(KeyCode.V) && isCheck == false)
             {
                 isCheck = true;
-                StartCoroutine(CoroutineManager(true));
+                StartCoroutine(CoroutineManager(false));
             }
             if (Input.GetKey(KeyCode.Z))
             {
@@ -62,30 +59,33 @@ public class NoticeController : MonoBehaviour
         }
     }
 
-    private void SetNotice()
-    {
-
-    }
-
-
-    private IEnumerator CoroutineManager(bool _isText)
+    public IEnumerator CoroutineManager(bool _isText)
     {
         isCoroutine = true;
+
+        StartCoroutine(WarningMainScale(0.1f));
+        yield return new WaitForSeconds(0.1f);
         StartCoroutine(WarningMainScale(0.1f));
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(WarningSubScale(0.1f, false));
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(WarningSubMove(new Vector2(-300.0f, 0.0f), new Vector2(300.0f, 0.0f), new Vector2(60.0f, 0.0f), 0.1f));
         yield return new WaitForSeconds(0.1f);
+        StartCoroutine(WarningSubText(0.1f, false));
+        yield return new WaitForSeconds(0.1f);
         StartCoroutine(NoticeScale(0.1f, false, _isText));
         yield return new WaitForSeconds(0.1f);
         if (_isText) { StartCoroutine(NoticeMove(new Vector2(-300.0f, 0.0f), new Vector2(300.0f, 0.0f), new Vector2(60.0f, 0.0f), 0.1f)); }
         else { StartCoroutine(NoticeMove(new Vector2(-100.0f, 0.0f), new Vector2(100.0f, 0.0f), new Vector2(20.0f, 0.0f), 0.1f)); }
+        StartCoroutine(NoticeText(0.1f, false, _isText));
         yield return new WaitForSeconds(5.0f);
+        StartCoroutine(NoticeText(0.1f, true, _isText));
         if (_isText) { StartCoroutine(NoticeMove(new Vector2(300.0f, 0.0f), new Vector2(-300.0f, 0.0f), new Vector2(-60.0f, 0.0f), 0.1f)); }
         else { StartCoroutine(NoticeMove(new Vector2(100.0f, 0.0f), new Vector2(-100.0f, 0.0f), new Vector2(-20.0f, 0.0f), 0.1f)); }
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(NoticeScale(0.1f, true, _isText));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(WarningSubText(0.1f, true));
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(WarningSubMove(new Vector2(300.0f, 0.0f), new Vector2(-300.0f, 0.0f), new Vector2(-60.0f, 0.0f), 0.1f));
         yield return new WaitForSeconds(0.1f);
@@ -101,44 +101,33 @@ public class NoticeController : MonoBehaviour
 
         warningMain.localScale = new Vector2(1.2f, 1.2f);
 
-        for (int i = 0; i < 3; i++)
-        {
-            while (timeElapsed < _duration * 0.1f)
-            {
-                timeElapsed += Time.deltaTime;
-
-                float time = Mathf.Clamp01(timeElapsed / _duration * 0.1f);
-
-                warningMain.GetComponent<CanvasGroup>().alpha = Mathf.Lerp(0.0f, 1.0f, time);
-
-                yield return null;
-            }
-            while (timeElapsed < _duration * 0.1f)
-            {
-                timeElapsed += Time.deltaTime;
-
-                float time = Mathf.Clamp01(timeElapsed / _duration * 0.1f);
-
-                warningMain.GetComponent<CanvasGroup>().alpha = Mathf.Lerp(1.0f, 0.0f, time);
-
-                yield return null;
-            }
-
-            i += 1;
-        }
-
-        timeElapsed = 0.0f;
-
-        while (timeElapsed < _duration * 0.4f)
+        while (timeElapsed < _duration * 0.3f)
         {
             timeElapsed += Time.deltaTime;
 
-            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / (_duration / 2)), 2);
+            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / (_duration * 0.3f)), 2);
+
+            warningMain.localScale = Vector2.Lerp(new Vector2(0.0f, 0.0f), new Vector2(1.2f, 1.2f), time);
+
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(_duration * 0.2f);
+
+        timeElapsed = 0.0f;
+
+        while (timeElapsed < _duration * 0.5f)
+        {
+            timeElapsed += Time.deltaTime;
+
+            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / (_duration * 0.5f)), 2);
 
             warningMain.localScale = Vector2.Lerp(new Vector2(1.2f, 1.2f), new Vector2(0.0f, 0.0f), time);
 
             yield return null;
         }
+
+        warningMain.localScale = new Vector2(0.0f, 0.0f);
     }
 
     private IEnumerator WarningSubScale(float _duration, bool _isEnd)
@@ -169,6 +158,19 @@ public class NoticeController : MonoBehaviour
             }   // isEnd: false
 
             yield return null;
+        }
+
+        if (_isEnd)
+        {
+            warningSubLeft.localScale = new Vector2(0.7f, 0.0f);
+            warningSubRight.localScale = new Vector2(0.7f, 0.0f);
+            warningSubMiddle.localScale = new Vector2(0.7f, 0.0f);
+        }
+        else
+        {
+            warningSubLeft.localScale = initalLeft;
+            warningSubRight.localScale = initalRight;
+            warningSubMiddle.localScale = initalMiddle;
         }
     }
 
@@ -210,6 +212,19 @@ public class NoticeController : MonoBehaviour
 
             yield return null;
         }
+
+        if (_isEnd)
+        {
+            noticeLeft.localScale = new Vector2(0.7f, 0.0f);
+            noticeRight.localScale = new Vector2(0.7f, 0.0f);
+            noticeMiddle.localScale = new Vector2(0.7f, 0.0f);
+        }
+        else
+        {
+            noticeLeft.localScale = initalLeft;
+            noticeRight.localScale = initalRight;
+            noticeMiddle.localScale = initalMiddle;
+        }
     }
 
     private IEnumerator WarningSubMove(Vector2 _left, Vector2 _right, Vector2 _middle, float _duration)
@@ -232,6 +247,10 @@ public class NoticeController : MonoBehaviour
 
             yield return null;
         }
+
+        warningSubLeft.anchoredPosition = initalLeft + _left;
+        warningSubRight.anchoredPosition = initalRight + _right;
+        warningSubMiddle.localScale = initalMiddle + _middle;
     }
 
     private IEnumerator NoticeMove(Vector2 _left, Vector2 _right, Vector2 _middle, float _duration)
@@ -253,6 +272,66 @@ public class NoticeController : MonoBehaviour
             noticeMiddle.localScale = Vector2.Lerp(initalMiddle, initalMiddle + _middle, time);
 
             yield return null;
+        }
+
+        noticeLeft.anchoredPosition = initalLeft + _left;
+        noticeRight.anchoredPosition = initalRight + _right;
+        noticeMiddle.localScale = initalMiddle + _middle;
+    }
+
+    private IEnumerator WarningSubText(float _duration, bool _isEnd)
+    {
+        timeElapsed = 0.0f;
+
+        while (timeElapsed < _duration)
+        {
+            timeElapsed += Time.deltaTime;
+
+            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / _duration), 2);
+
+            if (_isEnd) { warningSubText.alpha = Mathf.Lerp(1.0f, 0.0f, time); }
+            else { warningSubText.alpha = Mathf.Lerp(0.0f, 1.0f, time); }
+
+            yield return null;
+        }
+
+        if (_isEnd) { warningSubText.alpha = 0.0f; }
+        else { warningSubText.alpha = 1.0f; }
+    }
+
+    private IEnumerator NoticeText(float _duration, bool _isEnd, bool _isText)
+    {
+        timeElapsed = 0.0f;
+
+        while (timeElapsed < _duration)
+        {
+            timeElapsed += Time.deltaTime;
+
+            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / _duration), 2);
+
+            if (_isEnd)
+            {
+                if (_isText) { noticeTextText.alpha = Mathf.Lerp(1.0f, 0.0f, time); }
+                else { noticeTextCount.alpha = Mathf.Lerp(1.0f, 0.0f, time); }
+            }
+            else
+            {
+                if (_isText) { noticeTextText.alpha = Mathf.Lerp(0.0f, 1.0f, time); }
+                else { noticeTextCount.alpha = Mathf.Lerp(0.0f, 1.0f, time); }
+            }
+
+            yield return null;
+        }
+
+        if (_isEnd)
+        {
+            if (_isText) { noticeTextText.alpha = 0.0f; }
+            else { noticeTextCount.alpha = 0.0f; }
+        }
+        else
+        {
+            if (_isText) { noticeTextText.alpha = 1.0f; }
+            else { noticeTextCount.alpha = 1.0f; }
         }
     }
 }
