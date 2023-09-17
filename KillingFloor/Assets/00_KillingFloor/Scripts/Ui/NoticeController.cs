@@ -43,22 +43,6 @@ public class NoticeController : MonoBehaviour
         noticeTextCount.alpha = 0.0f;
     }
 
-    private void Update()
-    {
-        if (isCoroutine == false)
-        {
-            if (Input.GetKey(KeyCode.V) && isCheck == false)
-            {
-                isCheck = true;
-                StartCoroutine(CoroutineManager(false));
-            }
-            if (Input.GetKey(KeyCode.Z))
-            {
-                isCheck = false;
-            }
-        }
-    }
-
     public IEnumerator CoroutineManager(bool _isText)
     {
         isCoroutine = true;

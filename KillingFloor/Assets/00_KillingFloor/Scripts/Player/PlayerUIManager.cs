@@ -41,15 +41,18 @@ public class PlayerUIManager : MonoBehaviour
 
 
     //JunOh
-    public TMP_Text WarningSubText;   // 알림 내용
-    public TMP_Text NoticeTextText;   // 알림 로고 정보
-    public TMP_Text NoticeCountText;  // 알림 웨이브 정보
-    public TMP_Text ZombieCountText;  // 좀비 수
-    public TMP_Text ZombieWaveText;   // 좀비 웨이브 정보
+    public TMP_Text warningSubText;   // 알림 내용
+    public TMP_Text noticeTextText;   // 알림 로고 정보
+    public TMP_Text noticeCountText;  // 알림 웨이브 정보
+    public TMP_Text zombieCountText;  // 좀비 수
+    public TMP_Text timerCountText;   // 타이머
+    public TMP_Text zombieWaveText;   // 좀비 웨이브 정보
 
     public void Update()
     {
         CoinUpdate();
+        SetNoticeWave();
+        SetZombieWave();
     }
 
     // 체력 텍스트 갱신
@@ -129,33 +132,31 @@ public class PlayerUIManager : MonoBehaviour
     //JunOh
     public void SetNotice(string value)
     {
-        WarningSubText.text = string.Format("{0}", value);
+        warningSubText.text = string.Format("{0}", value);
     }
-    public void SetNoticeWave(float stageValue, float waveValue)
+    public void SetNoticeWave()
     {
-        NoticeCountText.text = string.Format("[ {0}/ {1} ]", stageValue, waveValue);
+        noticeCountText.text = string.Format("[ {0}/ {1} ]", GameManager.instance.round, GameManager.instance.wave);
     }
 
-    public void SetNoticeLogo(string NoticeTextValue)
-    { 
-    
+    public void SetNoticeLogo(string noticeTextValue)
+    {
+        noticeTextText.text = string.Format("{0}", noticeTextValue);
     }
 
-    public void SetZombieCount(float countValue, float minValue, float secValue, bool isZombie)
+    public void SetZombieCount(float countValue)
     {
-        if (isZombie)
-        {
-            ZombieCountText.text = string.Format("{0}", countValue);
-        }
-        else
-        {
-            ZombieCountText.text = string.Format("{0:00}:{1:00}", minValue, secValue);
-        }
+        zombieCountText.text = string.Format("{0}", countValue);
     }
 
-    public void SetZombieWave(float stageValue, float waveValue)
+    public void SetTimerCount(int value)
     {
-        ZombieWaveText.text = string.Format("{0}/ {1}", stageValue, waveValue);
+        timerCountText.text = string.Format("{0}:{1:D2}", value / 60, value % 60);
+    }
+
+    public void SetZombieWave()
+    {
+        zombieWaveText.text = string.Format("{0}/ {1}", GameManager.instance.round, GameManager.instance.wave);
     }
     //JunOh
 }

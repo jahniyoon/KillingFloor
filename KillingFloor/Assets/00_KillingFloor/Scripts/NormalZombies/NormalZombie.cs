@@ -20,6 +20,7 @@ public class NormalZombie : NormalZombieData
     public GameObject skillPrefab;
 
     private float timeElapsed;
+    private float zedTime;
 
     // 현재 애니메이션 좌표
     private float thisBlend;
@@ -441,6 +442,29 @@ public class NormalZombie : NormalZombieData
         }
 
         gameObject.SetActive(false);
+        
+        int num = Random.Range(0, 100);
+
+        if (0 <= num && num < 5)
+        {
+            GameManager.instance.zedTime = true;
+
+            StartCoroutine(ZedTime());
+        }
+    }
+
+    private IEnumerator ZedTime()
+    {
+        zedTime = 0.0f;
+
+        while (zedTime < 6.0f)
+        {
+            zedTime += Time.deltaTime;
+
+            yield return null;
+        }
+
+        GameManager.instance.zedTime = false;
     }
 
     protected virtual (float, float, int) ZombieWalk()
