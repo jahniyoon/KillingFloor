@@ -33,9 +33,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         // 포톤 네트워크 속도 최적화 설정
         PhotonNetwork.SendRate = 60;
         PhotonNetwork.SerializationRate = 30;
-
-        //지환
-        PhotonNetwork.AutomaticallySyncScene = true;    // 씬 씽크맞추기
+        //지환 : 플레이어들의 씬 씽크 맞추기
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     #region 플레이팹
@@ -349,12 +348,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         UserNickNameText.text = "";
 
         PlayFabClientAPI.GetUserData(new GetUserDataRequest(), (result) =>
+        {
+            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
-                for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-                {
-                    UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
-                }
-            },
+                UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
+            }
+        },
         (error) => { Debug.Log("레벨 불러오지 못함"); }
         );
 
@@ -391,9 +390,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         Debug.Log(UserNickNameText.text);
-
     }
     #endregion
-
-
 }

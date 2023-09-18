@@ -172,6 +172,9 @@ MonoBehaviour:
   ammo: 15
   remainingAmmo: 60
   magazineSize: 15
+  gunAudio: {fileID: 8300000, guid: 57be9f76b7fd1914fbb8a53e7ad41c53, type: 3}
+  reloadAudio: {fileID: 8300000, guid: 5352c7bdf44b11141ba87d35e6e5a45a, type: 3}
+  emptyAudio: {fileID: 8300000, guid: 1e3cfaa883eff6e428f66cbaf902eaf3, type: 3}
 --- !u!1 &4431287244747059036
 GameObject:
   m_ObjectHideFlags: 0

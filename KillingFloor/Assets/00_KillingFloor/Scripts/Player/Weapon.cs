@@ -22,4 +22,8 @@ public class Weapon : MonoBehaviour
     public float remainingAmmo;    // 儡咯 藕距
     public float magazineSize; // 藕芒 侩樊
 
+    public AudioClip gunAudio;    // 醚 家府
+    public AudioClip reloadAudio; // 厘傈 家府
+    public AudioClip emptyAudio;  // 后 醚 家府
+
 }
