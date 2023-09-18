@@ -146,7 +146,7 @@ public class PlayerShooter : MonoBehaviour
             if (Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range, layerMask) )
             {
                 GameObject hitObj = hit.transform.gameObject;
-                Damage(hitObj);
+                Damage(hitObj); 
                 hitPoint = hit.point;
 
             }
@@ -257,26 +257,50 @@ public class PlayerShooter : MonoBehaviour
     }
     void Damage(GameObject _hitObj)
     {
-        if (_hitObj.transform.GetComponent<HitPoint>() == null)
-        {
-            playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
-            return;
-        }
-        if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health > 0)
-        {
-            _hitObj.transform.GetComponent<HitPoint>().Hit(damage); // 좀비에게 데미지
 
-            // 만약 좀비가 죽는다면
-            if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health <= 0)
+        if (!"Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name))//보스 가 아닐경우 
+        {
+            if (_hitObj.transform.GetComponent<HitPoint>() == null)
             {
-                // 코인 먹이고
-                playerHealth.GetCoin(_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin);
+                playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
+                return;
+            }
+          
+            if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health > 0)
+            {
+                _hitObj.transform.GetComponent<HitPoint>().Hit(damage); // 좀비에게 데미지
 
-                // 코인값 초기화
-                _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin = 0;
-                //coin += _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin;
+                // 만약 좀비가 죽는다면
+                if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health <= 0)
+                {
+                    // 코인 먹이고
+                    playerHealth.GetCoin(_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin);
+
+                    // 코인값 초기화
+                    _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin = 0;
+                    //coin += _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin;
+                }
             }
         }
+
+        if ("Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name)) // 보스 일경우
+        {
+
+            Debug.Log(_hitObj.transform.gameObject.name);
+            Debug.Log(_hitObj.transform.gameObject.layer); 
+
+            if (9 == _hitObj.transform.gameObject.layer)
+            {
+                Debug.Log("a");
+                FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().bossHit(damage);
+            }
+            else if (11 == _hitObj.transform.gameObject.layer)
+            {
+                Debug.Log("b");
+                FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().bossHit(damage*0.5f);
+            }
+        }
+        
     }
 
     // 장전
@@ -561,6 +585,20 @@ public class PlayerShooter : MonoBehaviour
                 animator.SetIKHintPositionWeight(AvatarIKHint.RightElbow, 0);
                 animator.SetIKHintPositionWeight(AvatarIKHint.LeftElbow, 0);
             }
+        }
+    }
+    //ssm 부모 찾기 
+    private Transform FindTopmostParent(Transform currentTransform)
+    {
+        if (currentTransform.parent == null)
+        {
+            // 현재 Transform이 루트이면 최상위 부모이므로 반환합니다.
+            return currentTransform;
+        }
+        else
+        {
+            // 부모가 있으면 부모의 부모를 재귀적으로 찾습니다.
+            return FindTopmostParent(currentTransform.parent);
         }
     }
 }

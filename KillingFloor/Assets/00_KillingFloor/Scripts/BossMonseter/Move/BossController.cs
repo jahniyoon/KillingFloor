@@ -1,11 +1,14 @@
+
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
+
 
 public class BossController : MonoBehaviour
 {
-    private float bossHp = 3500f;//보스 hp;
+    public float bossHp = 3500f;//보스 hp;
     private GameObject[] targetPlayer;
     private int randPlayerNum;//타겟플레이어
     private Animator animator;
@@ -26,9 +29,12 @@ public class BossController : MonoBehaviour
     private float[] meteorFattern;
     private NavMeshAgent agent;
     private bool dieChk = false;
+    private Image Hpimage;
+
+    private GameObject bossintro;
     private void Awake()
     {
-        meteorFattern = new float[] {70, 50, 20, 10,0,-10,-10,-10 };
+        meteorFattern = new float[] {2000, 1500, 0,-10,-10,-10 };
         meteors = new GameObject[4];
         GameObject meteor = GameObject.Find("Meteor");
 
@@ -43,6 +49,7 @@ public class BossController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         agent = GetComponent<NavMeshAgent>();
         fireBreathHoles = new GameObject[3];
         fireBreathHoleParticles = new ParticleSystem[3];
@@ -52,7 +59,8 @@ public class BossController : MonoBehaviour
         midSphereEffectParticles = new ParticleSystem[4];
         fireRings = new GameObject[4];
         fireRingParticles = new ParticleSystem[4];
-       
+        bossintro = GameObject.Find("Bossintro");//보스 등장씬
+        Hpimage = GameObject.Find("HP_Main").GetComponent<Image>();
         GameObject midSphere = GameObject.Find("MidSphereEffect");
         GameObject fireBreath = GameObject.Find("FireBreath");
         GameObject fireBreathHole = GameObject.Find("FireBreathHole");
@@ -94,6 +102,10 @@ public class BossController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (bossintro.activeSelf)
+        {
+            Invoke("bossIntroTime", 4f);
+        }
         if(bossHp <= 0)
         {
             if(dieChk == false)
@@ -104,6 +116,7 @@ public class BossController : MonoBehaviour
 
             return;
         }
+      
         currentTime += Time.deltaTime;
         if (currentTime >= setTime)
         {
@@ -307,5 +320,21 @@ public class BossController : MonoBehaviour
         }
     }
     
-
+    //보스 인트로
+    private void bossIntroTime()
+    {
+        bossintro.SetActive(false);
+    }
+    public void bossHit(float dam)
+    {
+        Debug.Log(bossHp);
+        Debug.Log(Hpimage);
+        Hpimage.fillAmount = normalization();
+        bossHp -= dam;
+    }
+    public float normalization()
+    {
+        float normalizedHealth = (bossHp - 0) / (3500f - 0);
+        return normalizedHealth;
+    }
 }
