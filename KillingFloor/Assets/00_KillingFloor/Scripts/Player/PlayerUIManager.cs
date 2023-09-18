@@ -47,6 +47,8 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text zombieCountText;  // 좀비 수
     public TMP_Text timerCountText;   // 타이머
     public TMP_Text zombieWaveText;   // 좀비 웨이브 정보
+    public GameObject CountUI;
+    public GameObject TimerUI;
 
     public void Update()
     {

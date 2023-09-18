@@ -3152,13 +3152,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputEnable: 1
-  noticeController: {fileID: 0}
+  noticeController: {fileID: 7440238471407707254}
   round: 1
   wave: 1
   player: 4
   difficulty: 0
   currentZombieCount: 0
-  zedTime: 0
+  isZedTime: 0
+  isSpawnZombie: 0
+  isCheck: 1
 --- !u!4 &1336404650
 Transform:
   m_ObjectHideFlags: 0
@@ -10346,6 +10348,8 @@ MonoBehaviour:
   zombieCountText: {fileID: 8790496424115937054}
   timerCountText: {fileID: 1357598284}
   zombieWaveText: {fileID: 4140731076046290234}
+  CountUI: {fileID: 8177180887516509227}
+  TimerUI: {fileID: 841127171}
 --- !u!224 &8943634589061892529
 RectTransform:
   m_ObjectHideFlags: 0

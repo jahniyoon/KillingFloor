@@ -1,4 +1,4 @@
-    using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,67 +17,52 @@ public class NormalZombieSpawner : MonoBehaviour
     private int zombieCount;
     private int randZombieNum;
 
-    private bool isCheck = true;
-
     private void Awake()
     {
         CreateZombieSave();
     }
 
-    private void Start()
-    {
-        if (GameManager.instance.round == 1 && isCheck)
-        {
-            isCheck = false;
-            roundPointCount = 4;
-
-            Count();
-
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-        }
-    }
-
     private void Update()
     {
-        if (GameManager.instance.round == 1 && isCheck)
+        if (GameManager.instance.wave == 1 && GameManager.instance.isCheck)
         {
-            isCheck = false;
+            GameManager.instance.isCheck = false;
             roundPointCount = 4;
 
             Count();
 
             StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
         }
-        else if (GameManager.instance.round == 2 && isCheck)
+        else if (GameManager.instance.wave == 2 && GameManager.instance.isCheck)
         {
-            isCheck = false;
+            GameManager.instance.isCheck = false;
             roundPointCount = 5;
 
             Count();
 
             StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
         }
-        else if (GameManager.instance.round == 3 && isCheck)
+        else if (GameManager.instance.wave == 3 && GameManager.instance.isCheck)
         {
-            isCheck = false;
+            GameManager.instance.isCheck = false;
             roundPointCount = 5;
 
             Count();
 
             StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
         }
-        else if (GameManager.instance.round == 4 && isCheck)
+        else if (GameManager.instance.wave == 4 && GameManager.instance.isCheck)
         {
-            isCheck = false;
+            GameManager.instance.isCheck = false;
             roundPointCount = 4;
 
             Count();
 
             StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
         }
-        else if (GameManager.instance.round == 5 && isCheck)
+        else if (GameManager.instance.wave == 5 && GameManager.instance.isCheck)
         {
-            isCheck = false;
+            GameManager.instance.isCheck = false;
             roundPointCount = 2;
 
             Count();
@@ -88,9 +73,9 @@ public class NormalZombieSpawner : MonoBehaviour
 
     private void Count()
     {
-        zombieCount = GameManager.instance.round * 30 +
-                    GameManager.instance.player * 10 +
-                    GameManager.instance.difficulty * 10;
+        zombieCount = GameManager.instance.wave * 1 +
+                    GameManager.instance.player * 1 +
+                    GameManager.instance.difficulty * 1;
     }
 
     private void CreateZombie()

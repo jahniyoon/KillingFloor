@@ -434,23 +434,21 @@ public class NormalZombie : NormalZombieData
         {
             yield return null;
         }
-        while (1 <= ani.GetNextAnimatorStateInfo(0).normalizedTime)
-        {
-            yield return null;
 
-            break;
-        }
+        GameManager.instance.MinusCount(1);
 
-        gameObject.SetActive(false);
-        
+        yield return new WaitForSeconds(3);
+
         int num = Random.Range(0, 100);
 
         if (0 <= num && num < 5)
         {
-            GameManager.instance.zedTime = true;
+            GameManager.instance.isZedTime = true;
 
             StartCoroutine(ZedTime());
         }
+
+        gameObject.SetActive(false);
     }
 
     private IEnumerator ZedTime()
@@ -464,7 +462,7 @@ public class NormalZombie : NormalZombieData
             yield return null;
         }
 
-        GameManager.instance.zedTime = false;
+        GameManager.instance.isZedTime = false;
     }
 
     protected virtual (float, float, int) ZombieWalk()

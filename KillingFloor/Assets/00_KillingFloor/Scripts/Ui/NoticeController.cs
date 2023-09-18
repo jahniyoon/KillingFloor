@@ -25,8 +25,6 @@ public class NoticeController : MonoBehaviour
 
     private float timeElapsed = 0.0f;
 
-    private bool isCoroutine = false;
-    private bool isCheck = false;
     public bool isText = false;
 
     private void Awake()
@@ -45,8 +43,6 @@ public class NoticeController : MonoBehaviour
 
     public IEnumerator CoroutineManager(bool _isText)
     {
-        isCoroutine = true;
-
         StartCoroutine(WarningMainScale(0.1f));
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(WarningMainScale(0.1f));
@@ -75,7 +71,6 @@ public class NoticeController : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(WarningSubScale(0.1f, true));
 
-        isCoroutine = false;
         yield break;
     }
 

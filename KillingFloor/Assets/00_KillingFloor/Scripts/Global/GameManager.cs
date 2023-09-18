@@ -20,7 +20,9 @@ public class GameManager : MonoBehaviour
     public int player = 4;              // 플레이어 인원 수
     public int difficulty = 0;          // 난이도 0: 보통 1: 어려움 2: 지옥
     public int currentZombieCount = 0;  // 현재 좀비 수
-    public bool zedTime = false;        // 제드 타임
+    public bool isZedTime = false;      // 제드 타임
+    public bool isSpawnZombie = false;  // 좀비가 소환 됬는지 확인
+    public bool isCheck = true;         // 좀비 웨이브가 시작 확인
     // Junoh 추가
 
     public void Awake()
@@ -54,14 +56,33 @@ public class GameManager : MonoBehaviour
         currentZombieCount -= _num;
     }
 
+    public void SetWave(int _num)
+    {
+        wave += _num;
+    }
+
     private IEnumerator StartWave()
     {
-        PlayerUIManager.instance.SetNotice("Start Wave");
+        PlayerUIManager.instance.CountUI.SetActive(true);
+        PlayerUIManager.instance.TimerUI.SetActive(false);
 
+        PlayerUIManager.instance.zombieCountText.gameObject.SetActive(true);
+        PlayerUIManager.instance.timerCountText.gameObject.SetActive(false);
+
+        while (true)
+        {
+            if (currentZombieCount > 0) { break; }
+
+            yield return null;
+        }
+
+        PlayerUIManager.instance.SetNotice("Start Wave");
         StartCoroutine(noticeController.CoroutineManager(false));
 
-        while (currentZombieCount <= 0)
+        while (0 < currentZombieCount)
         {
+            PlayerUIManager.instance.SetZombieCount(currentZombieCount);
+
             yield return null;
         }
 
@@ -73,9 +94,16 @@ public class GameManager : MonoBehaviour
         PlayerUIManager.instance.SetNotice("Wave Clear");
         PlayerUIManager.instance.SetNoticeLogo("Go to Shop");
 
+        PlayerUIManager.instance.CountUI.SetActive(false);
+        PlayerUIManager.instance.TimerUI.SetActive(true);
+
+        PlayerUIManager.instance.zombieCountText.gameObject.SetActive(false);
+        PlayerUIManager.instance.timerCountText.gameObject.SetActive(true);
+
         StartCoroutine(noticeController.CoroutineManager(true));
 
-        int timeElapsed = 70;
+        int timeElapsed = 10;
+
 
         while (0 < timeElapsed)
         {
@@ -86,6 +114,8 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
 
+        SetWave(1);
+        isCheck = true;
         StartCoroutine(StartWave());
     }
     // Junoh 추가
