@@ -42,7 +42,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (isZedTime)
+        {
+            Time.timeScale = 0.2f;
+        }
     }
 
     // Junoh Ãß°¡

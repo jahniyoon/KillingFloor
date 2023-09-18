@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/03_[MJ]Project/[MJ]Scenes/LobbyScene.unity
     guid: 2a904c960d452324ea881bf3947841a5
-  - enabled: 1
+  - enabled: 0
     path: Assets/00_KillingFloor/Scenes/Main.unity
     guid: 7b9800b98f0e72a4da8ab8757607cc77
   m_configObjects: {}
