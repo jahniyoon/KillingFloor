@@ -12,6 +12,7 @@ public class Shop : MonoBehaviour
     public GameObject shopUI;
     bool isShopOpen;
 
+
     // Update is called once per frame
     void Update()
     {
