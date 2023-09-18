@@ -645,8 +645,8 @@ MonoBehaviour:
   weaponID: 0
   weaponType: 1
   damage: 30
-  fireRate: 500
-  reloadRate: 2
+  fireRate: 0.12
+  reloadRate: 3
   ammo: 20
   remainingAmmo: 120
   magazineSize: 20

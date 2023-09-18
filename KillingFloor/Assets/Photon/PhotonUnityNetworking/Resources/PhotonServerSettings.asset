@@ -44,6 +44,10 @@ MonoBehaviour:
   - RestoreArmor
   - RestoreHealth
   - GetCoin
+  - FireProcessOnServer
+  - ShotProcessOnServer
+  - GetAmmo
+  - ShotEffectProcessOnClients
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

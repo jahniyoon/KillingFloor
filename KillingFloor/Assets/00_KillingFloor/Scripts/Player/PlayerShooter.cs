@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Windows;
@@ -8,6 +9,13 @@ using UnityEngine.Windows;
 
 public class PlayerShooter : MonoBehaviourPun
 {
+    public enum State
+    {
+        Ready, // 발사 준비됨
+        Empty, // 탄창이 빔
+        Reloading // 재장전 중
+    }
+    public State state { get; private set; }
     public enum Type { Pistol, Rifle, Melee, Heal };
     private PlayerInputs input;
     private PlayerMovement playerMovement;
@@ -31,13 +39,24 @@ public class PlayerShooter : MonoBehaviourPun
     public float range = 100f;  // 사거리
     public float reloadRate;    // 재장전 속도
     public float fireRate;      // 사격 속도
-    public bool isReloading;    // 가능 여부
-    public bool isFireReady;
-    public int grenade;
-    public bool isGrenade;
+    public float lastFireTime;  // 마지막 사격시간
+    public int grenade;         // 수류탄 개수
+    public bool isGrenade;      // 수류탄 상태 체크 (1인칭 애니메이션)
     public float healCoolDown = 15f;  // 힐 쿨다운
 
-    
+    public ParticleSystem muzzleFlashEffect; // 총구 화염효과
+    public ParticleSystem shellEjectEffect;  // 탄피 배출 효과
+    public AudioSource gunAudioPlayer;       // 총 소리 재생기
+
+    public Transform fireTransform;          // 총알이 발사될 위치
+    public GameObject bulletHole;            // 총알이 맞는 곳에 생성되는 파티클
+    public GameObject bloodParticle;            // 총알이 맞는 곳에 생성되는 파티클
+    public LineRenderer bulletLineRenderer;  // 총알 궤적을 그리기 위한 렌더러
+    public ParticleSystem fireParticle;
+    public bool isParticleTrigger;          // 파티클 생성여부 트리거
+
+
+
     [Header("TPS Weapon")]
     Weapon tpsPistol;    // 가져올 권총 무기 정보
     Weapon tpsRifle;     // 가져올 라이플 무기 정보
@@ -66,9 +85,6 @@ public class PlayerShooter : MonoBehaviourPun
     public float animationIKAmount = 0.5f; // 애니메이션 중 IK 기본값
     public bool ikActive = false;
 
-    public GameObject bulletHole;
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -91,9 +107,9 @@ public class PlayerShooter : MonoBehaviourPun
         fpsPosition = transform.GetChild(0).GetChild(0).GetComponent<Transform>();
         fpsPistol = fpsPosition.transform.GetChild(0).GetComponent<Transform>();
         fpsRifle = fpsPosition.transform.GetChild(1).GetComponent<Transform>();  // 라이플은 미리 불러와서 꺼두기
-        fpsMelee = fpsPosition.transform.GetChild(2).GetComponent<Transform>();  
-        fpsHeal = fpsPosition.transform.GetChild(3).GetComponent<Transform>();  
-        fpsGrenade = fpsPosition.transform.GetChild(4).GetComponent<Transform>();  
+        fpsMelee = fpsPosition.transform.GetChild(2).GetComponent<Transform>();
+        fpsHeal = fpsPosition.transform.GetChild(3).GetComponent<Transform>();
+        fpsGrenade = fpsPosition.transform.GetChild(4).GetComponent<Transform>();
 
         fpsRifle.gameObject.SetActive(false);
         fpsMelee.gameObject.SetActive(false);
@@ -104,6 +120,11 @@ public class PlayerShooter : MonoBehaviourPun
         SetWeapon(tpsPistol, fpsPistol); // 무기 장착
         animator.SetBool("isWeaponPistol", true);
         animator.SetBool("isWeaponRifle", false);
+
+
+        state = State.Ready;    // 사격 준비 상태로 시작
+        lastFireTime = 0;       // 시간 초기화
+
     }
 
     // Update is called once per frame
@@ -116,99 +137,147 @@ public class PlayerShooter : MonoBehaviourPun
         {
             HandSet();
             Aim();
-            Shoot();
+            Fire();
             Reload();
+            WeaponInput();
             Weapons();
+            Melee();
             Heal();
         }
     }
 
-    // 사격 입력
-
-    void Shoot()
+    // 주무기 보조무기 사격 입력
+    void Fire()
     {
+        if (input.shoot && weaponSlot < 3)
+        {
+            // 현재 상태가 발사 가능한 상태
+            // && 마지막 총 발사 시점에서 timeBetFire 이상의 시간이 지남
+            if (state == State.Ready && Time.time >= lastFireTime + fireRate)
+            {
+                // 마지막 총 발사 시점을 갱신
+                lastFireTime = Time.time;
+                // 실제 발사 처리 실행
+                Shot();
+            }
+            // 남은 총알이 있을 때 발사하면 재장전 실행
+            if (state == State.Empty && equipedWeapon.remainingAmmo >= 0 && !input.dash)
+            {
+                input.reload = true; // 재장전 버튼 눌러주기
+                input.shoot = false;
+            }
+            // 남은 총알도 없을 때
+            else if (equipedWeapon.ammo == 0 && equipedWeapon.remainingAmmo == 0 && !input.dash)
+            {
+                // ToDo : 틱 사운드 플레이되도록 하기 (총알 없음)
+                input.shoot = false;
+            }
+        }
+
+    }
+
+    void Shot()
+    {
+        // 실제 발사 처리는 호스트에게 대리
+        photonView.RPC("ShotProcessOnServer", RpcTarget.MasterClient);
+
+
+        equipedWeapon.ammo -= 1;
+        //PlayerUIManager.instance.SetAmmo(equipedWeapon.ammo);   // 탄 소모
+
+        if (equipedWeapon.ammo <= 0)
+        {
+            // 탄창에 남은 탄약이 없다면, 총의 현재 상태를 Empty으로 갱신
+            state = State.Empty;
+        }
+
+    }
+    // 호스트에서 실행되는 실제 발사 처리
+    [PunRPC]
+    private void ShotProcessOnServer()
+    {
+        // 레이캐스트에 의한 충돌 정보를 저장하는 컨테이터
         RaycastHit hit;
         Vector3 hitPoint = cameraSet.followCam.transform.forward * 1f;
-        if (Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range))
-        {
-            hitPoint = hit.point;
-        }
+
         // 사격
-        if (input.shoot && 0 < equipedWeapon.ammo&& !isReloading && !isFireReady && weaponSlot < 3 && !input.dash)
+        if (0 < equipedWeapon.ammo && weaponSlot < 3 && !input.dash)
         {
-            isFireReady = true;
+
             isAnimation = true;
             // 애니메이션 작동 후 잠깐 IK 풀어주기
             handAnimator.SetTrigger("isFire");
             animator.SetTrigger("isFire");
+
+            Debug.Log("발사했다. " + state);
             handIKAmount = animationIKAmount;
             elbowIKAmount = animationIKAmount;
             StartCoroutine(ShootCoroutine());
-    
-            // 만약 닿은게 있으면 데미지
-            if (Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range, layerMask) )
+
+            // 만약 좀비류에 닿으면 데미지
+            if (Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range, layerMask))
             {
                 GameObject hitObj = hit.transform.gameObject;
                 Damage(hitObj);
                 hitPoint = hit.point;
-
             }
+            // 만약 뭔가에 닿으면 그곳을 히트포인트로
             else if(Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range))
             {
                 hitPoint = hit.point;
-
-                GameObject particles = (GameObject)Instantiate(bulletHole);
-                particles.transform.position = hit.point;
-                Destroy(particles, 8f);
+                isParticleTrigger = true;
             }
+            // 안닿으면 최대거리를 히트포인트로
+            else
+            hitPoint = cameraSet.followCam.transform.forward * range;
+
+            // 이펙트 재생 코루틴을 랩핑
+            photonView.RPC("ShotEffectProcessOnClients", RpcTarget.All, hitPoint);
+
+            // 단발 설정
             if (weaponSlot == 1)
             {
                 input.shoot = false;
             }
 
         }
-        // 남은 총알이 있을 때
-        else if (input.shoot && equipedWeapon.ammo == 0 && equipedWeapon.remainingAmmo >= 0 && !input.dash)
-        {
-            input.reload = true; // 재장전 버튼 눌러주기
-            input.shoot = false;
+        //aimTarget.transform.position = hitPoint;    // 플레이어 조준 포지션
+    }
+    // 이펙트 재생 코루틴
+    [PunRPC]
+    private void ShotEffectProcessOnClients(Vector3 hitPosition)
+    {
+        StartCoroutine(ShotEffect(hitPosition));
+    }
+    // 발사 이펙트와 소리를 재생하고 총알 궤적을 그린다.
+    private IEnumerator ShotEffect(Vector3 _hitPosition)
+    {
+        if (isParticleTrigger)
+        { 
+            // 총알 자국 파티클 생성
+            GameObject particles = (GameObject)Instantiate(bulletHole);
+            particles.transform.position = _hitPosition;
+            Destroy(particles, 8f);
+            isParticleTrigger = false;
         }
+        fireParticle.Play();
 
-        // 남은 총알도 없을 때
-        else if(input.shoot && equipedWeapon.ammo == 0 && equipedWeapon.remainingAmmo == 0 && !input.dash)
-        {
-            // ToDo : 틱 사운드 플레이되도록 하기 (총알 없음)
+        // 선의 시작점은 총구의 위치
+        bulletLineRenderer.SetPosition(0, fireTransform.position);
+        // 선의 끝점은 입력으로 들어온 충돌 위치
+        bulletLineRenderer.SetPosition(1, _hitPosition);
+        // 라인 렌더러를 활성화하여 총알 궤적을 그린다
+        bulletLineRenderer.enabled = true;
 
-            input.shoot = false;
-        }
-
-        // 근접공격
-        if(input.shoot && weaponSlot == 3 && !isFireReady && !input.dash)
-        {
-            isFireReady = true;
-            handAnimator.SetTrigger("isFire");
-            StartCoroutine(WeaponDelay(reloadRate));
-            input.shoot = false;
-        }
-
-        // 힐
-        if (input.shoot && weaponSlot == 4 && !isFireReady && 15 <= healCoolDown && playerHealth.health != 100 && !input.dash)
-        {
-            isFireReady = true;
-            handAnimator.SetTrigger("isFire");
-            healCoolDown = -0.1f;
-            StartCoroutine(WeaponDelay(reloadRate));
-            float heal = damage;
-            if (heal+playerHealth.health >= 100)
-            { heal -= ((heal+playerHealth.health)-100);}
-            playerHealth.RestoreHealth(heal);
-            input.shoot = false;
-        }
-        aimTarget.transform.position = hitPoint;    // 플레이어 조준 포지션
+        yield return new WaitForSeconds(0.01f);
+        // 라인렌더러 비활성화
+        bulletLineRenderer.enabled = false;
     }
 
+    // 플레이어 조준키 입력
     void Aim()
     {
+        // 대시중일 때는 조준 애니메이션 False
         if (input.dash)
         {
             if (weaponSlot <= 2)
@@ -218,48 +287,70 @@ public class PlayerShooter : MonoBehaviourPun
             return; 
         }
 
-        if (weaponSlot <= 2 && !isReloading && !input.dash)
+        // 주무기, 보조무기 재장전 중이거나 대시중이 아닐 때 조준
+        if (weaponSlot <= 2 && state == State.Ready && !input.dash)
         {
             handAnimator.SetBool("isAim", input.aim);
         }
-        if (weaponSlot == 3 && !isFireReady && input.aim)
+
+        // 밀리 무기상태이면 강공격 실행
+        if (weaponSlot == 3 && state == State.Ready && input.aim)
         {
             input.aim = false;
-            isFireReady = true;
             handAnimator.SetTrigger("isAim");
             StartCoroutine(WeaponDelay(reloadRate * 2));
         }
-
-
     }
-
+    // 사격 딜레이를 주기위한 코루틴
     IEnumerator ShootCoroutine()
     {
-        yield return new WaitForSeconds(1 / (fireRate/90)); // fireRate 는 RPM
+        yield return new WaitForSeconds(fireRate); // fireRate 는 RPM
         handIKAmount = 1f;
         elbowIKAmount = 1f;
-        equipedWeapon.ammo -= 1;
-        PlayerUIManager.instance.SetAmmo(equipedWeapon.ammo);   // 탄 소모
-        isFireReady = false;
         isAnimation = false;
-
     }
 
+    // 밀리 또는 힐의 딜레이를 주기위한 코루틴
     IEnumerator WeaponDelay(float _reloadRate)
     {
         yield return new WaitForSeconds(_reloadRate);
-        isFireReady = false;
         isAnimation = false;
+        state = State.Ready;
+    }
 
+    void Melee()
+    {
+        // 근접공격
+        if (input.shoot && weaponSlot == 3 && state == State.Ready && !input.dash)
+        {
+            state = State.Reloading;
+            handAnimator.SetTrigger("isFire");
+            StartCoroutine(WeaponDelay(reloadRate));
+            input.shoot = false;
+        }
     }
     void Heal()
     {
-        if(healCoolDown <= 15)
+        // 힐 클릭
+        if (input.shoot && weaponSlot == 4 && state == State.Ready && 15 <= healCoolDown && playerHealth.health != 100 && !input.dash)
+        {
+            state = State.Reloading;
+            handAnimator.SetTrigger("isFire");
+            healCoolDown = -0.1f;
+            StartCoroutine(WeaponDelay(reloadRate));
+            float heal = damage;
+            if (heal + playerHealth.health >= 100)
+            { heal -= ((heal + playerHealth.health) - 100); }
+            playerHealth.RestoreHealth(heal);
+            input.shoot = false;
+        }
+
+        // 쿨다운 업데이트
+        if (healCoolDown <= 15)
         {
             healCoolDown += Time.deltaTime;
             PlayerUIManager.instance.SetHeal(healCoolDown);
         }
-
     }
     void Damage(GameObject _hitObj)
     {
@@ -298,28 +389,39 @@ public class PlayerShooter : MonoBehaviourPun
     // 장전
     public void Reload()
     {
+        // 주무기, 보조무기일 때 장전 버튼을 누른다면
         if (input.reload && weaponSlot < 3)
         {
-            // 잔여 탄이 0보다 많고, 탄이 꽉차있지 않고, 장전 가능할 때 장전
-            if (0 < equipedWeapon.remainingAmmo && equipedWeapon.ammo != equipedWeapon.magazineSize && !isReloading)
+            if (Reloading())
             {
-                isReloading = true;
-                isAnimation = true;
-                input.dash = false;
 
                 // 애니메이션 작동 후 잠깐 IK 풀어주기
                 handAnimator.SetTrigger("isReload");
                 animator.SetTrigger("isReload");
+                input.shoot = false;
+                input.dash = false;
+                isAnimation = true;
                 handIKAmount = animationIKAmount;
                 elbowIKAmount = animationIKAmount;
-                StartCoroutine(ReloadCoroutine());
             }
             input.reload = false;
         }
     }
+    private bool Reloading()
+    {
+        // 잔여 탄이 0보다 많고, 탄이 꽉차있지 않고, 장전 가능할 때 장전
+        if(state == State.Reloading || equipedWeapon.remainingAmmo <= 0 || equipedWeapon.ammo == equipedWeapon.magazineSize)
+        {
+            return false;
+        }
+        StartCoroutine(ReloadCoroutine());
+        return true;
+    }
     // 장전 코루틴
     IEnumerator ReloadCoroutine()
     {
+        state = State.Reloading;
+
         yield return new WaitForSeconds(reloadRate);
 
         float currentAmmo = equipedWeapon.ammo;
@@ -328,19 +430,15 @@ public class PlayerShooter : MonoBehaviourPun
         equipedWeapon.ammo = Mathf.Min(equipedWeapon.magazineSize, equipedWeapon.ammo + equipedWeapon.remainingAmmo);   // 현재 탄 세팅
         equipedWeapon.remainingAmmo = Mathf.Max(0, remainingAmmo);                                                      // 남은 탄 세팅
 
-        PlayerUIManager.instance.SetAmmo(equipedWeapon.ammo);
-        PlayerUIManager.instance.SetRemainingAmmo(equipedWeapon.remainingAmmo);
-
         handIKAmount = 1f;
         elbowIKAmount = 1f;
-        isReloading = false;
         isAnimation = false;
+        state = State.Ready;
     }
 
-
+    // 화면에 보여지는 무기를 변경하는 메서드
     public void Weapons()
     {
-        WeaponInput();
 
         if(weaponSlot == 1 && !isGrenade)
         {
@@ -399,11 +497,10 @@ public class PlayerShooter : MonoBehaviourPun
             fpsMelee.gameObject.SetActive(false);
             fpsHeal.gameObject.SetActive(false);
             fpsGrenade.gameObject.SetActive(true);
-
         }
-
     }
 
+    // 무기 슬롯 입력부분
     public void WeaponInput()
     {
         if (input.weaponSlot1)
@@ -443,7 +540,7 @@ public class PlayerShooter : MonoBehaviourPun
             if (!isGrenade && 0 < grenade)
             { 
                 isGrenade = true;
-                isFireReady = true;
+                state = State.Reloading;
                 StartCoroutine(Grenade());
             }
             input.grenade = false;
@@ -466,14 +563,14 @@ public class PlayerShooter : MonoBehaviourPun
         grenade -= 1;
         PlayerUIManager.instance.SetGrenade(grenade);
         isGrenade = false;
-        isFireReady = false;
-
+        state = State.Ready;
     }
 
     public void SetWeapon(Weapon _tpsweapon, Transform _fpsWeapon)
     {
+
         // 무기 장착 및 TPS IK 세팅
-        equipedWeapon = _tpsweapon;                         
+        equipedWeapon = _tpsweapon;
         rightHandObj = equipedWeapon.rightHandObj.transform;     // 권총의 오른손 그랩
         leftHandObj = equipedWeapon.leftHandObj.transform;       // 권총의 왼손 그랩
         rightElbowObj = equipedWeapon.rightElbowObj.transform;   // 권총의 오른팔꿈치
@@ -502,12 +599,35 @@ public class PlayerShooter : MonoBehaviourPun
         PlayerUIManager.instance.SetRemainingAmmo(_tpsweapon.remainingAmmo); // 현재 남은 탄 UI 세팅
         PlayerUIManager.instance.SetGrenade(grenade);
 
-        // FPS상태도 세팅
+
+        // FPS 애니메이션도 세팅
         handAnimator = _fpsWeapon.GetComponent<Animator>();
         handAnimator.SetFloat("ReloadSpeed", reloadRate);
         playerMovement.fpsAnimator = handAnimator;
 
+        // FPS 파이어 포지션 변경해주기
+        if (weaponSlot < 3)
+        {
+            fireTransform = _fpsWeapon.GetComponent<FireTransform>().fireTransform;
+            bulletLineRenderer = _fpsWeapon.GetComponent<LineRenderer>();
+            fireParticle = fireTransform.GetComponent<ParticleSystem>();
+
+            // 사용할 점을 두개로 변경
+            bulletLineRenderer.positionCount = 2;
+            // 라인 렌더러를 비활성화
+        }
+
+        else
+        {
+            fireTransform = null;
+            bulletLineRenderer = null;
+            fireParticle = null;
+        }
+
+
     }
+
+    [PunRPC]
     public void GetAmmo(int value)
     {
         equipedWeapon.remainingAmmo += value;

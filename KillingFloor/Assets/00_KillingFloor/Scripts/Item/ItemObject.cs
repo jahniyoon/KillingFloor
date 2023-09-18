@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -51,7 +52,8 @@ public class ItemObject : MonoBehaviour
 
             if(input.equip)
             {
-                shooter.GetAmmo(value);
+                shooter.photonView.RPC("GetAmmo", RpcTarget.All,value);
+                //shooter.GetAmmo(value);
                 PlayerUIManager.instance.equipUI.SetActive(false);
                 input.equip = false;
                 Destroy(gameObject);

@@ -33,6 +33,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         // 포톤 네트워크 속도 최적화 설정
         PhotonNetwork.SendRate = 60;
         PhotonNetwork.SerializationRate = 30;
+
+        //지환
+        PhotonNetwork.AutomaticallySyncScene = true;    // 씬 씽크맞추기
     }
 
     #region 플레이팹
@@ -382,16 +385,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #region PlayScene Load
     public void OnPlayScene()
     {
-        // 지환 : 마스터만 테스트씬으로 이동하여 잠시 주석처리했습니다.
-        //if(PhotonNetwork.IsMasterClient)
-        //{
+        if (PhotonNetwork.IsMasterClient)
+        {
             PhotonNetwork.LoadLevel("PlayerTestScene");
-        //}
+        }
 
         Debug.Log(UserNickNameText.text);
-        if (PhotonNetwork.IsMasterClient)
-        { Debug.Log("마스터 클라이언트 :" + UserNickNameText.text); }
 
     }
     #endregion
+
+
 }

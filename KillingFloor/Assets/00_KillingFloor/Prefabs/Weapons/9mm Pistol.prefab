@@ -167,7 +167,7 @@ MonoBehaviour:
   weaponID: 0
   weaponType: 0
   damage: 25
-  fireRate: 300
+  fireRate: 0.2
   reloadRate: 3
   ammo: 15
   remainingAmmo: 60

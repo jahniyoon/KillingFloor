@@ -2018,7 +2018,7 @@ MonoBehaviour:
   fpsAnimator: {fileID: 0}
   moveSpeed: 4
   dashSpeed: 6
-  rotationSpeed: 15
+  rotationSpeed: 20
   speedChangeRate: 8
   jumpHeight: 1.2
   gravity: -15
@@ -2073,11 +2073,19 @@ MonoBehaviour:
   range: 100
   reloadRate: 0
   fireRate: 0
-  isReloading: 0
-  isFireReady: 0
+  lastFireTime: 0
   grenade: 5
   isGrenade: 0
   healCoolDown: 15
+  muzzleFlashEffect: {fileID: 0}
+  shellEjectEffect: {fileID: 0}
+  gunAudioPlayer: {fileID: 0}
+  fireTransform: {fileID: 0}
+  bulletHole: {fileID: 100002, guid: 3b1513bcb86426b4795879be6a128ed7, type: 3}
+  bloodParticle: {fileID: 0}
+  bulletLineRenderer: {fileID: 0}
+  fireParticle: {fileID: 0}
+  isParticleTrigger: 0
   fpsPosition: {fileID: 2252685923766802721}
   fpsPistol: {fileID: 0}
   fpsRifle: {fileID: 0}
@@ -2093,7 +2101,6 @@ MonoBehaviour:
   elbowIKAmount: 1
   animationIKAmount: 0.5
   ikActive: 1
-  bulletHole: {fileID: 100002, guid: 3b1513bcb86426b4795879be6a128ed7, type: 3}
 --- !u!114 &4861928655055331820
 MonoBehaviour:
   m_ObjectHideFlags: 0
