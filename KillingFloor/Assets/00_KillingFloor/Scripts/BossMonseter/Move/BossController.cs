@@ -1,11 +1,13 @@
+
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
+
 
 public class BossController : MonoBehaviour
 {
-    private float bossHp = 3500f;//보스 hp;
+    public float bossHp = 3500f;//보스 hp;
     private GameObject[] targetPlayer;
     private int randPlayerNum;//타겟플레이어
     private Animator animator;
@@ -26,23 +28,27 @@ public class BossController : MonoBehaviour
     private float[] meteorFattern;
     private NavMeshAgent agent;
     private bool dieChk = false;
+    private Image Hpimage;
+    private GameObject meteor;
+    private GameObject bossintro;
     private void Awake()
     {
-        meteorFattern = new float[] {70, 50, 20, 10,0,-10,-10,-10 };
+        meteorFattern = new float[] { 2000, 1500, 0, -10, -10, -10 };
         meteors = new GameObject[4];
-        GameObject meteor = GameObject.Find("Meteor");
+        meteor = GameObject.Find("Meteor");
 
 
 
         for (int i = 0; i <= 1; i++) // 메테오 배열에 저장하는과정
         {
-            meteors[i] = meteor.transform.GetChild(i).gameObject;        
+            meteors[i] = meteor.transform.GetChild(i).gameObject;
             meteors[i].SetActive(false);
         }
     }
     // Start is called before the first frame update
     void Start()
     {
+
         agent = GetComponent<NavMeshAgent>();
         fireBreathHoles = new GameObject[3];
         fireBreathHoleParticles = new ParticleSystem[3];
@@ -52,13 +58,14 @@ public class BossController : MonoBehaviour
         midSphereEffectParticles = new ParticleSystem[4];
         fireRings = new GameObject[4];
         fireRingParticles = new ParticleSystem[4];
-       
+        bossintro = GameObject.Find("Bossintro");//보스 등장씬
+        Hpimage = GameObject.Find("HP_Main").GetComponent<Image>();
         GameObject midSphere = GameObject.Find("MidSphereEffect");
         GameObject fireBreath = GameObject.Find("FireBreath");
         GameObject fireBreathHole = GameObject.Find("FireBreathHole");
         GameObject fireRing = GameObject.Find("FireRing");
 
-      
+
         for (int i = 0; i <= 2; i++) // 점프 충격 배열에 저장하는과정
         {
             fireRings[i] = fireRing.transform.GetChild(i).gameObject;
@@ -88,15 +95,19 @@ public class BossController : MonoBehaviour
         animator = GetComponent<Animator>();
         targetPlayer = GameObject.FindGameObjectsWithTag("Player");
         randPlayerNum = Random.Range(0, targetPlayer.Length);
-      
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(bossHp <= 0)
+        if (bossintro.activeSelf)
         {
-            if(dieChk == false)
+            Invoke("bossIntroTime", 4f);
+        }
+        if (bossHp <= 0)
+        {
+            if (dieChk == false)
             {
                 animator.SetTrigger("Die");//죽음
                 dieChk = true;
@@ -104,22 +115,23 @@ public class BossController : MonoBehaviour
 
             return;
         }
+
         currentTime += Time.deltaTime;
         if (currentTime >= setTime)
         {
 
 
-        
+
             // 플레이어와 보스 사이의 거리를 계산합니다.
             float distance = Vector3.Distance(targetPlayer[randPlayerNum].transform.position, transform.position);
-          
+
             if (distance < 6f)//근거리 애니메이션
             {
                 agent.isStopped = true;
                 agent.updatePosition = false;
                 agent.updateRotation = false;
                 agent.velocity = Vector3.zero;
-             
+
                 randomFattern = Random.Range(0, 6);
                 if (randomFattern != saveFattern)// 공격패턴 중복체크, 중복패턴 변경
                 {
@@ -139,7 +151,7 @@ public class BossController : MonoBehaviour
                     }
                 }// 공격패턴 중복체크, 중복패턴 변경 End
 
-                if(bossHp< meteorFattern[mereorCount])
+                if (bossHp < meteorFattern[mereorCount])
                 {
                     mereorCount++;
                     randomFattern = 6;
@@ -150,15 +162,15 @@ public class BossController : MonoBehaviour
 
                         animator.SetTrigger("Attack1");//찍기
                         currentTime = 0;
-                    
+
                         setTime = 3.7f;
-                      
+
                         break;
                     case 1:
 
                         animator.SetTrigger("Attack2");//가르기
                         currentTime = 0;
-                     
+
                         setTime = 3.7f;
                         break;
                     case 2:
@@ -170,7 +182,7 @@ public class BossController : MonoBehaviour
                             fireBreathsParticle[i].Play();
                         }
                         currentTime = 0;
-                       
+
                         setTime = 5.75f;
                         break;
                     case 3:
@@ -191,32 +203,50 @@ public class BossController : MonoBehaviour
 
 
                         }
-                        
+
                         currentTime = 0;
                         setTime = 3.6f;
                         break;
                     case 4://점프공격
                         animator.SetTrigger("Jump");
                         Invoke("JumpImpt", 1.1f);
-                        currentTime = 0;                      
+                        currentTime = 0;
                         setTime = 3f;
                         break;
                     case 5://긴브레스
                         animator.SetTrigger("Breath");
                         Invoke("fireBreathImpt", 1f);
                         currentTime = 0;
-                       
+
                         setTime = 5.8f;
                         break;
                     case 6://메테오
                         animator.SetTrigger("Meteor");
+                        // 현재 오브젝트의 Transform 컴포넌트 가져오기
+                        Transform myTransform = transform;
+
+                        // 현재 오브젝트의 정면 방향 벡터 계산
+                        Vector3 forwardDirection = myTransform.forward;
+
+                        forwardDirection = new Vector3(forwardDirection.x, forwardDirection.y+1f, forwardDirection.z);
+                        // 배치할 거리
+                        float distanceToPlace = 4.0f;
+
+                        // 오브젝트의 위치 계산 (현재 오브젝트의 위치에서 정면 방향으로 일정 거리만큼 이동)
+                        Vector3 newPosition = myTransform.position + forwardDirection * distanceToPlace;
 
 
-                        for (int i = 0; i <= 1; i++) 
-                        {
-                            meteors[i].SetActive(true);
 
-                        }
+                        meteor.transform.position = newPosition;
+                        meteor.SetActive(true);
+                        for (int i = 0; i <= 1; i++)
+                         {
+                             // 오브젝트의 위치를 새로 계산한 위치로 설정
+                          //   meteors[i].transform.position = newPosition;
+                             // 오브젝트 활성화
+                             meteors[i].SetActive(true);
+
+                         }
 
                         currentTime = 0;
 
@@ -233,7 +263,7 @@ public class BossController : MonoBehaviour
                 {
                     agent.isStopped = false;
                     agent.updatePosition = true;
-                    agent.updateRotation = true;                    
+                    agent.updateRotation = true;
                     BossMove();
                 }
                 animator.SetFloat("Speed", agent.speed);
@@ -277,7 +307,7 @@ public class BossController : MonoBehaviour
     {
         yield return new WaitForSeconds(num);
         particle.Stop();
- 
+
     }
     //오브젝트 비활성화
     private IEnumerator FalseObj(GameObject gameObj, float num)
@@ -306,6 +336,21 @@ public class BossController : MonoBehaviour
             StartCoroutine(StopParticle(fireBreathsParticle[i], 4f));
         }
     }
-    
 
+    //보스 인트로
+    private void bossIntroTime()
+    {
+        bossintro.SetActive(false);
+    }
+    public void bossHit(float dam)
+    {
+
+        Hpimage.fillAmount = normalization();
+        bossHp -= dam;
+    }
+    public float normalization()
+    {
+        float normalizedHealth = (bossHp - 0) / (3500f - 0);
+        return normalizedHealth;
+    }
 }

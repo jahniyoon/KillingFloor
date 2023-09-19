@@ -153,10 +153,17 @@ public class PlayerShooter : MonoBehaviourPun
             // && 마지막 총 발사 시점에서 timeBetFire 이상의 시간이 지남
             if (state == State.Ready && Time.time >= lastFireTime + fireRate && !input.dash && 0 < equipedWeapon.ammo)
             {
+<<<<<<< HEAD
                 // 마지막 총 발사 시점을 갱신
                 lastFireTime = Time.time;
                 // 실제 발사 처리 실행
                 Shot();
+=======
+                GameObject hitObj = hit.transform.gameObject;
+                Damage(hitObj); 
+                hitPoint = hit.point;
+
+>>>>>>> origin/feature/ssm
             }
             // 남은 총알이 있을 때 발사하면 재장전 실행
             else if (state == State.Empty && 0 < equipedWeapon.remainingAmmo && !input.dash)
@@ -350,10 +357,13 @@ public class PlayerShooter : MonoBehaviourPun
             PlayerUIManager.instance.SetHeal(healCoolDown);
         }
     }
+
     void Damage(GameObject _hitObj)
     {
-        if (_hitObj.transform.GetComponent<HitPoint>() == null)
+       
+        if (!"Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name)&& !"Meteor".Equals(FindTopmostParent(_hitObj.transform).gameObject.name))//보스 가 아닐경우 
         {
+<<<<<<< HEAD
             playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
             return;
         }
@@ -374,7 +384,59 @@ public class PlayerShooter : MonoBehaviourPun
                     _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin = 0;
                     //coin += _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin;
                 }
+=======
+           
+            ////////////////////////////////////////////////좀비////////////////////
+
+            if (_hitObj.transform.GetComponent<HitPoint>() == null)
+            {
+                playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
+                return;
+>>>>>>> origin/feature/ssm
             }
+          
+            if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health > 0)
+            {
+                _hitObj.transform.GetComponent<HitPoint>().Hit(damage); // 좀비에게 데미지
+
+                // 만약 좀비가 죽는다면
+                if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health <= 0)
+                {
+                    // 코인 먹이고
+                    playerHealth.GetCoin(_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin);
+
+                    // 코인값 초기화
+                    _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin = 0;
+                    //coin += _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin;
+                }
+            }
+
+            ////////////////////////////////////////////////////////////////////
+        }
+      
+        if ("Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name)) // 보스 일경우
+        {
+
+
+            if (9 == _hitObj.transform.gameObject.layer)
+            {
+               
+                FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().bossHit(damage);
+            }
+            else if (11 == _hitObj.transform.gameObject.layer)
+            {
+              
+                FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().bossHit(damage*0.5f);
+            }
+        }
+    
+        if ("Meteor".Equals(FindTopmostParent(_hitObj.transform).gameObject.name))
+        {
+           
+               
+                 
+            _hitObj.gameObject.GetComponent<Meteor>().MeteorHit(damage);
+            
         }
         // 보스일 경우
         if (_hitObj.transform.GetComponent<BossController>() != null)
@@ -697,6 +759,20 @@ public class PlayerShooter : MonoBehaviourPun
                 animator.SetIKHintPositionWeight(AvatarIKHint.RightElbow, 0);
                 animator.SetIKHintPositionWeight(AvatarIKHint.LeftElbow, 0);
             }
+        }
+    }
+    //ssm 부모 찾기 
+    private Transform FindTopmostParent(Transform currentTransform)
+    {
+        if (currentTransform.parent == null)
+        {
+            // 현재 Transform이 루트이면 최상위 부모이므로 반환합니다.
+            return currentTransform;
+        }
+        else
+        {
+            // 부모가 있으면 부모의 부모를 재귀적으로 찾습니다.
+            return FindTopmostParent(currentTransform.parent);
         }
     }
 }

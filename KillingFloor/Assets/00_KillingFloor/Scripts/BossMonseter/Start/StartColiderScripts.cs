@@ -6,20 +6,28 @@ public class StartColiderScripts : MonoBehaviour
 {
     private BoxCollider boxCollider; 
     private GameObject[] targetPlayer; //플레이어 리스트
-    private List<GameObject> playersInTrigger = new List<GameObject>(); // 플레이어 콜라이더 접촉수 리스트저장용
+    private List<GameObject> playersInTrigger; // 플레이어 콜라이더 접촉수 리스트저장용
     private GameObject Boss; // 보스오브젝트
+    private GameObject entrance;
+    private GameObject introCanvas;
     // Start is called before the first frame update
 
     private void Awake()
     {
         Boss = FindAnyObjectByType<BossController>().gameObject;
         Boss.SetActive(false);
+       
     }
     void Start()
     {
- 
+        playersInTrigger = new List<GameObject>(); // 플레이어 콜라이더 접촉수 리스트저장용
+        entrance = GameObject.Find("Entrance");
+        entrance.SetActive(false);
+
+
         targetPlayer = GameObject.FindGameObjectsWithTag("Player");
         boxCollider = GetComponent<BoxCollider>();  
+
 
     }
 
@@ -31,6 +39,9 @@ public class StartColiderScripts : MonoBehaviour
         {
             if (!Boss.activeSelf)
             {
+
+                entrance.SetActive(true);
+               
                 Boss.SetActive(true);
                 gameObject.SetActive(false);
             }
@@ -74,6 +85,5 @@ public class StartColiderScripts : MonoBehaviour
             }
         }
     }
-
 
 }
