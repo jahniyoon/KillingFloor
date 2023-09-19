@@ -2,30 +2,15 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-<<<<<<< HEAD
 using UnityEngine.SceneManagement;
-=======
+
 using UnityEngine.Rendering;
 using static UnityEngine.Rendering.DebugUI;
->>>>>>> origin/feature/junoh
 
 public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 {
-    public static GameManager instance
-    {
-        get
-        {
-            // 만약 싱글톤 변수에 아직 오브젝트가 할당되지 않았다면
-            if (m_instance == null)
-            {
-                // 씬에서 GameManager 오브젝트를 찾아 할당
-                m_instance = FindObjectOfType<GameManager>();
-            }
-
-            // 싱글톤 오브젝트를 반환
-            return m_instance;
-        }
-    }
+    public static GameManager instance;
+   
     private static GameManager m_instance; // 싱글톤이 할당될 static 변수
 
     public GameObject playerPrefab; // 생성할 플레이어 캐릭터 프리팹
@@ -53,25 +38,21 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Awake()
     {
-<<<<<<< HEAD
         // 씬에 싱글톤 오브젝트가 된 다른 GameManager 오브젝트가 있다면
         if (instance != this)
         {
             // 자신을 파괴
             Destroy(gameObject);
         }
-=======
         if (instance == null)
         { instance = this; }
         else
         { GlobalFunc.LogWarning("씬에 두 개 이상의 게임 매니저가 존재합니다."); }
->>>>>>> origin/feature/junoh
     }
 
     // Start is called before the first frame update
     void Start()
     {
-<<<<<<< HEAD
         // 생성할 랜덤 위치 지정
         Vector3 spawnPosition = new Vector3 (8f,0f,8f);
         // 네트워크 상의 모든 클라이언트들에서 생성 실행
@@ -79,22 +60,18 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
         // ToDO : 테스트씬으로 넘어오면 생성되도록 수정하기
      
-=======
         StartCoroutine(StartWave());
->>>>>>> origin/feature/junoh
     }
 
     // 키보드 입력을 감지하고 룸을 나가게 함
     private void Update()
     {
-<<<<<<< HEAD
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             PhotonNetwork.LeaveRoom();
         }
-=======
         if (isZedTime) { StartCoroutine(ZedTime()); Debug.Log("몇번 호출 하는가?"); }
     }
 
@@ -147,7 +124,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         }
 
         isZedTimeCheck = false;
->>>>>>> origin/feature/junoh
     }
     // 룸을 나갈때 자동 실행되는 메서드
     public override void OnLeftRoom()

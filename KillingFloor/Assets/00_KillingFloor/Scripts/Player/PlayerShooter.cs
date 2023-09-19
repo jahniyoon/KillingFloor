@@ -153,17 +153,16 @@ public class PlayerShooter : MonoBehaviourPun
             // && 마지막 총 발사 시점에서 timeBetFire 이상의 시간이 지남
             if (state == State.Ready && Time.time >= lastFireTime + fireRate && !input.dash && 0 < equipedWeapon.ammo)
             {
-<<<<<<< HEAD
                 // 마지막 총 발사 시점을 갱신
                 lastFireTime = Time.time;
                 // 실제 발사 처리 실행
                 Shot();
-=======
-                GameObject hitObj = hit.transform.gameObject;
-                Damage(hitObj); 
-                hitPoint = hit.point;
+//=======
+//                GameObject hitObj = hit.transform.gameObject;
+//                Damage(hitObj); 
+//                hitPoint = hit.point;
 
->>>>>>> origin/feature/ssm
+//>>>>>>> origin/feature/ssm
             }
             // 남은 총알이 있을 때 발사하면 재장전 실행
             else if (state == State.Empty && 0 < equipedWeapon.remainingAmmo && !input.dash)
