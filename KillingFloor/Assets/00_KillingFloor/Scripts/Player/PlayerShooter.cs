@@ -309,7 +309,7 @@ public class PlayerShooter : MonoBehaviour
         {
            
                
-          
+                 
             _hitObj.gameObject.GetComponent<Meteor>().MeteorHit(damage);
             
         }
