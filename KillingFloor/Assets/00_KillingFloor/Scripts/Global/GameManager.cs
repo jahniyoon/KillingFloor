@@ -74,6 +74,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     //}
 
     // Start is called before the first frame update
+    public Transform parentTransform;
+
     void Start()
     {
         // 생성할 랜덤 위치 지정
@@ -88,7 +90,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         // 네트워크 상의 모든 클라이언트들에서 생성 실행
         // 단, 해당 게임 오브젝트의 주도권은, 생성 메서드를 직접 실행한 클라이언트에게 있음
-        PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
+        PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity).transform.SetParent(parentTransform);
         // ToDO : 테스트씬으로 넘어오면 생성되도록 수정하기
      
         StartCoroutine(StartWave());
