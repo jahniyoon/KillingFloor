@@ -185,6 +185,8 @@ public class PlayerShooter : MonoBehaviourPun
     void Shot()
     {
         // 실제 발사 처리는 호스트에게 대리
+        Debug.Log(photonView.ViewID + "가 Master에게 사격 요청");
+
         photonView.RPC("ShotProcessOnServer", RpcTarget.MasterClient);
         
         // 애니메이션 작동 
@@ -206,6 +208,7 @@ public class PlayerShooter : MonoBehaviourPun
     [PunRPC]
     private void ShotProcessOnServer()
     {
+        // ToDo : 히트를 밖에서 수정해줘야함. 히트포인트를 받아와야지 데미지 효과 실행 가능
         // 레이캐스트에 의한 충돌 정보를 저장하는 컨테이터
         RaycastHit hit;
         Vector3 hitPoint = cameraSet.followCam.transform.forward * 1f;
@@ -232,6 +235,8 @@ public class PlayerShooter : MonoBehaviourPun
         else
         hitPoint = cameraSet.followCam.transform.forward * range;
 
+        Debug.Log("Master 모든이에게 사격 이펙트 요청" + hitPoint);
+
         // 이펙트 재생 코루틴을 랩핑
         photonView.RPC("ShotEffectProcessOnClients", RpcTarget.All, hitPoint);
  
@@ -246,6 +251,8 @@ public class PlayerShooter : MonoBehaviourPun
     // 발사 이펙트와 소리를 재생하고 총알 궤적을 그린다.
     private IEnumerator ShotEffect(Vector3 _hitPosition)
     {
+        Debug.Log(photonView.ViewID + "사격 이펙트 생성" + _hitPosition);
+
         if (isParticleTrigger)
         { 
             // 총알 자국 파티클 생성
@@ -360,17 +367,15 @@ public class PlayerShooter : MonoBehaviourPun
     void Damage(GameObject _hitObj)
     {
        
+        if (_hitObj.transform.GetComponent<HitPoint>() == null)
+        {
+            playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
+            return;
+        }
         if (!"Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name)&& !"Meteor".Equals(FindTopmostParent(_hitObj.transform).gameObject.name))//보스 가 아닐경우 
         {
-
-           
             ////////////////////////////////////////////////좀비////////////////////
 
-            if (_hitObj.transform.GetComponent<HitPoint>() == null)
-            {
-                playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
-                return;
-            }
           
             if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health > 0)
             {
