@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:KillingFloor/Assets/UrbanUnderground/Source/Textures/Tiling/Rocks_Metallic.tif.meta
-guid: 244adba5c203e844e8856ba0cf8c1276
-========
-guid: bfc02e2f0447eaf4190d17879193f0e2
->>>>>>>> origin/feature/Mijeong:KillingFloor/Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Textures/FlyerAsteroidEmissive.tif.meta
+guid: 34b19bc20b665b240af9c0fc9d0086f6
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -95,18 +91,6 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
