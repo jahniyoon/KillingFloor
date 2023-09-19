@@ -451,7 +451,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.LoadLevel("ZombieTestScene");
+            PhotonNetwork.LoadLevel("PlayerTestScene");
         }
 
         Debug.Log(UserNickNameText.text);
