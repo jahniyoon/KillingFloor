@@ -3953,11 +3953,14 @@ MonoBehaviour:
   healSlider: {fileID: 5800464884708412799}
   equipUI: {fileID: 1036877582}
   shopUI: {fileID: 6051208411664601542}
-  shopOpenUI: {fileID: 1672645971}
-  NoticeText: {fileID: 0}
-  NoticeWaveText: {fileID: 0}
-  ZombieCountText: {fileID: 0}
-  ZombieWaveText: {fileID: 0}
+  warningSubText: {fileID: 0}
+  noticeTextText: {fileID: 0}
+  noticeCountText: {fileID: 0}
+  zombieCountText: {fileID: 0}
+  timerCountText: {fileID: 0}
+  zombieWaveText: {fileID: 0}
+  CountUI: {fileID: 0}
+  TimerUI: {fileID: 0}
 --- !u!1 &8943634587513504491
 GameObject:
   m_ObjectHideFlags: 0

@@ -50,7 +50,7 @@ public class NormalNavigation : MonoBehaviour
 
     private void Update()
     {
-        if (0.0f <= normalZombie.health)
+        if (0 < normalZombie.health)
         {
             if (isCoroutine == false)
             {

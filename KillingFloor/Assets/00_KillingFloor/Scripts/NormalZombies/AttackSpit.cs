@@ -88,7 +88,7 @@ public class AttackSpit : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<PlayerHealth>().startingHealth -= 1.0f;
+            other.gameObject.GetComponent<PlayerHealth>().OnDamage(1.0f, Vector3.zero, Vector3.zero);
         }
     }
 }

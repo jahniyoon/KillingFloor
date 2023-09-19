@@ -51,7 +51,7 @@ public class AttackNoise : MonoBehaviour
             {
                 if (Vector3.Distance(gameObject.transform.position, targets[i].transform.position) <= 8.0f)
                 {
-                    targets[i].GetComponent<PlayerHealth>().startingHealth -= 1.0f;
+                    targets[i].GetComponent<PlayerHealth>().OnDamage(1.0f, Vector3.zero, Vector3.zero);
                 }
             }
 

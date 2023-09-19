@@ -24,7 +24,7 @@ public class AttackHand : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<PlayerHealth>().startingHealth -= parentObjectAni.gameObject.GetComponent<NormalZombie>().damage;
+            other.gameObject.GetComponent<PlayerHealth>().OnDamage(parentObjectAni.gameObject.GetComponent<NormalZombie>().damage, Vector3.zero, Vector3.zero);
         }
     }
 }
