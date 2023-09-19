@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1441,6 +1441,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 721541097}
     m_Modifications:
+    - target: {fileID: -8611255361421249592, guid: 7f847b893ce10e24ea00df64ab0271fb,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4861928655055331811, guid: 7f847b893ce10e24ea00df64ab0271fb,
         type: 3}
       propertyPath: m_Name
@@ -2708,7 +2713,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.01
+  near clip plane: 0.001
   far clip plane: 1000
   field of view: 40
   orthographic: 0
@@ -3153,6 +3158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba594f0c1db5e74b872409866064d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 0}
   inputEnable: 1
   noticeController: {fileID: 7440238471407707254}
   volume: {fileID: 1848489676}
