@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Meteor : MonoBehaviour
 {
-    Transform orgPos;
-    private float MeteorHP = 300;
-    GameObject meteorsField;
+    private Transform orgPos;
+    public float MeteorHP = 500;
+    private GameObject meteorsField;
 
   
     private ParticleSystem[] meteorsParticle;//브레스 파티클 배열
@@ -42,7 +42,8 @@ public class Meteor : MonoBehaviour
         if(MeteorHP < 0)
         {
             //원래 위치로 이동
-          
+            transform.position = new Vector3(orgPos.transform.position.x , orgPos.transform.position.y + 17.9f, orgPos.transform.position.z);
+            gameObject.SetActive(false);
             return;
         }
 
@@ -53,7 +54,7 @@ public class Meteor : MonoBehaviour
             
 
        
-            transform.position = new Vector3(orgPos.transform.position.x-9.51f, orgPos.transform.position.y +15f, orgPos.transform.position.z-2.25f);
+            transform.position = new Vector3(orgPos.transform.position.x, orgPos.transform.position.y + 17.9f, orgPos.transform.position.z);
             gameObject.SetActive(false);
             for (int i = 0; i < 4; i++)
             {
@@ -76,5 +77,11 @@ public class Meteor : MonoBehaviour
 
 
 
+    }
+
+    public void MeteorHit(float dam)
+    {
+        Debug.Log(MeteorHP);
+        MeteorHP -= dam;
     }
 }

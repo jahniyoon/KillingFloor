@@ -255,11 +255,15 @@ public class PlayerShooter : MonoBehaviour
         }
 
     }
+
     void Damage(GameObject _hitObj)
     {
-
-        if (!"Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name))//보스 가 아닐경우 
+       
+        if (!"Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name)&& !"Meteor".Equals(FindTopmostParent(_hitObj.transform).gameObject.name))//보스 가 아닐경우 
         {
+           
+            ////////////////////////////////////////////////좀비////////////////////
+
             if (_hitObj.transform.GetComponent<HitPoint>() == null)
             {
                 playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
@@ -281,26 +285,34 @@ public class PlayerShooter : MonoBehaviour
                     //coin += _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin;
                 }
             }
-        }
 
+            ////////////////////////////////////////////////////////////////////
+        }
+      
         if ("Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name)) // 보스 일경우
         {
 
-            Debug.Log(_hitObj.transform.gameObject.name);
-            Debug.Log(_hitObj.transform.gameObject.layer); 
 
             if (9 == _hitObj.transform.gameObject.layer)
             {
-                Debug.Log("a");
+               
                 FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().bossHit(damage);
             }
             else if (11 == _hitObj.transform.gameObject.layer)
             {
-                Debug.Log("b");
+              
                 FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().bossHit(damage*0.5f);
             }
         }
-        
+    
+        if ("Meteor".Equals(FindTopmostParent(_hitObj.transform).gameObject.name))
+        {
+           
+               
+          
+            _hitObj.gameObject.GetComponent<Meteor>().MeteorHit(damage);
+            
+        }
     }
 
     // 장전

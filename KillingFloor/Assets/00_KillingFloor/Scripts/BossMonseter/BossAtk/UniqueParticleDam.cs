@@ -7,10 +7,21 @@ public class UniqueParticleDam : MonoBehaviour
 {
     private bool atkChk = false;
     private float damage = 5f;
+    private float coolTime = 0.05f;
     private void OnParticleCollision(GameObject other)
     {
         if (atkChk == false)
         {
+            if(transform.name.Equals("Effect_38_SmokeField_2"))
+            {
+                coolTime = 0;
+                damage = 50;      
+            }
+            else
+            {
+                coolTime = 0.05f;
+                damage = 5;
+            }
             // 상대방으로부터 LivingEntity 타입을 가져오기 시도
             LivingEntity attackTarget = other.GetComponent<LivingEntity>();
             if (attackTarget != null)
@@ -21,7 +32,7 @@ public class UniqueParticleDam : MonoBehaviour
                 // 공격 실행
                 attackTarget.OnDamage(damage, hitPoint, hitNormal);
             }
-            Invoke("DamTime", 0.05f);
+            Invoke("DamTime", coolTime);
             atkChk = true;
         }
     }
