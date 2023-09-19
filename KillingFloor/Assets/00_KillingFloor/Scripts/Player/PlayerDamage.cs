@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,6 +25,11 @@ public class PlayerDamage : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        // 마스터가 아니라면 데미지 입력 불가
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
 
         // 최근 공격 시점에서 timeBetAttack 이상 시간이 지났다면 공격 가능
         if (Time.time >= lastAttackTime + timeBetAttack)

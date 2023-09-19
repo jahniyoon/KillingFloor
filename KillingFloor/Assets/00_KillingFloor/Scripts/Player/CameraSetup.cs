@@ -20,6 +20,10 @@ public class CameraSetup : MonoBehaviourPun
     {
         if (photonView.IsMine)
         {
+            // 카메라 셋 하면서 화면 락 걸어주기
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+
             playerMovement = GetComponent<PlayerMovement>();
             input = GetComponent<PlayerInputs>();
 

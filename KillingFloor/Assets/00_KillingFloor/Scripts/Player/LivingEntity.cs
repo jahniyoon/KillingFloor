@@ -87,6 +87,9 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
             health -= _damage;
         }
 
+        if (0 >= health)
+        { health = 0; }
+
     }
 
     // 체력을 회복하는 기능

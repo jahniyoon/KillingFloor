@@ -103,7 +103,7 @@ public class PlayerShooter : MonoBehaviourPun
         tpsHeal.gameObject.SetActive(false);    // 미리 꺼두기
 
         // FPS 무기 가져오기
-        fpsPosition = transform.GetChild(0).GetChild(0).GetComponent<Transform>();
+        fpsPosition = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Transform>();
         fpsPistol = fpsPosition.transform.GetChild(0).GetComponent<Transform>();
         fpsRifle = fpsPosition.transform.GetChild(1).GetComponent<Transform>();  // 라이플은 미리 불러와서 꺼두기
         fpsMelee = fpsPosition.transform.GetChild(2).GetComponent<Transform>();
@@ -478,68 +478,76 @@ public class PlayerShooter : MonoBehaviourPun
     // 화면에 보여지는 무기를 변경하는 메서드
     public void Weapons()
     {
-        // 준비되었을 때만 변경 가능
-        if (state == State.Ready && !input.dash)
+        // 재장전 상태 아닐때만 변경 가능
+        if (state != State.Reloading && !input.dash)
         {
-            if (input.weaponSlot1 && weaponSlot != 1 && !isGrenade)
+            if (input.weaponSlot1)
             {
-                weaponSlot = 1;
-                tpsRifle.gameObject.SetActive(false);
-                tpsPistol.gameObject.SetActive(true);
-                fpsRifle.gameObject.SetActive(false);
-                fpsPistol.gameObject.SetActive(true);
-                fpsMelee.gameObject.SetActive(false);
-                fpsHeal.gameObject.SetActive(false);
-                fpsGrenade.gameObject.SetActive(false);
-                SetWeapon(tpsPistol, fpsPistol); // 무기 장착
-                animator.SetBool("isWeaponPistol", true);
-                animator.SetBool("isWeaponRifle", false);
-
-                input.weaponSlot1 = false;
+                if (weaponSlot != 1 && !isGrenade)
+                {
+                    weaponSlot = 1;
+                    tpsRifle.gameObject.SetActive(false);
+                    tpsPistol.gameObject.SetActive(true);
+                    fpsRifle.gameObject.SetActive(false);
+                    fpsPistol.gameObject.SetActive(true);
+                    fpsMelee.gameObject.SetActive(false);
+                    fpsHeal.gameObject.SetActive(false);
+                    fpsGrenade.gameObject.SetActive(false);
+                    SetWeapon(tpsPistol, fpsPistol); // 무기 장착
+                    animator.SetBool("isWeaponPistol", true);
+                    animator.SetBool("isWeaponRifle", false);
+                }
+                    input.weaponSlot1 = false;
             }
-            if (input.weaponSlot2 && weaponSlot != 2 && !isGrenade)
+            if (input.weaponSlot2)
             {
-                weaponSlot = 2;
-                tpsPistol.gameObject.SetActive(false);
-                tpsRifle.gameObject.SetActive(true);
-                fpsPistol.gameObject.SetActive(false);
-                fpsRifle.gameObject.SetActive(true);
-                fpsMelee.gameObject.SetActive(false);
-                fpsHeal.gameObject.SetActive(false);
-                fpsGrenade.gameObject.SetActive(false);
-                SetWeapon(tpsRifle, fpsRifle); // 무기 장착
-                animator.SetBool("isWeaponPistol", false);
-                animator.SetBool("isWeaponRifle", true);
-
-                input.weaponSlot2 = false;
+                if (weaponSlot != 2 && !isGrenade)
+                {
+                    weaponSlot = 2;
+                    tpsPistol.gameObject.SetActive(false);
+                    tpsRifle.gameObject.SetActive(true);
+                    fpsPistol.gameObject.SetActive(false);
+                    fpsRifle.gameObject.SetActive(true);
+                    fpsMelee.gameObject.SetActive(false);
+                    fpsHeal.gameObject.SetActive(false);
+                    fpsGrenade.gameObject.SetActive(false);
+                    SetWeapon(tpsRifle, fpsRifle); // 무기 장착
+                    animator.SetBool("isWeaponPistol", false);
+                    animator.SetBool("isWeaponRifle", true);
+                }
+                    input.weaponSlot2 = false;
             }
-            if (input.weaponSlot3 && weaponSlot != 3 && !isGrenade)
+            if (input.weaponSlot3)
             {
-                weaponSlot = 3;
-                tpsPistol.gameObject.SetActive(false);
-                tpsRifle.gameObject.SetActive(false);
-                fpsPistol.gameObject.SetActive(false);
-                fpsRifle.gameObject.SetActive(false);
-                fpsMelee.gameObject.SetActive(true);
-                fpsHeal.gameObject.SetActive(false);
-                fpsGrenade.gameObject.SetActive(false);
-                SetWeapon(tpsMelee, fpsMelee); // 무기 장착
-
-                input.weaponSlot3 = false;
+                if (weaponSlot != 3 && !isGrenade)
+                {
+                    weaponSlot = 3;
+                    tpsPistol.gameObject.SetActive(false);
+                    tpsRifle.gameObject.SetActive(false);
+                    fpsPistol.gameObject.SetActive(false);
+                    fpsRifle.gameObject.SetActive(false);
+                    fpsMelee.gameObject.SetActive(true);
+                    fpsHeal.gameObject.SetActive(false);
+                    fpsGrenade.gameObject.SetActive(false);
+                    SetWeapon(tpsMelee, fpsMelee); // 무기 장착
+                }
+                    input.weaponSlot3 = false;
             }
-            if (input.weaponSlot4 && weaponSlot != 4 && !isGrenade)
+            if (input.weaponSlot4)
             {
-                weaponSlot = 4;
-                tpsPistol.gameObject.SetActive(false);
-                tpsRifle.gameObject.SetActive(false);
-                fpsPistol.gameObject.SetActive(false);
-                fpsRifle.gameObject.SetActive(false);
-                fpsMelee.gameObject.SetActive(false);
-                fpsHeal.gameObject.SetActive(true);
-                fpsGrenade.gameObject.SetActive(false);
-                SetWeapon(tpsHeal, fpsHeal); // 무기 장착
-
-                input.weaponSlot4 = false;
+                if (weaponSlot != 4 && !isGrenade)
+                {
+                    weaponSlot = 4;
+                    tpsPistol.gameObject.SetActive(false);
+                    tpsRifle.gameObject.SetActive(false);
+                    fpsPistol.gameObject.SetActive(false);
+                    fpsRifle.gameObject.SetActive(false);
+                    fpsMelee.gameObject.SetActive(false);
+                    fpsHeal.gameObject.SetActive(true);
+                    fpsGrenade.gameObject.SetActive(false);
+                    SetWeapon(tpsHeal, fpsHeal); // 무기 장착
+                }
+                    input.weaponSlot4 = false;
             }
             if (input.grenade && !isGrenade && 0 < grenade)
             {
@@ -553,7 +561,6 @@ public class PlayerShooter : MonoBehaviourPun
                 fpsGrenade.gameObject.SetActive(true);
                 state = State.Reloading;
                 StartCoroutine(Grenade());
-
                 input.grenade = false;
             }
         }
@@ -562,31 +569,38 @@ public class PlayerShooter : MonoBehaviourPun
     // 무기 슬롯 입력부분
     public void WeaponInput()
     {
-        // 스크롤로 받는 입력부분
-        if (input.scroll != 0)
+        // 스크롤로 받는 입력부분 입력이 있으면 실행
+        if (input.scroll != 0 && !isGrenade)
         {
+            int newSlot = weaponSlot;
+
             if (input.scroll > 0)
             {
-                weaponSlot += 1;
-                if (4 < weaponSlot) weaponSlot = 1;
+                newSlot += 1;
+                if (4 < newSlot) newSlot = 1;
             }
             else if (input.scroll < 0)
             {
-                weaponSlot -= 1;
-                if (0 >= weaponSlot) weaponSlot = 4;
+                newSlot -= 1;
+                if (0 >= newSlot) newSlot = 4;
             }
-            switch (weaponSlot)
+
+            switch (newSlot)
             {
                 case 1:
+                    Debug.Log("1번으로 무기스왑");
                     input.weaponSlot1 = true;
                     break;
                 case 2:
+                    Debug.Log("2번으로 무기스왑");
                     input.weaponSlot2 = true;
                     break;
                 case 3:
+                    Debug.Log("3번으로 무기스왑");
                     input.weaponSlot3 = true;
                     break;
                 case 4:
+                    Debug.Log("4번으로 무기스왑");
                     input.weaponSlot4 = true;
                     break;
             }
