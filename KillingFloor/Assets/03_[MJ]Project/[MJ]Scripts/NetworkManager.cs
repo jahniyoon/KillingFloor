@@ -386,7 +386,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.LoadLevel("PlayerTestScene");
+            PhotonNetwork.LoadLevel("ZombieTestScene");
         }
 
         Debug.Log(UserNickNameText.text);
