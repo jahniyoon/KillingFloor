@@ -97,6 +97,71 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         },
             (error) => Debug.Log("로그인 실패"));
     }
+    public void OnLoginTest04()
+    {
+        // 이메일과 비밀번호 사용해서 로그인 요청
+        var request = new LoginWithEmailAddressRequest { Email = "test04@test.com", Password = "000000" };
+
+        PlayFabClientAPI.LoginWithEmailAddress(request, (result) =>
+        {
+            // 로그인 성공시 실행
+            GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+        },
+            (error) => Debug.Log("로그인 실패"));
+    }
+    public void OnLoginTest05()
+    {
+        // 이메일과 비밀번호 사용해서 로그인 요청
+        var request = new LoginWithEmailAddressRequest { Email = "test05@test.com", Password = "000000" };
+
+        PlayFabClientAPI.LoginWithEmailAddress(request, (result) =>
+        {
+            // 로그인 성공시 실행
+            GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+        },
+            (error) => Debug.Log("로그인 실패"));
+    }
+    public void OnLoginTest06()
+    {
+        // 이메일과 비밀번호 사용해서 로그인 요청
+        var request = new LoginWithEmailAddressRequest { Email = "test06@test.com", Password = "000000" };
+
+        PlayFabClientAPI.LoginWithEmailAddress(request, (result) =>
+        {
+            // 로그인 성공시 실행
+            GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+        },
+            (error) => Debug.Log("로그인 실패"));
+    }
+    public void OnLoginTest07()
+    {
+        // 이메일과 비밀번호 사용해서 로그인 요청
+        var request = new LoginWithEmailAddressRequest { Email = "test07@test.com", Password = "000000" };
+
+        PlayFabClientAPI.LoginWithEmailAddress(request, (result) =>
+        {
+            // 로그인 성공시 실행
+            GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+        },
+            (error) => Debug.Log("로그인 실패"));
+    }
+    public void OnLoginTest08()
+    {
+        // 이메일과 비밀번호 사용해서 로그인 요청
+        var request = new LoginWithEmailAddressRequest { Email = "test08@test.com", Password = "000000" };
+
+        PlayFabClientAPI.LoginWithEmailAddress(request, (result) =>
+        {
+            // 로그인 성공시 실행
+            GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+        },
+            (error) => Debug.Log("로그인 실패"));
+    }
     #endregion
 
     public void Register()
@@ -382,11 +447,38 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region PlayScene Load
-    public void OnPlayScene()
+    public void OnPlayerTestScene()
     {
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.LoadLevel("PlayerTestScene");
+        }
+
+        Debug.Log(UserNickNameText.text);
+    }
+    public void OnGunTestScene()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("GunTestScene");
+        }
+
+        Debug.Log(UserNickNameText.text);
+    }
+    public void OnZombieTestScene()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("ZombieTestScene");
+        }
+
+        Debug.Log(UserNickNameText.text);
+    }
+    public void OnMainTestScene()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("Main");
         }
 
         Debug.Log(UserNickNameText.text);
