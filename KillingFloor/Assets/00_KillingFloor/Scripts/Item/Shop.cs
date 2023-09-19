@@ -54,7 +54,13 @@ public class Shop : MonoBehaviour
         input.cursorInputForLook = true;
         input.cursorLocked = true;
         isShopOpen = false;
-        
+        Invoke("ChangeState", 0.5f);
+
+
+    }
+    private void ChangeState()
+    {
+        PlayerUIManager.instance.isShopState = false;
     }
     void OnTriggerStay(Collider player)
     {
@@ -70,6 +76,8 @@ public class Shop : MonoBehaviour
             {
                 shopUI.SetActive(true);
                 PlayerUIManager.instance.shopUI.SetActive(false);
+                PlayerUIManager.instance.isShopState = true;
+
                 isShopOpen = true;
                 input.equip = false;
             }

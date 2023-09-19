@@ -32,7 +32,7 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
         health = startingHealth;
         armor = 0;
     }
-
+   
     // 데미지 처리
     // 호스트에서 먼저 단독 실행되고, 호스트를 통해 다른 클라이언트들에서 일괄 실행됨
     [PunRPC]

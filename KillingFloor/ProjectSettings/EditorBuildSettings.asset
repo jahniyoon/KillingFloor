@@ -14,16 +14,16 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/03_[MJ]Project/[MJ]Scenes/LobbyScene.unity
     guid: 2a904c960d452324ea881bf3947841a5
-  - enabled: 0
+  - enabled: 1
     path: Assets/00_KillingFloor/Scenes/GunTestScene.unity
     guid: 59438d3cb10298c46aa06816bb84d0c9
   - enabled: 1
     path: Assets/00_KillingFloor/Scenes/PlayerTestScene.unity
     guid: a03856037cb863441bfff0ddf0ec6d96
-  - enabled: 0
+  - enabled: 1
     path: Assets/00_KillingFloor/Scenes/ZombieTestScene.unity
     guid: c9107cdb6d79c424894cf2ac2aa3cf6f
-  - enabled: 0
+  - enabled: 1
     path: Assets/00_KillingFloor/Scenes/Main.unity
     guid: 7b9800b98f0e72a4da8ab8757607cc77
   m_configObjects: {}

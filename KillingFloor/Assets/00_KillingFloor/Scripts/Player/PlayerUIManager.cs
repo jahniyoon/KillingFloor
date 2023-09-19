@@ -1,6 +1,8 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,9 +32,14 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text grenadeText;    // 남은 수류탄
     public TMP_Text coinText;       // 현재 재화
     public TMP_Text weightText;     // 현재 무게
-    public Slider healSlider;        // 힐 슬라이더
-    public GameObject equipUI;
-    public GameObject shopUI;
+    public Slider healSlider;       // 힐 슬라이더
+    public GameObject equipUI;      // 상호작용 UI
+    public GameObject shopUI;       // 상점 상호작용 UI
+    public GameObject pauseUI;       // 포즈 UI
+    public Slider mouseSensitive;
+    public TMP_Text mouseSensitiveValue;
+    public bool isShopState;
+    public bool isPauseState;
 
     // 코인 증가효과 계산용 변수
     private int coin;
@@ -55,6 +62,7 @@ public class PlayerUIManager : MonoBehaviour
         CoinUpdate();
         SetNoticeWave();
         SetZombieWave();
+        Pause();
     }
 
     // 체력 텍스트 갱신
@@ -93,7 +101,6 @@ public class PlayerUIManager : MonoBehaviour
     {
         healSlider.value = value;
     }
-
     // 코인 획득
     public void SetCoin(int value)
     {
@@ -130,6 +137,51 @@ public class PlayerUIManager : MonoBehaviour
     {
         weightText.text = string.Format("{0}", value);
     }
+
+    // 포즈
+    public void Pause()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && !isShopState && !isPauseState)
+        {
+            isPauseState = true;
+            pauseUI.SetActive(true);
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            GameManager.instance.inputLock = true;  // 인풋락도 걸어주기
+        }
+        // 상점 닫기 ESC
+        else if (Input.GetKeyDown(KeyCode.Escape) && isPauseState)
+        {
+            OffPause();
+        }
+        MouseSensitiveUpdate();
+
+    }
+    public void OnPause()
+    {
+        isPauseState = true;
+    }
+    public void OffPause()
+    {
+        isPauseState = false;
+        pauseUI.SetActive(false);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        GameManager.instance.inputLock = false;  // 인풋락도 풀어주기
+
+    }
+    public void LeaveRoomButton()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        PhotonNetwork.LeaveRoom();
+    }
+    public void MouseSensitiveUpdate()
+    {
+        mouseSensitiveValue.text = string.Format("{0}", Mathf.FloorToInt(mouseSensitive.value));
+    }
+
+
 
     //JunOh
     public void SetNotice(string value)

@@ -48,12 +48,11 @@ public class PlayerShooter : MonoBehaviourPun
     public AudioSource gunAudioPlayer;       // 총 소리 재생기
 
     public Transform fireTransform;          // 총알이 발사될 위치
-    public GameObject bulletHole;            // 총알이 맞는 곳에 생성되는 파티클
+    public ParticleSystem bulletHole;            // 총알이 맞는 곳에 생성되는 파티클
     public GameObject bloodParticle;            // 총알이 맞는 곳에 생성되는 파티클
     public LineRenderer bulletLineRenderer;  // 총알 궤적을 그리기 위한 렌더러
     public ParticleSystem fireParticle;
     public bool isParticleTrigger;          // 파티클 생성여부 트리거
-
 
 
     [Header("TPS Weapon")]
@@ -184,11 +183,13 @@ public class PlayerShooter : MonoBehaviourPun
 
     void Shot()
     {
-        // 실제 발사 처리는 호스트에게 대리
-        Debug.Log(photonView.ViewID + "가 Master에게 사격 요청");
 
-        photonView.RPC("ShotProcessOnServer", RpcTarget.MasterClient);
-        
+        Vector3 cameraForward = cameraSet.followCam.transform.forward;
+        Vector3 cameraPosition = cameraSet.followCam.transform.position;
+        // 카메라는 각자 가지고있으므로 카메라값도 함께 전달
+        photonView.RPC("ShotProcessOnServer", RpcTarget.MasterClient, cameraForward, cameraPosition);
+
+
         // 애니메이션 작동 
         handAnimator.SetTrigger("isFire");
         animator.SetTrigger("isFire");
@@ -204,14 +205,17 @@ public class PlayerShooter : MonoBehaviourPun
         }
 
     }
-    // 호스트에서 실행되는 실제 발사 처리
+
+    // 마스터가 실행하는 실제 발사 처리
     [PunRPC]
-    private void ShotProcessOnServer()
+    private void ShotProcessOnServer(Vector3 _cameraForward, Vector3 _cameraPosition)
     {
+
         // ToDo : 히트를 밖에서 수정해줘야함. 히트포인트를 받아와야지 데미지 효과 실행 가능
         // 레이캐스트에 의한 충돌 정보를 저장하는 컨테이터
         RaycastHit hit;
-        Vector3 hitPoint = cameraSet.followCam.transform.forward * 1f;
+        Vector3 hitPoint  = _cameraForward * range;
+        GameObject hitObj = null;
 
         // 잠깐 IK 풀어주기
         handIKAmount = animationIKAmount;
@@ -219,28 +223,34 @@ public class PlayerShooter : MonoBehaviourPun
         StartCoroutine(ShootCoroutine());
 
         // 만약 좀비류에 닿으면 데미지
-        if (Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range, layerMask))
+        if (Physics.Raycast(_cameraPosition, _cameraForward, out hit, range, layerMask))
         {
-            GameObject hitObj = hit.transform.gameObject;
-            Damage(hitObj);
+            hitObj = hit.transform.gameObject;
             hitPoint = hit.point;
         }
+
         // 만약 뭔가에 닿으면 그곳을 히트포인트로
-        else if(Physics.Raycast(cameraSet.followCam.transform.position, cameraSet.followCam.transform.forward, out hit, range))
+        else if (Physics.Raycast(_cameraPosition, _cameraForward, out hit, range))
         {
             hitPoint = hit.point;
             isParticleTrigger = true;
         }
         // 안닿으면 최대거리를 히트포인트로
-        else
-        hitPoint = cameraSet.followCam.transform.forward * range;
+        //else
+        //{ hitPoint = cameraSet.followCam.transform.forward * range; }
 
-        Debug.Log("Master 모든이에게 사격 이펙트 요청" + hitPoint);
+        // 발사처리를 마스터에게 위임
+        Debug.Log(photonView.ViewID + "가 Master에게 사격 요청을 합니다.");
+
+        if (hitObj != null)
+        {
+            // 부딧친 오브젝트가 있다면 모두에게 데미지 실행
+            Damage(hitObj);
+        }
+
 
         // 이펙트 재생 코루틴을 랩핑
         photonView.RPC("ShotEffectProcessOnClients", RpcTarget.All, hitPoint);
- 
-        //aimTarget.transform.position = hitPoint;    // 플레이어 조준 포지션
     }
     // 이펙트 재생 코루틴
     [PunRPC]
@@ -251,14 +261,13 @@ public class PlayerShooter : MonoBehaviourPun
     // 발사 이펙트와 소리를 재생하고 총알 궤적을 그린다.
     private IEnumerator ShotEffect(Vector3 _hitPosition)
     {
-        Debug.Log(photonView.ViewID + "사격 이펙트 생성" + _hitPosition);
-
+        Debug.Log(photonView.ViewID + "이펙트 실행 완료");
         if (isParticleTrigger)
-        { 
+        {
             // 총알 자국 파티클 생성
-            GameObject particles = (GameObject)Instantiate(bulletHole);
-            particles.transform.position = _hitPosition;
-            Destroy(particles, 8f);
+            ParticleSystem _bulletHoleParticle = bulletHole;
+            _bulletHoleParticle.transform.position = _hitPosition;
+            bulletHole.Play();
             isParticleTrigger = false;
         }
         fireParticle.Play();    // 파티클 재생
@@ -363,13 +372,13 @@ public class PlayerShooter : MonoBehaviourPun
             PlayerUIManager.instance.SetHeal(healCoolDown);
         }
     }
-
     void Damage(GameObject _hitObj)
     {
        
-        if (_hitObj.transform.GetComponent<HitPoint>() == null)
+        if (_hitObj.transform.GetComponent<HitPoint>() == null && _hitObj.transform.GetComponent<PlayerDamage>() != null )
         {
             playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
+            _hitObj.transform.GetComponent<PlayerDamage>().OnDamage(); // RPC 확인 디버그용
             return;
         }
         if (!"Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name)&& !"Meteor".Equals(FindTopmostParent(_hitObj.transform).gameObject.name))//보스 가 아닐경우 

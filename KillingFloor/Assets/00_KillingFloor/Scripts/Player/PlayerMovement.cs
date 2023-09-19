@@ -102,11 +102,20 @@ public class PlayerMovement : MonoBehaviourPun
     {
         // 입력 가능여부 확인
         if (!photonView.IsMine) { return; } // 로컬 플레이어가 아닌 경우 입력을 받지 않는다.
-
+            MouseSensitiveUpdate();
             GroundedCheck();    // 바닥 체크
             JumpAndGravity();   // 점프와 중력 관련 메서드
             Move();             // 이동 관련 메서드
             ActiveAnimation();  // 애니메이션 적용
+
+        if (GameManager.instance.inputLock)
+        {
+            GetComponent<PlayerInput>().enabled = false;
+        }
+        else if (!GameManager.instance.inputLock)
+        {
+            GetComponent<PlayerInput>().enabled = true;
+        }
     }
     private void LateUpdate()
     {
@@ -114,6 +123,10 @@ public class PlayerMovement : MonoBehaviourPun
         CameraRotation();
     }
 
+    public void MouseSensitiveUpdate()
+    {
+        rotationSpeed = PlayerUIManager.instance.mouseSensitive.value;
+    }
     // 바닥 체크
     private void GroundedCheck()
     {

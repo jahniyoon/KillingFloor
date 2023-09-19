@@ -3,25 +3,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerDamage : MonoBehaviour
+public class PlayerDamage : MonoBehaviourPun
 {
 
     public float damage = 20f; // 공격력
     public float timeBetAttack = 0.5f; // 공격 간격
-    private float lastAttackTime; // 마지막 공격 시점
+    private float lastAttackTime = 0; // 마지막 공격 시점
+    public int destroyCount;
+    
 
-    // Start is called before the first frame update
-    void Start()
+
+    // ================== 데미지를 입는 과정 정리 ================== //
+    // 1. 어디선가 데미지 메서드를 호출한다.
+    // 마스터에게 데미지 계산을 요청한다.
+    public void OnDamage()
     {
-        
-    }
+        // 마스터에게 데미지 계산 요청
+        Debug.Log("데미지 계산요청" + photonView.ViewID);
 
-    // Update is called once per frame
-    void Update()
+        photonView.RPC("MasterDamage", RpcTarget.MasterClient, destroyCount);
+    }
+    // 2.마스터가 데미지 계산을 요청받고 계산을 먼저 해준다.
+    // 계산이 끝난 값을 모두에게 보내준다.
+    [PunRPC]
+    public void MasterDamage(int _destroyCount)
     {
-        
-    }
+        Debug.Log("마스터 모두에게 데미지 업데이트 요청" );
 
+        // 5번 데미지 요청 받으면 파괴도록하기위해 카운트 1 증가
+        int newDestroyCount = _destroyCount + 1;
+        // 마스터가 계산한 값 전달
+        photonView.RPC("SyncDamage", RpcTarget.All, newDestroyCount);
+
+    }
+    // 3. 모두는 (마스터를 포함) 전달받은 값을 업데이트를 한다.
+    [PunRPC]
+    public void SyncDamage(int _destroyCount)
+    {
+        // 마스터가 계산한 값을 모두 받아와서 업데이트
+        destroyCount = _destroyCount;
+        Debug.Log("카운트는?"+destroyCount);
+
+        if (5 < destroyCount)
+        {
+            Debug.Log("게임오브젝트 제거");
+            PhotonNetwork.Destroy(this.gameObject);
+        }
+    }
+    // ================== 데미지를 입는 과정 정리 ================== //
 
     private void OnTriggerStay(Collider other)
     {

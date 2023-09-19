@@ -7,6 +7,7 @@ public class PlayerHealth : LivingEntity
     private PlayerMovement playerMovement; // 플레이어 움직임 컴포넌트
     private PlayerShooter playerShooter; // 플레이어 슈터 컴포넌트
     private Animator playerAnimator; // 플레이어의 애니메이터
+    private PlayerInfoUI playerInfo;
 
     private void Awake()
     {
@@ -14,6 +15,7 @@ public class PlayerHealth : LivingEntity
         playerAnimator = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
         playerShooter = GetComponent<PlayerShooter>();
+        playerInfo = GetComponent<PlayerInfoUI>();  
     }
 
     protected override void OnEnable()
@@ -25,6 +27,9 @@ public class PlayerHealth : LivingEntity
         playerMovement.enabled = true;
         playerShooter.enabled = true;
         PlayerUIManager.instance.SetHP(startingHealth);
+        playerInfo.SetHealth(health);
+        playerInfo.SetArmor(armor);
+
     }
 
     // 데미지 처리
@@ -44,17 +49,22 @@ public class PlayerHealth : LivingEntity
         // 갱신된 체력 업데이트
         PlayerUIManager.instance.SetHP(health);
         PlayerUIManager.instance.SetArmor(armor);
+        playerInfo.SetHealth(health);
+        playerInfo.SetArmor(armor);
+
     }
 
     public override void RestoreHealth(float newHealth)
     {
         base.RestoreHealth(newHealth);
         PlayerUIManager.instance.SetHP(health);
+        playerInfo.SetHealth(health);
     }
     public override void RestoreArmor(float newArmor)
     {
         base.RestoreArmor(newArmor);
         PlayerUIManager.instance.SetArmor(armor);
+        playerInfo.SetArmor(armor);
     }
 
     // 코인 획득

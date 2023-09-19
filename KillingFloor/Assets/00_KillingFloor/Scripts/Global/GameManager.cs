@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public Vector3 spawnPosition;
     public bool isGameover { get; private set; } // 게임 오버 상태
     public bool inputEnable = true;
+    public bool inputLock;
 
     // 지환 추가
 
