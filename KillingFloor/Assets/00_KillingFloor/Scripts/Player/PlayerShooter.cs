@@ -363,28 +363,7 @@ public class PlayerShooter : MonoBehaviourPun
        
         if (!"Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name)&& !"Meteor".Equals(FindTopmostParent(_hitObj.transform).gameObject.name))//보스 가 아닐경우 
         {
-<<<<<<< HEAD
-            playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
-            return;
-        }
-        // 좀비일 경우
-        else if (_hitObj.transform.GetComponent<HitPoint>() != null)
-        {
-            if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health > 0)
-            {
-                _hitObj.transform.GetComponent<HitPoint>().Hit(damage); // 좀비에게 데미지
 
-                // 만약 좀비가 죽는다면
-                if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health <= 0)
-                {
-                    // 코인 먹이고
-                    playerHealth.GetCoin(_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin);
-
-                    // 코인값 초기화
-                    _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin = 0;
-                    //coin += _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin;
-                }
-=======
            
             ////////////////////////////////////////////////좀비////////////////////
 
@@ -392,7 +371,6 @@ public class PlayerShooter : MonoBehaviourPun
             {
                 playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
                 return;
->>>>>>> origin/feature/ssm
             }
           
             if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health > 0)
