@@ -184,8 +184,7 @@ public class PlayerShooter : MonoBehaviourPun
         // 애니메이션 작동 
         handAnimator.SetTrigger("isFire");
         animator.SetTrigger("isFire");
-
-
+        PlayerFireCameraShake.Invoke();
         equipedWeapon.ammo -= 1;
         PlayerUIManager.instance.SetAmmo(equipedWeapon.ammo);           // 현재 탄 UI 세팅
 
