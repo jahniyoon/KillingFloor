@@ -9,8 +9,21 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 {
-    public static GameManager instance;
-   
+    public static GameManager instance
+    {
+        get
+        {
+            // 만약 싱글톤 변수에 아직 오브젝트가 할당되지 않았다면
+            if (m_instance == null)
+            {
+                // 씬에서 GameManager 오브젝트를 찾아 할당
+                m_instance = FindObjectOfType<GameManager>();
+            }
+
+            // 싱글톤 오브젝트를 반환
+            return m_instance;
+        }
+    }
     private static GameManager m_instance; // 싱글톤이 할당될 static 변수
 
     public GameObject playerPrefab; // 생성할 플레이어 캐릭터 프리팹
@@ -44,11 +57,20 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             // 자신을 파괴
             Destroy(gameObject);
         }
-        if (instance == null)
-        { instance = this; }
-        else
-        { GlobalFunc.LogWarning("씬에 두 개 이상의 게임 매니저가 존재합니다."); }
     }
+    //private void Awake()
+    //{
+    //    // 씬에 싱글톤 오브젝트가 된 다른 GameManager 오브젝트가 있다면
+    //    if (instance != this)
+    //    {
+    //        // 자신을 파괴
+    //        Destroy(gameObject);
+    //    }
+    //    if (instance == null)
+    //    { instance = this; }
+    //    else
+    //    { GlobalFunc.LogWarning("씬에 두 개 이상의 게임 매니저가 존재합니다."); }
+    //}
 
     // Start is called before the first frame update
     void Start()
@@ -58,6 +80,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 네트워크 상의 모든 클라이언트들에서 생성 실행
         // 단, 해당 게임 오브젝트의 주도권은, 생성 메서드를 직접 실행한 클라이언트에게 있음
         PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
+        Debug.Log("플레이어 왜 생성 안돼" + playerPrefab.name);
         // ToDO : 테스트씬으로 넘어오면 생성되도록 수정하기
      
         StartCoroutine(StartWave());
