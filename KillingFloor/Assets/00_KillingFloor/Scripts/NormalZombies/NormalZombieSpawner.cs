@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NormalZombieSpawner : MonoBehaviour
 {
-    public List<Vector3> spawnPoint = new List<Vector3>();
+    public List<GameObject> spawnPoint = new List<GameObject>();
     public List<GameObject> zombiePrefab = new List<GameObject>();
     private List<Transform> zombieSaveList = new List<Transform>();
 
@@ -36,7 +36,7 @@ public class NormalZombieSpawner : MonoBehaviour
         else if (GameManager.instance.wave == 2 && GameManager.instance.isCheck)
         {
             GameManager.instance.isCheck = false;
-            roundPointCount = 5;
+            roundPointCount = 6;
 
             Count();
 
@@ -54,7 +54,7 @@ public class NormalZombieSpawner : MonoBehaviour
         else if (GameManager.instance.wave == 4 && GameManager.instance.isCheck)
         {
             GameManager.instance.isCheck = false;
-            roundPointCount = 4;
+            roundPointCount = 7;
 
             Count();
 
@@ -82,7 +82,9 @@ public class NormalZombieSpawner : MonoBehaviour
     {
         GameObject newObject = Instantiate(zombiePrefab[randZombieNum], zombieSaveList[randZombieNum]);
 
-        newObject.transform.position = spawnPoint[pointCount];
+        newObject.transform.position = spawnPoint[pointCount].transform.position;
+
+        Debug.Log(newObject.transform.position);
     }
 
     private void CreateZombieSave()
