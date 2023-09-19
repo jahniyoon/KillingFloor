@@ -156,6 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6430a03b446fc7e4a80cfa44287c117b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemRenderer: {fileID: 2766218534873693422}
   value: 30
   isBlink: 1
   duration: 1

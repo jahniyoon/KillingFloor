@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ItemObject : MonoBehaviour
 {
-    MeshRenderer itemRenderer;
+    public MeshRenderer itemRenderer;
     Material mat;
     PlayerInputs input;
     PlayerShooter shooter;
@@ -16,7 +16,6 @@ public class ItemObject : MonoBehaviour
 
     void Start()
     {
-        itemRenderer = GetComponent<MeshRenderer>();
         if(itemRenderer != null)
         {
            mat = itemRenderer.material;
