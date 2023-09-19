@@ -1,5 +1,6 @@
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -31,9 +32,10 @@ public class BossController : MonoBehaviour
     private Image Hpimage;
     private GameObject meteor;
     private GameObject bossintro;
+    private bool changeBool = false;
     private void Awake()
     {
-        meteorFattern = new float[] { 2000, 1500, 0, -10, -10, -10 };
+        meteorFattern = new float[] { 2000, 1000, 0, -10, -10, -10 };
         meteors = new GameObject[4];
         meteor = GameObject.Find("Meteor");
 
@@ -120,8 +122,12 @@ public class BossController : MonoBehaviour
         if (currentTime >= setTime)
         {
 
-
-
+            if(!changeBool)
+            {
+                Invoke("changeplayerlook", 50);
+                changeBool = true;
+            }
+          
             // 플레이어와 보스 사이의 거리를 계산합니다.
             float distance = Vector3.Distance(targetPlayer[randPlayerNum].transform.position, transform.position);
 
@@ -239,14 +245,13 @@ public class BossController : MonoBehaviour
 
                         meteor.transform.position = newPosition;
                         meteor.SetActive(true);
-                        for (int i = 0; i <= 1; i++)
-                         {
+                        
                              // 오브젝트의 위치를 새로 계산한 위치로 설정
                           //   meteors[i].transform.position = newPosition;
                              // 오브젝트 활성화
-                             meteors[i].SetActive(true);
+                        meteors[0].SetActive(true);
 
-                         }
+                         
 
                         currentTime = 0;
 
@@ -348,9 +353,29 @@ public class BossController : MonoBehaviour
         Hpimage.fillAmount = normalization();
         bossHp -= dam;
     }
+    // 정규화
     public float normalization()
     {
         float normalizedHealth = (bossHp - 0) / (3500f - 0);
         return normalizedHealth;
+    }
+
+
+    // 타겟변경
+    public void changeplayerlook()
+    {
+        List<int> playerNumber = new List<int>();
+        targetPlayer = GameObject.FindGameObjectsWithTag("Player");
+        for(int i=0; i < targetPlayer.Length; i++)
+        {
+            float hp = targetPlayer[i].GetComponent<LivingEntity>().health;
+            if(hp > 0)
+            {
+                playerNumber.Add(i);
+            }
+        }
+        int targetNumber = Random.Range(0, playerNumber.Count);
+        randPlayerNum = playerNumber[targetNumber];
+        changeBool = false;
     }
 }

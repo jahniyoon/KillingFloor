@@ -26,16 +26,16 @@ public class StartColiderScripts : MonoBehaviour
 
 
         targetPlayer = GameObject.FindGameObjectsWithTag("Player");
-        boxCollider = GetComponent<BoxCollider>();  
-
+        boxCollider = GetComponent<BoxCollider>();
+        Debug.Log(targetPlayer.Length);
 
     }
 
     // Update is called once per frame
     void Update()
     {
-       
-        if(playersInTrigger.Count >= targetPlayer.Length) //플레이어가 모두 입장시 보스 Active
+      
+        if (playersInTrigger.Count >= targetPlayer.Length) //플레이어가 모두 입장시 보스 Active
         {
             if (!Boss.activeSelf)
             {
@@ -55,7 +55,7 @@ public class StartColiderScripts : MonoBehaviour
     {
         GameObject otherGameObject = other.gameObject;
 
-
+        targetPlayer = GameObject.FindGameObjectsWithTag("Player");
         // 트리거에 진입한 상대방이 플레이어인지 여부를 판단
         if (otherGameObject.CompareTag("Player"))
         {

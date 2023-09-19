@@ -5,7 +5,7 @@ public class Meteor : MonoBehaviour
     private Transform orgPos;
     public float MeteorHP = 500;
     private GameObject meteorsField;
-
+    private bool fildchk = false;
   
     private ParticleSystem[] meteorsParticle;//브레스 파티클 배열
                                              // Start is called before the first frame update
@@ -26,10 +26,7 @@ public class Meteor : MonoBehaviour
 
         }
 
-        for (int i = 0; i < 4; i++)
-        {
-            meteorsParticle[i].Stop();
-        }
+       
         meteorsField.SetActive(false);
 
         orgPos = meteorsField.transform;
@@ -50,9 +47,9 @@ public class Meteor : MonoBehaviour
       
         if (transform.position.y < orgPos.transform.position.y)
         {
-          
-            
 
+            fildchk = true;
+            
        
             transform.position = new Vector3(orgPos.transform.position.x, orgPos.transform.position.y + 17.9f, orgPos.transform.position.z);
             gameObject.SetActive(false);
@@ -69,6 +66,14 @@ public class Meteor : MonoBehaviour
         else
         {
             transform.Translate(Vector3.down * 2 * Time.deltaTime);
+            if(!fildchk)
+            {
+               
+                meteorsField.SetActive(false);
+                fildchk = true;
+                
+            }
+          
         }
 
         
