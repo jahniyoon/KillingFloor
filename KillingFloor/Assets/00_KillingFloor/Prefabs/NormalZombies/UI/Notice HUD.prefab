@@ -1557,8 +1557,11 @@ MonoBehaviour:
   healSlider: {fileID: 0}
   equipUI: {fileID: 0}
   shopUI: {fileID: 0}
-  WarningSubText: {fileID: 0}
-  NoticeTextText: {fileID: 0}
-  NoticeCountText: {fileID: 0}
-  ZombieCountText: {fileID: 0}
-  ZombieWaveText: {fileID: 0}
+  warningSubText: {fileID: 0}
+  noticeTextText: {fileID: 0}
+  noticeCountText: {fileID: 0}
+  zombieCountText: {fileID: 0}
+  timerCountText: {fileID: 0}
+  zombieWaveText: {fileID: 0}
+  CountUI: {fileID: 0}
+  TimerUI: {fileID: 0}

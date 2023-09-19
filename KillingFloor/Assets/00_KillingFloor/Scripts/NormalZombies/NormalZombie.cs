@@ -430,6 +430,13 @@ public class NormalZombie : NormalZombieData
 
     private IEnumerator DeathEnd()
     {
+        int num = Random.Range(0, 100);
+
+        if (0 <= num && num < 99)
+        {
+            GameManager.instance.isZedTime = true;
+        }
+
         while (ani.GetNextAnimatorStateInfo(0).IsName("Dead") == false)
         {
             yield return null;
@@ -439,30 +446,7 @@ public class NormalZombie : NormalZombieData
 
         yield return new WaitForSeconds(3);
 
-        int num = Random.Range(0, 100);
-
-        if (0 <= num && num < 5)
-        {
-            GameManager.instance.isZedTime = true;
-
-            StartCoroutine(ZedTime());
-        }
-
         gameObject.SetActive(false);
-    }
-
-    private IEnumerator ZedTime()
-    {
-        zedTime = 0.0f;
-
-        while (zedTime < 6.0f)
-        {
-            zedTime += Time.deltaTime;
-
-            yield return null;
-        }
-
-        GameManager.instance.isZedTime = false;
     }
 
     protected virtual (float, float, int) ZombieWalk()

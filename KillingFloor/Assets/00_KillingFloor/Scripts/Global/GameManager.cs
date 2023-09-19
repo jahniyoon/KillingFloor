@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static UnityEngine.Rendering.DebugUI;
 
 public class GameManager : MonoBehaviour
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     // Junoh 추가
     public NoticeController noticeController;
+    public Volume volume;
 
     public int round = 1;               // 현재 라운드
     public int wave = 1;                // 현재 웨이브
@@ -23,6 +25,7 @@ public class GameManager : MonoBehaviour
     public bool isZedTime = false;      // 제드 타임
     public bool isSpawnZombie = false;  // 좀비가 소환 됬는지 확인
     public bool isCheck = true;         // 좀비 웨이브가 시작 확인
+    public bool isZedTimeCheck = false;
     // Junoh 추가
 
     public void Awake()
@@ -42,10 +45,58 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isZedTime)
+        if (isZedTime) { StartCoroutine(ZedTime()); Debug.Log("몇번 호출 하는가?"); }
+    }
+
+    private IEnumerator ZedTime()
+    {
+        isZedTime = false;
+
+        float timeElapsed = 0.0f;
+
+        if (isZedTimeCheck == false)
         {
-            Time.timeScale = 0.2f;
+            while (timeElapsed < 0.5f)
+            {
+                timeElapsed += Time.deltaTime;
+
+                float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / 0.5f), 2);
+
+                Time.timeScale = Mathf.Lerp(1.0f, 0.2f, time);
+                volume.weight = Mathf.Lerp(0.0f, 1.0f, time);
+
+                yield return null;
+            }
+
+            isZedTimeCheck = true;
         }
+        Debug.Log("스타트");
+        timeElapsed = 0.0f;
+
+        while (timeElapsed < 6.0 * 0.2f)
+        {
+            timeElapsed += Time.deltaTime;
+
+            yield return null;
+        }
+        Debug.Log("중간");
+
+        timeElapsed = 0.0f;
+
+        while (timeElapsed < 0.5f)
+        {
+            timeElapsed += Time.deltaTime;
+
+            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / 0.5f), 2);
+
+            Time.timeScale = Mathf.Lerp(0.2f, 1.0f, time);
+            volume.weight = Mathf.Lerp(1.0f, 0.0f, time);
+
+            yield return null;
+        Debug.Log("마지막");
+        }
+
+        isZedTimeCheck = false;
     }
 
     // Junoh 추가
