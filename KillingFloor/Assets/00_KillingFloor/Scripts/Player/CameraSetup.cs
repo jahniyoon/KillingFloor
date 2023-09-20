@@ -33,7 +33,7 @@ public class CameraSetup : MonoBehaviourPun
             fpsCam = GameObject.FindWithTag("FPS CAM");
             fpsCam.transform.parent = this.transform;
             playerSpine = this.transform.GetChild(1).gameObject;
-
+            playerSpine.SetActive(false);               // 3ÀÎÄª ÃÑµµ ²¨ÁÖ±â
             tpsCam.SetActive(false);                    // 3ÀÎÄªÀº ¹Ì¸® ²¨µÎ±â (Debug¿ë)
 
             followCam = fpsCam.GetComponent<CinemachineVirtualCamera>();    // FPS Ä«¸Þ¶ó¸¦ ÆÈ·Î¿ìÄ·À¸·Î ¼³Á¤
@@ -47,7 +47,6 @@ public class CameraSetup : MonoBehaviourPun
         }
             fpsPlayerBody.SetActive(photonView.IsMine);
             tpsPlayerBody.SetActive(!photonView.IsMine);
-            playerSpine.SetActive(!photonView.IsMine);
         
     }
 

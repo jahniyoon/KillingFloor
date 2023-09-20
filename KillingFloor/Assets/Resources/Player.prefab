@@ -4471,6 +4471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c8146fbef9fef4f9c0a7b956719a82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_player: {fileID: 0}
   playerNickname: {fileID: 476069275615135483}
   playerLevel: {fileID: 6022182744024792868}
   armor: {fileID: 7725070845473741932}

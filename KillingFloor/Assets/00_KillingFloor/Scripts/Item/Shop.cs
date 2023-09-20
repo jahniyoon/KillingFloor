@@ -27,7 +27,7 @@ public class Shop : MonoBehaviour
             // 상점이 열려있을 땐 입력 막아주기
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            GameManager.instance.inputEnable = false;
+            GameManager.instance.inputLock = true;
             input.cursorInputForLook = false;
             input.cursorLocked = false;
 
@@ -50,7 +50,7 @@ public class Shop : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         shopUI.SetActive(false);
         PlayerUIManager.instance.shopUI.SetActive(true);
-        GameManager.instance.inputEnable = true;
+        GameManager.instance.inputLock = false;
         input.cursorInputForLook = true;
         input.cursorLocked = true;
         isShopOpen = false;
@@ -100,18 +100,19 @@ public class Shop : MonoBehaviour
     {
         if(playerInfo != null)
         {
-            if (playerInfo.coin >= 100 && playerInfo.armor != 100)
-            {
-                if (playerInfo.armor >= 100)
-                {
-                    float _armor = 100 - playerInfo.health;
-                    playerInfo.RestoreArmor(_armor);
-                    playerInfo.SpendCoin(Mathf.CeilToInt(_armor));
-                }
+            // 아머는 100을 넘도록 채울 수 없음
+            int _armor = Mathf.FloorToInt(100 - playerInfo.armor);
 
-                else
-                    playerInfo.RestoreArmor(100);
-                playerInfo.SpendCoin(100);
+
+            // 아머 가격은 1당 5원, 100까지 채우려면 500원 필요
+            // 돈이 있고 아머가 100이 아닐 경우 구매 가능
+            if (playerInfo.coin >= _armor * 5 && playerInfo.armor != 100)
+            {
+
+                playerInfo.RestoreArmor(_armor);
+                playerInfo.SpendCoin(_armor);
+                playerInfo.SetArmor();
+                PlayerUIManager.instance.SetCoin(playerInfo.coin);
             }
         }
     }
@@ -124,6 +125,8 @@ public class Shop : MonoBehaviour
             {
                 shooter.GetAmmo(50);
                 playerInfo.SpendCoin(50);
+                PlayerUIManager.instance.SetCoin(playerInfo.coin);
+
             }
         }
     }

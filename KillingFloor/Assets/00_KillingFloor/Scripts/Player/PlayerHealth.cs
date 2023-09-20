@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : LivingEntity
 {
@@ -27,13 +29,14 @@ public class PlayerHealth : LivingEntity
         playerMovement.enabled = true;
         playerShooter.enabled = true;
         PlayerUIManager.instance.SetHP(startingHealth);
+        PlayerUIManager.instance.SetArmor(0);
         playerInfo.SetHealth(health);
         playerInfo.SetArmor(armor);
 
     }
 
     // 데미지 처리
-    //[PunRPC]
+    [PunRPC]
     public override void OnDamage(float damage, Vector3 hitPoint,
         Vector3 hitDirection)
     {
@@ -47,25 +50,24 @@ public class PlayerHealth : LivingEntity
         base.OnDamage(damage, hitPoint, hitDirection);
 
         // 갱신된 체력 업데이트
-        PlayerUIManager.instance.SetHP(health);
-        PlayerUIManager.instance.SetArmor(armor);
-        PlayerUIManager.instance.SetBloodScreen();
+
         playerInfo.SetHealth(health);
         playerInfo.SetArmor(armor);
         
 
     }
 
+    [PunRPC]
     public override void RestoreHealth(float newHealth)
     {
         base.RestoreHealth(newHealth);
-        PlayerUIManager.instance.SetHP(health);
         playerInfo.SetHealth(health);
     }
+
+    [PunRPC]
     public override void RestoreArmor(float newArmor)
     {
         base.RestoreArmor(newArmor);
-        PlayerUIManager.instance.SetArmor(armor);
         playerInfo.SetArmor(armor);
     }
 
@@ -73,14 +75,41 @@ public class PlayerHealth : LivingEntity
     public override void GetCoin(int newCoin)
     {
         base.GetCoin(newCoin);
-        PlayerUIManager.instance.SetCoin(coin);
 
     }
     // 코인 소비
     public override void SpendCoin(int newCoin)
     {
         base.SpendCoin(newCoin);
-        PlayerUIManager.instance.SetCoin(coin);
     }
 
+    public override void Die()
+    {
+        base.Die();
+
+        Invoke("Respawn",3f);
+    }
+    public void Respawn()
+    {
+        // 죽으면 리스폰 시키기
+        if (photonView.IsMine)
+        {
+            Vector3 spawnPosition = new Vector3(0f, 1f, 0f);
+
+            if (SceneManager.GetActiveScene().name == "Main")
+            {
+                spawnPosition = new(135.0f, -6.0f, 200.0f);
+            }
+
+
+            // 지정된 랜덤 위치로 이동
+            transform.position = spawnPosition;
+        }
+
+        // 컴포넌트들을 리셋하기 위해 게임 오브젝트를 잠시 껐다가 다시 켜기
+        // 컴포넌트들의 OnDisable(), OnEnable() 메서드가 실행됨
+        gameObject.SetActive(false);
+        gameObject.SetActive(true);
+
+    }
 }

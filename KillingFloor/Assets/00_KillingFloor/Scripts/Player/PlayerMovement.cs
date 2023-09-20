@@ -97,7 +97,13 @@ public class PlayerMovement : MonoBehaviourPun
         m_StepCycle = 0f;
         m_NextStep = m_StepCycle / 2f;
     }
-
+    public void OnEnable()
+    {
+        _jumpTimeoutDelta = jumpTimeout;
+        _fallTimeoutDelta = fallTimeout;
+        m_StepCycle = 0f;
+        m_NextStep = m_StepCycle / 2f;
+    }
     void Update()
     {
         // 입력 가능여부 확인
@@ -119,6 +125,7 @@ public class PlayerMovement : MonoBehaviourPun
             GetComponent<PlayerInput>().enabled = true;
         }
     }
+
     private void LateUpdate()
     {
         if (!photonView.IsMine) { return; } // 로컬 플레이어가 아닌 경우 입력을 받지 않는다.
@@ -136,7 +143,7 @@ public class PlayerMovement : MonoBehaviourPun
     }
     private void JumpAndGravity()
     {
-        if (GameManager.instance != null && !GameManager.instance.inputEnable)
+        if (GameManager.instance != null && GameManager.instance.inputLock)
             return;
 
         if (isGrounded)
@@ -194,7 +201,7 @@ public class PlayerMovement : MonoBehaviourPun
     }
     private void CameraRotation()
     {
-        if (GameManager.instance != null && !GameManager.instance.inputEnable)
+        if (GameManager.instance != null && GameManager.instance.inputLock)
             return;
         // 마우스 입력이 있으면
         if (input.look.sqrMagnitude >= _threshold)
@@ -224,7 +231,7 @@ public class PlayerMovement : MonoBehaviourPun
         if (input.dash & 0.7 <= input.move.y)
         { targetSpeed = dashSpeed; }
 
-        if (GameManager.instance != null && !GameManager.instance.inputEnable)
+        if (GameManager.instance != null && GameManager.instance.inputLock)
         { input.move = Vector2.zero; }
 
         // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon

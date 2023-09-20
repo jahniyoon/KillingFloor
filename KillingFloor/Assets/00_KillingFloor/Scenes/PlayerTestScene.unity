@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18058695, g: 0.22607905, b: 0.30708987, a: 1}
+  m_IndirectSpecularColor: {r: 0.18058726, g: 0.22607939, b: 0.30709064, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -423,7 +423,6 @@ MonoBehaviour:
   playerPrefab: {fileID: 4861928655055331811, guid: 7f847b893ce10e24ea00df64ab0271fb,
     type: 3}
   spawnPosition: {x: 0, y: 0, z: 0}
-  inputEnable: 1
   inputLock: 0
   shopPosition: {fileID: 4365128104377406915}
   noticeController: {fileID: 0}
@@ -437,6 +436,8 @@ MonoBehaviour:
   isSpawnZombie: 0
   isCheck: 1
   isZedTimeCheck: 0
+  shops: []
+  isShop: 1
 --- !u!4 &156583478
 Transform:
   m_ObjectHideFlags: 0

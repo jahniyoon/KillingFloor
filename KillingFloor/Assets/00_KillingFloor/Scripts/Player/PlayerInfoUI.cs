@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerInfoUI : MonoBehaviour
 {
+    public PlayerHealth m_player;
     public TMP_Text playerNickname;
     public TMP_Text playerLevel;
     public Slider armor;
@@ -18,15 +18,9 @@ public class PlayerInfoUI : MonoBehaviour
     void Start()
     {
         playerNickname.text = string.Format(PhotonNetwork.LocalPlayer.NickName);
-        playerLevel.text = string.Format("Level");
-        
+        playerLevel.text = string.Format("Level");   
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void SetArmor(float value)
     {
         armor.value = value;

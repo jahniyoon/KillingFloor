@@ -182,7 +182,7 @@ public class PlayerShooter : MonoBehaviourPun
         if (!photonView.IsMine) { return; } // 로컬 플레이어가 아닌 경우 입력을 받지 않는다.
 
         // 입력 가능여부 확인
-        if (GameManager.instance != null && GameManager.instance.inputEnable)
+        if (GameManager.instance != null && !GameManager.instance.inputLock)
         {
             HandSet();
             Aim();
@@ -245,6 +245,8 @@ public class PlayerShooter : MonoBehaviourPun
             }
             // 데몰리스트 발사 입력 후 할것들
         }
+        PlayerUIManager.instance.SetCoin(playerHealth.coin);
+
     }
 
     void Shot()
@@ -429,6 +431,7 @@ public class PlayerShooter : MonoBehaviourPun
             if (heal + playerHealth.health >= 100)
             { heal -= ((heal + playerHealth.health) - 100); }
             playerHealth.RestoreHealth(heal);
+            PlayerUIManager.instance.SetHP(playerHealth.health);
             input.shoot = false;
         }
 
@@ -502,6 +505,7 @@ public class PlayerShooter : MonoBehaviourPun
             // 보스 데미지 넣어야하는 부분
             //_hitObj.transform.GetComponent<BossController>().bossHp -= damage;
         }
+
     }
 
     // 장전

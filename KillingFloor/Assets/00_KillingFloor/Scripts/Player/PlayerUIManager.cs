@@ -39,6 +39,7 @@ public class PlayerUIManager : MonoBehaviour
     public GameObject equipUI;      // 상호작용 UI
     public GameObject shopUI;       // 상점 상호작용 UI
     public GameObject pauseUI;       // 포즈 UI
+    public float playerHealth;  // 블러드스크린에 영향을 주기위한 플레이어의 체력
     public Image bloodScreen;   // 피 데미지 스크린
     public Image poisonScreen;  // 독 데미지 스크린
     public float bloodScreenValue;
@@ -161,27 +162,41 @@ public class PlayerUIManager : MonoBehaviour
         shopDownRotation.gameObject.SetActive(!isUp);
 
     }
+
+    // 스크린 데미지 업데이트
     public void DamageScreenUpdate()
     {
+        // 블러드 스크린의 값이 있을 경우 0이 될때까지 실행
         if (0 < bloodScreenValue)
         {
             bloodScreenValue -= Mathf.CeilToInt(1 * Time.deltaTime);
-            Debug.Log(bloodScreenValue);
-
-            // 색상의 알파 값이 서서히 줄어들게 설정
-            float alpha = Mathf.Clamp01(bloodScreenValue / 100.0f); // 혹은 다른 최대값을 사용
-
-            bloodScreen.color = new Color(255, 255, 255, alpha);
+            bloodScreen.color = new Color(255, 255, 255, bloodScreenValue/1000);
         }
-
+        // 블러드 스크린의 값이 있을 경우 0이 될때까지 실행
+        if (0 < poisonScreenValue)
+        {
+            poisonScreenValue -= Mathf.CeilToInt(1 * Time.deltaTime);
+            poisonScreen.color = new Color(255, 255, 255, bloodScreenValue / 100);
+        }
     }
-    public void SetBloodScreen()
+    // 블러드 스크린의 값 조정
+    public void SetBloodScreen(float _health)
     {
-        bloodScreenValue += 200f;
+        // 체력이 낮을 경우 더 붉어지게 하기 위한 값
+        // 체력이 100이면 변함없음
+        float newHealth = (-1*_health+100);
+
+        bloodScreenValue += 200 + newHealth;
+        if(1000f < bloodScreenValue)
+        { bloodScreenValue = 1000f;}
+    }
+    // 포이즌 스크린의 값 조정
+    public void SetPoisonScreen()
+    {
+        poisonScreenValue += 200;
     }
 
-
-    // 포즈
+    // 포즈 업데이트
     public void Pause()
     {
         if (Input.GetKeyDown(KeyCode.Escape) && !isShopState && !isPauseState)
@@ -200,10 +215,12 @@ public class PlayerUIManager : MonoBehaviour
         MouseSensitiveUpdate();
 
     }
+    // 포즈 켜기
     public void OnPause()
     {
         isPauseState = true;
     }
+    // 포즈 종료
     public void OffPause()
     {
         isPauseState = false;
@@ -213,12 +230,12 @@ public class PlayerUIManager : MonoBehaviour
         GameManager.instance.inputLock = false;  // 인풋락도 풀어주기
 
     }
+    // 서버 나가기 버튼
     public void LeaveRoomButton()
     {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-        PhotonNetwork.LeaveRoom();
+        GameManager.instance.LeaveServer();
     }
+    // 마우스 센서티브 업데이트
     public void MouseSensitiveUpdate()
     {
         mouseSensitiveValue.text = string.Format("{0}", Mathf.FloorToInt(mouseSensitive.value));

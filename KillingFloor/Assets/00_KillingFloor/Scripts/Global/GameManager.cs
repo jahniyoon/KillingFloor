@@ -29,8 +29,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public GameObject playerPrefab; // 생성할 플레이어 캐릭터 프리팹
     public Vector3 spawnPosition;   // 플레이어 스폰 포지션
     public bool isGameover { get; private set; } // 게임 오버 상태
-    public bool inputEnable = true;
-    public bool inputLock;  // 입력을 받을 수 있는 상태
+    public bool inputLock;  // 입력을 받을 수 있는 상태. true면 락이 걸려 입력 불가
 
     public Transform shopPosition; // 매 웨이브 업데이트되는 상점의 트랜스폼
 
@@ -108,9 +107,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         shopPosition = shops[wave - 1];
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            PhotonNetwork.LeaveRoom();
+            LeaveServer();
         }
         if (isZedTime) { StartCoroutine(ZedTime()); Debug.Log("몇번 호출 하는가?"); }
     }
@@ -162,6 +159,13 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         isZedTimeCheck = false;
     }
+    public void LeaveServer()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        PhotonNetwork.LeaveRoom();
+    }
+
     // 룸을 나갈때 자동 실행되는 메서드
     public override void OnLeftRoom()
     {
