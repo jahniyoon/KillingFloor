@@ -107,7 +107,9 @@ public class PlayerMovement : MonoBehaviourPun
             JumpAndGravity();   // 점프와 중력 관련 메서드
             Move();             // 이동 관련 메서드
             ActiveAnimation();  // 애니메이션 적용
+            ShopUIUpdate();     // 이동에 따라 상점 UI 업데이트
 
+        // 입력 가능 여부 확인
         if (GameManager.instance.inputLock)
         {
             GetComponent<PlayerInput>().enabled = false;
@@ -364,5 +366,10 @@ public class PlayerMovement : MonoBehaviourPun
 
         tpsAnimator.SetFloat("Speed", animMoveSpeed);
     }
-
+    // 상점 UI 업데이트
+    public void ShopUIUpdate()
+    {
+        float shopDistance = Mathf.RoundToInt(Vector3.Distance(controller.transform.position, GameManager.instance.shopPosition.position));
+        PlayerUIManager.instance.SetShopDistance(shopDistance);
+    }
 }

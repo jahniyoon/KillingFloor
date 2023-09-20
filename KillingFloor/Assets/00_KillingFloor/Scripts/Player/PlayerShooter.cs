@@ -29,6 +29,10 @@ public class PlayerShooter : MonoBehaviourPun
     public Transform targetObj;                // 플레이어 시점
     public Transform weaponPosition = null;    // 무기 위치 기준점
     public Transform rightHandPosition; // 오른손 위치
+    
+    // 병과
+    public enum WeaponClass { Commando, Demolitionist };    // 병과 추가될경우 여기에 추가
+    public WeaponClass weaponClass;                         // 현재 병과 상태
 
     [Header("Weapon Info")]
     public Weapon equipedWeapon;
@@ -92,22 +96,41 @@ public class PlayerShooter : MonoBehaviourPun
         cameraSet = GetComponent<CameraSetup>();
         animator = GetComponent<Animator>();
 
+        // ========================= 무기 가져오는 부분 =========================//
         // TPS 무기 가져오기
-        tpsPistol = weaponPosition.GetChild(0).GetComponent<Weapon>();
-        tpsRifle = weaponPosition.GetChild(1).GetComponent<Weapon>();
+        tpsPistol = weaponPosition.GetChild(0).GetChild(0).GetComponent<Weapon>();
         tpsMelee = weaponPosition.GetChild(2).GetComponent<Weapon>();
         tpsHeal = weaponPosition.GetChild(3).GetComponent<Weapon>();
-        tpsRifle.gameObject.SetActive(false);    // 미리 꺼두기
-        tpsMelee.gameObject.SetActive(false);    // 미리 꺼두기
-        tpsHeal.gameObject.SetActive(false);    // 미리 꺼두기
 
         // FPS 무기 가져오기
-        fpsPosition = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Transform>();
-        fpsPistol = fpsPosition.transform.GetChild(0).GetComponent<Transform>();
-        fpsRifle = fpsPosition.transform.GetChild(1).GetComponent<Transform>();  // 라이플은 미리 불러와서 꺼두기
+        fpsPosition = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Transform>(); // FPS Body 게임오브젝트
+        fpsPistol = fpsPosition.transform.GetChild(0).GetChild(0).GetComponent<Transform>();   // Slot1 의 무기 가져오기
         fpsMelee = fpsPosition.transform.GetChild(2).GetComponent<Transform>();
         fpsHeal = fpsPosition.transform.GetChild(3).GetComponent<Transform>();
         fpsGrenade = fpsPosition.transform.GetChild(4).GetComponent<Transform>();
+
+
+        // 병과에 따라 가져올 무기가 달라져야하는 경우
+        switch (weaponClass)
+        {
+
+            // 코만도면 Slot2의 첫번째 무기
+            case WeaponClass.Commando:
+                fpsRifle = fpsPosition.transform.GetChild(1).GetChild(0).GetComponent<Transform>();    
+                tpsRifle = weaponPosition.GetChild(1).GetChild(0).GetComponent<Weapon>();              
+
+                break;
+            // 데몰리스트면 Slot2의 두번째 무기
+            case WeaponClass.Demolitionist:
+                fpsRifle = fpsPosition.transform.GetChild(1).GetChild(1).GetComponent<Transform>();    
+                tpsRifle = weaponPosition.GetChild(1).GetChild(1).GetComponent<Weapon>();
+                break;
+
+        }
+
+        tpsRifle.gameObject.SetActive(false);    // 미리 꺼두기
+        tpsMelee.gameObject.SetActive(false);    // 미리 꺼두기
+        tpsHeal.gameObject.SetActive(false);    // 미리 꺼두기
 
         fpsRifle.gameObject.SetActive(false);
         fpsMelee.gameObject.SetActive(false);

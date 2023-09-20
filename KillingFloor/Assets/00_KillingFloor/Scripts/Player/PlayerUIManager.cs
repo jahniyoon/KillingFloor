@@ -32,6 +32,8 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text grenadeText;    // 남은 수류탄
     public TMP_Text coinText;       // 현재 재화
     public TMP_Text weightText;     // 현재 무게
+    public TMP_Text shopDistance;   // 상점까지 거리
+    public Slider shopRotation;     // 상점 방향
     public Slider healSlider;       // 힐 슬라이더
     public GameObject equipUI;      // 상호작용 UI
     public GameObject shopUI;       // 상점 상호작용 UI
@@ -40,6 +42,8 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text mouseSensitiveValue;
     public bool isShopState;
     public bool isPauseState;
+
+
 
     // 코인 증가효과 계산용 변수
     private int coin;
@@ -136,6 +140,14 @@ public class PlayerUIManager : MonoBehaviour
     public void SetWeight(float value)
     {
         weightText.text = string.Format("{0}", value);
+    }
+    public void SetShopDistance(float value)
+    {
+        shopDistance.text = string.Format("{0}M", value);
+    }
+    public void SetShopRotation(float value)
+    {
+        shopRotation.value = value;
     }
 
     // 포즈

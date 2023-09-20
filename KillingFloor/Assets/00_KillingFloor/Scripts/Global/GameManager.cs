@@ -27,11 +27,12 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     private static GameManager m_instance; // 싱글톤이 할당될 static 변수
 
     public GameObject playerPrefab; // 생성할 플레이어 캐릭터 프리팹
-    public Vector3 spawnPosition;
+    public Vector3 spawnPosition;   // 플레이어 스폰 포지션
     public bool isGameover { get; private set; } // 게임 오버 상태
     public bool inputEnable = true;
-    public bool inputLock;
+    public bool inputLock;  // 입력을 받을 수 있는 상태
 
+    public Transform shopPosition; // 매 웨이브 업데이트되는 상점의 트랜스폼
     // 지환 추가
 
     [Header("Game Setting")]
@@ -50,6 +51,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public bool isCheck = true;         // 좀비 웨이브가 시작 확인
     public bool isZedTimeCheck = false;
     // Junoh 추가
+
+
 
     private void Awake()
     {
