@@ -101,8 +101,10 @@ public class NormalNavigation : MonoBehaviour
         else
         {
             isContact = false;
-
-            nav.SetDestination(targets[minDistanceTarget].transform.position);
+            if (targets[minDistanceTarget].transform.position != null)
+            {
+                nav.SetDestination(targets[minDistanceTarget].transform.position);
+            }
         }
 
         isCoroutine = false;
