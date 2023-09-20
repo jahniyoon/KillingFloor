@@ -8,7 +8,16 @@ using UnityEngine.UI;
 
 public class BossController : MonoBehaviour
 {
+    public AudioClip intro;
+    public AudioClip walk;
+    public AudioClip jump;
+    public AudioClip attack1Audio;
+    public AudioClip attack2Audio;
+    public AudioClip shoutAudio;
+    public AudioClip fireBreathsAudio;
     public float bossHp = 3500f;//보스 hp;
+
+    private AudioSource audioSource;
     private GameObject[] targetPlayer;
     private int randPlayerNum;//타겟플레이어
     private Animator animator;
@@ -33,8 +42,11 @@ public class BossController : MonoBehaviour
     private GameObject meteor;
     private GameObject bossintro;
     private bool changeBool = false;
+    private bool audioChk = false;
+
     private void Awake()
     {
+       
         meteorFattern = new float[] { 2000, 1000, 0, -10, -10, -10 };
         meteors = new GameObject[4];
         meteor = GameObject.Find("Meteor");
@@ -46,11 +58,12 @@ public class BossController : MonoBehaviour
             meteors[i] = meteor.transform.GetChild(i).gameObject;
             meteors[i].SetActive(false);
         }
+
     }
-    // Start is called before the first frame update
+
     void Start()
     {
-
+        audioSource = GetComponent<AudioSource>();
         agent = GetComponent<NavMeshAgent>();
         fireBreathHoles = new GameObject[3];
         fireBreathHoleParticles = new ParticleSystem[3];
@@ -100,11 +113,17 @@ public class BossController : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (bossintro.activeSelf)
         {
+            if (!audioChk)
+            {
+                StartCoroutine(TimeAudio(intro, 1));
+                audioChk = true;
+            }
+           
+
             Invoke("bossIntroTime", 4f);
         }
         if (bossHp <= 0)
@@ -165,8 +184,9 @@ public class BossController : MonoBehaviour
                 switch (randomFattern)//보스 공격패턴
                 {
                     case 0:
-
+                        StartCoroutine(TimeAudio(intro, 1));
                         animator.SetTrigger("Attack1");//찍기
+                        audioSource.PlayOneShot(attack1Audio);
                         currentTime = 0;
 
                         setTime = 3.7f;
@@ -175,6 +195,7 @@ public class BossController : MonoBehaviour
                     case 1:
 
                         animator.SetTrigger("Attack2");//가르기
+                        audioSource.PlayOneShot(attack2Audio);
                         currentTime = 0;
 
                         setTime = 3.7f;
@@ -182,6 +203,7 @@ public class BossController : MonoBehaviour
                     case 2:
 
                         animator.SetTrigger("Attack3");//브레스
+                        audioSource.PlayOneShot(fireBreathsAudio);
                         for (int i = 0; i <= 2; i++)
                         {
                             fireBreaths[i].SetActive(true);
@@ -214,6 +236,7 @@ public class BossController : MonoBehaviour
                         setTime = 3.6f;
                         break;
                     case 4://점프공격
+                        audioSource.PlayOneShot(jump);
                         animator.SetTrigger("Jump");
                         Invoke("JumpImpt", 1.1f);
                         currentTime = 0;
@@ -221,6 +244,7 @@ public class BossController : MonoBehaviour
                         break;
                     case 5://긴브레스
                         animator.SetTrigger("Breath");
+                        audioSource.PlayOneShot(fireBreathsAudio);
                         Invoke("fireBreathImpt", 1f);
                         currentTime = 0;
 
@@ -262,14 +286,20 @@ public class BossController : MonoBehaviour
             }//보스 공격패턴End
             else//원거리 애니메이션
             {
-
+                
                 AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("idle"))// 속도 변화
                 {
-                    agent.isStopped = false;
-                    agent.updatePosition = true;
-                    agent.updateRotation = true;
-                    BossMove();
+                    if(!audioSource.isPlaying)
+                    {
+                        audioSource.PlayOneShot(walk);
+                        agent.isStopped = false;
+                        agent.updatePosition = true;
+                        agent.updateRotation = true;
+                        BossMove();
+
+                    }
+                
                 }
                 animator.SetFloat("Speed", agent.speed);
 
@@ -311,6 +341,7 @@ public class BossController : MonoBehaviour
     private IEnumerator StopParticle(ParticleSystem particle, float num)
     {
         yield return new WaitForSeconds(num);
+        audioSource.Stop();
         particle.Stop();
 
     }
@@ -345,7 +376,9 @@ public class BossController : MonoBehaviour
     //보스 인트로
     private void bossIntroTime()
     {
+        audioChk = false;
         bossintro.SetActive(false);
+
     }
     public void bossHit(float dam)
     {
@@ -377,5 +410,11 @@ public class BossController : MonoBehaviour
         int targetNumber = Random.Range(0, playerNumber.Count);
         randPlayerNum = playerNumber[targetNumber];
         changeBool = false;
+    }
+
+    private IEnumerator TimeAudio(AudioClip audio ,float time)
+    {
+        yield return new WaitForSeconds(time);
+        audioSource.PlayOneShot(audio);
     }
 }
