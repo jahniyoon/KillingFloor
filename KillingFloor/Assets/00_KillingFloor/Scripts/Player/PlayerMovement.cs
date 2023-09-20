@@ -13,8 +13,8 @@ using DG.Tweening;
 
 public class PlayerMovement : MonoBehaviourPun
 {
-    private PlayerInputs input; 
-    private CharacterController controller; 
+    private PlayerInputs input;
+    private CharacterController controller;
     public Animator tpsAnimator;    // 플레이어 TPS 모델 애니메이터
     public Animator fpsAnimator;    // 플레이어 FPS 모델 애니메이터
 
@@ -102,12 +102,12 @@ public class PlayerMovement : MonoBehaviourPun
     {
         // 입력 가능여부 확인
         if (!photonView.IsMine) { return; } // 로컬 플레이어가 아닌 경우 입력을 받지 않는다.
-            MouseSensitiveUpdate();
-            GroundedCheck();    // 바닥 체크
-            JumpAndGravity();   // 점프와 중력 관련 메서드
-            Move();             // 이동 관련 메서드
-            ActiveAnimation();  // 애니메이션 적용
-            ShopUIUpdate();     // 이동에 따라 상점 UI 업데이트
+        MouseSensitiveUpdate();
+        GroundedCheck();    // 바닥 체크
+        JumpAndGravity();   // 점프와 중력 관련 메서드
+        Move();             // 이동 관련 메서드
+        ActiveAnimation();  // 애니메이션 적용
+        ShopUIUpdate();     // 이동에 따라 상점 UI 업데이트
 
         // 입력 가능 여부 확인
         if (GameManager.instance.inputLock)
@@ -180,7 +180,7 @@ public class PlayerMovement : MonoBehaviourPun
             }
 
             else
-            tpsAnimator.SetBool("isAir", true);
+                tpsAnimator.SetBool("isAir", true);
 
             // 바닥이 아니면 점프를 못하게 처리
             input.jump = false;
@@ -267,7 +267,7 @@ public class PlayerMovement : MonoBehaviourPun
             // 이동
             inputDirection = transform.right * input.move.x + transform.forward * input.move.y;
         }
-   
+
 
         // 플레이어 위치 이동
         controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
@@ -353,7 +353,7 @@ public class PlayerMovement : MonoBehaviourPun
                 fpsAnimator.SetBool("isGrounded", isGrounded);
             }
         }
-            tpsAnimator.SetBool("isJump", input.jump);
+        tpsAnimator.SetBool("isJump", input.jump);
 
         if (isGrounded)
         {
@@ -369,7 +369,10 @@ public class PlayerMovement : MonoBehaviourPun
     // 상점 UI 업데이트
     public void ShopUIUpdate()
     {
-        float shopDistance = Mathf.RoundToInt(Vector3.Distance(controller.transform.position, GameManager.instance.shopPosition.position));
-        PlayerUIManager.instance.SetShopDistance(shopDistance);
+        if (GameManager.instance.isShop)
+        {
+            float shopDistance = Mathf.RoundToInt(Vector3.Distance(controller.transform.position, GameManager.instance.shopPosition.position));
+            PlayerUIManager.instance.SetShopDistance(shopDistance);
+        }
     }
 }

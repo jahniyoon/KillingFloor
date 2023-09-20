@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -61,33 +62,21 @@ public class NormalZombie : NormalZombieData
     private void OnEnable()
     {
         ZombieSetting();
-        enabled = false;
-        startTime = 0.0f;
     }
     private void Start()
     {
         ZombieSetting();
-        enabled = false;
-        startTime = 0.0f;
     }
 
     private void Update()
     {
-        startTime += Time.deltaTime;
-        {
-            if (startTime < 1.0f)
-            {
-                enabled = true;
-            }
-        }
-
         if (isDeath == false)
         {
             if (health <= 0)
             {
                 Death();
             }
-            if (health <= health / 2 && isHit == false)
+            if (health == health / 2 && isHit == false)
             {
                 isHit = true;
 
@@ -108,6 +97,8 @@ public class NormalZombie : NormalZombieData
             }
         }
     }
+
+
 
     private void ZombieSetting()
     {
@@ -445,7 +436,7 @@ public class NormalZombie : NormalZombieData
     {
         int num = Random.Range(0, 100);
 
-        if (0 <= num && num < 50)
+        if (0 <= num && num < 5)
         {
             GameManager.instance.isZedTime = true;
         }
@@ -459,7 +450,6 @@ public class NormalZombie : NormalZombieData
 
         yield return new WaitForSeconds(3);
 
-        enabled = false;
         gameObject.SetActive(false);
     }
 

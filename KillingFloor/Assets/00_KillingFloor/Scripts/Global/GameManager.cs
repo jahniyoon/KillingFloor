@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public bool isCheck = false;        // 좀비 웨이브가 시작 확인
     public bool isZedTimeCheck = false;
     public List<Transform> shops = new List<Transform>();
+    public bool isShop = false;
     // Junoh 추가
 
     private void Awake()
@@ -104,6 +105,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     // 키보드 입력을 감지하고 룸을 나가게 함
     private void Update()
     {
+        shopPosition = shops[wave - 1];
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             Cursor.visible = true;
@@ -241,7 +243,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private IEnumerator ChangeWave()
     {
-        shopPosition.position = shops[wave - 1].position;
+        isShop = true;
 
         PlayerUIManager.instance.SetNotice("Wave Clear");
         PlayerUIManager.instance.SetNoticeLogo("Go to Shop");
@@ -254,7 +256,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         StartCoroutine(noticeController.CoroutineManager(true));
 
-        int timeElapsed = 10;
+        int timeElapsed = 70;
 
 
         while (0 < timeElapsed)
@@ -266,6 +268,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             yield return new WaitForSeconds(1);
         }
 
+        isShop = false;
         SetWave(1);
         isCheck = true;
         StartCoroutine(StartWave());
