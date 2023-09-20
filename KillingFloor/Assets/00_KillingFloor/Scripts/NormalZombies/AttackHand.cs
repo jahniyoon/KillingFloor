@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -22,6 +23,8 @@ public class AttackHand : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!PhotonNetwork.IsMasterClient)
+        { return; }
         if (other.CompareTag("Player"))
         {
             other.gameObject.GetComponent<PlayerHealth>().OnDamage(parentObjectAni.gameObject.GetComponent<NormalZombie>().damage, Vector3.zero, Vector3.zero);

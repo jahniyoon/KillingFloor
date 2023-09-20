@@ -59,18 +59,21 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             Destroy(gameObject);
         }
         // 생성할 랜덤 위치 지정
-        spawnPosition = new Vector3(0f, 1f, 0f);
+        //spawnPosition = new Vector3(0f, 1f, 0f);
 
         if (SceneManager.GetActiveScene().name == "Main")
         {
             Debug.Log("메인씬 입장");
-            spawnPosition = new Vector3(-23.7f, -5.9f, 22.5f);
+            //spawnPosition = new Vector3(-23.7f, -5.9f, 22.5f);
 
         }
 
         // 네트워크 상의 모든 클라이언트들에서 생성 실행
         // 단, 해당 게임 오브젝트의 주도권은, 생성 메서드를 직접 실행한 클라이언트에게 있음
-        PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
+        //PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
+        GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(0.0f,0.0f,0.0f), Quaternion.identity);
+        newPlayer.transform.SetParent(GameObject.Find("Players").transform);
+        Debug.Log(newPlayer.transform.position);
     }
     //private void Awake()
     //{

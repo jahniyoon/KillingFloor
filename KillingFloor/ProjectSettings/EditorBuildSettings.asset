@@ -20,7 +20,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/00_KillingFloor/Scenes/PlayerTestScene.unity
     guid: a03856037cb863441bfff0ddf0ec6d96
-  - enabled: 0
+  - enabled: 1
     path: Assets/00_KillingFloor/Scenes/ZombieTestScene.unity
     guid: c9107cdb6d79c424894cf2ac2aa3cf6f
   - enabled: 1
