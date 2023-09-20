@@ -369,9 +369,10 @@ public class PlayerMovement : MonoBehaviourPun
     // 상점 UI 업데이트
     public void ShopUIUpdate()
     {
-<<<<<<< HEAD
-        // 상점과의 거리 계산하기
-        float shopDistance = Mathf.FloorToInt(Vector3.Distance(controller.transform.position, GameManager.instance.shopPosition.position));
+        if (GameManager.instance.isShop)
+        {
+            // 상점과의 거리 계산하기
+            float shopDistance = Mathf.FloorToInt(Vector3.Distance(controller.transform.position, GameManager.instance.shopPosition.position));
         PlayerUIManager.instance.SetShopDistance(shopDistance); // 상점 거리 업데이트
         // 플레이어의 현재방향에서 상점까지의 벡터간 각도 계산하기
         Vector3 playerForward = controller.transform.rotation * Vector3.forward;
@@ -381,12 +382,7 @@ public class PlayerMovement : MonoBehaviourPun
         { PlayerUIManager.instance.SetShopRotation(shopAngle, true); }
         else
         PlayerUIManager.instance.SetShopRotation(shopAngle, false);
-=======
-        if (GameManager.instance.isShop)
-        {
-            float shopDistance = Mathf.RoundToInt(Vector3.Distance(controller.transform.position, GameManager.instance.shopPosition.position));
-            PlayerUIManager.instance.SetShopDistance(shopDistance);
+ 
         }
->>>>>>> origin/feature/junoh
     }
 }
