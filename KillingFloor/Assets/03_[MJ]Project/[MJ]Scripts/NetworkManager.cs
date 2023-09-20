@@ -10,6 +10,8 @@ using UnityEngine.UI;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
+    public static NetworkManager instance;
+
     public GameObject Lang_Panel, Room_Panel, UserRoom_Panel, Lobby_Panel, Login_Panel, Store_Panel;
 
     [Header("Login")]
@@ -32,8 +34,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     bool isLoaded;
 
+    public int coins = default;
+    public int stars = default;
+
     void Awake()
     {
+        instance = this;
+
         // 포톤 네트워크 속도 최적화 설정
         PhotonNetwork.SendRate = 60;
         PhotonNetwork.SerializationRate = 30;
@@ -242,9 +249,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 }
             },
             (error) => { });
+
         }
     }
 
+    #region 유저 데이터 설정
     // 유저 데이터 설정하는 메서드
     void SetData(string curData)
     {
@@ -267,16 +276,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         UserRoomDataText.text = "고유ID" + curID + "\n" + result.Data["HomeLevel"].Value,
         (error) => Debug.Log("데이터 불러오기 실패"));
     }
+    #endregion
 
+    #region 유저 Currency
     // 유저 Currency 가져오는 메서드
     public void GetVirtualCurrencies()
     {
         PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), OnGetUserInventorySuccess, OnError);
     }
+    // 아이템 구매 성공시 메서드
     void OnGetUserInventorySuccess(GetUserInventoryResult result)
     {
-        int coins = result.VirtualCurrency["CN"];
-        int stars = result.VirtualCurrency["ST"];
+        coins = result.VirtualCurrency["CN"];
+        stars = result.VirtualCurrency["ST"];
 
         CoinsValueText.text = "Coins: " + coins.ToString();
         StarsValueText.text = "Stars: " + stars.ToString();
@@ -284,10 +296,26 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log(result);
         Debug.Log(CoinsValueText.text);
     }
+    // 코인 추가 메서드
+    public void GrantVirtualCurrency()
+    {
+        var request = new AddUserVirtualCurrencyRequest { VirtualCurrency = "CN", Amount = 50 };
+        PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
+    }
+    void OnGrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
+    {
+        Debug.Log("Add 50 Coins Granted !");
+
+        coins += 50;
+        CoinsValueText.text = "Coins: " + coins.ToString();
+        StarsValueText.text = "Stars: " + stars.ToString();
+    }
     void OnError(PlayFabError error)
     {
         Debug.Log("Error: " + error.ErrorMessage);
     }
+    #endregion
+
     #endregion
 
     #region Lang_Panel
