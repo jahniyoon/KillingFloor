@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public bool inputLock;  // 입력을 받을 수 있는 상태
 
     public Transform shopPosition; // 매 웨이브 업데이트되는 상점의 트랜스폼
+
     // 지환 추가
 
     [Header("Game Setting")]
@@ -48,11 +49,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public int currentZombieCount = 0;  // 현재 좀비 수
     public bool isZedTime = false;      // 제드 타임
     public bool isSpawnZombie = false;  // 좀비가 소환 됬는지 확인
-    public bool isCheck = true;         // 좀비 웨이브가 시작 확인
+    public bool isCheck = false;        // 좀비 웨이브가 시작 확인
     public bool isZedTimeCheck = false;
+    public List<Transform> shops = new List<Transform>();
+    public bool isShop = false;
     // Junoh 추가
-
-
 
     private void Awake()
     {
@@ -75,9 +76,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 네트워크 상의 모든 클라이언트들에서 생성 실행
         // 단, 해당 게임 오브젝트의 주도권은, 생성 메서드를 직접 실행한 클라이언트에게 있음
         //PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
-        GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(0.0f,0.0f,0.0f), Quaternion.identity);
+        GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(135.0f, -6.0f, 200.0f), Quaternion.identity);
         newPlayer.transform.SetParent(GameObject.Find("Players").transform);
-        Debug.Log(newPlayer.transform.position);
     }
     //private void Awake()
     //{
@@ -96,15 +96,16 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     // Start is called before the first frame update
     void Start()
     {
-      
+
         // ToDO : 테스트씬으로 넘어오면 생성되도록 수정하기
-     
+
         StartCoroutine(StartWave());
     }
 
     // 키보드 입력을 감지하고 룸을 나가게 함
     private void Update()
     {
+        shopPosition = shops[wave - 1];
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             Cursor.visible = true;
@@ -136,7 +137,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
             isZedTimeCheck = true;
         }
-        Debug.Log("스타트");
         timeElapsed = 0.0f;
 
         while (timeElapsed < 6.0 * 0.2f)
@@ -145,7 +145,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
             yield return null;
         }
-        Debug.Log("중간");
 
         timeElapsed = 0.0f;
 
@@ -159,7 +158,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             volume.weight = Mathf.Lerp(1.0f, 0.0f, time);
 
             yield return null;
-        Debug.Log("마지막");
         }
 
         isZedTimeCheck = false;
@@ -193,9 +191,9 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     }
 
-    
 
-   
+
+
 
     // Junoh 추가
     public void PlusCount(int _num)
@@ -221,6 +219,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         PlayerUIManager.instance.zombieCountText.gameObject.SetActive(true);
         PlayerUIManager.instance.timerCountText.gameObject.SetActive(false);
 
+        isCheck = true;
+
         while (true)
         {
             if (currentZombieCount > 0) { break; }
@@ -243,6 +243,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private IEnumerator ChangeWave()
     {
+        isShop = true;
+
         PlayerUIManager.instance.SetNotice("Wave Clear");
         PlayerUIManager.instance.SetNoticeLogo("Go to Shop");
 
@@ -254,7 +256,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         StartCoroutine(noticeController.CoroutineManager(true));
 
-        int timeElapsed = 10;
+        int timeElapsed = 70;
 
 
         while (0 < timeElapsed)
@@ -266,6 +268,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             yield return new WaitForSeconds(1);
         }
 
+        isShop = false;
         SetWave(1);
         isCheck = true;
         StartCoroutine(StartWave());

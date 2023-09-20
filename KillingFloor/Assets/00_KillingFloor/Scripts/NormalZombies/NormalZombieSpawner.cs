@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -73,18 +74,19 @@ public class NormalZombieSpawner : MonoBehaviour
 
     private void Count()
     {
-        zombieCount = GameManager.instance.wave * 1 +
-                    GameManager.instance.player * 1 +
-                    GameManager.instance.difficulty * 1;
+        zombieCount = GameManager.instance.wave * 20 +
+                    GameManager.instance.player * 10 +
+                    GameManager.instance.difficulty * 10;
     }
 
     private void CreateZombie()
     {
-        GameObject newObject = Instantiate(zombiePrefab[randZombieNum], zombieSaveList[randZombieNum]);
+        GameObject newObject = PhotonNetwork.Instantiate(zombiePrefab[randZombieNum].name, spawnPoint[pointCount].transform.position, Quaternion.identity);
+        newObject.transform.SetParent(zombieSaveList[randZombieNum]);
 
-        newObject.transform.position = spawnPoint[pointCount].transform.position;
+        //GameObject newObject = Instantiate(zombiePrefab[randZombieNum], zombieSaveList[randZombieNum]);
 
-        Debug.Log(newObject.transform.position);
+        //newObject.transform.position = spawnPoint[pointCount].transform.position;
     }
 
     private void CreateZombieSave()
@@ -99,8 +101,6 @@ public class NormalZombieSpawner : MonoBehaviour
 
     public IEnumerator SpawnZombie(int _zombieCount, int _roundPointCount)
     {
-        yield return new WaitForSeconds(5.0f);
-
         for (int i = 0; i < _roundPointCount; i++)
         {
             for (int j = 0; j < _zombieCount / _roundPointCount * 0.8f; j++)
@@ -134,7 +134,7 @@ public class NormalZombieSpawner : MonoBehaviour
                         else
                         {
                             zombieSaveList[randZombieNum].GetChild(x).gameObject.SetActive(true);
-
+                            zombieSaveList[randZombieNum].GetChild(x).position = spawnPoint[pointCount].transform.position;
                             GameManager.instance.PlusCount(1);
 
                             break;
@@ -175,6 +175,7 @@ public class NormalZombieSpawner : MonoBehaviour
                         else
                         {
                             zombieSaveList[randZombieNum].GetChild(x).gameObject.SetActive(true);
+                            zombieSaveList[randZombieNum].GetChild(x).position = spawnPoint[pointCount].transform.position;
 
                             GameManager.instance.PlusCount(1);
 

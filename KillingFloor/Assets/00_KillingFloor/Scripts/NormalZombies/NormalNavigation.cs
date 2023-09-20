@@ -54,6 +54,7 @@ public class NormalNavigation : MonoBehaviour
         {
             if (isCoroutine == false)
             {
+                nav.enabled = true;
                 StartCoroutine(Target());
             }
         }
@@ -101,7 +102,12 @@ public class NormalNavigation : MonoBehaviour
         else
         {
             isContact = false;
-            if (targets[minDistanceTarget].transform.position != null)
+
+            if (targets[minDistanceTarget].transform.position == null)
+            {
+                nav.enabled = false;
+            }
+            else if (targets[minDistanceTarget].transform.position != null)
             {
                 nav.SetDestination(targets[minDistanceTarget].transform.position);
             }

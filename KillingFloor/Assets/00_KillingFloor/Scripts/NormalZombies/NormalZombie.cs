@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -23,6 +24,7 @@ public class NormalZombie : NormalZombieData
     private float zedTime;
 
     // 현재 애니메이션 좌표
+    private float startTime;
     private float thisBlend;
     private float coolTime;
     private float skillTime;
@@ -95,6 +97,8 @@ public class NormalZombie : NormalZombieData
             }
         }
     }
+
+
 
     private void ZombieSetting()
     {
@@ -432,7 +436,7 @@ public class NormalZombie : NormalZombieData
     {
         int num = Random.Range(0, 100);
 
-        if (0 <= num && num < 99)
+        if (0 <= num && num < 5)
         {
             GameManager.instance.isZedTime = true;
         }
