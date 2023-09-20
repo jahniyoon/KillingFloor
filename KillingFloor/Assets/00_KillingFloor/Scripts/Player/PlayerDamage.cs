@@ -42,12 +42,10 @@ public class PlayerDamage : MonoBehaviourPun
     {
         // 마스터가 계산한 값을 모두 받아와서 업데이트
         destroyCount = _destroyCount;
-        Debug.Log("카운트는?"+destroyCount);
 
         if (5 < destroyCount)
         {
             Debug.Log("게임오브젝트 제거");
-            PhotonNetwork.Destroy(this.gameObject);
         }
     }
     // ================== 데미지를 입는 과정 정리 ================== //

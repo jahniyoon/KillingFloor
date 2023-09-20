@@ -49,8 +49,10 @@ public class PlayerHealth : LivingEntity
         // 갱신된 체력 업데이트
         PlayerUIManager.instance.SetHP(health);
         PlayerUIManager.instance.SetArmor(armor);
+        PlayerUIManager.instance.SetBloodScreen();
         playerInfo.SetHealth(health);
         playerInfo.SetArmor(armor);
+        
 
     }
 

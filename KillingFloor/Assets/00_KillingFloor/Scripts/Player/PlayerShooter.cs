@@ -43,9 +43,9 @@ public class PlayerShooter : MonoBehaviourPun
     public float reloadRate;    // 재장전 속도
     public float fireRate;      // 사격 속도
     public float lastFireTime;  // 마지막 사격시간
-    public int grenade;         // 수류탄 개수
-    public bool isGrenade;      // 수류탄 상태 체크 (1인칭 애니메이션)
     public float healCoolDown = 15f;  // 힐 쿨다운
+
+    [Header("Effects")]
 
     public ParticleSystem muzzleFlashEffect; // 총구 화염효과
     public ParticleSystem shellEjectEffect;  // 탄피 배출 효과
@@ -57,6 +57,13 @@ public class PlayerShooter : MonoBehaviourPun
     public LineRenderer bulletLineRenderer;  // 총알 궤적을 그리기 위한 렌더러
     public ParticleSystem fireParticle;
     public bool isParticleTrigger;          // 파티클 생성여부 트리거
+
+    [Header("Grenade")]
+    public int grenade;         // 수류탄 개수
+    public bool isGrenade;      // 수류탄 상태 체크 (1인칭 애니메이션)
+    public GameObject grenadePrefab;  // 수류탄 프리팹 (Resources 폴더)
+    public Transform throwPosition;   // 던지는 포지션
+    public float grenadePower;        // 수류탄 던지는 힘
 
 
     [Header("TPS Weapon")]
@@ -169,7 +176,8 @@ public class PlayerShooter : MonoBehaviourPun
     // 주무기 보조무기 사격 입력
     void Fire()
     {
-        if (input.shoot && weaponSlot < 3)
+        if (input.shoot && weaponSlot < 3 && weaponClass == WeaponClass.Commando ||
+            input.shoot && weaponSlot == 1 && weaponClass == WeaponClass.Demolitionist)
         {
             // 현재 상태가 발사 가능한 상태
             // && 마지막 총 발사 시점에서 timeBetFire 이상의 시간이 지남
@@ -201,7 +209,10 @@ public class PlayerShooter : MonoBehaviourPun
                 input.shoot = false;
             }
         }
-
+        if (input.shoot && weaponSlot < 3 && weaponClass == WeaponClass.Demolitionist)
+        {
+            // 데몰리스트 발사 입력 후 할것들
+        }
     }
 
     void Shot()
@@ -331,11 +342,12 @@ public class PlayerShooter : MonoBehaviourPun
         // 밀리 무기상태이면 강공격 실행
         if (weaponSlot == 3 && state == State.Ready && input.aim)
         {
-            input.aim = false;
+            state = State.Reloading;
             handAnimator.SetTrigger("isAim");
             gunAudioPlayer.clip = equipedWeapon.reloadAudio;
             gunAudioPlayer.PlayOneShot(gunAudioPlayer.clip); // 근접공격 소리 재생
-            StartCoroutine(WeaponDelay(reloadRate * 2));
+            StartCoroutine(WeaponDelay(reloadRate * 1.8f));
+            input.aim = false;
         }
     }
     // 사격 딜레이를 주기위한 코루틴
@@ -625,19 +637,15 @@ public class PlayerShooter : MonoBehaviourPun
             switch (newSlot)
             {
                 case 1:
-                    Debug.Log("1번으로 무기스왑");
                     input.weaponSlot1 = true;
                     break;
                 case 2:
-                    Debug.Log("2번으로 무기스왑");
                     input.weaponSlot2 = true;
                     break;
                 case 3:
-                    Debug.Log("3번으로 무기스왑");
                     input.weaponSlot3 = true;
                     break;
                 case 4:
-                    Debug.Log("4번으로 무기스왑");
                     input.weaponSlot4 = true;
                     break;
             }
@@ -646,13 +654,44 @@ public class PlayerShooter : MonoBehaviourPun
     }
     IEnumerator Grenade()
     {
-        yield return new WaitForSeconds(2.1f);
-        grenade -= 1;
-        PlayerUIManager.instance.SetGrenade(grenade);
+        yield return new WaitForSeconds(1.3f);
+
+        GameObject newGrenade = PhotonNetwork.Instantiate(grenadePrefab.name, throwPosition.transform.position, Quaternion.identity);
+        newGrenade.GetComponent<Rigidbody>().AddForce(calculateForce(), ForceMode.Impulse);
+
+
+        yield return new WaitForSeconds(1f);
+
+        grenade -= 1;   // 수류탄 개수 -1
+        PlayerUIManager.instance.SetGrenade(grenade); // 수류탄 개수 추가
         isGrenade = false;
         state = State.Ready;
-    }
 
+        // 수류탄 던지기 이전 슬롯으로 돌려주기
+        int slotIs = weaponSlot;
+        weaponSlot = 0;
+
+        switch (slotIs)
+        {
+            case 1:
+                input.weaponSlot1 = true;
+                break;
+            case 2:
+                input.weaponSlot2 = true;
+                break;
+            case 3:
+                input.weaponSlot3 = true;
+                break;
+            case 4:
+                input.weaponSlot4 = true;
+                break;
+        }
+    }
+    // 던지는 힘 계산
+    public Vector3 calculateForce()
+    {
+        return cameraSet.followCam.transform.forward * grenadePower;
+    }
     public void SetWeapon(Weapon _tpsWeapon, Transform _fpsWeapon)
     {
 

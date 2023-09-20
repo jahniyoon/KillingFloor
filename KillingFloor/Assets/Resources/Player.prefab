@@ -32,6 +32,7 @@ Transform:
   - {fileID: 4908835935755406134}
   - {fileID: 3189699837523972601}
   - {fileID: 5720838668444562529}
+  - {fileID: 2207666476851839549}
   m_Father: {fileID: 7139762257810773996}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -838,6 +839,37 @@ Transform:
   - {fileID: 5086708633262997652}
   m_Father: {fileID: 1980154752016271394}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1892483206995054460
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2207666476851839549}
+  m_Layer: 2
+  m_Name: GrenadeThrowPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2207666476851839549
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1892483206995054460}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.178, y: 0.012, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3852224017406423098}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1895500412320706872
 GameObject:
@@ -2687,8 +2719,6 @@ MonoBehaviour:
   reloadRate: 0
   fireRate: 0
   lastFireTime: 0
-  grenade: 5
-  isGrenade: 0
   healCoolDown: 15
   muzzleFlashEffect: {fileID: 0}
   shellEjectEffect: {fileID: 0}
@@ -2699,6 +2729,12 @@ MonoBehaviour:
   bulletLineRenderer: {fileID: 0}
   fireParticle: {fileID: 0}
   isParticleTrigger: 0
+  grenade: 5
+  isGrenade: 0
+  grenadePrefab: {fileID: 6649126960150165074, guid: 07b0046f16dcc5b4db7cd4fc1c25ed8c,
+    type: 3}
+  throwPosition: {fileID: 2207666476851839549}
+  grenadePower: 15
   fpsPosition: {fileID: 2252685923766802721}
   fpsPistol: {fileID: 0}
   fpsRifle: {fileID: 0}

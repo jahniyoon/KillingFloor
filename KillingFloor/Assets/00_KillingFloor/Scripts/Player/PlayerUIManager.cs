@@ -33,16 +33,21 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text coinText;       // 현재 재화
     public TMP_Text weightText;     // 현재 무게
     public TMP_Text shopDistance;   // 상점까지 거리
-    public Slider shopRotation;     // 상점 방향
+    public Slider shopUpRotation;     // 상점 방향
+    public Slider shopDownRotation;     // 상점 방향
     public Slider healSlider;       // 힐 슬라이더
     public GameObject equipUI;      // 상호작용 UI
     public GameObject shopUI;       // 상점 상호작용 UI
     public GameObject pauseUI;       // 포즈 UI
+    public Image bloodScreen;   // 피 데미지 스크린
+    public Image poisonScreen;  // 독 데미지 스크린
+    public float bloodScreenValue;
+    public float poisonScreenValue;
+
     public Slider mouseSensitive;
     public TMP_Text mouseSensitiveValue;
     public bool isShopState;
     public bool isPauseState;
-
 
 
     // 코인 증가효과 계산용 변수
@@ -67,6 +72,7 @@ public class PlayerUIManager : MonoBehaviour
         SetNoticeWave();
         SetZombieWave();
         Pause();
+        DamageScreenUpdate();
     }
 
     // 체력 텍스트 갱신
@@ -145,10 +151,35 @@ public class PlayerUIManager : MonoBehaviour
     {
         shopDistance.text = string.Format("{0}M", value);
     }
-    public void SetShopRotation(float value)
-    {
-        shopRotation.value = value;
+    public void SetShopRotation(float value, bool isUp)
+    {  
+        shopUpRotation.value = value;
+        shopDownRotation.value = value;
+
+        // 위 아래 감지 
+        shopUpRotation.gameObject.SetActive(isUp);
+        shopDownRotation.gameObject.SetActive(!isUp);
+
     }
+    public void DamageScreenUpdate()
+    {
+        if (0 < bloodScreenValue)
+        {
+            bloodScreenValue -= Mathf.CeilToInt(1 * Time.deltaTime);
+            Debug.Log(bloodScreenValue);
+
+            // 색상의 알파 값이 서서히 줄어들게 설정
+            float alpha = Mathf.Clamp01(bloodScreenValue / 100.0f); // 혹은 다른 최대값을 사용
+
+            bloodScreen.color = new Color(255, 255, 255, alpha);
+        }
+
+    }
+    public void SetBloodScreen()
+    {
+        bloodScreenValue += 200f;
+    }
+
 
     // 포즈
     public void Pause()

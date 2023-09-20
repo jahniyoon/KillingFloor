@@ -18,6 +18,8 @@ public class PlayerInfoUI : MonoBehaviour
     void Start()
     {
         playerNickname.text = string.Format(PhotonNetwork.LocalPlayer.NickName);
+        playerLevel.text = string.Format("Level");
+        
     }
 
     // Update is called once per frame
