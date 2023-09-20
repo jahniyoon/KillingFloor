@@ -10,7 +10,9 @@ using UnityEngine.UI;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-    public GameObject Lang_Panel, Room_Panel, UserRoom_Panel, Lobby_Panel, Login_Panel;
+    public static NetworkManager instance;
+
+    public GameObject Lang_Panel, Room_Panel, UserRoom_Panel, Lobby_Panel, Login_Panel, Store_Panel;
 
     [Header("Login")]
     public PlayerLeaderboardEntry MyPlayFabInfo;
@@ -26,10 +28,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public GameObject SetDataBtnObj;
     public Text UserRoomDataText, RoomNameInfoText, RoomNumInfoText;
 
+    [Header("Store")]
+    public Text CoinsValueText;
+    public Text StarsValueText;
+
     bool isLoaded;
+
+    public int coins = default;
+    public int stars = default;
 
     void Awake()
     {
+        instance = this;
+
         // 포톤 네트워크 속도 최적화 설정
         PhotonNetwork.SendRate = 60;
         PhotonNetwork.SerializationRate = 30;
@@ -50,10 +61,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
+            GetVirtualCurrencies();                 // 유저 Currency 가져옴
+
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
         },
             (error) => Debug.Log("로그인 실패"));
-
     }
 
     #region TestLogin
@@ -68,6 +80,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+
+            GetVirtualCurrencies();                 // 유저 Currency 가져옴
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -81,6 +95,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+
+            GetVirtualCurrencies();                 // 유저 Currency 가져옴
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -94,6 +110,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+
+            GetVirtualCurrencies();                 // 유저 Currency 가져옴
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -107,6 +125,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+
+            GetVirtualCurrencies();                 // 유저 Currency 가져옴
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -120,6 +140,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+
+            GetVirtualCurrencies();                 // 유저 Currency 가져옴
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -133,6 +155,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+
+            GetVirtualCurrencies();                 // 유저 Currency 가져옴
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -146,6 +170,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+
+            GetVirtualCurrencies();                 // 유저 Currency 가져옴
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -159,6 +185,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
+
+            GetVirtualCurrencies();                 // 유저 Currency 가져옴
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -221,9 +249,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 }
             },
             (error) => { });
+
         }
     }
 
+    #region 유저 데이터 설정
     // 유저 데이터 설정하는 메서드
     void SetData(string curData)
     {
@@ -246,6 +276,46 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         UserRoomDataText.text = "고유ID" + curID + "\n" + result.Data["HomeLevel"].Value,
         (error) => Debug.Log("데이터 불러오기 실패"));
     }
+    #endregion
+
+    #region 유저 Currency
+    // 유저 Currency 가져오는 메서드
+    public void GetVirtualCurrencies()
+    {
+        PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), OnGetUserInventorySuccess, OnError);
+    }
+    // 아이템 구매 성공시 메서드
+    void OnGetUserInventorySuccess(GetUserInventoryResult result)
+    {
+        coins = result.VirtualCurrency["CN"];
+        stars = result.VirtualCurrency["ST"];
+
+        CoinsValueText.text = "Coins: " + coins.ToString();
+        StarsValueText.text = "Stars: " + stars.ToString();
+
+        Debug.Log(result);
+        Debug.Log(CoinsValueText.text);
+    }
+    // 코인 추가 메서드
+    public void GrantVirtualCurrency()
+    {
+        var request = new AddUserVirtualCurrencyRequest { VirtualCurrency = "CN", Amount = 50 };
+        PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
+    }
+    void OnGrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
+    {
+        Debug.Log("Add 50 Coins Granted !");
+
+        coins += 50;
+        CoinsValueText.text = "Coins: " + coins.ToString();
+        StarsValueText.text = "Stars: " + stars.ToString();
+    }
+    void OnError(PlayFabError error)
+    {
+        Debug.Log("Error: " + error.ErrorMessage);
+    }
+    #endregion
+
     #endregion
 
     #region Lang_Panel
@@ -320,6 +390,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         UserRoom_Panel.SetActive(false);
         Lobby_Panel.SetActive(false);
         Login_Panel.SetActive(false);
+        Store_Panel.SetActive(false);
 
         curPanel.SetActive(true);
     }
@@ -343,6 +414,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         isLoaded = false;
         ShowPanel(Login_Panel);
+    }
+    #endregion
+
+    #region Store_Panel
+    public void StoreBtn()
+    {
+        Store_Panel.SetActive(true);
+    }
+    public void ExitStore_Panel()
+    {
+        Store_Panel.SetActive(false);
     }
     #endregion
 
