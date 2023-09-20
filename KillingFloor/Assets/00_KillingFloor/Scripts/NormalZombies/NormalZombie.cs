@@ -23,6 +23,7 @@ public class NormalZombie : NormalZombieData
     private float zedTime;
 
     // 현재 애니메이션 좌표
+    private float startTime;
     private float thisBlend;
     private float coolTime;
     private float skillTime;
@@ -60,21 +61,33 @@ public class NormalZombie : NormalZombieData
     private void OnEnable()
     {
         ZombieSetting();
+        enabled = false;
+        startTime = 0.0f;
     }
     private void Start()
     {
         ZombieSetting();
+        enabled = false;
+        startTime = 0.0f;
     }
 
     private void Update()
     {
+        startTime += Time.deltaTime;
+        {
+            if (startTime < 1.0f)
+            {
+                enabled = true;
+            }
+        }
+
         if (isDeath == false)
         {
             if (health <= 0)
             {
                 Death();
             }
-            if (health == health / 2 && isHit == false)
+            if (health <= health / 2 && isHit == false)
             {
                 isHit = true;
 
@@ -432,7 +445,7 @@ public class NormalZombie : NormalZombieData
     {
         int num = Random.Range(0, 100);
 
-        if (0 <= num && num < 99)
+        if (0 <= num && num < 50)
         {
             GameManager.instance.isZedTime = true;
         }
@@ -446,6 +459,7 @@ public class NormalZombie : NormalZombieData
 
         yield return new WaitForSeconds(3);
 
+        enabled = false;
         gameObject.SetActive(false);
     }
 

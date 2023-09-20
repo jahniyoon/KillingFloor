@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -80,11 +81,13 @@ public class NormalZombieSpawner : MonoBehaviour
 
     private void CreateZombie()
     {
+
+        //GameObject newObject = PhotonNetwork.Instantiate(zombiePrefab[randZombieNum].name, spawnPoint[pointCount].transform.position, Quaternion.identity);
+        //newObject.transform.SetParent(zombieSaveList[randZombieNum]);
+
         GameObject newObject = Instantiate(zombiePrefab[randZombieNum], zombieSaveList[randZombieNum]);
 
         newObject.transform.position = spawnPoint[pointCount].transform.position;
-
-        Debug.Log(newObject.transform.position);
     }
 
     private void CreateZombieSave()
@@ -99,8 +102,6 @@ public class NormalZombieSpawner : MonoBehaviour
 
     public IEnumerator SpawnZombie(int _zombieCount, int _roundPointCount)
     {
-        yield return new WaitForSeconds(5.0f);
-
         for (int i = 0; i < _roundPointCount; i++)
         {
             for (int j = 0; j < _zombieCount / _roundPointCount * 0.8f; j++)
