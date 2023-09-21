@@ -78,7 +78,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 단, 해당 게임 오브젝트의 주도권은, 생성 메서드를 직접 실행한 클라이언트에게 있음
         //PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
         GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
+<<<<<<< HEAD
 
+=======
+        newPlayer.transform.SetParent(GameObject.Find("Players").transform);
+>>>>>>> origin/feature/ssm
 
     }
 
@@ -111,8 +115,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         shopPosition = shops[wave - 1];
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            Debug.Log("서버 나가기 시도");
-
             LeaveServer();
         }
         if (isZedTime) { StartCoroutine(ZedTime()); Debug.Log("몇번 호출 하는가?"); }
@@ -178,12 +180,9 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     }
     public void LeaveServer()
     {
-        Debug.Log("Leave Server");
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         PhotonNetwork.LeaveRoom();
-        SceneManager.LoadScene("LoginScene");
-
     }
 
     // 룸을 나갈때 자동 실행되는 메서드
