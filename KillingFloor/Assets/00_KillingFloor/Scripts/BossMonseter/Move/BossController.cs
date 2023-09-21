@@ -1,4 +1,4 @@
-
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +6,7 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 
 
-public class BossController : MonoBehaviour
+public class BossController : MonoBehaviourPun
 {
     public AudioClip intro;
     public AudioClip walk;
@@ -46,7 +46,7 @@ public class BossController : MonoBehaviour
 
     private void Awake()
     {
-       
+
         meteorFattern = new float[] { 2000, 1000, 0, -10, -10, -10 };
         meteors = new GameObject[4];
         meteor = GameObject.Find("Meteor");
@@ -115,6 +115,7 @@ public class BossController : MonoBehaviour
 
     void Update()
     {
+        if (!photonView.IsMine) { return; }
         if (bossintro.activeSelf)
         {
             if (!audioChk)
@@ -122,7 +123,7 @@ public class BossController : MonoBehaviour
                 StartCoroutine(TimeAudio(intro, 1));
                 audioChk = true;
             }
-           
+
 
             Invoke("bossIntroTime", 4f);
         }
@@ -141,156 +142,24 @@ public class BossController : MonoBehaviour
         if (currentTime >= setTime)
         {
 
-            if(!changeBool)
-            {
-                Invoke("changeplayerlook", 50);
-                changeBool = true;
-            }
-          
+            
+            photonView.RPC("changeTime", RpcTarget.MasterClient);
             // 플레이어와 보스 사이의 거리를 계산합니다.
             float distance = Vector3.Distance(targetPlayer[randPlayerNum].transform.position, transform.position);
 
             if (distance < 6f)//근거리 애니메이션
             {
-                agent.isStopped = true;
-                agent.updatePosition = false;
-                agent.updateRotation = false;
-                agent.velocity = Vector3.zero;
-
-                randomFattern = Random.Range(0, 6);
-                if (randomFattern != saveFattern)// 공격패턴 중복체크, 중복패턴 변경
-                {
-                    saveFattern = randomFattern;
-                }
-                else if (randomFattern == saveFattern)
-                {
-                    if (randomFattern != 0)
-                    {
-                        randomFattern = 0;
-                        saveFattern = 0;
-                    }
-                    else
-                    {
-                        randomFattern = 1;
-                        saveFattern = 1;
-                    }
-                }// 공격패턴 중복체크, 중복패턴 변경 End
-
-                if (bossHp < meteorFattern[mereorCount])
-                {
-                    mereorCount++;
-                    randomFattern = 6;
-                }
-                switch (randomFattern)//보스 공격패턴
-                {
-                    case 0:
-                        StartCoroutine(TimeAudio(intro, 1));
-                        animator.SetTrigger("Attack1");//찍기
-                        audioSource.PlayOneShot(attack1Audio);
-                        currentTime = 0;
-
-                        setTime = 3.7f;
-
-                        break;
-                    case 1:
-
-                        animator.SetTrigger("Attack2");//가르기
-                        audioSource.PlayOneShot(attack2Audio);
-                        currentTime = 0;
-
-                        setTime = 3.7f;
-                        break;
-                    case 2:
-
-                        animator.SetTrigger("Attack3");//브레스
-                        audioSource.PlayOneShot(fireBreathsAudio);
-                        for (int i = 0; i <= 2; i++)
-                        {
-                            fireBreaths[i].SetActive(true);
-                            fireBreathsParticle[i].Play();
-                        }
-                        currentTime = 0;
-
-                        setTime = 5.75f;
-                        break;
-                    case 3:
-
-                        animator.SetTrigger("Shout");//짖기
-                        for (int i = 0; i <= 1; i++)
-                        {
-                            fireBreathHoles[i].SetActive(true);
-                            fireBreathHoleParticles[i].Play();
-                            midSphereEffects[i].SetActive(true);
-                            if (i == 1)
-                            {
-                                midSphereEffectParticles[i].Play();
-                                StartCoroutine(StopParticle(midSphereEffectParticles[i], 3.6f));//파티클 정지 코루틴
-                                StartCoroutine(FalseObj(midSphereEffects[0], 3.6f));//오브젝트 정지 코루틴
-                            }
-                            StartCoroutine(StopParticle(fireBreathHoleParticles[i], 3.6f));//파티클 정지 코루틴
+                photonView.RPC("BossAttackAni", RpcTarget.MasterClient, distance);
 
 
-                        }
-
-                        currentTime = 0;
-                        setTime = 3.6f;
-                        break;
-                    case 4://점프공격
-                        audioSource.PlayOneShot(jump);
-                        animator.SetTrigger("Jump");
-                        Invoke("JumpImpt", 1.1f);
-                        currentTime = 0;
-                        setTime = 3f;
-                        break;
-                    case 5://긴브레스
-                        animator.SetTrigger("Breath");
-                        audioSource.PlayOneShot(fireBreathsAudio);
-                        Invoke("fireBreathImpt", 1f);
-                        currentTime = 0;
-
-                        setTime = 5.8f;
-                        break;
-                    case 6://메테오
-                        animator.SetTrigger("Meteor");
-                        // 현재 오브젝트의 Transform 컴포넌트 가져오기
-                        Transform myTransform = transform;
-
-                        // 현재 오브젝트의 정면 방향 벡터 계산
-                        Vector3 forwardDirection = myTransform.forward;
-
-                        forwardDirection = new Vector3(forwardDirection.x, forwardDirection.y+1f, forwardDirection.z);
-                        // 배치할 거리
-                        float distanceToPlace = 4.0f;
-
-                        // 오브젝트의 위치 계산 (현재 오브젝트의 위치에서 정면 방향으로 일정 거리만큼 이동)
-                        Vector3 newPosition = myTransform.position + forwardDirection * distanceToPlace;
-
-
-
-                        meteor.transform.position = newPosition;
-                        meteor.SetActive(true);
-                        
-                             // 오브젝트의 위치를 새로 계산한 위치로 설정
-                          //   meteors[i].transform.position = newPosition;
-                             // 오브젝트 활성화
-                        meteors[0].SetActive(true);
-
-                         
-
-                        currentTime = 0;
-
-                        setTime = 11f;
-                        break;
-
-                }
             }//보스 공격패턴End
             else//원거리 애니메이션
             {
-                
+
                 AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("idle"))// 속도 변화
                 {
-                    if(!audioSource.isPlaying)
+                    if (!audioSource.isPlaying)
                     {
                         audioSource.PlayOneShot(walk);
                         agent.isStopped = false;
@@ -299,7 +168,7 @@ public class BossController : MonoBehaviour
                         BossMove();
 
                     }
-                
+
                 }
                 animator.SetFloat("Speed", agent.speed);
 
@@ -309,6 +178,153 @@ public class BossController : MonoBehaviour
 
         }
 
+    }
+
+    [PunRPC]
+    private void changeTime()
+    {
+
+        if (!changeBool)
+        {
+            Invoke("changeplayerlook", 30f);
+            changeBool = true;
+        }
+    }
+    [PunRPC]
+    private void BossAttackAni(float distance)
+    {
+
+        agent.isStopped = true;
+        agent.updatePosition = false;
+        agent.updateRotation = false;
+        agent.velocity = Vector3.zero;
+
+        randomFattern = Random.Range(0, 6);
+        if (randomFattern != saveFattern)// 공격패턴 중복체크, 중복패턴 변경
+        {
+            saveFattern = randomFattern;
+        }
+        else if (randomFattern == saveFattern)
+        {
+            if (randomFattern != 0)
+            {
+                randomFattern = 0;
+                saveFattern = 0;
+            }
+            else
+            {
+                randomFattern = 1;
+                saveFattern = 1;
+            }
+        }// 공격패턴 중복체크, 중복패턴 변경 End
+
+        if (bossHp < meteorFattern[mereorCount])
+        {
+            mereorCount++;
+            randomFattern = 6;
+        }
+        switch (randomFattern)//보스 공격패턴
+        {
+            case 0:
+                StartCoroutine(TimeAudio(intro, 1));
+                animator.SetTrigger("Attack1");//찍기
+                audioSource.PlayOneShot(attack1Audio);
+                currentTime = 0;
+
+                setTime = 3.7f;
+
+                break;
+            case 1:
+
+                animator.SetTrigger("Attack2");//가르기
+                audioSource.PlayOneShot(attack2Audio);
+                currentTime = 0;
+
+                setTime = 3.7f;
+                break;
+            case 2:
+
+                animator.SetTrigger("Attack3");//브레스
+                audioSource.PlayOneShot(fireBreathsAudio);
+                for (int i = 0; i <= 2; i++)
+                {
+                    fireBreaths[i].SetActive(true);
+                    fireBreathsParticle[i].Play();
+                }
+                currentTime = 0;
+
+                setTime = 5.75f;
+                break;
+            case 3:
+
+                animator.SetTrigger("Shout");//짖기
+                for (int i = 0; i <= 1; i++)
+                {
+                    fireBreathHoles[i].SetActive(true);
+                    fireBreathHoleParticles[i].Play();
+                    midSphereEffects[i].SetActive(true);
+                    if (i == 1)
+                    {
+                        midSphereEffectParticles[i].Play();
+                        StartCoroutine(StopParticle(midSphereEffectParticles[i], 3.6f));//파티클 정지 코루틴
+                        StartCoroutine(FalseObj(midSphereEffects[0], 3.6f));//오브젝트 정지 코루틴
+                    }
+                    StartCoroutine(StopParticle(fireBreathHoleParticles[i], 3.6f));//파티클 정지 코루틴
+
+
+                }
+
+                currentTime = 0;
+                setTime = 3.6f;
+                break;
+            case 4://점프공격
+                audioSource.PlayOneShot(jump);
+                animator.SetTrigger("Jump");
+                Invoke("JumpImpt", 1.1f);
+                currentTime = 0;
+                setTime = 3f;
+                break;
+            case 5://긴브레스
+                animator.SetTrigger("Breath");
+                audioSource.PlayOneShot(fireBreathsAudio);
+                Invoke("fireBreathImpt", 1f);
+                currentTime = 0;
+
+                setTime = 5.8f;
+                break;
+            case 6://메테오
+                animator.SetTrigger("Meteor");
+                // 현재 오브젝트의 Transform 컴포넌트 가져오기
+                Transform myTransform = transform;
+
+                // 현재 오브젝트의 정면 방향 벡터 계산
+                Vector3 forwardDirection = myTransform.forward;
+
+                forwardDirection = new Vector3(forwardDirection.x, forwardDirection.y + 1f, forwardDirection.z);
+                // 배치할 거리
+                float distanceToPlace = 4.0f;
+
+                // 오브젝트의 위치 계산 (현재 오브젝트의 위치에서 정면 방향으로 일정 거리만큼 이동)
+                Vector3 newPosition = myTransform.position + forwardDirection * distanceToPlace;
+
+
+
+                meteor.transform.position = newPosition;
+                meteor.SetActive(true);
+
+                // 오브젝트의 위치를 새로 계산한 위치로 설정
+                //   meteors[i].transform.position = newPosition;
+                // 오브젝트 활성화
+                meteors[0].SetActive(true);
+
+
+
+                currentTime = 0;
+
+                setTime = 11f;
+                break;
+
+        }
     }
     //대상을 바라보는 로직 (사용안함)
     private void LookRotate()
