@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -72,10 +73,10 @@ public class NormalZombie : NormalZombieData
     {
         if (isDeath == false)
         {
-            if (health <= 0)
-            {
-                Death();
-            }
+            //if (health <= 0)
+            //{
+            //    Death();
+            //}
             if (health == health / 2 && isHit == false)
             {
                 isHit = true;
@@ -423,7 +424,7 @@ public class NormalZombie : NormalZombieData
         }
     }
 
-    private void Death()
+    public void Death()
     {
         ani.SetTrigger("isDie");
 
@@ -477,6 +478,42 @@ public class NormalZombie : NormalZombieData
     {
         return base.ZombieNoise(health, damage, coin);
     }
+
+    // ================== 데미지를 입는 과정 정리 ================== //
+    // 1. 어디선가 데미지 메서드를 호출한다.
+    // 마스터에게 데미지 계산을 요청한다.
+    public void Hit(float _damage)
+    {
+        // 마스터에게 데미지 계산 요청
+        photonView.RPC("MasterDamage", RpcTarget.MasterClient, _damage);
+    }
+    // 2.마스터가 데미지 계산을 요청받고 계산을 먼저 해준다.
+    // 계산이 끝난 값을 모두에게 보내준다.
+    [PunRPC]
+    public void MasterDamage(float _destroyCount)
+    {
+        // 5번 데미지 요청 받으면 파괴도록하기위해 카운트 1 증가
+        //int newDestroyCount = _destroyCount + 1;
+
+        float newHealth = health - _destroyCount;
+
+        // 마스터가 계산한 값 전달
+        photonView.RPC("SyncDamage", RpcTarget.All, newHealth);
+
+    }
+    // 3. 모두는 (마스터를 포함) 전달받은 값을 업데이트를 한다.
+    [PunRPC]
+    public void SyncDamage(float _destroyCount)
+    {
+        // 마스터가 계산한 값을 모두 받아와서 업데이트
+        health = _destroyCount;
+
+        if (health <= 0)
+        {
+            Death();
+        }
+    }
+    // ================== 데미지를 입는 과정 정리 ================== //
 
     //Legacy:
     //private IEnumerator AnimationCoroutine(float startBlend, float endBlend, float duration, bool isBlend, string checkName)

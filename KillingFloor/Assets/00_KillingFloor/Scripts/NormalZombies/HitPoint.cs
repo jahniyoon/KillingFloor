@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,7 @@ public class HitPoint : MonoBehaviour
 
     public void Hit(float damage)
     {
-        parentObject.GetComponent<NormalZombie>().health -= damage;
+        parentObject.GetComponent<NormalZombie>().Hit(damage);
 
         if (gameObject.layer == 8)
         {
