@@ -1,9 +1,10 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NormalZombieData : MonoBehaviour
+public class NormalZombieData : MonoBehaviourPun
 {
     public float health;
     public float damage;

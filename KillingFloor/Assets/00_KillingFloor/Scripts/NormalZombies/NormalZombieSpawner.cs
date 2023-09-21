@@ -25,50 +25,53 @@ public class NormalZombieSpawner : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.wave == 1 && GameManager.instance.isCheck)
+        if (PhotonNetwork.IsMasterClient)
         {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 4;
+            if (GameManager.instance.wave == 1 && GameManager.instance.isCheck)
+            {
+                GameManager.instance.isCheck = false;
+                roundPointCount = 4;
 
-            Count();
+                Count();
 
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-        }
-        else if (GameManager.instance.wave == 2 && GameManager.instance.isCheck)
-        {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 6;
+                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+            }
+            else if (GameManager.instance.wave == 2 && GameManager.instance.isCheck)
+            {
+                GameManager.instance.isCheck = false;
+                roundPointCount = 6;
 
-            Count();
+                Count();
 
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-        }
-        else if (GameManager.instance.wave == 3 && GameManager.instance.isCheck)
-        {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 5;
+                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+            }
+            else if (GameManager.instance.wave == 3 && GameManager.instance.isCheck)
+            {
+                GameManager.instance.isCheck = false;
+                roundPointCount = 5;
 
-            Count();
+                Count();
 
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-        }
-        else if (GameManager.instance.wave == 4 && GameManager.instance.isCheck)
-        {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 7;
+                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+            }
+            else if (GameManager.instance.wave == 4 && GameManager.instance.isCheck)
+            {
+                GameManager.instance.isCheck = false;
+                roundPointCount = 7;
 
-            Count();
+                Count();
 
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-        }
-        else if (GameManager.instance.wave == 5 && GameManager.instance.isCheck)
-        {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 2;
+                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+            }
+            else if (GameManager.instance.wave == 5 && GameManager.instance.isCheck)
+            {
+                GameManager.instance.isCheck = false;
+                roundPointCount = 2;
 
-            Count();
+                Count();
 
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+            }
         }
     }
 
