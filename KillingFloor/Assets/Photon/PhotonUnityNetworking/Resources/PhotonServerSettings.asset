@@ -57,15 +57,12 @@ MonoBehaviour:
   - SpendCoin
   - BossAttackAni
   - changeTime
-<<<<<<< HEAD
   - Hit
   - OnPoison
-=======
   - AnimatorStart
   - masterCle
   - BossMove
   - BossOff
->>>>>>> origin/feature/ssm
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
