@@ -482,12 +482,12 @@ public class PlayerShooter : MonoBehaviourPun
             if (9 == _hitObj.transform.gameObject.layer)
             {
 
-                FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().bossHit(damage);
+                FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().OnDamage(damage);
             }
             else if (11 == _hitObj.transform.gameObject.layer)
             {
 
-                FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().bossHit(damage * 0.5f);
+                FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().OnDamage(damage * 0.5f);
             }
         }
 
@@ -496,7 +496,7 @@ public class PlayerShooter : MonoBehaviourPun
 
 
 
-            _hitObj.gameObject.GetComponent<Meteor>().MeteorHit(damage);
+            _hitObj.gameObject.GetComponent<Meteor>().OnDamage(damage);
 
         }
         // 보스일 경우

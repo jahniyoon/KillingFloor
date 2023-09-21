@@ -55,6 +55,12 @@ MonoBehaviour:
   - Damage
   - OnDestroy
   - SpendCoin
+  - BossAttackAni
+  - changeTime
+  - AnimatorStart
+  - masterCle
+  - BossMove
+  - BossOff
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
