@@ -21,7 +21,7 @@ public class PlayerMeleeAttack : MonoBehaviour
         
     }
 
-    private void OnTriggerStay(Collider hitObj)
+    private void OnTriggerEnter(Collider hitObj)
     {
         Debug.Log(hitObj + "뭔가가 닿나?" + hitObj.gameObject.layer);
 
@@ -40,7 +40,7 @@ public class PlayerMeleeAttack : MonoBehaviour
     {
     }
 
-
+    // TODO : PunRPC로 데미지 들어가도록 수정
     void Damage(GameObject _hitObj)
     {
         if (_hitObj.transform.GetComponent<HitPoint>() == null)

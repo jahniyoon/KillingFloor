@@ -42,45 +42,44 @@ public class PlayerDamage : MonoBehaviourPun
     {
         // 마스터가 계산한 값을 모두 받아와서 업데이트
         destroyCount = _destroyCount;
-        Debug.Log("카운트는?"+destroyCount);
 
         if (5 < destroyCount)
         {
             Debug.Log("게임오브젝트 제거");
-            PhotonNetwork.Destroy(this.gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
     // ================== 데미지를 입는 과정 정리 ================== //
 
     private void OnTriggerStay(Collider other)
     {
-        // 마스터가 아니라면 데미지 입력 불가
-        if (!PhotonNetwork.IsMasterClient)
-        {
-            return;
-        }
+        // 상대방으로부터 LivingEntity 타입을 가져오기 시도
+        LivingEntity attackTarget
+            = other.GetComponent<LivingEntity>();
 
+        // 마스터가 아니라면 데미지 입력 불가
         // 최근 공격 시점에서 timeBetAttack 이상 시간이 지났다면 공격 가능
         if (Time.time >= lastAttackTime + timeBetAttack)
         {
-            // 상대방으로부터 LivingEntity 타입을 가져오기 시도
-            LivingEntity attackTarget
-                = other.GetComponent<LivingEntity>();
-
             // 상대방의 LivingEntity가 자신의 추적 대상이라면 공격 실행
             if (attackTarget != null)
             {
-                Debug.Log(attackTarget.name + "뭔가 닿았다 공격 실행");
+                // 실제 공격 처리는 마스터에게만 전달
+                if (PhotonNetwork.IsMasterClient)
+                {// 최근 공격 시간을 갱신
+                    lastAttackTime = Time.time;
 
-                // 최근 공격 시간을 갱신
-                lastAttackTime = Time.time;
+                    // 상대방의 피격 위치와 피격 방향을 근삿값으로 계산
+                    Vector3 hitPoint = other.ClosestPoint(transform.position);
+                    Vector3 hitNormal = transform.position - other.transform.position;
 
-                // 상대방의 피격 위치와 피격 방향을 근삿값으로 계산
-                Vector3 hitPoint = other.ClosestPoint(transform.position);
-                Vector3 hitNormal = transform.position - other.transform.position;
-
-                // 공격 실행
-                attackTarget.OnDamage(damage, hitPoint, hitNormal);
+                    // 공격 실행
+                    attackTarget.OnDamage(damage, hitPoint, hitNormal);
+                }
+                // 플레이어들 각자 데미지 이후 상황 업데이트
+                PlayerUIManager.instance.SetArmor(attackTarget.armor);
+                PlayerUIManager.instance.SetHP(attackTarget.health);
+                PlayerUIManager.instance.SetBloodScreen(attackTarget.health);
             }
         }
     }

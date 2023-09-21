@@ -1,6 +1,9 @@
 using Photon.Pun;
 using System;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using static UnityEngine.UI.Image;
 
 // 생명체로서 동작할 게임 오브젝트들을 위한 뼈대를 제공
 // 체력, 데미지 받아들이기, 사망 기능, 사망 이벤트를 제공
@@ -11,7 +14,6 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
     public float armor { get; protected set; }
     public int coin { get; protected set; }
     public bool dead { get; protected set; } // 사망 상태
-    public event Action OnDeath; // 사망시 발동할 이벤트
 
 
     //// 호스트->모든 클라이언트 방향으로 체력과 사망 상태를 동기화 하는 메서드
@@ -31,6 +33,8 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
         // 체력을 시작 체력으로 초기화
         health = startingHealth;
         armor = 0;
+        PlayerUIManager.instance.bloodScreenValue = 0;
+        PlayerUIManager.instance.bloodScreen.color = new Color(0, 0, 0, 0);
     }
    
     // 데미지 처리
@@ -53,7 +57,7 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
         // 체력이 0 이하 && 아직 죽지 않았다면 사망 처리 실행
         if (health <= 0 && !dead)
             if (health <= 0)
-        {
+            {
             health = 0;
                 Die();
             }
@@ -139,8 +143,6 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
         }
 
     }
-    [PunRPC]
-
     public virtual void GetCoin(int newCoin)
     {
         if(dead)
@@ -157,16 +159,20 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
         }
         coin -= newCoin;
     }
+    public void SetHealth()
+    {
+        if (!photonView.IsMine) { return; } // 로컬 플레이어가 아닌 경우 입력을 받지 않는다.
 
+        PlayerUIManager.instance.SetHP(health);
+    }
+    public void SetArmor()
+    {
+        if (!photonView.IsMine) { return; } // 로컬 플레이어가 아닌 경우 입력을 받지 않는다.
 
+        PlayerUIManager.instance.SetArmor(armor);
+    }
     public virtual void Die()
     {
-        // onDeath 이벤트에 등록된 메서드가 있다면 실행
-        if (OnDeath != null)
-        {
-            OnDeath();
-        }
-
         // 사망 상태를 참으로 변경
         dead = true;
     }

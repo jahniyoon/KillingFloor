@@ -29,8 +29,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public GameObject playerPrefab; // 생성할 플레이어 캐릭터 프리팹
     public Vector3 spawnPosition;   // 플레이어 스폰 포지션
     public bool isGameover { get; private set; } // 게임 오버 상태
-    public bool inputEnable = true;
-    public bool inputLock;  // 입력을 받을 수 있는 상태
+    public bool inputLock;  // 입력을 받을 수 있는 상태. true면 락이 걸려 입력 불가
 
     public Transform shopPosition; // 매 웨이브 업데이트되는 상점의 트랜스폼
 
@@ -64,19 +63,19 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             Destroy(gameObject);
         }
         // 생성할 랜덤 위치 지정
-        //spawnPosition = new Vector3(0f, 1f, 0f);
+        spawnPosition = new Vector3(0f, 1f, 0f);
 
         if (SceneManager.GetActiveScene().name == "Main")
         {
             Debug.Log("메인씬 입장");
-            //spawnPosition = new Vector3(-23.7f, -5.9f, 22.5f);
+            spawnPosition = new(135.0f, -6.0f, 200.0f);
 
         }
 
         // 네트워크 상의 모든 클라이언트들에서 생성 실행
         // 단, 해당 게임 오브젝트의 주도권은, 생성 메서드를 직접 실행한 클라이언트에게 있음
         //PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
-        GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(135.0f, -6.0f, 200.0f), Quaternion.identity);
+        GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
         newPlayer.transform.SetParent(GameObject.Find("Players").transform);
     }
     //private void Awake()
@@ -108,9 +107,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         shopPosition = shops[wave - 1];
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            PhotonNetwork.LeaveRoom();
+            LeaveServer();
         }
         if (isZedTime) { StartCoroutine(ZedTime()); Debug.Log("몇번 호출 하는가?"); }
     }
@@ -162,6 +159,13 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         isZedTimeCheck = false;
     }
+    public void LeaveServer()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        PhotonNetwork.LeaveRoom();
+    }
+
     // 룸을 나갈때 자동 실행되는 메서드
     public override void OnLeftRoom()
     {

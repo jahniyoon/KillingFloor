@@ -33,16 +33,22 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text coinText;       // 현재 재화
     public TMP_Text weightText;     // 현재 무게
     public TMP_Text shopDistance;   // 상점까지 거리
-    public Slider shopRotation;     // 상점 방향
+    public Slider shopUpRotation;     // 상점 방향
+    public Slider shopDownRotation;     // 상점 방향
     public Slider healSlider;       // 힐 슬라이더
     public GameObject equipUI;      // 상호작용 UI
     public GameObject shopUI;       // 상점 상호작용 UI
     public GameObject pauseUI;       // 포즈 UI
+    public float playerHealth;  // 블러드스크린에 영향을 주기위한 플레이어의 체력
+    public Image bloodScreen;   // 피 데미지 스크린
+    public Image poisonScreen;  // 독 데미지 스크린
+    public float bloodScreenValue;
+    public float poisonScreenValue;
+
     public Slider mouseSensitive;
     public TMP_Text mouseSensitiveValue;
     public bool isShopState;
     public bool isPauseState;
-
 
 
     // 코인 증가효과 계산용 변수
@@ -67,6 +73,7 @@ public class PlayerUIManager : MonoBehaviour
         SetNoticeWave();
         SetZombieWave();
         Pause();
+        DamageScreenUpdate();
     }
 
     // 체력 텍스트 갱신
@@ -145,12 +152,51 @@ public class PlayerUIManager : MonoBehaviour
     {
         shopDistance.text = string.Format("{0}M", value);
     }
-    public void SetShopRotation(float value)
-    {
-        shopRotation.value = value;
+    public void SetShopRotation(float value, bool isUp)
+    {  
+        shopUpRotation.value = value;
+        shopDownRotation.value = value;
+
+        // 위 아래 감지 
+        shopUpRotation.gameObject.SetActive(isUp);
+        shopDownRotation.gameObject.SetActive(!isUp);
+
     }
 
-    // 포즈
+    // 스크린 데미지 업데이트
+    public void DamageScreenUpdate()
+    {
+        // 블러드 스크린의 값이 있을 경우 0이 될때까지 실행
+        if (0 < bloodScreenValue)
+        {
+            bloodScreenValue -= Mathf.CeilToInt(1 * Time.deltaTime);
+            bloodScreen.color = new Color(255, 255, 255, bloodScreenValue/1000);
+        }
+        // 블러드 스크린의 값이 있을 경우 0이 될때까지 실행
+        if (0 < poisonScreenValue)
+        {
+            poisonScreenValue -= Mathf.CeilToInt(1 * Time.deltaTime);
+            poisonScreen.color = new Color(255, 255, 255, bloodScreenValue / 100);
+        }
+    }
+    // 블러드 스크린의 값 조정
+    public void SetBloodScreen(float _health)
+    {
+        // 체력이 낮을 경우 더 붉어지게 하기 위한 값
+        // 체력이 100이면 변함없음
+        float newHealth = (-1*_health+100);
+
+        bloodScreenValue += 200 + newHealth;
+        if(1000f < bloodScreenValue)
+        { bloodScreenValue = 1000f;}
+    }
+    // 포이즌 스크린의 값 조정
+    public void SetPoisonScreen()
+    {
+        poisonScreenValue += 200;
+    }
+
+    // 포즈 업데이트
     public void Pause()
     {
         if (Input.GetKeyDown(KeyCode.Escape) && !isShopState && !isPauseState)
@@ -169,10 +215,12 @@ public class PlayerUIManager : MonoBehaviour
         MouseSensitiveUpdate();
 
     }
+    // 포즈 켜기
     public void OnPause()
     {
         isPauseState = true;
     }
+    // 포즈 종료
     public void OffPause()
     {
         isPauseState = false;
@@ -182,12 +230,12 @@ public class PlayerUIManager : MonoBehaviour
         GameManager.instance.inputLock = false;  // 인풋락도 풀어주기
 
     }
+    // 서버 나가기 버튼
     public void LeaveRoomButton()
     {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-        PhotonNetwork.LeaveRoom();
+        GameManager.instance.LeaveServer();
     }
+    // 마우스 센서티브 업데이트
     public void MouseSensitiveUpdate()
     {
         mouseSensitiveValue.text = string.Format("{0}", Mathf.FloorToInt(mouseSensitive.value));

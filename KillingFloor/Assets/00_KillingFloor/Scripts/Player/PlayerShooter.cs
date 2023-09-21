@@ -1,10 +1,7 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEngine.Windows;
 
 
 public class PlayerShooter : MonoBehaviourPun
@@ -15,6 +12,18 @@ public class PlayerShooter : MonoBehaviourPun
         Empty, // 탄창이 빔
         Reloading // 재장전 중
     }
+    //ssm 유탄 발사 로직 //
+
+    [SerializeField]
+    private GameObject bulletPrefab;
+    [SerializeField]
+    private GameObject bulletPoint;
+    [SerializeField]
+    private float bulletSpeed = 600;
+    [SerializeField]
+    private List<GameObject> bulletlist;
+
+    //ssm 유탄 끝
     public State state { get; private set; }
     public enum Type { Pistol, Rifle, Melee, Heal };
     private PlayerInputs input;
@@ -29,7 +38,7 @@ public class PlayerShooter : MonoBehaviourPun
     public Transform targetObj;                // 플레이어 시점
     public Transform weaponPosition = null;    // 무기 위치 기준점
     public Transform rightHandPosition; // 오른손 위치
-    
+
     // 병과
     public enum WeaponClass { Commando, Demolitionist };    // 병과 추가될경우 여기에 추가
     public WeaponClass weaponClass;                         // 현재 병과 상태
@@ -43,9 +52,9 @@ public class PlayerShooter : MonoBehaviourPun
     public float reloadRate;    // 재장전 속도
     public float fireRate;      // 사격 속도
     public float lastFireTime;  // 마지막 사격시간
-    public int grenade;         // 수류탄 개수
-    public bool isGrenade;      // 수류탄 상태 체크 (1인칭 애니메이션)
     public float healCoolDown = 15f;  // 힐 쿨다운
+
+    [Header("Effects")]
 
     public ParticleSystem muzzleFlashEffect; // 총구 화염효과
     public ParticleSystem shellEjectEffect;  // 탄피 배출 효과
@@ -57,6 +66,13 @@ public class PlayerShooter : MonoBehaviourPun
     public LineRenderer bulletLineRenderer;  // 총알 궤적을 그리기 위한 렌더러
     public ParticleSystem fireParticle;
     public bool isParticleTrigger;          // 파티클 생성여부 트리거
+
+    [Header("Grenade")]
+    public int grenade;         // 수류탄 개수
+    public bool isGrenade;      // 수류탄 상태 체크 (1인칭 애니메이션)
+    public GameObject grenadePrefab;  // 수류탄 프리팹 (Resources 폴더)
+    public Transform throwPosition;   // 던지는 포지션
+    public float grenadePower;        // 수류탄 던지는 힘
 
 
     [Header("TPS Weapon")]
@@ -90,6 +106,14 @@ public class PlayerShooter : MonoBehaviourPun
     // Start is called before the first frame update
     void Start()
     {
+        bulletlist = new List<GameObject>();
+        for (int i = 0; i < 7; i++)
+        {
+            GameObject bullet = Instantiate(bulletPrefab, bulletPoint.transform.position, transform.rotation);
+            bulletlist.Add(bullet)  ;
+            bulletlist[i].SetActive(false);
+        }
+
         input = GetComponent<PlayerInputs>();
         playerMovement = GetComponent<PlayerMovement>();
         playerHealth = GetComponent<PlayerHealth>();
@@ -116,14 +140,19 @@ public class PlayerShooter : MonoBehaviourPun
 
             // 코만도면 Slot2의 첫번째 무기
             case WeaponClass.Commando:
-                fpsRifle = fpsPosition.transform.GetChild(1).GetChild(0).GetComponent<Transform>();    
-                tpsRifle = weaponPosition.GetChild(1).GetChild(0).GetComponent<Weapon>();              
+                fpsRifle = fpsPosition.transform.GetChild(1).GetChild(0).GetComponent<Transform>();
+                tpsRifle = weaponPosition.GetChild(1).GetChild(0).GetComponent<Weapon>();
+                fpsPosition.transform.GetChild(1).GetChild(1).GetComponent<Transform>().gameObject.SetActive(false);
+                weaponPosition.GetChild(1).GetChild(1).GetComponent<Weapon>().gameObject.SetActive(false);
 
                 break;
             // 데몰리스트면 Slot2의 두번째 무기
             case WeaponClass.Demolitionist:
-                fpsRifle = fpsPosition.transform.GetChild(1).GetChild(1).GetComponent<Transform>();    
+
+                fpsRifle = fpsPosition.transform.GetChild(1).GetChild(1).GetComponent<Transform>();
                 tpsRifle = weaponPosition.GetChild(1).GetChild(1).GetComponent<Weapon>();
+                fpsPosition.transform.GetChild(1).GetChild(0).GetComponent<Transform>().gameObject.SetActive(false);
+                weaponPosition.GetChild(1).GetChild(0).GetComponent<Weapon>().gameObject.SetActive(false);
                 break;
 
         }
@@ -153,7 +182,7 @@ public class PlayerShooter : MonoBehaviourPun
         if (!photonView.IsMine) { return; } // 로컬 플레이어가 아닌 경우 입력을 받지 않는다.
 
         // 입력 가능여부 확인
-        if (GameManager.instance != null && GameManager.instance.inputEnable)
+        if (GameManager.instance != null && !GameManager.instance.inputLock)
         {
             HandSet();
             Aim();
@@ -169,7 +198,9 @@ public class PlayerShooter : MonoBehaviourPun
     // 주무기 보조무기 사격 입력
     void Fire()
     {
-        if (input.shoot && weaponSlot < 3)
+
+        if (input.shoot && weaponSlot < 3 && weaponClass == WeaponClass.Commando || 
+            input.shoot && weaponSlot == 1 && weaponClass == WeaponClass.Demolitionist)
         {
             // 현재 상태가 발사 가능한 상태
             // && 마지막 총 발사 시점에서 timeBetFire 이상의 시간이 지남
@@ -179,12 +210,12 @@ public class PlayerShooter : MonoBehaviourPun
                 lastFireTime = Time.time;
                 // 실제 발사 처리 실행
                 Shot();
-//=======
-//                GameObject hitObj = hit.transform.gameObject;
-//                Damage(hitObj); 
-//                hitPoint = hit.point;
+                //=======
+                //                GameObject hitObj = hit.transform.gameObject;
+                //                Damage(hitObj); 
+                //                hitPoint = hit.point;
 
-//>>>>>>> origin/feature/ssm
+                //>>>>>>> origin/feature/ssm
             }
             // 남은 총알이 있을 때 발사하면 재장전 실행
             else if (state == State.Empty && 0 < equipedWeapon.remainingAmmo && !input.dash)
@@ -201,6 +232,20 @@ public class PlayerShooter : MonoBehaviourPun
                 input.shoot = false;
             }
         }
+        if (input.shoot && weaponSlot < 3 && weaponClass == WeaponClass.Demolitionist)
+        {
+
+            for (int i = 0; i < 7; i++)
+            {
+                if(!bulletlist[i].activeSelf)
+                {
+                    bulletlist[i].GetComponent<Rigidbody>().AddForce(transform.forward * bulletSpeed);
+                    break;
+                }
+            }
+            // 데몰리스트 발사 입력 후 할것들
+        }
+        PlayerUIManager.instance.SetCoin(playerHealth.coin);
 
     }
 
@@ -237,7 +282,7 @@ public class PlayerShooter : MonoBehaviourPun
         // ToDo : 히트를 밖에서 수정해줘야함. 히트포인트를 받아와야지 데미지 효과 실행 가능
         // 레이캐스트에 의한 충돌 정보를 저장하는 컨테이터
         RaycastHit hit;
-        Vector3 hitPoint  = _cameraForward * range;
+        Vector3 hitPoint = _cameraForward * range;
         GameObject hitObj = null;
 
         // 잠깐 IK 풀어주기
@@ -319,7 +364,7 @@ public class PlayerShooter : MonoBehaviourPun
             {
                 handAnimator.SetBool("isAim", false);
             }
-            return; 
+            return;
         }
 
         // 주무기, 보조무기 재장전 중이거나 대시중이 아닐 때 조준
@@ -331,11 +376,12 @@ public class PlayerShooter : MonoBehaviourPun
         // 밀리 무기상태이면 강공격 실행
         if (weaponSlot == 3 && state == State.Ready && input.aim)
         {
-            input.aim = false;
+            state = State.Reloading;
             handAnimator.SetTrigger("isAim");
             gunAudioPlayer.clip = equipedWeapon.reloadAudio;
             gunAudioPlayer.PlayOneShot(gunAudioPlayer.clip); // 근접공격 소리 재생
-            StartCoroutine(WeaponDelay(reloadRate * 2));
+            StartCoroutine(WeaponDelay(reloadRate * 1.8f));
+            input.aim = false;
         }
     }
     // 사격 딜레이를 주기위한 코루틴
@@ -385,6 +431,7 @@ public class PlayerShooter : MonoBehaviourPun
             if (heal + playerHealth.health >= 100)
             { heal -= ((heal + playerHealth.health) - 100); }
             playerHealth.RestoreHealth(heal);
+            PlayerUIManager.instance.SetHP(playerHealth.health);
             input.shoot = false;
         }
 
@@ -397,18 +444,18 @@ public class PlayerShooter : MonoBehaviourPun
     }
     void Damage(GameObject _hitObj)
     {
-       
-        if (_hitObj.transform.GetComponent<HitPoint>() == null && _hitObj.transform.GetComponent<PlayerDamage>() != null )
+
+        if (_hitObj.transform.GetComponent<HitPoint>() == null && _hitObj.transform.GetComponent<PlayerDamage>() != null)
         {
             playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
             _hitObj.transform.GetComponent<PlayerDamage>().OnDamage(); // RPC 확인 디버그용
             return;
         }
-        if (!"Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name)&& !"Meteor".Equals(FindTopmostParent(_hitObj.transform).gameObject.name))//보스 가 아닐경우 
+        if (!"Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name) && !"Meteor".Equals(FindTopmostParent(_hitObj.transform).gameObject.name))//보스 가 아닐경우 
         {
             ////////////////////////////////////////////////좀비////////////////////
 
-          
+
             if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health > 0)
             {
                 _hitObj.transform.GetComponent<HitPoint>().Hit(damage); // 좀비에게 데미지
@@ -427,30 +474,30 @@ public class PlayerShooter : MonoBehaviourPun
 
             ////////////////////////////////////////////////////////////////////
         }
-      
+
         if ("Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name)) // 보스 일경우
         {
 
 
             if (9 == _hitObj.transform.gameObject.layer)
             {
-               
+
                 FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().bossHit(damage);
             }
             else if (11 == _hitObj.transform.gameObject.layer)
             {
-              
-                FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().bossHit(damage*0.5f);
+
+                FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().bossHit(damage * 0.5f);
             }
         }
-    
+
         if ("Meteor".Equals(FindTopmostParent(_hitObj.transform).gameObject.name))
         {
-           
-               
-                 
+
+
+
             _hitObj.gameObject.GetComponent<Meteor>().MeteorHit(damage);
-            
+
         }
         // 보스일 경우
         if (_hitObj.transform.GetComponent<BossController>() != null)
@@ -458,6 +505,7 @@ public class PlayerShooter : MonoBehaviourPun
             // 보스 데미지 넣어야하는 부분
             //_hitObj.transform.GetComponent<BossController>().bossHp -= damage;
         }
+
     }
 
     // 장전
@@ -485,7 +533,7 @@ public class PlayerShooter : MonoBehaviourPun
     private bool Reloading()
     {
         // 잔여 탄이 0보다 많고, 탄이 꽉차있지 않고, 장전 가능할 때 장전
-        if(state == State.Reloading || equipedWeapon.remainingAmmo <= 0 || equipedWeapon.ammo == equipedWeapon.magazineSize)
+        if (state == State.Reloading || equipedWeapon.remainingAmmo <= 0 || equipedWeapon.ammo == equipedWeapon.magazineSize)
         {
             return false;
         }
@@ -534,7 +582,7 @@ public class PlayerShooter : MonoBehaviourPun
                     animator.SetBool("isWeaponPistol", true);
                     animator.SetBool("isWeaponRifle", false);
                 }
-                    input.weaponSlot1 = false;
+                input.weaponSlot1 = false;
             }
             if (input.weaponSlot2)
             {
@@ -552,7 +600,7 @@ public class PlayerShooter : MonoBehaviourPun
                     animator.SetBool("isWeaponPistol", false);
                     animator.SetBool("isWeaponRifle", true);
                 }
-                    input.weaponSlot2 = false;
+                input.weaponSlot2 = false;
             }
             if (input.weaponSlot3)
             {
@@ -568,7 +616,7 @@ public class PlayerShooter : MonoBehaviourPun
                     fpsGrenade.gameObject.SetActive(false);
                     SetWeapon(tpsMelee, fpsMelee); // 무기 장착
                 }
-                    input.weaponSlot3 = false;
+                input.weaponSlot3 = false;
             }
             if (input.weaponSlot4)
             {
@@ -584,7 +632,7 @@ public class PlayerShooter : MonoBehaviourPun
                     fpsGrenade.gameObject.SetActive(false);
                     SetWeapon(tpsHeal, fpsHeal); // 무기 장착
                 }
-                    input.weaponSlot4 = false;
+                input.weaponSlot4 = false;
             }
             if (input.grenade && !isGrenade && 0 < grenade)
             {
@@ -625,19 +673,15 @@ public class PlayerShooter : MonoBehaviourPun
             switch (newSlot)
             {
                 case 1:
-                    Debug.Log("1번으로 무기스왑");
                     input.weaponSlot1 = true;
                     break;
                 case 2:
-                    Debug.Log("2번으로 무기스왑");
                     input.weaponSlot2 = true;
                     break;
                 case 3:
-                    Debug.Log("3번으로 무기스왑");
                     input.weaponSlot3 = true;
                     break;
                 case 4:
-                    Debug.Log("4번으로 무기스왑");
                     input.weaponSlot4 = true;
                     break;
             }
@@ -646,13 +690,44 @@ public class PlayerShooter : MonoBehaviourPun
     }
     IEnumerator Grenade()
     {
-        yield return new WaitForSeconds(2.1f);
-        grenade -= 1;
-        PlayerUIManager.instance.SetGrenade(grenade);
+        yield return new WaitForSeconds(1.3f);
+
+        GameObject newGrenade = PhotonNetwork.Instantiate(grenadePrefab.name, throwPosition.transform.position, Quaternion.identity);
+        newGrenade.GetComponent<Rigidbody>().AddForce(calculateForce(), ForceMode.Impulse);
+
+
+        yield return new WaitForSeconds(1f);
+
+        grenade -= 1;   // 수류탄 개수 -1
+        PlayerUIManager.instance.SetGrenade(grenade); // 수류탄 개수 추가
         isGrenade = false;
         state = State.Ready;
-    }
 
+        // 수류탄 던지기 이전 슬롯으로 돌려주기
+        int slotIs = weaponSlot;
+        weaponSlot = 0;
+
+        switch (slotIs)
+        {
+            case 1:
+                input.weaponSlot1 = true;
+                break;
+            case 2:
+                input.weaponSlot2 = true;
+                break;
+            case 3:
+                input.weaponSlot3 = true;
+                break;
+            case 4:
+                input.weaponSlot4 = true;
+                break;
+        }
+    }
+    // 던지는 힘 계산
+    public Vector3 calculateForce()
+    {
+        return cameraSet.followCam.transform.forward * grenadePower;
+    }
     public void SetWeapon(Weapon _tpsWeapon, Transform _fpsWeapon)
     {
 
@@ -713,7 +788,7 @@ public class PlayerShooter : MonoBehaviourPun
         // 무기의 상태도 체크
         if (0 < _tpsWeapon.ammo)
         { state = State.Ready; }
-        else if(0 >= _tpsWeapon.ammo)
+        else if (0 >= _tpsWeapon.ammo)
         { state = State.Empty; }
     }
 
@@ -759,7 +834,7 @@ public class PlayerShooter : MonoBehaviourPun
                     animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandObj.position);
                     animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandObj.rotation);
                 }
-              
+
                 // 왼쪽 팔꿈치
                 if (leftElbowObj != null)
                 {
