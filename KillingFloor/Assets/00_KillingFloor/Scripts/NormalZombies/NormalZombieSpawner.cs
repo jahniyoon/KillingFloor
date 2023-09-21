@@ -25,53 +25,50 @@ public class NormalZombieSpawner : MonoBehaviour
 
     private void Update()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (GameManager.instance.wave == 1 && GameManager.instance.isCheck)
         {
-            if (GameManager.instance.wave == 1 && GameManager.instance.isCheck)
-            {
-                GameManager.instance.isCheck = false;
-                roundPointCount = 4;
+            GameManager.instance.isCheck = false;
+            roundPointCount = 4;
 
-                Count();
+            Count();
 
-                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-            }
-            else if (GameManager.instance.wave == 2 && GameManager.instance.isCheck)
-            {
-                GameManager.instance.isCheck = false;
-                roundPointCount = 6;
+            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+        }
+        else if (GameManager.instance.wave == 2 && GameManager.instance.isCheck)
+        {
+            GameManager.instance.isCheck = false;
+            roundPointCount = 6;
 
-                Count();
+            Count();
 
-                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-            }
-            else if (GameManager.instance.wave == 3 && GameManager.instance.isCheck)
-            {
-                GameManager.instance.isCheck = false;
-                roundPointCount = 5;
+            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+        }
+        else if (GameManager.instance.wave == 3 && GameManager.instance.isCheck)
+        {
+            GameManager.instance.isCheck = false;
+            roundPointCount = 5;
 
-                Count();
+            Count();
 
-                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-            }
-            else if (GameManager.instance.wave == 4 && GameManager.instance.isCheck)
-            {
-                GameManager.instance.isCheck = false;
-                roundPointCount = 7;
+            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+        }
+        else if (GameManager.instance.wave == 4 && GameManager.instance.isCheck)
+        {
+            GameManager.instance.isCheck = false;
+            roundPointCount = 7;
 
-                Count();
+            Count();
 
-                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-            }
-            else if (GameManager.instance.wave == 5 && GameManager.instance.isCheck)
-            {
-                GameManager.instance.isCheck = false;
-                roundPointCount = 2;
+            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+        }
+        else if (GameManager.instance.wave == 5 && GameManager.instance.isCheck)
+        {
+            GameManager.instance.isCheck = false;
+            roundPointCount = 2;
 
-                Count();
+            Count();
 
-                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-            }
+            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
         }
     }
 
@@ -84,8 +81,11 @@ public class NormalZombieSpawner : MonoBehaviour
 
     private void CreateZombie()
     {
-        GameObject newObject = PhotonNetwork.Instantiate(zombiePrefab[randZombieNum].name, spawnPoint[pointCount].transform.position, Quaternion.identity);
-        newObject.transform.SetParent(zombieSaveList[randZombieNum]);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameObject newObject = PhotonNetwork.Instantiate(zombiePrefab[randZombieNum].name, spawnPoint[pointCount].transform.position, Quaternion.identity);
+            newObject.transform.SetParent(zombieSaveList[randZombieNum]);
+        }
 
         //GameObject newObject = Instantiate(zombiePrefab[randZombieNum], zombieSaveList[randZombieNum]);
 

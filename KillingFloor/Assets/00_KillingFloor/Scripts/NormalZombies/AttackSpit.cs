@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class AttackSpit : MonoBehaviour
 {
+    private Coroutine coroutine;
     private CapsuleCollider capsuleCollider;
 
     private float timeElapsed = 0.0f;
@@ -91,8 +92,23 @@ public class AttackSpit : MonoBehaviour
         { return; }
         if (other.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<PlayerHealth>().OnDamage(1.0f, Vector3.zero, Vector3.zero);
-            //other.gameObject.GetComponent<PlayerHealth>().OnPosion(true);
+            other.gameObject.GetComponent<PlayerHealth>().OnPoison();
+
+            if (coroutine != null)
+            {
+                StopCoroutine(coroutine);
+            }
+            coroutine = StartCoroutine(PoisonAttack(other));
+        }
+    }
+
+    private IEnumerator PoisonAttack(Collider _other)
+    {
+        while (0 < _other.gameObject.GetComponent<PlayerInfoUI>().poisonScreenValue)
+        {
+            _other.gameObject.GetComponent<PlayerHealth>().OnDamage(1.0f, Vector3.zero, Vector3.zero);
+
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }
