@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -50,17 +51,20 @@ public class NormalNavigation : MonoBehaviour
 
     private void Update()
     {
-        if (0 < normalZombie.health)
+        if (PhotonNetwork.IsMasterClient)
         {
-            if (isCoroutine == false)
+            if (0 < normalZombie.health)
             {
-                nav.enabled = true;
-                StartCoroutine(Target());
+                if (isCoroutine == false)
+                {
+                    nav.enabled = true;
+                    StartCoroutine(Target());
+                }
             }
-        }
-        else
-        {
-            nav.enabled = false;
+            else
+            {
+                nav.enabled = false;
+            }
         }
     }
 
