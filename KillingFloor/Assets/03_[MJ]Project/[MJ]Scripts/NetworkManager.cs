@@ -7,6 +7,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.UI;
+using System;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -296,8 +297,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             localPlayerLv = result.Data["HomeLevel"].Value;
 
             UserNameText.text = "Name: " + localPlayerName + "\nLevel: " + localPlayerLv;
+
         },
             (error) => Debug.Log("데이터 불러오기 실패"));
+
+        // 문자열을 정수로 변환 후 1을 더함
+        int lv = int.Parse(localPlayerLv) + 1;
+        // 결과를 다시 문자열로 변환
+        string localPlayerLvUp = lv.ToString();
+
+        Debug.Log(lv);
+        Debug.Log("더하기 1 했을 때: " + localPlayerLvUp);
     }
 
     #region 유저 Currency
@@ -559,8 +569,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.LoadLevel("PlayerTestScene");
         }
-
-        Debug.Log(UserNickNameText.text);
     }
     public void OnGunTestScene()
     {
@@ -568,8 +576,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.LoadLevel("GunTestScene");
         }
-
-        Debug.Log(UserNickNameText.text);
     }
     public void OnZombieTestScene()
     {
@@ -577,8 +583,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.LoadLevel("ZombieTestScene");
         }
-
-        Debug.Log(UserNickNameText.text);
     }
     public void OnMainTestScene()
     {
@@ -586,8 +590,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.LoadLevel("Main");
         }
-
-        Debug.Log(UserNickNameText.text);
+    }
+    public void OnLevelTestScene()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("LevelTestScene");
+        }
     }
     #endregion
 }
