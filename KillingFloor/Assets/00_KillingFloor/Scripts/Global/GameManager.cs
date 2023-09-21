@@ -78,11 +78,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 단, 해당 게임 오브젝트의 주도권은, 생성 메서드를 직접 실행한 클라이언트에게 있음
         //PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
         GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
-<<<<<<< HEAD
 
-=======
-        newPlayer.transform.SetParent(GameObject.Find("Players").transform);
->>>>>>> origin/feature/ssm
+        //newPlayer.transform.SetParent(GameObject.Find("Players").transform);
 
     }
 
