@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StartColiderScripts : MonoBehaviour
+public class StartColiderScripts : MonoBehaviourPun
 {
     private BoxCollider boxCollider; 
     private GameObject[] targetPlayer; //플레이어 리스트
@@ -14,12 +15,13 @@ public class StartColiderScripts : MonoBehaviour
 
     private void Awake()
     {
-        Boss = FindAnyObjectByType<BossController>().gameObject;
-        Boss.SetActive(false);
+   
        
     }
     void Start()
     {
+        Boss = FindAnyObjectByType<BossController>().gameObject;
+        Boss.SetActive(false);
         playersInTrigger = new List<GameObject>(); // 플레이어 콜라이더 접촉수 리스트저장용
         entrance = GameObject.Find("Entrance");
         entrance.SetActive(false);
@@ -34,7 +36,7 @@ public class StartColiderScripts : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      
+     
         if (playersInTrigger.Count >= targetPlayer.Length) //플레이어가 모두 입장시 보스 Active
         {
             if (!Boss.activeSelf)
@@ -53,6 +55,7 @@ public class StartColiderScripts : MonoBehaviour
     //접촉중인 플레이어
     private void OnTriggerStay(Collider other)
     {
+      
         GameObject otherGameObject = other.gameObject;
 
         targetPlayer = GameObject.FindGameObjectsWithTag("Player");
@@ -72,6 +75,7 @@ public class StartColiderScripts : MonoBehaviour
     // 접촉을 끊은 플레이어
     private void OnTriggerExit(Collider other)
     {
+        
         GameObject otherGameObject = other.gameObject;
 
         // 트리거에서 나간 상대방이 플레이어인지 여부를 판단
