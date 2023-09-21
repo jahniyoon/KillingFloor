@@ -115,7 +115,7 @@ public class PlayerInfoUI : MonoBehaviourPun
         if (0 < poisonScreenValue)
         {
             poisonScreenValue -= Mathf.CeilToInt(1 * Time.deltaTime);
-            poisonScreen.color = new Color(255, 255, 255, bloodScreenValue / 100);
+            poisonScreen.color = new Color(255, 255, 255, poisonScreenValue / 100);
         }
     }
     // 블러드 스크린의 값 조정

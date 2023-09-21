@@ -1486,6 +1486,7 @@ MonoBehaviour:
   skills: []
   skillPrefab: {fileID: 8311565978892429643, guid: df6a61e72b87c0748885bc318b7de6f0,
     type: 3}
+  ammoPrefab: {fileID: 0}
   hitPos: 0
   isCoroutine: 0
 --- !u!114 &4469125548070593814
