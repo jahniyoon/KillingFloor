@@ -76,10 +76,7 @@ public class PlayerDamage : MonoBehaviourPun
                     // 공격 실행
                     attackTarget.OnDamage(damage, hitPoint, hitNormal);
                 }
-                // 플레이어들 각자 데미지 이후 상황 업데이트
-                PlayerUIManager.instance.SetArmor(attackTarget.armor);
-                PlayerUIManager.instance.SetHP(attackTarget.health);
-                PlayerUIManager.instance.SetBloodScreen(attackTarget.health);
+               
             }
         }
     }

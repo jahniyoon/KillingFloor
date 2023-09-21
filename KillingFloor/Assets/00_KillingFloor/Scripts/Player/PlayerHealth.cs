@@ -11,6 +11,8 @@ public class PlayerHealth : LivingEntity
     private Animator playerAnimator; // 플레이어의 애니메이터
     private PlayerInfoUI playerInfo;
 
+
+
     private void Awake()
     {
         // 사용할 컴포넌트를 가져오기
@@ -28,8 +30,7 @@ public class PlayerHealth : LivingEntity
         // 플레이어 조작을 받는 컴포넌트들 활성화
         playerMovement.enabled = true;
         playerShooter.enabled = true;
-        PlayerUIManager.instance.SetHP(startingHealth);
-        PlayerUIManager.instance.SetArmor(0);
+
         playerInfo.SetHealth(health);
         playerInfo.SetArmor(armor);
 
@@ -53,8 +54,7 @@ public class PlayerHealth : LivingEntity
 
         playerInfo.SetHealth(health);
         playerInfo.SetArmor(armor);
-        
-
+        playerInfo.SetBloodScreen(health);
     }
 
     [PunRPC]
@@ -72,15 +72,18 @@ public class PlayerHealth : LivingEntity
     }
 
     // 코인 획득
+    [PunRPC]
     public override void GetCoin(int newCoin)
     {
         base.GetCoin(newCoin);
-
+        playerInfo.SetCoin(coin);
     }
     // 코인 소비
+    [PunRPC]
     public override void SpendCoin(int newCoin)
     {
         base.SpendCoin(newCoin);
+        playerInfo.SetCoin(coin);
     }
 
     public override void Die()

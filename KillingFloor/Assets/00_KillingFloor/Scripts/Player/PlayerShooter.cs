@@ -431,7 +431,7 @@ public class PlayerShooter : MonoBehaviourPun
             if (heal + playerHealth.health >= 100)
             { heal -= ((heal + playerHealth.health) - 100); }
             playerHealth.RestoreHealth(heal);
-            PlayerUIManager.instance.SetHP(playerHealth.health);
+            //PlayerUIManager.instance.SetHP(playerHealth.health);
             input.shoot = false;
         }
 

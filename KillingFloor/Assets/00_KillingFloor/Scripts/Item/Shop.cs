@@ -111,8 +111,6 @@ public class Shop : MonoBehaviour
 
                 playerInfo.RestoreArmor(_armor);
                 playerInfo.SpendCoin(_armor);
-                playerInfo.SetArmor();
-                PlayerUIManager.instance.SetCoin(playerInfo.coin);
             }
         }
     }
@@ -125,8 +123,6 @@ public class Shop : MonoBehaviour
             {
                 shooter.GetAmmo(50);
                 playerInfo.SpendCoin(50);
-                PlayerUIManager.instance.SetCoin(playerInfo.coin);
-
             }
         }
     }

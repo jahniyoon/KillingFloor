@@ -23,13 +23,11 @@ public class PlayerMeleeAttack : MonoBehaviour
 
     private void OnTriggerEnter(Collider hitObj)
     {
-        Debug.Log(hitObj + "뭔가가 닿나?" + hitObj.gameObject.layer);
 
 
         // 특정 레이어만 확인
         if (((1 << hitObj.gameObject.layer) & layerMask) != 0)
         {
-            Debug.Log("닿나?");
             Damage(hitObj.gameObject);
         }
 
@@ -45,8 +43,8 @@ public class PlayerMeleeAttack : MonoBehaviour
     {
         if (_hitObj.transform.GetComponent<HitPoint>() == null)
         {
-            Debug.Log("그럼 데미지가 들어가나?");
             playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
+            _hitObj.GetComponent<PlayerDamage>().OnDamage();
             return;
         }
         // 좀비일 경우

@@ -69,7 +69,6 @@ public class PlayerUIManager : MonoBehaviour
 
     public void Update()
     {
-        CoinUpdate();
         SetNoticeWave();
         SetZombieWave();
         Pause();
@@ -116,7 +115,6 @@ public class PlayerUIManager : MonoBehaviour
     public void SetCoin(int value)
     {
         targetCoin = value;
-
     }
     // 코인 증가 업데이트
     public void CoinUpdate()

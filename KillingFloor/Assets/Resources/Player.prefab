@@ -3018,7 +3018,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 100
   m_WholeNumbers: 0
-  m_Value: 100
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -4476,6 +4476,14 @@ MonoBehaviour:
   playerLevel: {fileID: 6022182744024792868}
   armor: {fileID: 7725070845473741932}
   health: {fileID: 623305403731852907}
+  healtHUD: {fileID: 0}
+  armorHUD: {fileID: 0}
+  coinHUD: {fileID: 0}
+  playerHealth: 0
+  bloodScreen: {fileID: 0}
+  poisonScreen: {fileID: 0}
+  bloodScreenValue: 0
+  poisonScreenValue: 0
 --- !u!114 &3074268453861525134
 MonoBehaviour:
   m_ObjectHideFlags: 0

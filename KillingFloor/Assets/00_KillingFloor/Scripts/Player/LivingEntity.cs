@@ -18,10 +18,11 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
 
     //// 호스트->모든 클라이언트 방향으로 체력과 사망 상태를 동기화 하는 메서드
     [PunRPC]
-    public void ApplyUpdatedHealth(float newHealth,float newArmor, bool newDead)
+    public void ApplyUpdatedHealth(float newHealth, float newArmor, int newCoin ,bool newDead)
     {
         health = newHealth;
         armor = newArmor;
+        coin = newCoin;
         dead = newDead;
     }
 
@@ -33,8 +34,6 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
         // 체력을 시작 체력으로 초기화
         health = startingHealth;
         armor = 0;
-        PlayerUIManager.instance.bloodScreenValue = 0;
-        PlayerUIManager.instance.bloodScreen.color = new Color(0, 0, 0, 0);
     }
    
     // 데미지 처리
@@ -48,11 +47,18 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
             Damage(damage);
 
             // 호스트에서 클라이언트로 동기화
-            photonView.RPC("ApplyUpdatedHealth", RpcTarget.Others, health, armor, dead);
+            photonView.RPC("ApplyUpdatedHealth", RpcTarget.Others, health, armor, coin, dead);
 
             // 다른 클라이언트들도 OnDamage를 실행하도록 함
             photonView.RPC("OnDamage", RpcTarget.Others, damage, hitPoint, hitNormal);
         }
+
+        //if(photonView.IsMine)
+        //{
+        //    PlayerUIManager.instance.SetArmor(armor);
+        //    PlayerUIManager.instance.SetHP(health);
+        //    PlayerUIManager.instance.SetBloodScreen(health);
+        //}
 
         // 체력이 0 이하 && 아직 죽지 않았다면 사망 처리 실행
         if (health <= 0 && !dead)
@@ -92,7 +98,11 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
         }
 
         if (0 >= health)
-        { health = 0; }
+        { 
+            health = 0;
+            if (0 < armor) // 아머가 남아있다면 체력 1로 한번 살려주기
+            { health = 1; }
+        }
 
     }
 
@@ -113,7 +123,7 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
             health += newHealth;
 
             // 서버에서 클라이언트로 동기화
-            photonView.RPC("ApplyUpdatedHealth", RpcTarget.Others, health, armor, dead);
+            photonView.RPC("ApplyUpdatedHealth", RpcTarget.Others, health, armor, coin, dead);
 
             // 다른 클라이언트들도 RestoreHealth를 실행하도록 함
             photonView.RPC("RestoreHealth", RpcTarget.Others, newHealth);
@@ -135,11 +145,10 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
         {
             armor += newArmor;
             // 서버에서 클라이언트로 동기화
-            photonView.RPC("ApplyUpdatedHealth", RpcTarget.Others, health, armor, dead);
+            photonView.RPC("ApplyUpdatedHealth", RpcTarget.Others, health, armor, coin, dead);
 
             // 다른 클라이언트들도 RestoreHealth를 실행하도록 함
             photonView.RPC("RestoreArmor", RpcTarget.Others, newArmor);
-
         }
 
     }
@@ -149,7 +158,16 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
         {
             return;
         }
-        coin += newCoin;
+        //호스트만 실드를 직접 갱신 가능
+        if (PhotonNetwork.IsMasterClient)
+        {
+            coin += newCoin;
+            // 서버에서 클라이언트로 동기화
+            photonView.RPC("ApplyUpdatedHealth", RpcTarget.Others, health, armor, coin, dead);
+
+            // 다른 클라이언트들도 RestoreHealth를 실행하도록 함
+            photonView.RPC("GetCoin", RpcTarget.Others, newCoin);
+        }
     }
     public virtual void SpendCoin(int newCoin)
     {
@@ -157,20 +175,18 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
         {
             return;
         }
-        coin -= newCoin;
-    }
-    public void SetHealth()
-    {
-        if (!photonView.IsMine) { return; } // 로컬 플레이어가 아닌 경우 입력을 받지 않는다.
+        //호스트만 실드를 직접 갱신 가능
+        if (PhotonNetwork.IsMasterClient)
+        {
+            coin -= newCoin;
+            // 서버에서 클라이언트로 동기화
+            photonView.RPC("ApplyUpdatedHealth", RpcTarget.Others, health, armor, coin, dead);
 
-        PlayerUIManager.instance.SetHP(health);
+            // 다른 클라이언트들도 RestoreHealth를 실행하도록 함
+            photonView.RPC("SpendCoin", RpcTarget.Others, newCoin);
+        }
     }
-    public void SetArmor()
-    {
-        if (!photonView.IsMine) { return; } // 로컬 플레이어가 아닌 경우 입력을 받지 않는다.
 
-        PlayerUIManager.instance.SetArmor(armor);
-    }
     public virtual void Die()
     {
         // 사망 상태를 참으로 변경
