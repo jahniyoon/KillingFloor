@@ -14,6 +14,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public GameObject Lang_Panel, Room_Panel, UserRoom_Panel, Lobby_Panel, Login_Panel, Store_Panel;
 
+    public string localPlayerName = default;
+    public string localPlayerLv = default;
+
     [Header("Login")]
     public PlayerLeaderboardEntry MyPlayFabInfo;
     public List<PlayerLeaderboardEntry> PlayFabUserList = new List<PlayerLeaderboardEntry>();
@@ -21,7 +24,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     [Header("Lobby")]
     public InputField UserSearchInput;
-    public Text LobbyInfoText, UserNickNameText;
+    public Text LobbyInfoText, UserNickNameText, UserNameText;
 
     [Header("Room")]
     public InputField SetDataInput;
@@ -32,10 +35,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public Text CoinsValueText;
     public Text StarsValueText;
 
-    bool isLoaded;
-
     public int coins = default;
     public int stars = default;
+
+    bool isLoaded;
 
     void Awake()
     {
@@ -66,6 +69,21 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
         },
             (error) => Debug.Log("로그인 실패"));
+    }
+    public void Register()
+    {
+        // 이메일, 비밀번호, 유저 이름으로 등록 요청 생성
+        var request = new RegisterPlayFabUserRequest
+        { Email = EmailInput.text, Password = PasswordInput.text, Username = UsernameInput.text, DisplayName = UsernameInput.text };
+
+        PlayFabClientAPI.RegisterPlayFabUser(request, (result) =>
+        {
+            Debug.Log("회원가입 성공");
+            SetStat();          // 통계 초기화
+            SetData("Lv.0");    // 유저 데이터 초기화
+        },
+            (error) => Debug.Log("회원가입 실패"));
+
     }
 
     #region TestLogin
@@ -172,6 +190,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
 
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+
+            SetLocalPlayerData();
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -187,26 +207,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
 
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+
+            SetLocalPlayerData();
         },
             (error) => Debug.Log("로그인 실패"));
     }
     #endregion
 
-    public void Register()
-    {
-        // 이메일, 비밀번호, 유저 이름으로 등록 요청 생성
-        var request = new RegisterPlayFabUserRequest
-        { Email = EmailInput.text, Password = PasswordInput.text, Username = UsernameInput.text, DisplayName = UsernameInput.text };
-
-        PlayFabClientAPI.RegisterPlayFabUser(request, (result) =>
-        {
-            Debug.Log("회원가입 성공");
-            SetStat();          // 통계 초기화
-            SetData("Lv.0");    // 유저 데이터 초기화
-        },
-            (error) => Debug.Log("회원가입 실패"));
-
-    }
 
     // 유저 통계 초기화
     void SetStat()
@@ -277,6 +284,21 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         (error) => Debug.Log("데이터 불러오기 실패"));
     }
     #endregion
+
+    void SetLocalPlayerData()
+    {
+        PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = MyPlayFabInfo.DisplayName }, (result) =>
+        {
+            Debug.Log("result: " + result);
+            Debug.Log(MyPlayFabInfo.DisplayName + result.Data["HomeLevel"].Value);
+
+            localPlayerName = MyPlayFabInfo.DisplayName;
+            localPlayerLv = result.Data["HomeLevel"].Value;
+
+            UserNameText.text = "Name: " + localPlayerName + "\nLevel: " + localPlayerLv;
+        },
+            (error) => Debug.Log("데이터 불러오기 실패"));
+    }
 
     #region 유저 Currency
     // 유저 Currency 가져오는 메서드
@@ -374,6 +396,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
         else Invoke("OnJoinedLobbyDelay", 3);
     }
+
+    // 로컬 플레이어 닉네임 할당
     void OnJoinedLobbyDelay()
     {
         isLoaded = true;
@@ -463,7 +487,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         string curName = PhotonNetwork.CurrentRoom.Name;
         RoomNameInfoText.text = curName;
         Debug.Log(curName);
-        Debug.Log(RoomNameInfoText.text);
 
         if (curName == "ROOM1" || curName == "ROOM2" || curName == "ROOM3" || curName == "ROOM4") ShowPanel(Room_Panel);
 
@@ -490,6 +513,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer) => RoomRenewal();
 
+    // REGACY:
     void RoomRenewal()
     {
         UserNickNameText.text = "";
@@ -498,13 +522,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
+                //TODO : 레벨 플레이어 고유값에 맞게 수정하기
                 UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
             }
         },
         (error) => { Debug.Log("레벨 불러오지 못함"); }
         );
 
-        //UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + "\n" + result.Data["HomeLevel"].Value;
         RoomNumInfoText.text = PhotonNetwork.CurrentRoom.PlayerCount + "명 / " + PhotonNetwork.CurrentRoom.MaxPlayers + "최대 인원";
     }
 
