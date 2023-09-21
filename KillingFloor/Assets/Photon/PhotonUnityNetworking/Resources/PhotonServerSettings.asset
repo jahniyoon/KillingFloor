@@ -63,15 +63,12 @@ MonoBehaviour:
   - masterCle
   - BossMove
   - BossOff
-<<<<<<< HEAD
   - BuyArmorMaster
   - HealProcessOnServer
   - SyncHeal
   - BuyArmorProcessOnServer
   - SyncBuyArmor
-=======
   - BossSp
->>>>>>> origin/feature/ssm
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
