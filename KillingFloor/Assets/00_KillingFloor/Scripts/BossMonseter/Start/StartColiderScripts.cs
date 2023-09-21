@@ -9,6 +9,7 @@ public class StartColiderScripts : MonoBehaviourPun
     private GameObject[] targetPlayer; //플레이어 리스트
     private List<GameObject> playersInTrigger; // 플레이어 콜라이더 접촉수 리스트저장용
     private GameObject Boss; // 보스오브젝트
+    private List<GameObject> bossList;
     private GameObject entrance;
     private GameObject introCanvas;
     public GameObject bossPf;
@@ -18,30 +19,23 @@ public class StartColiderScripts : MonoBehaviourPun
   
     void Start()
     {
-        playersInTrigger = new List<GameObject>(); // 플레이어 콜라이더 접촉수 리스트저장용
-        targetPlayer = GameObject.FindGameObjectsWithTag("Player");
-      
+    
+
         if (!PhotonNetwork.IsMasterClient)
         {
             return;
         }
-        Boss = PhotonNetwork.Instantiate(bossPf.name, bossPos.transform.position, bossPos.transform.rotation);
+        playersInTrigger = new List<GameObject>(); // 플레이어 콜라이더 접촉수 리스트저장용
+        targetPlayer = GameObject.FindGameObjectsWithTag("Player");
 
-        Boss.SetActive(false);
 
-        if (Boss.activeSelf)
-        {
-            Debug.Log("꺼짐");
-        }
-      
         entrance = GameObject.Find("Entrance");
         entrance.SetActive(false);
 
-
- 
         boxCollider = GetComponent<BoxCollider>();
+    
        
-
+   
     }
 
     // Update is called once per frame
@@ -51,16 +45,12 @@ public class StartColiderScripts : MonoBehaviourPun
         {
             return;
         }
-        if (playersInTrigger.Count == 0)
-        {
-            Boss.SetActive(false);
-        }
+   
         if (playersInTrigger.Count >= targetPlayer.Length) //플레이어가 모두 입장시 보스 Active
         {
             if (!Boss.activeSelf)
-            {    Debug.Log(targetPlayer.Length);
-                 Debug.Log(playersInTrigger.Count);
-
+            {   
+                PhotonNetwork.Instantiate(bossPf.name, bossPos.transform.position, bossPos.transform.rotation);
                 entrance.SetActive(true);
                
                 Boss.SetActive(true);
@@ -70,11 +60,8 @@ public class StartColiderScripts : MonoBehaviourPun
       
      
     }
-    [PunRPC]
-    private void BossOff()
-    {
-      
-    }
+   
+
 
     //접촉중인 플레이어
     private void OnTriggerStay(Collider other)
@@ -89,6 +76,7 @@ public class StartColiderScripts : MonoBehaviourPun
             // 이미 리스트에 추가되지 않았으면 추가
             if (!playersInTrigger.Contains(otherGameObject))
             {
+
                 playersInTrigger.Add(otherGameObject);
                 // 플레이어 트리거 접촉 이벤트를 처리하거나 필요한 작업 수행
             }
