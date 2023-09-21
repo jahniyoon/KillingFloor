@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
+using UnityEngine.Windows;
 
 public class PlayerHealth : LivingEntity
 {
@@ -10,8 +11,7 @@ public class PlayerHealth : LivingEntity
     private PlayerShooter playerShooter; // 플레이어 슈터 컴포넌트
     private Animator playerAnimator; // 플레이어의 애니메이터
     private PlayerInfoUI playerInfo;
-
-
+    private CameraSetup playerCamera;
 
     private void Awake()
     {
@@ -19,7 +19,8 @@ public class PlayerHealth : LivingEntity
         playerAnimator = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
         playerShooter = GetComponent<PlayerShooter>();
-        playerInfo = GetComponent<PlayerInfoUI>();  
+        playerInfo = GetComponent<PlayerInfoUI>();
+        playerCamera = GetComponent<CameraSetup>();
     }
 
     protected override void OnEnable()
@@ -30,10 +31,10 @@ public class PlayerHealth : LivingEntity
         // 플레이어 조작을 받는 컴포넌트들 활성화
         playerMovement.enabled = true;
         playerShooter.enabled = true;
-
+        playerAnimator.SetBool("isDead", false);
         playerInfo.SetHealth(health);
         playerInfo.SetArmor(armor);
-
+        playerInfo.ResetScreen();
     }
 
     // 데미지 처리
@@ -96,7 +97,8 @@ public class PlayerHealth : LivingEntity
     public override void Die()
     {
         base.Die();
-
+        playerCamera.SetCamera();
+        playerAnimator.SetBool("isDead", true);
         Invoke("Respawn",3f);
     }
     public void Respawn()
@@ -120,6 +122,7 @@ public class PlayerHealth : LivingEntity
         // 컴포넌트들의 OnDisable(), OnEnable() 메서드가 실행됨
         gameObject.SetActive(false);
         gameObject.SetActive(true);
+        playerCamera.SetCamera();
 
     }
 
@@ -132,8 +135,8 @@ public class PlayerHealth : LivingEntity
     [PunRPC]
     public void BuyArmorProcessOnServer(float _armor)
     {
-        float newArmor = _armor;
-        int newCoin = Mathf.FloorToInt(_armor * 5);
+        float newArmor = armor + _armor;
+        int newCoin = coin - Mathf.FloorToInt(_armor * 5);
         photonView.RPC("SyncBuyArmor", RpcTarget.All, newArmor, newCoin);
     }
 

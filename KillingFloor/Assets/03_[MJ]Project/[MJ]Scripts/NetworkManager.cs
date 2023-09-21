@@ -287,7 +287,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     void SetLocalPlayerData()
     {
-        PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = MyPlayFabInfo.DisplayName }, (result) =>
+        PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = MyPlayFabInfo.PlayFabId }, (result) =>
         {
             Debug.Log("result: " + result);
             Debug.Log(MyPlayFabInfo.DisplayName + result.Data["HomeLevel"].Value);

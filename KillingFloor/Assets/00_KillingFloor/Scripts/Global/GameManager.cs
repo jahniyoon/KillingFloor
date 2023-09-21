@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public GameObject playerPrefab; // 생성할 플레이어 캐릭터 프리팹
     public Vector3 spawnPosition;   // 플레이어 스폰 포지션
+    private GameObject[] targetPlayer; //플레이어 리스트
+
     public bool isGameover { get; private set; } // 게임 오버 상태
     public bool inputLock;  // 입력을 받을 수 있는 상태. true면 락이 걸려 입력 불가
 
@@ -76,8 +78,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 단, 해당 게임 오브젝트의 주도권은, 생성 메서드를 직접 실행한 클라이언트에게 있음
         //PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
         GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
-        newPlayer.transform.SetParent(GameObject.Find("Players").transform);
+
+
     }
+
     //private void Awake()
     //{
     //    // 씬에 싱글톤 오브젝트가 된 다른 GameManager 오브젝트가 있다면
@@ -95,7 +99,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     // Start is called before the first frame update
     void Start()
     {
-
         // ToDO : 테스트씬으로 넘어오면 생성되도록 수정하기
 
         StartCoroutine(StartWave());
@@ -104,6 +107,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     // 키보드 입력을 감지하고 룸을 나가게 함
     private void Update()
     {
+        SetPlayer();
         shopPosition = shops[wave - 1];
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
@@ -113,6 +117,17 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         }
         if (isZedTime) { StartCoroutine(ZedTime()); Debug.Log("몇번 호출 하는가?"); }
     }
+
+    public void SetPlayer()
+    {
+        targetPlayer = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject players in targetPlayer)
+        {
+            players.transform.SetParent(GameObject.Find("Players").transform);
+
+        }
+    }
+
 
     private IEnumerator ZedTime()
     {

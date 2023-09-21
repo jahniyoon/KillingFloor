@@ -44,6 +44,7 @@ public class PlayerUIManager : MonoBehaviour
     public Image poisonScreen;  // 독 데미지 스크린
     public float bloodScreenValue;
     public float poisonScreenValue;
+    public bool isPoison; // 현재 포이즌 상태인지 확인
 
     public Slider mouseSensitive;
     public TMP_Text mouseSensitiveValue;
