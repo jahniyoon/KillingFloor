@@ -122,4 +122,28 @@ public class PlayerHealth : LivingEntity
         gameObject.SetActive(true);
 
     }
+
+    public void BuyArmor(float _armor)
+    {
+        photonView.RPC("BuyArmorProcessOnServer", RpcTarget.MasterClient, _armor);
+        // 마스터 클라이언트에게 구매값 요청
+    }
+
+    [PunRPC]
+    public void BuyArmorProcessOnServer(float _armor)
+    {
+        float newArmor = _armor;
+        int newCoin = Mathf.FloorToInt(_armor * 5);
+        photonView.RPC("SyncBuyArmor", RpcTarget.All, newArmor, newCoin);
+    }
+
+    [PunRPC]
+    public void SyncBuyArmor(float _armor, int _coin)
+    {
+        coin = _coin;
+        armor = _armor;
+        playerInfo.SetArmor(armor);
+        playerInfo.SetCoin(coin);
+
+    }
 }

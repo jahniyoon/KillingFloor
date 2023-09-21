@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -308,8 +309,6 @@ public class PlayerShooter : MonoBehaviourPun
         //{ hitPoint = cameraSet.followCam.transform.forward * range; }
 
         // 발사처리를 마스터에게 위임
-        Debug.Log(photonView.ViewID + "가 Master에게 사격 요청을 합니다.");
-
         if (hitObj != null)
         {
             // 부딧친 오브젝트가 있다면 모두에게 데미지 실행
@@ -329,7 +328,6 @@ public class PlayerShooter : MonoBehaviourPun
     // 발사 이펙트와 소리를 재생하고 총알 궤적을 그린다.
     private IEnumerator ShotEffect(Vector3 _hitPosition)
     {
-        Debug.Log(photonView.ViewID + "이펙트 실행 완료");
         if (isParticleTrigger)
         {
             // 총알 자국 파티클 생성
@@ -430,7 +428,7 @@ public class PlayerShooter : MonoBehaviourPun
             float heal = damage;
             if (heal + playerHealth.health >= 100)
             { heal -= ((heal + playerHealth.health) - 100); }
-            playerHealth.RestoreHealth(heal);
+            photonView.RPC("HealProcessOnServer",RpcTarget.All, heal);
             //PlayerUIManager.instance.SetHP(playerHealth.health);
             input.shoot = false;
         }
@@ -442,6 +440,14 @@ public class PlayerShooter : MonoBehaviourPun
             PlayerUIManager.instance.SetHeal(healCoolDown);
         }
     }
+    // 힐 동기화
+    [PunRPC]
+    void HealProcessOnServer(float _heal)
+    {
+        playerHealth.RestoreHealth(_heal);
+    }
+
+
     void Damage(GameObject _hitObj)
     {
 

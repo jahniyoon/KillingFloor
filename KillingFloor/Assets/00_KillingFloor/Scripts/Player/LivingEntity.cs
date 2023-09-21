@@ -13,16 +13,20 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
     public float health { get; protected set; } // 현재 체력
     public float armor { get; protected set; }
     public int coin { get; protected set; }
+    public int level { get; protected set; }
+    public int exp { get; protected set; }
     public bool dead { get; protected set; } // 사망 상태
 
 
     //// 호스트->모든 클라이언트 방향으로 체력과 사망 상태를 동기화 하는 메서드
     [PunRPC]
-    public void ApplyUpdatedHealth(float newHealth, float newArmor, int newCoin ,bool newDead)
+    public void ApplyUpdatedHealth(float newHealth, float newArmor, int newCoin,int newLevel, int newExp, bool newDead)
     {
         health = newHealth;
         armor = newArmor;
         coin = newCoin;
+        level = newLevel;
+        exp = newExp;
         dead = newDead;
     }
 

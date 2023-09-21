@@ -1135,7 +1135,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f08b96ed5857e2478466a22b37a43a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  box: {fileID: 0}
   shopUI: {fileID: 7521998081691112320}
 --- !u!65 &2805526153776280762
 BoxCollider:
@@ -1274,7 +1273,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4365128105268566320}
         m_TargetAssemblyTypeName: Shop, Assembly-CSharp
-        m_MethodName: ShopCloseButton
+        m_MethodName: ShopClose
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
