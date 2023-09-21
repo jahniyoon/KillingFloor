@@ -77,6 +77,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         //PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
         GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
         newPlayer.transform.SetParent(GameObject.Find("Players").transform);
+
     }
     //private void Awake()
     //{
@@ -107,8 +108,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         shopPosition = shops[wave - 1];
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            Debug.Log("서버 나가기 시도");
-
             LeaveServer();
         }
         if (isZedTime) { StartCoroutine(ZedTime()); Debug.Log("몇번 호출 하는가?"); }
@@ -163,12 +162,9 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     }
     public void LeaveServer()
     {
-        Debug.Log("Leave Server");
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         PhotonNetwork.LeaveRoom();
-        SceneManager.LoadScene("LoginScene");
-
     }
 
     // 룸을 나갈때 자동 실행되는 메서드

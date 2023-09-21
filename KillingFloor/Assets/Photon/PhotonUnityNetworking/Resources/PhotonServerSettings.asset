@@ -69,6 +69,9 @@ MonoBehaviour:
   - BuyArmorProcessOnServer
   - SyncBuyArmor
   - BossSp
+  - PartticleOn
+  - IntroOff
+  - IntroOffMaster
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

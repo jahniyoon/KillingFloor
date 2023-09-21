@@ -19,19 +19,11 @@ public class StartColiderScripts : MonoBehaviourPun
   
     void Start()
     {
-    
 
-        if (!PhotonNetwork.IsMasterClient)
-        {
-            return;
-        }
         playersInTrigger = new List<GameObject>(); // 플레이어 콜라이더 접촉수 리스트저장용
         targetPlayer = GameObject.FindGameObjectsWithTag("Player");
-
-
         entrance = GameObject.Find("Entrance");
         entrance.SetActive(false);
-
         boxCollider = GetComponent<BoxCollider>();
     
        
@@ -48,14 +40,12 @@ public class StartColiderScripts : MonoBehaviourPun
    
         if (playersInTrigger.Count >= targetPlayer.Length) //플레이어가 모두 입장시 보스 Active
         {
-            if (!Boss.activeSelf)
-            {   
+            
                 PhotonNetwork.Instantiate(bossPf.name, bossPos.transform.position, bossPos.transform.rotation);
                 entrance.SetActive(true);
                
-                Boss.SetActive(true);
                 gameObject.SetActive(false);
-            }
+            
         }
       
      
