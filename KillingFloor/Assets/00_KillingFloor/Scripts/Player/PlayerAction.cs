@@ -188,6 +188,15 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cheat"",
+                    ""type"": ""Button"",
+                    ""id"": ""b2f05880-fc64-4f92-8f36-cdacef84a794"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -487,6 +496,17 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""action"": ""ChangeCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93d9aa15-9b54-432b-a2b4-30c446919567"",
+                    ""path"": ""<Keyboard>/f1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cheat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -513,6 +533,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         m_Player_Equip = m_Player.FindAction("Equip", throwIfNotFound: true);
         m_Player_Cancle = m_Player.FindAction("Cancle", throwIfNotFound: true);
         m_Player_ChangeCamera = m_Player.FindAction("ChangeCamera", throwIfNotFound: true);
+        m_Player_Cheat = m_Player.FindAction("Cheat", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -592,6 +613,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Equip;
     private readonly InputAction m_Player_Cancle;
     private readonly InputAction m_Player_ChangeCamera;
+    private readonly InputAction m_Player_Cheat;
     public struct PlayerActions
     {
         private @PlayerAction m_Wrapper;
@@ -614,6 +636,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         public InputAction @Equip => m_Wrapper.m_Player_Equip;
         public InputAction @Cancle => m_Wrapper.m_Player_Cancle;
         public InputAction @ChangeCamera => m_Wrapper.m_Player_ChangeCamera;
+        public InputAction @Cheat => m_Wrapper.m_Player_Cheat;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -677,6 +700,9 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @ChangeCamera.started += instance.OnChangeCamera;
             @ChangeCamera.performed += instance.OnChangeCamera;
             @ChangeCamera.canceled += instance.OnChangeCamera;
+            @Cheat.started += instance.OnCheat;
+            @Cheat.performed += instance.OnCheat;
+            @Cheat.canceled += instance.OnCheat;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -735,6 +761,9 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @ChangeCamera.started -= instance.OnChangeCamera;
             @ChangeCamera.performed -= instance.OnChangeCamera;
             @ChangeCamera.canceled -= instance.OnChangeCamera;
+            @Cheat.started -= instance.OnCheat;
+            @Cheat.performed -= instance.OnCheat;
+            @Cheat.canceled -= instance.OnCheat;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -772,5 +801,6 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         void OnEquip(InputAction.CallbackContext context);
         void OnCancle(InputAction.CallbackContext context);
         void OnChangeCamera(InputAction.CallbackContext context);
+        void OnCheat(InputAction.CallbackContext context);
     }
 }

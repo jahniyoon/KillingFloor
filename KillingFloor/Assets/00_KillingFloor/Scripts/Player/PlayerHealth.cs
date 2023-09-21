@@ -56,6 +56,13 @@ public class PlayerHealth : LivingEntity
         playerInfo.SetArmor(armor);
         playerInfo.SetBloodScreen(health);
     }
+    [PunRPC]
+    public override void OnPoison()
+    {
+        base.OnPoison();
+        playerInfo.SetPoisonScreen();
+
+    }
 
     [PunRPC]
     public override void RestoreHealth(float newHealth)

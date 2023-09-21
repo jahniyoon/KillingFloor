@@ -186,7 +186,20 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
             photonView.RPC("SpendCoin", RpcTarget.Others, newCoin);
         }
     }
+    public virtual void OnPoison()
+    {
+        if (dead)
+        {
+            return;
+        }
+        //호스트만 실드를 직접 갱신 가능
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // 다른 클라이언트들도 RestoreHealth를 실행하도록 함
+            photonView.RPC("OnPoison", RpcTarget.Others);
+        }
 
+    }
     public virtual void Die()
     {
         // 사망 상태를 참으로 변경

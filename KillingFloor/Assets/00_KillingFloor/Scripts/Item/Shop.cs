@@ -103,12 +103,12 @@ public class Shop : MonoBehaviour
             // 아머는 100을 넘도록 채울 수 없음
             int _armor = Mathf.FloorToInt(100 - playerInfo.armor);
 
-
+            Debug.Log("플레이어 돈 : "+playerInfo.coin+"플레이어 아머 : "+playerInfo.armor);
             // 아머 가격은 1당 5원, 100까지 채우려면 500원 필요
             // 돈이 있고 아머가 100이 아닐 경우 구매 가능
             if (playerInfo.coin >= _armor * 5 && playerInfo.armor != 100)
             {
-
+                Debug.Log("구입하나?");
                 playerInfo.RestoreArmor(_armor);
                 playerInfo.SpendCoin(_armor);
             }

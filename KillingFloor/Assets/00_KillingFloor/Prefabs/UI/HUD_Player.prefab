@@ -6564,6 +6564,7 @@ MonoBehaviour:
   equipUI: {fileID: 2278167332612370682}
   shopUI: {fileID: 2278167332883259627}
   pauseUI: {fileID: 758812391}
+  playerHealth: 0
   bloodScreen: {fileID: 3256336096352447786}
   poisonScreen: {fileID: 7074479900252038970}
   bloodScreenValue: 0
