@@ -11,36 +11,55 @@ public class StartColiderScripts : MonoBehaviourPun
     private GameObject Boss; // 보스오브젝트
     private GameObject entrance;
     private GameObject introCanvas;
+    public GameObject bossPf;
+    public GameObject bossPos;
     // Start is called before the first frame update
 
-    private void Awake()
-    {
-   
-       
-    }
+  
     void Start()
     {
-        Boss = FindAnyObjectByType<BossController>().gameObject;
-        Boss.SetActive(false);
         playersInTrigger = new List<GameObject>(); // 플레이어 콜라이더 접촉수 리스트저장용
+        targetPlayer = GameObject.FindGameObjectsWithTag("Player");
+      
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+        Boss = PhotonNetwork.Instantiate(bossPf.name, bossPos.transform.position, bossPos.transform.rotation);
+
+        Boss.SetActive(false);
+
+        if (Boss.activeSelf)
+        {
+            Debug.Log("꺼짐");
+        }
+      
         entrance = GameObject.Find("Entrance");
         entrance.SetActive(false);
 
 
-        targetPlayer = GameObject.FindGameObjectsWithTag("Player");
+ 
         boxCollider = GetComponent<BoxCollider>();
-        Debug.Log(targetPlayer.Length);
+       
 
     }
 
     // Update is called once per frame
     void Update()
     {
-     
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+        if (playersInTrigger.Count == 0)
+        {
+            Boss.SetActive(false);
+        }
         if (playersInTrigger.Count >= targetPlayer.Length) //플레이어가 모두 입장시 보스 Active
         {
             if (!Boss.activeSelf)
-            {
+            {    Debug.Log(targetPlayer.Length);
+                 Debug.Log(playersInTrigger.Count);
 
                 entrance.SetActive(true);
                
@@ -50,6 +69,11 @@ public class StartColiderScripts : MonoBehaviourPun
         }
       
      
+    }
+    [PunRPC]
+    private void BossOff()
+    {
+      
     }
 
     //접촉중인 플레이어

@@ -1,6 +1,7 @@
+using Photon.Pun;
 using UnityEngine;
 
-public class Meteor : MonoBehaviour
+public class Meteor : MonoBehaviourPun
 {
     private Transform orgPos;
     public float MeteorHP = 500;
@@ -83,10 +84,34 @@ public class Meteor : MonoBehaviour
 
 
     }
-
-    public void MeteorHit(float dam)
+    // 데미지 
+    public void OnDamage(float dam)
     {
-        Debug.Log(MeteorHP);
-        MeteorHP -= dam;
+        // 마스터에게 데미지 계산 요청
+        Debug.Log("데미지 계산요청" + photonView.ViewID);
+
+        photonView.RPC("MasterDamage", RpcTarget.MasterClient, dam);
     }
+    // 2.마스터가 데미지 계산을 요청받고 계산을 먼저 해준다.
+    // 계산이 끝난 값을 모두에게 보내준다.
+    [PunRPC]
+    public void MasterDamage(int _destroyCount)
+    {
+        Debug.Log("마스터 모두에게 데미지 업데이트 요청");
+        MeteorHP -= _destroyCount;
+     
+
+        // 마스터가 계산한 값 전달
+        photonView.RPC("SyncDamage", RpcTarget.All, MeteorHP);
+
+    }
+    // 3. 모두는 (마스터를 포함) 전달받은 값을 업데이트를 한다.
+    [PunRPC]
+    public void SyncDamage(int _destroyCount)
+    {
+
+        MeteorHP = _destroyCount;
+
+    }
+    
 }
