@@ -11,6 +11,7 @@ public class NormalZombie : NormalZombieData
     public List<GameObject> skills = new List<GameObject>();
 
     private Transform skillParent;
+    private Transform ammoParent;
 
     private Coroutine blendTreeMove;
     private Coroutine animatorController;
@@ -20,6 +21,7 @@ public class NormalZombie : NormalZombieData
     private Animator ani;
 
     public GameObject skillPrefab;
+    public GameObject ammoPrefab;
 
     private float timeElapsed;
     private float zedTime;
@@ -58,6 +60,8 @@ public class NormalZombie : NormalZombieData
         {
             skillParent = GameObject.Find("Skills").transform;
         }
+
+        ammoParent = GameObject.Find("Ammos").transform;
     }
 
     private void OnEnable()
@@ -435,12 +439,18 @@ public class NormalZombie : NormalZombieData
 
     private IEnumerator DeathEnd()
     {
-        int num = Random.Range(0, 100);
-
-        if (0 <= num && num < 5)
+        int num_Zed = Random.Range(0, 100);
+        if (0 <= num_Zed && num_Zed < 5)
         {
             GameManager.instance.isZedTime = true;
-        }
+        }   // if: 제드타임 발생
+
+        int num_Ammo = Random.Range(0, 100);
+        if (0 <= num_Ammo && num_Ammo < 5)
+        {
+            GameObject newAmmo = Instantiate(ammoPrefab, ammoParent);
+            newAmmo.transform.position = gameObject.transform.position;
+        }   // if: 총알 스폰
 
         while (ani.GetNextAnimatorStateInfo(0).IsName("Dead") == false)
         {

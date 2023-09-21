@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -86,9 +87,12 @@ public class AttackSpit : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!PhotonNetwork.IsMasterClient)
+        { return; }
         if (other.CompareTag("Player"))
         {
             other.gameObject.GetComponent<PlayerHealth>().OnDamage(1.0f, Vector3.zero, Vector3.zero);
+            //other.gameObject.GetComponent<PlayerHealth>().OnPosion(true);
         }
     }
 }
