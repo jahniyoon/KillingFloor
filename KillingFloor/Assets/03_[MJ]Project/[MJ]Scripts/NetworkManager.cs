@@ -263,17 +263,24 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     #region 유저 데이터 설정
     // 유저 데이터 설정하는 메서드
-    void SetData(string curData)
+    public void SetData(string curData)
     {
         // 업데이트할 사용자 데이터 요청 생성
         var request = new UpdateUserDataRequest()
         {
             Data = new Dictionary<string, string>() { { "HomeLevel", curData } },   // "HomeLevel" 키를 가진 데이터 설정
-            Permission = UserDataPermission.Public      // 데이터 공개
+            Permission = UserDataPermission.Public     // 데이터 공개
         };
 
         // PlayFab를 통해 사용자 데이터 업데이트 요청 전송
-        PlayFabClientAPI.UpdateUserData(request, (result) => { }, (error) => Debug.Log("데이터 저장 실패"));
+        PlayFabClientAPI.UpdateUserData(request, (result) => 
+        {
+            Debug.Log("SetData 성공 -> " + result);
+            Debug.Log($"curData : {curData}");
+
+            localPlayerLv = curData;
+        },
+        (error) => Debug.Log("데이터 저장 실패"));
     }
 
     // 유저 데이터 가져오는 메서드
@@ -298,13 +305,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
             UserNameText.text = "Name: " + localPlayerName + "\nLevel: " + localPlayerLv;
 
-            // 문자열을 정수로 변환 후 1을 더함
-            int lv = int.Parse(localPlayerLv) + 1;
-            // 결과를 다시 문자열로 변환
-            string localPlayerLvUp = lv.ToString();
+            //// 문자열을 정수로 변환 후 1을 더함
+            //int lv = int.Parse(localPlayerLv) + 1;
+            //// 결과를 다시 문자열로 변환
+            //string localPlayerLvUp = lv.ToString();
 
-            Debug.Log(lv);
-            Debug.Log("더하기 1 했을 때: " + localPlayerLvUp);
+            //Debug.Log(lv);
+            //Debug.Log("더하기 1 했을 때: " + localPlayerLvUp);
 
         },
             (error) => Debug.Log("데이터 불러오기 실패"));
