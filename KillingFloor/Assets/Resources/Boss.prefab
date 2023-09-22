@@ -275,6 +275,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6749433695283906125, guid: c138d35eb6124514aa622876fc3997fa,
         type: 3}
+      propertyPath: m_Text
+      value: Q.T.B.Boss
+      objectReference: {fileID: 0}
+    - target: {fileID: 6749433695283906125, guid: c138d35eb6124514aa622876fc3997fa,
+        type: 3}
       propertyPath: m_FontData.m_MaxSize
       value: 264
       objectReference: {fileID: 0}
@@ -282,6 +287,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_FontData.m_FontSize
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6749433695283906128, guid: c138d35eb6124514aa622876fc3997fa,
+        type: 3}
+      propertyPath: m_Name
+      value: BOSS_TXT_NAME
+      objectReference: {fileID: 0}
+    - target: {fileID: 6749433695283906130, guid: c138d35eb6124514aa622876fc3997fa,
+        type: 3}
+      propertyPath: textKey
+      value: Q.T.B.Boss
       objectReference: {fileID: 0}
     - target: {fileID: 6749433695283906131, guid: c138d35eb6124514aa622876fc3997fa,
         type: 3}
