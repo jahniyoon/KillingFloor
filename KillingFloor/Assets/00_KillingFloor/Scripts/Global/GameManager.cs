@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         if (SceneManager.GetActiveScene().name == "Main")
         {
             Debug.Log("메인씬 입장");
-            spawnPosition = new(135.0f, -6.0f, 200.0f);
+            spawnPosition = new Vector3(135.0f, -6.0f, 200.0f);
 
         }
 
@@ -211,9 +211,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         }
 
     }
-
-
-
 
 
     // Junoh 추가

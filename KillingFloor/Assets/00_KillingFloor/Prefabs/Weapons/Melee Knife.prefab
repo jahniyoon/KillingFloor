@@ -83,7 +83,7 @@ MonoBehaviour:
   rightElbowObj: {fileID: 5530635079174040069}
   weaponID: 0
   weaponType: 2
-  damage: 30
+  damage: 80
   fireRate: 300
   reloadRate: 0.8
   ammo: 999
