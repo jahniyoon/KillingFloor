@@ -26,7 +26,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [Header("Lobby")]
     public InputField UserSearchInput;
     public Text LobbyInfoText, UserNickNameText, UserNameText;
-
+    
     [Header("Room")]
     public InputField SetDataInput;
     public GameObject SetDataBtnObj;
@@ -412,7 +412,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         isLoaded = true;
         PhotonNetwork.LocalPlayer.NickName = MyPlayFabInfo.DisplayName;
-
+        LobbyScreen(true);// 로비를 켠다.
         ShowPanel(Lobby_Panel);
         ShowUserNickName();
     }
@@ -427,6 +427,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Store_Panel.SetActive(false);
 
         curPanel.SetActive(true);
+    }
+    
+    // 지환
+    void LobbyScreen(bool isLobby)
+    {
+        Lobby_Screen.SetActive(isLobby);
     }
 
     void ShowUserNickName()
@@ -446,6 +452,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
+        LobbyScreen(false);// 로비를 끈다
         isLoaded = false;
         ShowPanel(Login_Panel);
     }

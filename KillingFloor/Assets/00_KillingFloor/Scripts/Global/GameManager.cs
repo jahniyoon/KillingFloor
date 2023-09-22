@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
 
 
-            StartCoroutine(ZedTime());
+            Zed();
 
         }
     }
@@ -133,8 +133,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     public void MasterZed()
     {
-        StartCoroutine(ZedTime());
-
         photonView.RPC("SyncZedTime", RpcTarget.All);
     }
 
