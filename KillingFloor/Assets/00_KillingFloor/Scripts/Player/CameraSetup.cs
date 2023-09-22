@@ -61,25 +61,30 @@ public class CameraSetup : MonoBehaviourPun
         {
             if (input.changeCamera) // 버튼이 눌리면 실행
             {
-                tpsCam.SetActive(isFPS);
-                fpsCam.SetActive(!isFPS);
-                tpsPlayerBody.SetActive(isFPS);
-                fpsPlayerBody.SetActive(!isFPS);
-                playerSpine.SetActive(isFPS);
-
-
-                if (isFPS) // 1인칭일 때
-                {
-                    followCam = tpsCam.GetComponent<CinemachineVirtualCamera>();
-                }
-                else if (!isFPS) // 3인칭일 때
-                {
-                    followCam = fpsCam.GetComponent<CinemachineVirtualCamera>();
-                }
-                CameraSet(followCam);
+                SetCamera();
                 input.changeCamera = false; // 카메라가 변경되면 다시 입력 가능
             }
         }
+    }
+
+    public void SetCamera()
+    {
+        tpsCam.SetActive(isFPS);
+        fpsCam.SetActive(!isFPS);
+        tpsPlayerBody.SetActive(isFPS);
+        fpsPlayerBody.SetActive(!isFPS);
+        playerSpine.SetActive(isFPS);
+
+
+        if (isFPS) // 1인칭일 때
+        {
+            followCam = tpsCam.GetComponent<CinemachineVirtualCamera>();
+        }
+        else if (!isFPS) // 3인칭일 때
+        {
+            followCam = fpsCam.GetComponent<CinemachineVirtualCamera>();
+        }
+        CameraSet(followCam);
     }
 
     public void TPSTest()

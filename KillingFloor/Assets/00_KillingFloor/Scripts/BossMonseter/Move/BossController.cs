@@ -111,18 +111,26 @@ public class BossController : MonoBehaviourPun
 
     void Update()
     {
-        if (!PhotonNetwork.IsMasterClient) { return; }
-        if (bossintro.activeSelf)
+        if(photonView.IsMine)
         {
-            if (!audioChk)
+            if (bossintro.activeSelf)
             {
-                StartCoroutine(TimeAudio(intro, 1));
-                audioChk = true;
+                if (!audioChk)
+                {
+                    Invoke("bossIntroTime", 4f);
+                    audioChk = false;
+              
+                }
+               
+
             }
-
-
-            Invoke("bossIntroTime", 4f);
         }
+
+        if (!PhotonNetwork.IsMasterClient)
+        { return; }
+
+       
+
         if (bossHp <= 0)
         {
             if (dieChk == false)
@@ -202,12 +210,8 @@ public class BossController : MonoBehaviourPun
                     case 2:
 
                         animator.SetTrigger("Attack3");//브레스
-                        audioSource.PlayOneShot(fireBreathsAudio);
-                        for (int i = 0; i <= 2; i++)
-                        {
-                            fireBreaths[i].SetActive(true);
-                            fireBreathsParticle[i].Play();
-                        }
+                        photonView.RPC("PartticleOn", RpcTarget.All,1); // 포톤으로 호출
+                        audioSource.PlayOneShot(fireBreathsAudio);                                  
                         currentTime = 0;
 
                         setTime = 5.75f;
@@ -215,21 +219,7 @@ public class BossController : MonoBehaviourPun
                     case 3:
 
                         animator.SetTrigger("Shout");//짖기
-                        for (int i = 0; i <= 1; i++)
-                        {
-                            fireBreathHoles[i].SetActive(true);
-                            fireBreathHoleParticles[i].Play();
-                            midSphereEffects[i].SetActive(true);
-                            if (i == 1)
-                            {
-                                midSphereEffectParticles[i].Play();
-                                StartCoroutine(StopParticle(midSphereEffectParticles[i], 3.6f));//파티클 정지 코루틴
-                                StartCoroutine(FalseObj(midSphereEffects[0], 3.6f));//오브젝트 정지 코루틴
-                            }
-                            StartCoroutine(StopParticle(fireBreathHoleParticles[i], 3.6f));//파티클 정지 코루틴
-
-
-                        }
+                        photonView.RPC("PartticleOn", RpcTarget.All,2); // 포톤으로 호출
 
                         currentTime = 0;
                         setTime = 3.6f;
@@ -237,44 +227,22 @@ public class BossController : MonoBehaviourPun
                     case 4://점프공격
                         audioSource.PlayOneShot(jump);
                         animator.SetTrigger("Jump");
-                        Invoke("JumpImpt", 1.1f);
+                        photonView.RPC("PartticleOn", RpcTarget.All, 3); // 포톤으로 호출
                         currentTime = 0;
                         setTime = 3f;
                         break;
                     case 5://긴브레스
                         animator.SetTrigger("Breath");
                         audioSource.PlayOneShot(fireBreathsAudio);
-                        Invoke("fireBreathImpt", 1f);
+                        photonView.RPC("PartticleOn", RpcTarget.All, 4); // 포톤으로 호출
                         currentTime = 0;
 
                         setTime = 5.8f;
                         break;
                     case 6://메테오
                         animator.SetTrigger("Meteor");
-                        // 현재 오브젝트의 Transform 컴포넌트 가져오기
-                        Transform myTransform = transform;
 
-                        // 현재 오브젝트의 정면 방향 벡터 계산
-                        Vector3 forwardDirection = myTransform.forward;
-
-                        forwardDirection = new Vector3(forwardDirection.x, forwardDirection.y + 1f, forwardDirection.z);
-                        // 배치할 거리
-                        float distanceToPlace = 4.0f;
-
-                        // 오브젝트의 위치 계산 (현재 오브젝트의 위치에서 정면 방향으로 일정 거리만큼 이동)
-                        Vector3 newPosition = myTransform.position + forwardDirection * distanceToPlace;
-
-
-
-                        meteor.transform.position = newPosition;
-                        meteor.SetActive(true);
-
-                        // 오브젝트의 위치를 새로 계산한 위치로 설정
-                        //   meteors[i].transform.position = newPosition;
-                        // 오브젝트 활성화
-                        meteors[0].SetActive(true);
-
-
+                        photonView.RPC("PartticleOn", RpcTarget.All, 5); // 포톤으로 호출
 
                         currentTime = 0;
 
@@ -319,7 +287,66 @@ public class BossController : MonoBehaviourPun
 
     }
 
-    
+    [PunRPC]
+    private void PartticleOn(int num)
+    {
+        switch(num)
+        {
+            case 1:
+                Invoke("fireBreathImpt", 0.5f);
+                break;
+            case 2:
+                for (int i = 0; i <= 1; i++)
+                {
+                    fireBreathHoles[i].SetActive(true);
+                    fireBreathHoleParticles[i].Play();
+                    midSphereEffects[i].SetActive(true);
+                    if (i == 1)
+                    {
+                        midSphereEffectParticles[i].Play();
+                        StartCoroutine(StopParticle(midSphereEffectParticles[i], 3.6f));//파티클 정지 코루틴
+                        StartCoroutine(FalseObj(midSphereEffects[0], 3.6f));//오브젝트 정지 코루틴
+                    }
+                    StartCoroutine(StopParticle(fireBreathHoleParticles[i], 3.6f));//파티클 정지 코루틴
+
+
+                }
+                break;
+            case 3:
+                Invoke("JumpImpt", 1.1f);
+
+                break;
+            case 4:
+                Invoke("fireBreathImpt", 1f);
+                break;
+            case 5:
+                // 현재 오브젝트의 Transform 컴포넌트 가져오기
+                Transform myTransform = transform;
+
+                // 현재 오브젝트의 정면 방향 벡터 계산
+                Vector3 forwardDirection = myTransform.forward;
+
+                forwardDirection = new Vector3(forwardDirection.x, forwardDirection.y + 1f, forwardDirection.z);
+                // 배치할 거리
+                float distanceToPlace = 4.0f;
+
+                // 오브젝트의 위치 계산 (현재 오브젝트의 위치에서 정면 방향으로 일정 거리만큼 이동)
+                Vector3 newPosition = myTransform.position + forwardDirection * distanceToPlace;
+
+
+
+                meteor.transform.position = newPosition;
+                meteor.SetActive(true);
+
+                // 오브젝트의 위치를 새로 계산한 위치로 설정
+                //   meteors[i].transform.position = newPosition;
+                // 오브젝트 활성화
+                meteors[0].SetActive(true);
+
+                break;
+        }
+
+    }
     private void AnimatorStart(string name)
     {
         animator.SetTrigger(name);
@@ -360,6 +387,7 @@ public class BossController : MonoBehaviourPun
         gameObj.SetActive(false);
 
     }
+    
     //점프 충격
     private void JumpImpt()
     {
@@ -371,6 +399,7 @@ public class BossController : MonoBehaviourPun
         }
 
     }
+
     private void fireBreathImpt()
     {
         for (int i = 0; i <= 2; i++)
@@ -381,12 +410,12 @@ public class BossController : MonoBehaviourPun
         }
     }
 
+
+  
     //보스 인트로
     private void bossIntroTime()
     {
-        audioChk = false;
-        bossintro.SetActive(false);
-
+        PhotonNetwork.Destroy(bossintro);
     }
     public void bossHit(float dam)
     {

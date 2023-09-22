@@ -105,6 +105,13 @@ public class PlayerInfoUI : MonoBehaviourPun
     // 스크린 데미지 업데이트
     public void DamageScreenUpdate()
     {
+        // 독상태 확인
+        if (0 < poisonScreenValue)
+        {
+            bloodScreenValue = 0;
+        }
+
+
         // 블러드 스크린의 값이 있을 경우 0이 될때까지 실행
         if (0 < bloodScreenValue)
         {
@@ -128,6 +135,17 @@ public class PlayerInfoUI : MonoBehaviourPun
         bloodScreenValue += 200 + newHealth;
         if (1000f < bloodScreenValue)
         { bloodScreenValue = 1000f; }
+        PlayerFireCameraShake.Invoke();
+
+    }
+    public void ResetScreen()
+    {
+        bloodScreenValue = 0f;
+        poisonScreenValue = 0;
+        bloodScreen.color = new Color(255, 255, 255, 0);
+        poisonScreen.color = new Color(255, 255, 255,0);
+
+
     }
     // 포이즌 스크린의 값 조정
     public void SetPoisonScreen()
