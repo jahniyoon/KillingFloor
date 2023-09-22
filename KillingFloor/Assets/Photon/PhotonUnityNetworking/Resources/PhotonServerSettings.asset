@@ -76,6 +76,7 @@ MonoBehaviour:
   - IntroDel
   - MasterTransform
   - SyncTransform
+  - bossMove
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -260,14 +260,16 @@ public class BossController : MonoBehaviourPun
                         audioSource.PlayOneShot(walk);
                     }
                   
-                    agent.isStopped = false;
+                   /* agent.isStopped = false;
                     agent.updatePosition = true;
-                    agent.updateRotation = true;
+                    agent.updateRotation = true;*/
+             
                     if (targetPlayer[randPlayerNum] != null)
                     {
+                        photonView.RPC("bossMove", RpcTarget.All); // 포톤으로 호출
 
                         Debug.Log(targetPlayer[randPlayerNum]);
-                        agent.destination = targetPlayer[randPlayerNum].transform.position;
+                       // agent.destination = targetPlayer[randPlayerNum].transform.position;
                     }
 
                 }
@@ -280,7 +282,11 @@ public class BossController : MonoBehaviourPun
         }
 
     }
-
+    [PunRPC]
+    private void bossMove()
+    {
+        agent.SetDestination(targetPlayer[randPlayerNum].transform.position);
+    }
     [PunRPC]
     private void PartticleOn(int num)
     {
