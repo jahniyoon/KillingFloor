@@ -54,6 +54,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public bool isZedTimeCheck = false;
     public List<Transform> shops = new List<Transform>();
     public bool isShop = false;
+
+    public bool GMMode = true;
     // Junoh 추가
 
     private void Awake()
@@ -79,7 +81,12 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         //PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
         
         GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
-
+        if (GMMode)
+        {
+            Debug.Log("GM Mode");
+            Transform bossRoomPos = FindAnyObjectByType<StartColiderScripts>().transform;
+            newPlayer.transform.position = bossRoomPos.transform.position;
+        }
         //newPlayer.transform.SetParent(GameObject.Find("Players").transform);
 
     }
@@ -101,8 +108,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     // Start is called before the first frame update
     void Start()
     {
-        // ToDO : 테스트씬으로 넘어오면 생성되도록 수정하기
+       
 
+        // ToDO : 테스트씬으로 넘어오면 생성되도록 수정하기
+  
         StartCoroutine(StartWave());
     }
 

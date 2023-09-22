@@ -24,7 +24,7 @@ public class BossController : MonoBehaviourPun
     private Animator animator;
     private int randomFattern;//랜덤패턴
     private float currentTime = 0f;
-    private float setTime = 6.5f;
+    private float setTime = 6f;
     private int saveFattern = 0;//이전패턴
     private GameObject[] fireBreaths;//브레스 오브젝트 배열
     private ParticleSystem[] fireBreathsParticle;//브레스 파티클 배열
@@ -105,8 +105,12 @@ public class BossController : MonoBehaviourPun
 
         animator = GetComponent<Animator>();
         targetPlayer = GameObject.FindGameObjectsWithTag("Player");
-        randPlayerNum = Random.Range(0, targetPlayer.Length);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            randPlayerNum = Random.Range(0, targetPlayer.Length);
+        }
 
+   
     }
 
     void Update()
@@ -117,8 +121,9 @@ public class BossController : MonoBehaviourPun
             {
                 if (!audioChk)
                 {
+                  
                     StartCoroutine(MasterIntro());
-                    audioChk = false;
+                    audioChk = true;
                                    
                 }
             }
@@ -140,9 +145,18 @@ public class BossController : MonoBehaviourPun
             return;
         }
 
+        //Debug.Log("현재 위치: " + transform.position + targetPlayer[randPlayerNum].transform.position + "네비 상대 위치 " + agent.destination);
         currentTime += Time.deltaTime;
         if (currentTime >= setTime)
         {
+
+            NavMeshPath path = new NavMeshPath();
+            agent.CalculatePath(targetPlayer[randPlayerNum].transform.position, path);
+            agent.SetPath(path);
+            // agent.SetDestination(targetPlayer[randPlayerNum].transform.position);
+
+          
+
             if (!changeBool)
             {
                 Invoke("changeplayerlook", 30f);
@@ -177,7 +191,7 @@ public class BossController : MonoBehaviourPun
                         saveFattern = 1;
                     }
                 }// 공격패턴 중복체크, 중복패턴 변경 End
-
+              
                 if (bossHp < meteorFattern[mereorCount])
                 {
                     mereorCount++;
@@ -251,7 +265,7 @@ public class BossController : MonoBehaviourPun
             }//보스 공격패턴End
             else//원거리 애니메이션
             {
-                Debug.Log(agent.speed);
+               
                 AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("idle"))// 속도 변화
                 {
@@ -260,17 +274,10 @@ public class BossController : MonoBehaviourPun
                         audioSource.PlayOneShot(walk);
                     }
                   
-                   /* agent.isStopped = false;
+                    agent.isStopped = false;
                     agent.updatePosition = true;
-                    agent.updateRotation = true;*/
+                    agent.updateRotation = true;
              
-                    if (targetPlayer[randPlayerNum] != null)
-                    {
-                        photonView.RPC("bossMove", RpcTarget.All); // 포톤으로 호출
-
-                        Debug.Log(targetPlayer[randPlayerNum]);
-                       // agent.destination = targetPlayer[randPlayerNum].transform.position;
-                    }
 
                 }
                 animator.SetFloat("Speed", agent.speed);
@@ -351,7 +358,7 @@ public class BossController : MonoBehaviourPun
     {
         animator.SetTrigger(name);
     }
-    //대상을 바라보는 로직 (사용안함)
+  /*  //대상을 바라보는 로직 (사용안함)
     private void LookRotate()
     {
         if (targetPlayer[randPlayerNum] == null) // 대상사라질경우
@@ -369,7 +376,7 @@ public class BossController : MonoBehaviourPun
         // 현재 오브젝트의 회전을 대상을 바라보는 회전으로 설정
         transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, 2 * Time.deltaTime);
     }
-    //보스 움직임
+    //보스 움직임*/
 
     
     //파티클 정지
@@ -465,6 +472,7 @@ public class BossController : MonoBehaviourPun
         int targetNumber = Random.Range(0, playerNumber.Count);
         randPlayerNum = playerNumber[targetNumber];
         changeBool = false;
+        photonView.RPC("bossMove", RpcTarget.All); // 포톤으로 호출
     }
 
     private IEnumerator TimeAudio(AudioClip audio ,float time)
@@ -476,26 +484,26 @@ public class BossController : MonoBehaviourPun
     public void OnDamage(float dam)
     {
         // 마스터에게 데미지 계산 요청
-        Debug.Log("데미지 계산요청" + photonView.ViewID);
+        Debug.Log("데미지 계산요청" + bossHp);
 
         photonView.RPC("MasterDamage", RpcTarget.MasterClient, dam);
     }
     // 2.마스터가 데미지 계산을 요청받고 계산을 먼저 해준다.
     // 계산이 끝난 값을 모두에게 보내준다.
     [PunRPC]
-    public void MasterDamage(int _destroyCount)
+    public void MasterDamage(float _destroyCount)
     {
         Debug.Log("마스터 모두에게 데미지 업데이트 요청");
 
         bossHp -= _destroyCount;
-
+        Debug.Log("마스터 계산요청" + bossHp);
         // 마스터가 계산한 값 전달
         photonView.RPC("SyncDamage", RpcTarget.All, bossHp);
 
     }
     // 3. 모두는 (마스터를 포함) 전달받은 값을 업데이트를 한다.
     [PunRPC]
-    public void SyncDamage(int _destroyCount)
+    public void SyncDamage(float _destroyCount)
     {  
         Hpimage.fillAmount = normalization();
         bossHp = _destroyCount;

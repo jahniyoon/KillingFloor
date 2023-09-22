@@ -95,7 +95,7 @@ public class Meteor : MonoBehaviourPun
     // 2.마스터가 데미지 계산을 요청받고 계산을 먼저 해준다.
     // 계산이 끝난 값을 모두에게 보내준다.
     [PunRPC]
-    public void MasterDamage(int _destroyCount)
+    public void MasterDamage(float _destroyCount)
     {
         Debug.Log("마스터 모두에게 데미지 업데이트 요청");
         MeteorHP -= _destroyCount;
@@ -107,7 +107,7 @@ public class Meteor : MonoBehaviourPun
     }
     // 3. 모두는 (마스터를 포함) 전달받은 값을 업데이트를 한다.
     [PunRPC]
-    public void SyncDamage(int _destroyCount)
+    public void SyncDamage(float _destroyCount)
     {
 
         MeteorHP = _destroyCount;
