@@ -117,12 +117,10 @@ public class BossController : MonoBehaviourPun
             {
                 if (!audioChk)
                 {
-                    Invoke("bossIntroTime", 4f);
+                    StartCoroutine(MasterIntro());
                     audioChk = false;
-              
+                                   
                 }
-               
-
             }
         }
 
@@ -145,9 +143,6 @@ public class BossController : MonoBehaviourPun
         currentTime += Time.deltaTime;
         if (currentTime >= setTime)
         {
-
-
-
             if (!changeBool)
             {
                 Invoke("changeplayerlook", 30f);
@@ -155,9 +150,10 @@ public class BossController : MonoBehaviourPun
             }
             // 플레이어와 보스 사이의 거리를 계산합니다.
             float distance = Vector3.Distance(targetPlayer[randPlayerNum].transform.position, transform.position);
-
+            
             if (distance < 6f)//근거리 애니메이션
             {
+            
                 agent.isStopped = true;
                 agent.updatePosition = false;
                 agent.updateRotation = false;
@@ -255,25 +251,23 @@ public class BossController : MonoBehaviourPun
             }//보스 공격패턴End
             else//원거리 애니메이션
             {
-
+                Debug.Log(agent.speed);
                 AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("idle"))// 속도 변화
                 {
                     if (!audioSource.isPlaying)
                     {
                         audioSource.PlayOneShot(walk);
-                        agent.isStopped = false;
-                        agent.updatePosition = true;
-                        agent.updateRotation = true;
-                        if (targetPlayer[randPlayerNum] != null)
-                        {
+                    }
+                  
+                    agent.isStopped = false;
+                    agent.updatePosition = true;
+                    agent.updateRotation = true;
+                    if (targetPlayer[randPlayerNum] != null)
+                    {
 
-                            Debug.Log(targetPlayer[randPlayerNum]);
-
-                            agent.destination = targetPlayer[randPlayerNum].transform.position;
-                        }
-
-
+                        Debug.Log(targetPlayer[randPlayerNum]);
+                        agent.destination = targetPlayer[randPlayerNum].transform.position;
                     }
 
                 }
@@ -409,13 +403,31 @@ public class BossController : MonoBehaviourPun
             StartCoroutine(StopParticle(fireBreathsParticle[i], 4f));
         }
     }
-
-
-  
-    //보스 인트로
-    private void bossIntroTime()
+    private IEnumerator MasterIntro()
     {
-        PhotonNetwork.Destroy(bossintro);
+        yield return new WaitForSeconds(4);
+        int id = bossintro.GetComponent<PhotonView>().ViewID;
+
+        photonView.RPC("bossIntroTime", RpcTarget.MasterClient, id); // 포톤으로 호출
+      
+       
+    }
+
+    [PunRPC]
+    //보스 인트로
+    private void bossIntroTime(int id)
+    {
+
+        photonView.RPC("IntroDel", RpcTarget.All, id); // 포톤으로 호출
+    }
+
+    [PunRPC]
+    private void IntroDel(int id )
+    {
+        // Photon View ID를 사용하여 오브젝트 찾기
+        GameObject targetObject = PhotonView.Find(id)?.gameObject;
+
+        targetObject.SetActive(false);
     }
     public void bossHit(float dam)
     {
@@ -478,8 +490,7 @@ public class BossController : MonoBehaviourPun
     // 3. 모두는 (마스터를 포함) 전달받은 값을 업데이트를 한다.
     [PunRPC]
     public void SyncDamage(int _destroyCount)
-    {
-  
+    {  
         Hpimage.fillAmount = normalization();
         bossHp = _destroyCount;
 
