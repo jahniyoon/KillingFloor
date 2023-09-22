@@ -113,7 +113,10 @@ public class NormalNavigation : MonoBehaviour
             }
             else if (targets[minDistanceTarget].transform.position != null)
             {
-                nav.SetDestination(targets[minDistanceTarget].transform.position);
+                if (nav.enabled == true)
+                {
+                    nav.SetDestination(targets[minDistanceTarget].transform.position);
+                }
             }
         }
 

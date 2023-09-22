@@ -14,7 +14,8 @@ public class NoticeController : MonoBehaviour
     public RectTransform noticeMiddle;
     public RectTransform noticeRight;
 
-    public CanvasGroup warningSubText;
+    public CanvasGroup warningEndText;
+    public CanvasGroup warningStartText;
     public CanvasGroup noticeTextText;
     public CanvasGroup noticeTextCount;
 
@@ -35,7 +36,8 @@ public class NoticeController : MonoBehaviour
         noticeLeft.localScale = new Vector2(0.0f, 0.0f);
         noticeMiddle.localScale = new Vector2(0.0f, 0.0f);
         noticeRight.localScale = new Vector2(0.0f, 0.0f);
-        warningSubText.alpha = 0.0f;
+        warningEndText.alpha = 0.0f;
+        warningStartText.alpha = 0.0f;
         noticeTextText.alpha = 0.0f;
         noticeTextCount.alpha = 0.0f;
     }
@@ -50,7 +52,7 @@ public class NoticeController : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(WarningSubMove(new Vector2(-300.0f, 0.0f), new Vector2(300.0f, 0.0f), new Vector2(60.0f, 0.0f), 0.1f));
         yield return new WaitForSeconds(0.1f);
-        StartCoroutine(WarningSubText(0.1f, false));
+        StartCoroutine(WarningSubText(0.1f, false, _isText));
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(NoticeScale(0.1f, false, _isText));
         yield return new WaitForSeconds(0.1f);
@@ -64,7 +66,7 @@ public class NoticeController : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(NoticeScale(0.1f, true, _isText));
         yield return new WaitForSeconds(0.1f);
-        StartCoroutine(WarningSubText(0.1f, true));
+        StartCoroutine(WarningSubText(0.1f, true, _isText));
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(WarningSubMove(new Vector2(300.0f, 0.0f), new Vector2(-300.0f, 0.0f), new Vector2(-60.0f, 0.0f), 0.1f));
         yield return new WaitForSeconds(0.1f);
@@ -257,7 +259,7 @@ public class NoticeController : MonoBehaviour
         noticeMiddle.localScale = initalMiddle + _middle;
     }
 
-    private IEnumerator WarningSubText(float _duration, bool _isEnd)
+    private IEnumerator WarningSubText(float _duration, bool _isEnd, bool _isText)
     {
         timeElapsed = 0.0f;
 
@@ -267,14 +269,30 @@ public class NoticeController : MonoBehaviour
 
             float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / _duration), 2);
 
-            if (_isEnd) { warningSubText.alpha = Mathf.Lerp(1.0f, 0.0f, time); }
-            else { warningSubText.alpha = Mathf.Lerp(0.0f, 1.0f, time); }
+            if (_isEnd)
+            {
+                if (_isText) { warningEndText.alpha = Mathf.Lerp(1.0f, 0.0f, time); }
+                else { warningStartText.alpha = Mathf.Lerp(1.0f, 0.0f, time); }
+            }
+            else
+            {
+                if (_isText) { warningEndText.alpha = Mathf.Lerp(1.0f, 0.0f, time); }
+                else { warningStartText.alpha = Mathf.Lerp(0.0f, 1.0f, time); }
+            }
 
             yield return null;
         }
 
-        if (_isEnd) { warningSubText.alpha = 0.0f; }
-        else { warningSubText.alpha = 1.0f; }
+        if (_isEnd)
+        {
+            if (_isText) { warningEndText.alpha = 0.0f; }
+            else { warningStartText.alpha = 0.0f; }
+        }
+        else
+        {
+            if (_isText) { warningEndText.alpha = 1.0f; }
+            else { warningStartText.alpha = 1.0f; }
+        }
     }
 
     private IEnumerator NoticeText(float _duration, bool _isEnd, bool _isText)

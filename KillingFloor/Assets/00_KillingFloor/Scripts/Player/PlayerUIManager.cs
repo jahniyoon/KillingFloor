@@ -59,7 +59,8 @@ public class PlayerUIManager : MonoBehaviour
 
 
     //JunOh
-    public TMP_Text warningSubText;   // 알림 내용
+    public TMP_Text warningEndText;   // 웨이브 종료 내용
+    public TMP_Text warningStartText; // 웨이브 시작 내용
     public TMP_Text noticeTextText;   // 알림 로고 정보
     public TMP_Text noticeCountText;  // 알림 웨이브 정보
     public TMP_Text zombieCountText;  // 좀비 수
@@ -243,10 +244,17 @@ public class PlayerUIManager : MonoBehaviour
 
 
     //JunOh
-    public void SetNotice(string value)
+
+    public void SetEndNotice(string value)
     {
-        warningSubText.text = string.Format("{0}", value);
+        warningEndText.text = string.Format("{0}", value);
     }
+
+    public void SetStartNotice(string value)
+    {
+        warningStartText.text = string.Format("{0}", value);
+    }
+
     public void SetNoticeWave()
     {
         noticeCountText.text = string.Format("[ {0}/ {1} ]", GameManager.instance.round, GameManager.instance.wave);
