@@ -6439,9 +6439,9 @@ MonoBehaviour:
   mouseSensitiveValue: {fileID: 1504811761}
   isShopState: 0
   isPauseState: 0
-  warningEndText: {fileID: 0}
-  warningStartText: {fileID: 0}
-  noticeTextText: {fileID: 0}
+  warningEndText: {fileID: 2731047854529641802}
+  warningStartText: {fileID: 568154866364725203}
+  noticeTextText: {fileID: 2249246963837599172}
   noticeCountText: {fileID: 2278167331946916995}
   zombieCountText: {fileID: 2278167332209848379}
   timerCountText: {fileID: 2278167332504875560}
