@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class PlayerInfoUI : MonoBehaviourPun
 {
+    public enum State { Live, Die }
+    public State state;
+
     public PlayerHealth m_player;
     public TMP_Text playerNickname;
     public TMP_Text playerLevel;
@@ -21,6 +24,8 @@ public class PlayerInfoUI : MonoBehaviourPun
     public Image poisonScreen;  // 독 데미지 스크린
     public float bloodScreenValue;
     public float poisonScreenValue;
+
+    public bool cameraShakeTrigger;
 
     // 코인 증가효과 계산용 변수
     private int coin;
@@ -46,6 +51,8 @@ public class PlayerInfoUI : MonoBehaviourPun
         {
             CoinUpdate();
             DamageScreenUpdate();
+            PlayerCameraShake();
+            PlayerState();
         }
     }
 
@@ -133,10 +140,10 @@ public class PlayerInfoUI : MonoBehaviourPun
         float newHealth = (-1 * _health + 100);
 
         bloodScreenValue += 200 + newHealth;
-        if (1000f < bloodScreenValue)
-        { bloodScreenValue = 1000f; }
-        PlayerFireCameraShake.Invoke();
+        if (900 < bloodScreenValue)
+        { bloodScreenValue = 900; }
 
+        cameraShakeTrigger = true;  // 카메라 흔들기를 위한 Bool
     }
     public void ResetScreen()
     {
@@ -144,13 +151,29 @@ public class PlayerInfoUI : MonoBehaviourPun
         poisonScreenValue = 0;
         bloodScreen.color = new Color(255, 255, 255, 0);
         poisonScreen.color = new Color(255, 255, 255,0);
-
-
     }
     // 포이즌 스크린의 값 조정
     public void SetPoisonScreen()
     {
         poisonScreenValue += 200;
     }
-
+    public void PlayerCameraShake()
+    {
+        if (cameraShakeTrigger)
+        {
+            cameraShakeTrigger = false;
+            PlayerFireCameraShake.Invoke();
+        }
+    }
+    public void PlayerState()
+    {
+        if(state == State.Die)
+        {
+            GameManager.instance.inputLock = true;
+        }
+        if (state == State.Live)
+        {
+            GameManager.instance.inputLock = false;
+        }
+    }
 }

@@ -4471,6 +4471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c8146fbef9fef4f9c0a7b956719a82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 0
   m_player: {fileID: 0}
   playerNickname: {fileID: 476069275615135483}
   playerLevel: {fileID: 6022182744024792868}
@@ -4484,6 +4485,7 @@ MonoBehaviour:
   poisonScreen: {fileID: 0}
   bloodScreenValue: 0
   poisonScreenValue: 0
+  cameraShakeTrigger: 0
 --- !u!114 &3074268453861525134
 MonoBehaviour:
   m_ObjectHideFlags: 0

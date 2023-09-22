@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public bool inputLock;  // 입력을 받을 수 있는 상태. true면 락이 걸려 입력 불가
 
     public Transform shopPosition; // 매 웨이브 업데이트되는 상점의 트랜스폼
-
+    public int playerCount;
     // 지환 추가
 
     [Header("Game Setting")]
@@ -119,11 +119,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public void SetPlayer()
     {
+        //if(playerCount == PhotonNetwork.CurrentRoom.PlayerCount)
         targetPlayer = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject players in targetPlayer)
         {
             players.transform.SetParent(GameObject.Find("Players").transform);
-
         }
     }
 

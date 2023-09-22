@@ -34,7 +34,6 @@ public class PlayerHealth : LivingEntity
         playerAnimator.SetBool("isDead", false);
         playerInfo.SetHealth(health);
         playerInfo.SetArmor(armor);
-        playerInfo.ResetScreen();
     }
 
     // 데미지 처리
@@ -42,10 +41,11 @@ public class PlayerHealth : LivingEntity
     public override void OnDamage(float damage, Vector3 hitPoint,
         Vector3 hitDirection)
     {
-        if (!dead)
+        if (dead)
         {
             // 사망하지 않은 경우에만 효과음을 재생
             //playerAudioPlayer.PlayOneShot(hitClip);
+            return;
         }
 
         // LivingEntity의 OnDamage() 실행(데미지 적용)
@@ -62,7 +62,6 @@ public class PlayerHealth : LivingEntity
     {
         base.OnPoison();
         playerInfo.SetPoisonScreen();
-
     }
 
     [PunRPC]
@@ -94,15 +93,20 @@ public class PlayerHealth : LivingEntity
         playerInfo.SetCoin(coin);
     }
 
+    // 플레이어 죽었을 때 실행되는 것들
     public override void Die()
     {
+     
         base.Die();
+        playerInfo.state = PlayerInfoUI.State.Die;
         playerCamera.SetCamera();
         playerAnimator.SetBool("isDead", true);
         Invoke("Respawn",3f);
     }
     public void Respawn()
     {
+        gameObject.SetActive(false);
+
         // 죽으면 리스폰 시키기
         if (photonView.IsMine)
         {
@@ -112,17 +116,16 @@ public class PlayerHealth : LivingEntity
             {
                 spawnPosition = new(135.0f, -6.0f, 200.0f);
             }
-
-
-            // 지정된 랜덤 위치로 이동
+            // 지정된 위치로 이동
             transform.position = spawnPosition;
         }
 
         // 컴포넌트들을 리셋하기 위해 게임 오브젝트를 잠시 껐다가 다시 켜기
         // 컴포넌트들의 OnDisable(), OnEnable() 메서드가 실행됨
-        gameObject.SetActive(false);
         gameObject.SetActive(true);
         playerCamera.SetCamera();
+        playerInfo.ResetScreen();
+        playerInfo.state = PlayerInfoUI.State.Live;
 
     }
 
@@ -147,6 +150,5 @@ public class PlayerHealth : LivingEntity
         armor = _armor;
         playerInfo.SetArmor(armor);
         playerInfo.SetCoin(coin);
-
     }
 }
