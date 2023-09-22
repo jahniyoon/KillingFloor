@@ -117,21 +117,17 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         }
         if (isZedTime && PhotonNetwork.IsMasterClient)
         {
-
-
-
             Zed();
-
         }
     }
 
     public void Zed()
     {
-        photonView.RPC("MasterZed", RpcTarget.MasterClient);
+        photonView.RPC("MasterZedTime", RpcTarget.MasterClient);
     }
 
     [PunRPC]
-    public void MasterZed()
+    public void MasterZedTime()
     {
         photonView.RPC("SyncZedTime", RpcTarget.All);
     }

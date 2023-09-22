@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NormalZombieSpawner : MonoBehaviour
+public class NormalZombieSpawner : MonoBehaviourPun
 {
     public List<GameObject> spawnPoint = new List<GameObject>();
     public List<GameObject> zombiePrefab = new List<GameObject>();
@@ -84,13 +84,41 @@ public class NormalZombieSpawner : MonoBehaviour
         if (PhotonNetwork.IsMasterClient)
         {
             GameObject newObject = PhotonNetwork.Instantiate(zombiePrefab[randZombieNum].name, spawnPoint[pointCount].transform.position, Quaternion.identity);
+            //ZombieTransfrom(newObject);
+            
             newObject.transform.SetParent(zombieSaveList[randZombieNum]);
         }
 
         //GameObject newObject = Instantiate(zombiePrefab[randZombieNum], zombieSaveList[randZombieNum]);
 
         //newObject.transform.position = spawnPoint[pointCount].transform.position;
+
+        Debug.Log(zombieSaveList[randZombieNum]);
+        Debug.Log(randZombieNum);
     }
+
+    //public void ZombieTransfrom(GameObject _object)
+    //{
+    //    photonView.RPC("MasterZombieTransform", RpcTarget.MasterClient, _object);
+        
+    //}
+
+    //[PunRPC]
+
+    //public void MasterZombieTransform(GameObject _object)
+    //{
+    //    photonView.RPC("SyncZombieTransfrom", RpcTarget.All, _object);
+        
+    //}
+
+    //[PunRPC]
+    //public void SyncZombieTransfrom(GameObject _object)
+    //{
+    //    _object.transform.SetParent(zombieSaveList[randZombieNum]);
+
+        
+
+    //}
 
     private void CreateZombieSave()
     {
