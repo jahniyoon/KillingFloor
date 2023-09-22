@@ -7,7 +7,6 @@ using UnityEngine.AI;
 
 public class NormalZombie : NormalZombieData
 {
-    public List<RuntimeAnimatorController> controllers = new List<RuntimeAnimatorController>();
     public List<GameObject> skills = new List<GameObject>();
 
     private Transform skillParent;
@@ -101,13 +100,12 @@ public class NormalZombie : NormalZombieData
                 else { /*No Event*/ }
             }
         }
+
+        SetTransform(transform.position);
     }
-
-
 
     private void ZombieSetting()
     {
-        ani.runtimeAnimatorController = controllers[Random.Range(0, controllers.Count)];
         blendTreeMove = StartCoroutine(BlendTreeMove(0.0f, 1.0f, 2.0f));
 
         if (gameObject.name == "ZombieWalk_01(Clone)" || gameObject.name == "ZombieWalk_02(Clone)" ||
@@ -524,6 +522,32 @@ public class NormalZombie : NormalZombieData
         }
     }
     // ================== 데미지를 입는 과정 정리 ================== //
+
+    // ================== 좀비 위치값 지정 ================== //
+    // 마스터에게 좀비 위치값 지정을 요청한다.
+    public void SetTransform(Vector3 _position)
+    {
+        // 마스터에게 데미지 계산 요청
+        photonView.RPC("MasterTransform", RpcTarget.MasterClient, _position);
+    }
+    // 2.마스터가 데미지 계산을 요청받고 계산을 먼저 해준다.
+    // 계산이 끝난 값을 모두에게 보내준다.
+    [PunRPC]
+    public void MasterTransform(Vector3 _position)
+    {
+        transform.position = _position;
+
+        // 마스터가 계산한 값 전달
+        photonView.RPC("SyncTransform", RpcTarget.All, _position);
+    }
+    // 3. 모두는 (마스터를 포함) 전달받은 값을 업데이트를 한다.
+    [PunRPC]
+    public void SyncTransform(Vector3 _position)
+    {
+        // 마스터가 계산한 값을 모두 받아와서 업데이트
+        transform.position = _position;
+    }
+    // ================== 좀비 위치값 지정 ================== //
 
     //Legacy:
     //private IEnumerator AnimationCoroutine(float startBlend, float endBlend, float duration, bool isBlend, string checkName)

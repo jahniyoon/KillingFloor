@@ -267,8 +267,8 @@ GameObject:
   - component: {fileID: 7207939716731105052}
   - component: {fileID: 7207939716731105055}
   - component: {fileID: 5358406667672536222}
-  - component: {fileID: -2353220068269185417}
-  - component: {fileID: 5809118194080345382}
+  - component: {fileID: 2272014647244899674}
+  - component: {fileID: -4681354212280936337}
   m_Layer: 0
   m_Name: ZombieHide_02
   m_TagString: Untagged
@@ -303,7 +303,7 @@ Animator:
   m_GameObject: {fileID: 7207939717960445588}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 8d2ec2f472c474443a6ddca0a2dcadb4, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3958d5d0434cd1b4aaae1fcb3740757b, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -329,8 +329,6 @@ MonoBehaviour:
   health: 0
   damage: 0
   coin: 0
-  controllers:
-  - {fileID: 9100000, guid: 3958d5d0434cd1b4aaae1fcb3740757b, type: 2}
   skills: []
   skillPrefab: {fileID: 0}
   ammoPrefab: {fileID: 6384981777947841841, guid: cda61820b7a633744a242523bf5385d9,
@@ -391,11 +389,13 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 0
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: -4681354212280936337}
+  - {fileID: 2272014647244899674}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &-2353220068269185417
+--- !u!114 &2272014647244899674
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -404,14 +404,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 7207939717960445588}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Script: {fileID: 11500000, guid: 8efc6b1d64977384eb3405357896c656, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
---- !u!114 &5809118194080345382
+  m_PositionModel:
+    SynchronizeEnabled: 1
+    TeleportEnabled: 1
+    TeleportIfDistanceGreaterThan: 3
+    InterpolateOption: 4
+    InterpolateMoveTowardsSpeed: 1
+    InterpolateLerpSpeed: 10
+    ExtrapolateOption: 0
+    ExtrapolateSpeed: 1
+    ExtrapolateIncludingRoundTripTime: 1
+    ExtrapolateNumberOfStoredPositions: 1
+  m_RotationModel:
+    SynchronizeEnabled: 1
+    InterpolateOption: 1
+    InterpolateRotateTowardsSpeed: 180
+    InterpolateLerpSpeed: 5
+  m_ScaleModel:
+    SynchronizeEnabled: 0
+    InterpolateOption: 0
+    InterpolateMoveTowardsSpeed: 1
+    InterpolateLerpSpeed: 0
+--- !u!114 &-4681354212280936337
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -425,8 +442,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
-  m_SynchronizeParameters: []
-  m_SynchronizeLayers: []
+  m_SynchronizeParameters:
+  - Type: 1
+    SynchronizeType: 1
+    Name: move
+  - Type: 9
+    SynchronizeType: 1
+    Name: isDie
+  - Type: 4
+    SynchronizeType: 1
+    Name: isHit
+  - Type: 4
+    SynchronizeType: 1
+    Name: atk01
+  - Type: 4
+    SynchronizeType: 1
+    Name: atk02
+  - Type: 4
+    SynchronizeType: 1
+    Name: atkScreaming
+  - Type: 1
+    SynchronizeType: 1
+    Name: hitPosX
+  - Type: 1
+    SynchronizeType: 1
+    Name: hitPosY
+  m_SynchronizeLayers:
+  - SynchronizeType: 1
+    LayerIndex: 0
 --- !u!1 &7207939717960445592
 GameObject:
   m_ObjectHideFlags: 0
