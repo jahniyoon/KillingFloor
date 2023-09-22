@@ -10,8 +10,8 @@ public class PlayerDamage : MonoBehaviourPun
     public float timeBetAttack = 0.5f; // 공격 간격
     private float lastAttackTime = 0; // 마지막 공격 시점
     public int destroyCount;
-    
 
+    public bool isPoison;
 
     // ================== 데미지를 입는 과정 정리 ================== //
     // 1. 어디선가 데미지 메서드를 호출한다.
@@ -75,6 +75,10 @@ public class PlayerDamage : MonoBehaviourPun
 
                     // 공격 실행
                     attackTarget.OnDamage(damage, hitPoint, hitNormal);
+                    if (isPoison)
+                    {
+                        attackTarget.OnPoison();
+                    }
                 }
                
             }

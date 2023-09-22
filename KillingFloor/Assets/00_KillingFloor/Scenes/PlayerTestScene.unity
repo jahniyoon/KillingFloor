@@ -175,6 +175,7 @@ MonoBehaviour:
   damage: 20
   timeBetAttack: 0.5
   destroyCount: 0
+  isPoison: 0
 --- !u!135 &18303420
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -425,6 +426,7 @@ MonoBehaviour:
   spawnPosition: {x: 0, y: 0, z: 0}
   inputLock: 0
   shopPosition: {fileID: 4365128104377406915}
+  playerCount: 0
   noticeController: {fileID: 0}
   volume: {fileID: 0}
   round: 1
@@ -506,6 +508,7 @@ MonoBehaviour:
   damage: 20
   timeBetAttack: 0.5
   destroyCount: 0
+  isPoison: 0
 --- !u!135 &251263698
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -689,7 +692,6 @@ MonoBehaviour:
   health: 0
   damage: 0
   coin: 0
-  controllers: []
   skills: []
   skillPrefab: {fileID: 0}
   ammoPrefab: {fileID: 0}
@@ -901,6 +903,7 @@ MonoBehaviour:
   damage: 20
   timeBetAttack: 0.5
   destroyCount: 0
+  isPoison: 0
 --- !u!135 &487156547
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1251,7 +1254,7 @@ Camera:
     height: 1
   near clip plane: 0.001
   far clip plane: 1000
-  field of view: 40
+  field of view: 50
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -1575,9 +1578,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0fdd8e338134c6448c52cc0f195a2a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
+  damage: 1
   timeBetAttack: 0.5
   destroyCount: 0
+  isPoison: 0
 --- !u!135 &752941278
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1925,6 +1929,7 @@ MonoBehaviour:
   damage: 20
   timeBetAttack: 0.5
   destroyCount: 0
+  isPoison: 0
 --- !u!135 &890779479
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2147,6 +2152,7 @@ MonoBehaviour:
   damage: 20
   timeBetAttack: 0.5
   destroyCount: 0
+  isPoison: 0
 --- !u!135 &994490164
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2297,9 +2303,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0fdd8e338134c6448c52cc0f195a2a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
+  damage: 1
   timeBetAttack: 0.5
   destroyCount: 0
+  isPoison: 1
 --- !u!135 &1005183018
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3114,6 +3121,7 @@ MonoBehaviour:
   damage: 20
   timeBetAttack: 0.5
   destroyCount: 0
+  isPoison: 0
 --- !u!135 &1492960062
 SphereCollider:
   m_ObjectHideFlags: 0
