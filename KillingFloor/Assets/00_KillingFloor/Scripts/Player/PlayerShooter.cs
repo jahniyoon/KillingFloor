@@ -457,7 +457,7 @@ public class PlayerShooter : MonoBehaviourPun
             _hitObj.transform.GetComponent<PlayerDamage>().OnDamage(); // RPC 확인 디버그용
             return;
         }
-        if (!"Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name) && !"Meteor".Equals(FindTopmostParent(_hitObj.transform).gameObject.name))//보스 가 아닐경우 
+        if (!"Mesh_Alfa_2".Equals(_hitObj.transform.name) && !"Meteor".Equals(_hitObj.transform.name))//보스 가 아닐경우 
         {
             ////////////////////////////////////////////////좀비////////////////////
 
@@ -481,23 +481,23 @@ public class PlayerShooter : MonoBehaviourPun
             ////////////////////////////////////////////////////////////////////
         }
 
-        if ("Mesh_Alfa_2".Equals(FindTopmostParent(_hitObj.transform).gameObject.name)) // 보스 일경우
+        if ("Mesh_Alfa_2".Equals(_hitObj.name)) // 보스 일경우
         {
 
 
             if (9 == _hitObj.transform.gameObject.layer)
             {
 
-                FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().OnDamage(damage);
+                _hitObj.gameObject.GetComponent<BossController>().OnDamage(damage);
             }
             else if (11 == _hitObj.transform.gameObject.layer)
             {
 
-                FindTopmostParent(_hitObj.transform).gameObject.GetComponent<BossController>().OnDamage(damage * 0.5f);
+                _hitObj.gameObject.GetComponent<BossController>().OnDamage(damage * 0.5f);
             }
         }
 
-        if ("Meteor".Equals(FindTopmostParent(_hitObj.transform).gameObject.name))
+        if ("Meteor".Equals(_hitObj.name))
         {
 
 

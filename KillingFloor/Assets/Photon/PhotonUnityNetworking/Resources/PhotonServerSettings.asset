@@ -72,6 +72,8 @@ MonoBehaviour:
   - PartticleOn
   - IntroOff
   - IntroOffMaster
+  - bossIntroTime
+  - IntroDel
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
