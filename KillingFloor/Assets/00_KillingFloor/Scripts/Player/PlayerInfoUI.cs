@@ -155,6 +155,9 @@ public class PlayerInfoUI : MonoBehaviourPun
     // 포이즌 스크린의 값 조정
     public void SetPoisonScreen()
     {
+        bloodScreenValue = 0f;
+        bloodScreen.color = new Color(255, 255, 255, 0);
+
         poisonScreenValue += 200;
     }
     public void PlayerCameraShake()
