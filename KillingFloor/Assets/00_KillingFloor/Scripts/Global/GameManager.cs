@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 네트워크 상의 모든 클라이언트들에서 생성 실행
         // 단, 해당 게임 오브젝트의 주도권은, 생성 메서드를 직접 실행한 클라이언트에게 있음
         //PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
-        
+
         GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
 
         //newPlayer.transform.SetParent(GameObject.Find("Players").transform);
@@ -115,7 +115,33 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             LeaveServer();
         }
-        if (isZedTime) { StartCoroutine(ZedTime()); Debug.Log("몇번 호출 하는가?"); }
+        if (isZedTime && PhotonNetwork.IsMasterClient)
+        {
+
+
+
+            StartCoroutine(ZedTime());
+
+        }
+    }
+
+    public void Zed()
+    {
+        photonView.RPC("MasterZed", RpcTarget.MasterClient);
+    }
+
+    [PunRPC]
+    public void MasterZed()
+    {
+        StartCoroutine(ZedTime());
+
+        photonView.RPC("SyncZedTime", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void SyncZedTime()
+    {
+        StartCoroutine(ZedTime());
     }
 
     public void SetPlayer()
@@ -249,7 +275,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             yield return null;
         }
 
-        PlayerUIManager.instance.SetNotice("Start Wave");
+        PlayerUIManager.instance.SetStartNotice("Start Wave");
         StartCoroutine(noticeController.CoroutineManager(false));
 
         while (0 < currentZombieCount)
@@ -266,7 +292,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         isShop = true;
 
-        PlayerUIManager.instance.SetNotice("Wave Clear");
+        PlayerUIManager.instance.SetEndNotice("Wave Clear");
         PlayerUIManager.instance.SetNoticeLogo("Go to Shop");
 
         PlayerUIManager.instance.CountUI.SetActive(false);

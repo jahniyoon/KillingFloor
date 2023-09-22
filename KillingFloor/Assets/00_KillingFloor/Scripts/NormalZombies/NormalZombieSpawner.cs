@@ -74,9 +74,9 @@ public class NormalZombieSpawner : MonoBehaviour
 
     private void Count()
     {
-        zombieCount = GameManager.instance.wave * 20 +
-                    GameManager.instance.player * 10 +
-                    GameManager.instance.difficulty * 10;
+        zombieCount = GameManager.instance.wave * 1 +
+                    GameManager.instance.player * 1 +
+                    GameManager.instance.difficulty * 1;
     }
 
     private void CreateZombie()
