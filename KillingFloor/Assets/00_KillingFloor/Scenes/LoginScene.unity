@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4915,9 +4915,6 @@ MonoBehaviour:
     langLocalize: English
     value:
     - white
-    - black
-    - green
-    - yellow
     - lobby
     - Login
     - Register
@@ -4934,9 +4931,6 @@ MonoBehaviour:
     langLocalize: "\uD55C\uAD6D\uC5B4"
     value:
     - "\uD558\uC580\uC0C9"
-    - "\uAC80\uC740\uC0C9"
-    - "\uB179\uC0C9"
-    - "\uB178\uB780\uC0C9"
     - "\uB85C\uBE44"
     - "\uB85C\uADF8\uC778"
     - "\uB4F1\uB85D\uD558\uB2E4"
@@ -4944,8 +4938,8 @@ MonoBehaviour:
     - Q.T.B.Boss
     - "\uC6E8\uC774\uBE0C \uC2DC\uC791"
     - "\uC6E8\uC774\uBE0C \uD074\uB9AC\uC5B4"
-    - "\uC0C1\uC810\uC73C\uB85C \uC774\uB3D9"
-    - "\uB85C\uB529"
+    - "\uC0C1\uC810\uC73C\uB85C \uC774\uB3D9\uD558\uC138\uC694"
+    - "\uB85C\uB529\uC911"
     - "\uBC29 \uC774\uB984"
     - "\uC785\uB825\uD558\uC2ED\uC2DC\uC624"
     - "\uC0C1\uC810"
@@ -4953,9 +4947,6 @@ MonoBehaviour:
     langLocalize: Afrikaans
     value:
     - wit
-    - swart
-    - groen
-    - geel
     - drukgroep
     - Teken aan
     - Register
@@ -4972,9 +4963,6 @@ MonoBehaviour:
     langLocalize: "\u0639\u0631\u0628\u064A"
     value:
     - "\u0623\u0628\u064A\u0636"
-    - "\u0623\u0633\u0648\u062F"
-    - "\u0623\u062E\u0636\u0631"
-    - "\u0623\u0635\u0641\u0631"
     - "\u0631\u062F\u0647\u0629"
     - "\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644"
     - "\u064A\u0633\u062C\u0644"
@@ -4985,15 +4973,12 @@ MonoBehaviour:
     - "\u0627\u0630\u0647\u0628 \u0625\u0644\u0649 \u0627\u0644\u0645\u062A\u062C\u0631"
     - "\u062A\u062D\u0645\u064A\u0644"
     - "\u0627\u0633\u0645 \u0627\u0644\u063A\u0631\u0641\u0629"
-    - "\u0627\u0644\u0631\u062C\u0627\u0621 \u0627\u0644\u0625\u062F\u062E\u0627\u0644"
+    - "\u064A\u0631\u062C\u0649 \u0627\u0644\u0625\u062F\u062E\u0627\u0644"
     - "\u0645\u062D\u0644"
   - lang: Bulgarian
     langLocalize: "\u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438"
     value:
     - "\u0431\u044F\u043B"
-    - "\u0427\u0435\u0440\u043D\u043E"
-    - "\u0417\u0435\u043B\u0435\u043D\u043E"
-    - "\u0436\u044A\u043B\u0442\u043E"
     - "\u043B\u043E\u0431\u0438"
     - "\u0412\u043B\u0438\u0437\u0430\u043C"
     - "\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u0430\u043C"
@@ -5010,9 +4995,6 @@ MonoBehaviour:
     langLocalize: Catalan
     value:
     - blanc
-    - negre
-    - verd
-    - groga
     - "vest\xEDbul"
     - "iniciar Sessi\xF3"
     - Registrar
@@ -5029,9 +5011,6 @@ MonoBehaviour:
     langLocalize: "\u010De\u0161tina"
     value:
     - "b\xEDl\xFD"
-    - "\u010Cern\xE1"
-    - "zelen\xE1"
-    - "\u017Elut\xE1"
     - lobby
     - "P\u0159ihl\xE1sit se"
     - Registrovat
@@ -5048,9 +5027,6 @@ MonoBehaviour:
     langLocalize: dansk
     value:
     - hvid
-    - sort
-    - "gr\xF8n"
-    - gul
     - Lobby
     - "Log p\xE5"
     - Tilmeld
@@ -5067,28 +5043,22 @@ MonoBehaviour:
     langLocalize: Nederlands
     value:
     - wit
-    - zwart
-    - groente
-    - geel
     - lobby
     - Log in
     - Register
     - Taal
     - Q.T.B.Boss
     - Start Wave
-    - Golfdicht
+    - Golf helder
     - Ga naar winkel
     - Bezig met laden
     - Kamer naam
     - Vul alsjeblieft in
     - Winkel
   - lang: Estonian
-    langLocalize: Eestonian
+    langLocalize: Eesti
     value:
     - valge
-    - must
-    - roheline
-    - kollane
     - fuajee
     - Logi sisse
     - Registreeri
@@ -5105,9 +5075,6 @@ MonoBehaviour:
     langLocalize: Suomalainen
     value:
     - valkoinen
-    - musta
-    - "vihre\xE4"
-    - keltainen
     - aula
     - "Kirjaudu sis\xE4\xE4n"
     - "Rekister\xF6id\xE4"
@@ -5124,9 +5091,6 @@ MonoBehaviour:
     langLocalize: "Fran\xE7ais"
     value:
     - blanc
-    - noir
-    - vert
-    - jaune
     - "hall d'entr\xE9e"
     - Se connecter
     - Registre
@@ -5143,16 +5107,13 @@ MonoBehaviour:
     langLocalize: Deutsch
     value:
     - "Wei\xDF"
-    - Schwarz
-    - "Gr\xFCn"
-    - Gelb
     - Empfangshalle
     - Anmeldung
     - Registrieren
     - Sprache
     - Q.T.B.Boss
     - Welle starten
-    - Welle klar
+    - Wellen Sie klar
     - Zum Laden gehen
     - Wird geladen
     - Raumname
@@ -5162,9 +5123,6 @@ MonoBehaviour:
     langLocalize: "\u05E2\u05B4\u05D1\u05E8\u05B4\u05D9\u05EA"
     value:
     - "\u05DC\u05D1\u05DF"
-    - "\u05E9\u05C1\u05B8\u05D7\u05D5\u05B9\u05E8"
-    - "\u05D9\u05E8\u05D5\u05E7"
-    - "\u05E6\u05D4\u05D5\u05D1"
     - "\u05DC\u05D5\u05D1\u05D9"
     - "\u05D4\u05EA\u05D7\u05D1\u05E8\u05D5\u05EA"
     - "\u05D4\u05D9\u05E8\u05E9\u05DD"
@@ -5181,9 +5139,6 @@ MonoBehaviour:
     langLocalize: Magyar
     value:
     - "feh\xE9r"
-    - fekete
-    - "z\xF6ld"
-    - "s\xE1rga"
     - "el\u0151csarnok"
     - "Bel\xE9p\xE9s"
     - "Regisztr\xE1ci\xF3"
@@ -5200,9 +5155,6 @@ MonoBehaviour:
     langLocalize: "\xCDslenskt"
     value:
     - "Hv\xEDtur"
-    - Svartur
-    - "Gr\xE6nt"
-    - gult
     - anddyri
     - "Skr\xE1 inn"
     - "Skr\xE1\xF0u \xFEig"
@@ -5219,9 +5171,6 @@ MonoBehaviour:
     langLocalize: bahasa Indonesia
     value:
     - putih
-    - hitam
-    - hijau
-    - kuning
     - lobi
     - Gabung
     - Daftar
@@ -5238,9 +5187,6 @@ MonoBehaviour:
     langLocalize: Italiano
     value:
     - bianco
-    - nero
-    - verde
-    - giallo
     - atrio
     - Login
     - Registrati
@@ -5257,9 +5203,6 @@ MonoBehaviour:
     langLocalize: "\u65E5\u672C\u8A9E"
     value:
     - "\u767D"
-    - "\u9ED2"
-    - "\u7DD1"
-    - "\u9EC4\u8272"
     - "\u30ED\u30D3\u30FC"
     - "\u30ED\u30B0\u30A4\u30F3"
     - "\u767B\u9332\u3059\u308B"
@@ -5276,9 +5219,6 @@ MonoBehaviour:
     langLocalize: "Latvie\u0161u"
     value:
     - baltums
-    - melns
-    - "za\u013C\u0161"
-    - dzeltens
     - lobija
     - "Piesl\u0113gties"
     - "Re\u0123istr\u0113t"
@@ -5295,9 +5235,6 @@ MonoBehaviour:
     langLocalize: Lietuvos
     value:
     - balta
-    - juodas
-    - "\u017Ealias"
-    - geltona
     - lobis
     - Prisijungti
     - Registruotis
@@ -5314,9 +5251,6 @@ MonoBehaviour:
     langLocalize: norsk
     value:
     - hvit
-    - svart
-    - "gr\xF8nn"
-    - gul
     - lobby
     - Logg Inn
     - Registrere
@@ -5333,9 +5267,6 @@ MonoBehaviour:
     langLocalize: Polski
     value:
     - "bia\u0142y"
-    - czarny
-    - zielony
-    - "\u017C\xF3\u0142ty"
     - lobby
     - Zaloguj sie
     - Rejestr
@@ -5352,9 +5283,6 @@ MonoBehaviour:
     langLocalize: "Portugu\xEAs"
     value:
     - branco
-    - preto
-    - verde
-    - amarelo
     - "sal\xE3o"
     - Conecte-se
     - Registro
@@ -5371,9 +5299,6 @@ MonoBehaviour:
     langLocalize: "Rom\xE2n\u0103"
     value:
     - alb
-    - negru
-    - verde
-    - galben
     - lobby
     - Log in
     - Inregistreaza-te
@@ -5390,9 +5315,6 @@ MonoBehaviour:
     langLocalize: "\u0420\u0443\u0441\u0441\u043A\u0438\u0439"
     value:
     - "\u0431\u0435\u043B\u044B\u0439"
-    - "\u0447\u0435\u0440\u043D\u044B\u0439"
-    - "\u0437\u0435\u043B\u0435\u043D\u044B\u0439"
-    - "\u0436\u0435\u043B\u0442\u044B\u0439"
     - "\u043B\u043E\u0431\u0431\u0438"
     - "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u043E\u0432\u0430\u0442\u044C\u0441\u044F"
     - "\u0440\u0435\u0433\u0438\u0441\u0442\u0440"
@@ -5409,9 +5331,6 @@ MonoBehaviour:
     langLocalize: "Slovensk\xFD"
     value:
     - biely
-    - "\u010Dierna"
-    - "zelen\xE1"
-    - "\u017Elt\xE1"
     - hala
     - "Prihl\xE1si\u0165 sa"
     - "Registrova\u0165"
@@ -5428,9 +5347,6 @@ MonoBehaviour:
     langLocalize: "Sloven\u0161\u010Dina"
     value:
     - bela
-    - "\u010Crna"
-    - zelena
-    - rumena
     - preddverje
     - "Vpi\u0161i se"
     - Register
@@ -5447,9 +5363,6 @@ MonoBehaviour:
     langLocalize: "Espa\xF1ol"
     value:
     - blanco
-    - negro
-    - verde
-    - amarillo
     - "vest\xEDbulo"
     - Acceso
     - Registro
@@ -5466,9 +5379,6 @@ MonoBehaviour:
     langLocalize: svenska
     value:
     - vit
-    - svart
-    - "gr\xF6n"
-    - gul
     - lobby
     - Logga in
     - Registrera
@@ -5476,7 +5386,7 @@ MonoBehaviour:
     - Q.T.B.Boss
     - "Startv\xE5g"
     - Vinkad
-    - "G\xE5 till butik"
+    - "G\xE5 f\xF6r att handla"
     - "L\xE4ser in"
     - Rumsnamn
     - "V\xE4nligen ange"
@@ -5485,9 +5395,6 @@ MonoBehaviour:
     langLocalize: "\u0E41\u0E1A\u0E1A\u0E44\u0E17\u0E22"
     value:
     - "\u0E2A\u0E35\u0E02\u0E32\u0E27"
-    - "\u0E2A\u0E35\u0E14\u0E33"
-    - "\u0E2A\u0E35\u0E40\u0E02\u0E35\u0E22\u0E27"
-    - "\u0E2A\u0E35\u0E40\u0E2B\u0E25\u0E37\u0E2D\u0E07"
     - "\u0E25\u0E47\u0E2D\u0E1A\u0E1A\u0E35\u0E49"
     - "\u0E40\u0E02\u0E49\u0E32\u0E2A\u0E39\u0E48\u0E23\u0E30\u0E1A\u0E1A"
     - "\u0E25\u0E07\u0E17\u0E30\u0E40\u0E1A\u0E35\u0E22\u0E19"
@@ -5504,9 +5411,6 @@ MonoBehaviour:
     langLocalize: "T\xFCrk\xE7e"
     value:
     - beyaz
-    - siyah
-    - "ye\u015Fil"
-    - "sar\u0131"
     - lobi
     - "Giri\u015F yapmak"
     - "Kay\u0131t olmak"
@@ -5523,11 +5427,8 @@ MonoBehaviour:
     langLocalize: "\u0423\u043A\u0440\u0430\u0457\u043D\u0441\u044C\u043A\u0438\u0439"
     value:
     - "\u0431\u0456\u043B\u0438\u0439"
-    - "\u0447\u043E\u0440\u043D\u0438\u0439"
-    - "\u0437\u0435\u043B\u0435\u043D\u0438\u0439"
-    - "\u0436\u043E\u0432\u0442\u0438\u0439"
     - "\u043B\u043E\u0431\u0456"
-    - "\u0412\u0445\u0456\u0434"
+    - "\u041B\u043E\u0433\u0456\u043D"
     - "\u0420\u0435\u0454\u0441\u0442\u0440\u0443\u0432\u0430\u0442\u0438"
     - "\u041C\u043E\u0432\u0430"
     - Q.T.B.Boss
@@ -5542,9 +5443,6 @@ MonoBehaviour:
     langLocalize: "Ti\u1EBFng Vi\u1EC7t"
     value:
     - "tr\u1EAFng"
-    - "\u0111en"
-    - "m\xE0u xanh l\xE1"
-    - "m\xE0u v\xE0ng"
     - "s\u1EA3nh"
     - "\u0110\u0103ng nh\u1EADp"
     - "\u0110\u0103ng k\xFD"
@@ -5561,9 +5459,6 @@ MonoBehaviour:
     langLocalize: "\u6C49\u8BED"
     value:
     - "\u767D\u8272\u7684"
-    - "\u9ED1\u8272\u7684"
-    - "\u7EFF\u8272\u7684"
-    - "\u9EC4\u8272\u7684"
     - "\u6E38\u8BF4"
     - "\u767B\u5F55"
     - "\u767B\u8BB0"
@@ -5580,9 +5475,6 @@ MonoBehaviour:
     langLocalize: "\u6F22\u8A9E\r"
     value:
     - "\u767D\u8272\u7684\r"
-    - "\u9ED1\u8272\u7684\r"
-    - "\u7DA0\u8272\u7684\r"
-    - "\u9EC3\u8272\u7684\r"
     - "\u904A\u8AAA\r"
     - "\u767B\u5165\r"
     - "\u767B\u8A18\r"
@@ -12846,7 +12738,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000045776367}
+  m_AnchoredPosition: {x: 0, y: 0.000091552734}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1757712875
@@ -13482,7 +13374,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 176459821}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99474066
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
