@@ -81,7 +81,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             Debug.Log("회원가입 성공");
             SetStat();          // 통계 초기화
-            SetData("Lv.0");    // 유저 데이터 초기화
+            SetData("0");    // 유저 데이터 초기화
         },
             (error) => Debug.Log("회원가입 실패"));
 
@@ -298,16 +298,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
             UserNameText.text = "Name: " + localPlayerName + "\nLevel: " + localPlayerLv;
 
+            // 문자열을 정수로 변환 후 1을 더함
+            int lv = int.Parse(localPlayerLv) + 1;
+            // 결과를 다시 문자열로 변환
+            string localPlayerLvUp = lv.ToString();
+
+            Debug.Log(lv);
+            Debug.Log("더하기 1 했을 때: " + localPlayerLvUp);
+
         },
             (error) => Debug.Log("데이터 불러오기 실패"));
-
-        // 문자열을 정수로 변환 후 1을 더함
-        int lv = int.Parse(localPlayerLv) + 1;
-        // 결과를 다시 문자열로 변환
-        string localPlayerLvUp = lv.ToString();
-
-        Debug.Log(lv);
-        Debug.Log("더하기 1 했을 때: " + localPlayerLvUp);
     }
 
     #region 유저 Currency
