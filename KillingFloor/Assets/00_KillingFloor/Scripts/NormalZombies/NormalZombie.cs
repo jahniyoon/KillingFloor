@@ -91,17 +91,33 @@ public class NormalZombie : NormalZombieData
                 if (navigation.isLongContact == true && isSkill == false)
                 {
                     StartCoroutine(Skill());
-
                 }
-                else if (navigation.isContact == true)
+                else if (navigation.isContact == true && PhotonNetwork.IsMasterClient)
                 {
-                    Attack();
+                    SkillStart();
                 }
                 else { /*No Event*/ }
             }
         }
 
         //SetTransform(transform.position);
+    }
+
+    public void SkillStart()
+    {
+        photonView.RPC("MasterSkill", RpcTarget.MasterClient);
+    }
+
+    [PunRPC]
+    public void MasterSkill()
+    {
+        photonView.RPC("SyncSkill", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void SyncSkill()
+    {
+        StartCoroutine(Skill());
     }
 
     private void ZombieSetting()
