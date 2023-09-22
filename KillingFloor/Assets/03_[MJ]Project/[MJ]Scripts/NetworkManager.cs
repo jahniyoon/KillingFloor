@@ -291,8 +291,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         UserRoomDataText.text = "고유ID" + curID + "\n" + result.Data["HomeLevel"].Value,
         (error) => Debug.Log("데이터 불러오기 실패"));
     }
-    #endregion
-
     void SetLocalPlayerData()
     {
         PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = MyPlayFabInfo.PlayFabId }, (result) =>
@@ -316,6 +314,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         },
             (error) => Debug.Log("데이터 불러오기 실패"));
     }
+    #endregion
+
 
     #region 유저 Currency
     // 유저 Currency 가져오는 메서드
