@@ -3446,7 +3446,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "0 / 0 \uCD5C\uB300"
+  m_Text: 0 / 0
 --- !u!222 &435116483
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4891,7 +4891,7 @@ GameObject:
   - component: {fileID: 647857149}
   - component: {fileID: 647857148}
   m_Layer: 0
-  m_Name: Singleton
+  m_Name: LanguageLocalize
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4919,30 +4919,682 @@ MonoBehaviour:
     - green
     - yellow
     - lobby
+    - Login
+    - Register
+    - Language
+    - Q.T.B.Boss
+    - Start Wave
+    - Wave Clear
+    - Go to Shop
+    - Loading
+    - Room Name
+    - Please input
+    - Store
   - lang: Korean
-    langLocalize: "\uD55C\uAD6D\uC778"
+    langLocalize: "\uD55C\uAD6D\uC5B4"
     value:
     - "\uD558\uC580\uC0C9"
     - "\uAC80\uC740\uC0C9"
     - "\uB179\uC0C9"
     - "\uB178\uB780\uC0C9"
     - "\uB85C\uBE44"
-  - lang: Chinese
-    langLocalize: "\u4E2D\u56FD\u4EBA"
+    - "\uB85C\uADF8\uC778"
+    - "\uB4F1\uB85D\uD558\uB2E4"
+    - "\uC5B8\uC5B4"
+    - Q.T.B.Boss
+    - "\uC6E8\uC774\uBE0C \uC2DC\uC791"
+    - "\uC6E8\uC774\uBE0C \uD074\uB9AC\uC5B4"
+    - "\uC0C1\uC810\uC73C\uB85C \uC774\uB3D9"
+    - "\uB85C\uB529"
+    - "\uBC29 \uC774\uB984"
+    - "\uC785\uB825\uD558\uC2ED\uC2DC\uC624"
+    - "\uC0C1\uC810"
+  - lang: Afrikaans
+    langLocalize: Afrikaans
+    value:
+    - wit
+    - swart
+    - groen
+    - geel
+    - drukgroep
+    - Teken aan
+    - Register
+    - Taal
+    - Q.T.B.Boss
+    - Begin golf
+    - Golfhelder
+    - Gaan winkel toe
+    - Laai
+    - Kamernaam
+    - Insette
+    - Winkel
+  - lang: Arabic
+    langLocalize: "\u0639\u0631\u0628\u064A"
+    value:
+    - "\u0623\u0628\u064A\u0636"
+    - "\u0623\u0633\u0648\u062F"
+    - "\u0623\u062E\u0636\u0631"
+    - "\u0623\u0635\u0641\u0631"
+    - "\u0631\u062F\u0647\u0629"
+    - "\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644"
+    - "\u064A\u0633\u062C\u0644"
+    - "\u0644\u063A\u0629"
+    - Q.T.B.Boss
+    - "\u0627\u0628\u062F\u0623 \u0627\u0644\u0645\u0648\u062C\u0629"
+    - "\u0645\u0648\u062C\u0629 \u0648\u0627\u0636\u062D\u0629"
+    - "\u0627\u0630\u0647\u0628 \u0625\u0644\u0649 \u0627\u0644\u0645\u062A\u062C\u0631"
+    - "\u062A\u062D\u0645\u064A\u0644"
+    - "\u0627\u0633\u0645 \u0627\u0644\u063A\u0631\u0641\u0629"
+    - "\u0627\u0644\u0631\u062C\u0627\u0621 \u0627\u0644\u0625\u062F\u062E\u0627\u0644"
+    - "\u0645\u062D\u0644"
+  - lang: Bulgarian
+    langLocalize: "\u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438"
+    value:
+    - "\u0431\u044F\u043B"
+    - "\u0427\u0435\u0440\u043D\u043E"
+    - "\u0417\u0435\u043B\u0435\u043D\u043E"
+    - "\u0436\u044A\u043B\u0442\u043E"
+    - "\u043B\u043E\u0431\u0438"
+    - "\u0412\u043B\u0438\u0437\u0430\u043C"
+    - "\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u0430\u043C"
+    - "\u0415\u0437\u0438\u043A"
+    - Q.T.B.Boss
+    - "\u041D\u0430\u0447\u0430\u043B\u043D\u0430 \u0432\u044A\u043B\u043D\u0430"
+    - "\u0412\u044A\u043B\u043D\u0430 \u044F\u0441\u043D\u0430"
+    - "\u041E\u0442\u0438\u0434\u0435\u0442\u0435 \u043D\u0430 Shop"
+    - "\u0417\u0430\u0440\u0435\u0436\u0434\u0430\u043D\u0435"
+    - "\u0418\u043C\u0435 \u043D\u0430 \u0441\u0442\u0430\u044F\u0442\u0430"
+    - "\u041C\u043E\u043B\u044F, \u0432\u044A\u0432\u0435\u0434\u0435\u0442\u0435"
+    - "\u041C\u0430\u0433\u0430\u0437\u0438\u043D"
+  - lang: Catalan
+    langLocalize: Catalan
+    value:
+    - blanc
+    - negre
+    - verd
+    - groga
+    - "vest\xEDbul"
+    - "iniciar Sessi\xF3"
+    - Registrar
+    - Llenguatge
+    - Q.T.B.Boss
+    - "Comen\xE7ar a onar"
+    - Una onada clara
+    - "V\xE9s a la botiga"
+    - "C\xE0rrega"
+    - "Nom de l'habitaci\xF3"
+    - "Si us plau, introdu\xEFu"
+    - Tenda
+  - lang: Czech
+    langLocalize: "\u010De\u0161tina"
+    value:
+    - "b\xEDl\xFD"
+    - "\u010Cern\xE1"
+    - "zelen\xE1"
+    - "\u017Elut\xE1"
+    - lobby
+    - "P\u0159ihl\xE1sit se"
+    - Registrovat
+    - Jazyk
+    - Q.T.B.Boss
+    - "Za\u010Dn\u011Bte vlnu"
+    - "Vlna \u010Dist\xE1"
+    - "J\xEDt do obchodu"
+    - "na\u010D\xEDt\xE1n\xED"
+    - "N\xE1zev m\xEDstnosti"
+    - "Zadejte pros\xEDm"
+    - Obchod
+  - lang: Danish
+    langLocalize: dansk
+    value:
+    - hvid
+    - sort
+    - "gr\xF8n"
+    - gul
+    - Lobby
+    - "Log p\xE5"
+    - Tilmeld
+    - Sprog
+    - Q.T.B.Boss
+    - "Start b\xF8lge"
+    - "B\xF8lge klar"
+    - "G\xE5 til shop"
+    - "Indl\xE6ser"
+    - "V\xE6relsets navn"
+    - Indtast venligst
+    - butik
+  - lang: Dutch
+    langLocalize: Nederlands
+    value:
+    - wit
+    - zwart
+    - groente
+    - geel
+    - lobby
+    - Log in
+    - Register
+    - Taal
+    - Q.T.B.Boss
+    - Start Wave
+    - Golfdicht
+    - Ga naar winkel
+    - Bezig met laden
+    - Kamer naam
+    - Vul alsjeblieft in
+    - Winkel
+  - lang: Estonian
+    langLocalize: Eestonian
+    value:
+    - valge
+    - must
+    - roheline
+    - kollane
+    - fuajee
+    - Logi sisse
+    - Registreeri
+    - Keel
+    - Q.T.B.Boss
+    - Stardlaine
+    - Lainepaik
+    - Poodi minema
+    - Laadimine
+    - Toanimi
+    - Palun sisestage
+    - Ladu
+  - lang: Finnish
+    langLocalize: Suomalainen
+    value:
+    - valkoinen
+    - musta
+    - "vihre\xE4"
+    - keltainen
+    - aula
+    - "Kirjaudu sis\xE4\xE4n"
+    - "Rekister\xF6id\xE4"
+    - Kieli
+    - Q.T.B.Boss
+    - Aloittaa aalto
+    - Aalto
+    - "Menn\xE4 kauppaan"
+    - Ladataan
+    - Huoneen nimi
+    - "Ole hyv\xE4 ja sy\xF6tt\xE4\xE4"
+    - "Myym\xE4l\xE4"
+  - lang: French
+    langLocalize: "Fran\xE7ais"
+    value:
+    - blanc
+    - noir
+    - vert
+    - jaune
+    - "hall d'entr\xE9e"
+    - Se connecter
+    - Registre
+    - Langue
+    - Q.T.B.Boss
+    - Commencer la vague
+    - Vague claire
+    - Aller faire du shopping
+    - Chargement
+    - Nom de la salle
+    - Veuillez saisir
+    - Magasin
+  - lang: German
+    langLocalize: Deutsch
+    value:
+    - "Wei\xDF"
+    - Schwarz
+    - "Gr\xFCn"
+    - Gelb
+    - Empfangshalle
+    - Anmeldung
+    - Registrieren
+    - Sprache
+    - Q.T.B.Boss
+    - Welle starten
+    - Welle klar
+    - Zum Laden gehen
+    - Wird geladen
+    - Raumname
+    - Bitte geben Sie ein
+    - Speichern
+  - lang: Hebrew
+    langLocalize: "\u05E2\u05B4\u05D1\u05E8\u05B4\u05D9\u05EA"
+    value:
+    - "\u05DC\u05D1\u05DF"
+    - "\u05E9\u05C1\u05B8\u05D7\u05D5\u05B9\u05E8"
+    - "\u05D9\u05E8\u05D5\u05E7"
+    - "\u05E6\u05D4\u05D5\u05D1"
+    - "\u05DC\u05D5\u05D1\u05D9"
+    - "\u05D4\u05EA\u05D7\u05D1\u05E8\u05D5\u05EA"
+    - "\u05D4\u05D9\u05E8\u05E9\u05DD"
+    - "\u05E9\u05E4\u05D4"
+    - Q.T.B.Boss
+    - "\u05D4\u05EA\u05D7\u05DC \u05D2\u05DC"
+    - "\u05D2\u05DC \u05D1\u05E8\u05D5\u05E8"
+    - "\u05DC\u05DA \u05DC\u05D7\u05E0\u05D5\u05EA"
+    - "\u05D8\u05D5\u05E2\u05DF"
+    - "\u05E9\u05DD \u05D7\u05D3\u05E8"
+    - "\u05D0\u05E0\u05D0 \u05D4\u05D6\u05DF"
+    - "\u05D7\u05E0\u05D5\u05EA"
+  - lang: Hungarian
+    langLocalize: Magyar
+    value:
+    - "feh\xE9r"
+    - fekete
+    - "z\xF6ld"
+    - "s\xE1rga"
+    - "el\u0151csarnok"
+    - "Bel\xE9p\xE9s"
+    - "Regisztr\xE1ci\xF3"
+    - Nyelv
+    - Q.T.B.Boss
+    - "Ind\xEDt\xF3hull\xE1m"
+    - "Tiszt\xEDt"
+    - Boltba menni
+    - "Bet\xF6lt\xE9s"
+    - "Szoban\xE9v"
+    - "K\xE9rj\xFCk, adja meg"
+    - Bolt
+  - lang: Icelandic
+    langLocalize: "\xCDslenskt"
+    value:
+    - "Hv\xEDtur"
+    - Svartur
+    - "Gr\xE6nt"
+    - gult
+    - anddyri
+    - "Skr\xE1 inn"
+    - "Skr\xE1\xF0u \xFEig"
+    - "Tungum\xE1l"
+    - Q.T.B.Boss
+    - "Byrja\xF0u bylgju"
+    - "Veifa t\xE6r"
+    - "Far\xF0u \xED b\xFA\xF0"
+    - "Hle\xF0sla"
+    - Herbergisnafn
+    - Vinsamlegast inntak
+    - "Geymi\xF0"
+  - lang: Indonesian
+    langLocalize: bahasa Indonesia
+    value:
+    - putih
+    - hitam
+    - hijau
+    - kuning
+    - lobi
+    - Gabung
+    - Daftar
+    - Bahasa
+    - Q.T.B.Boss
+    - Mulai Gelombang
+    - Gelombang jernih
+    - Pergi ke toko
+    - Memuat
+    - Nama ruangan
+    - Mohon masukkan
+    - Toko
+  - lang: Italian
+    langLocalize: Italiano
+    value:
+    - bianco
+    - nero
+    - verde
+    - giallo
+    - atrio
+    - Login
+    - Registrati
+    - Lingua
+    - Q.T.B.Boss
+    - Inizia Wave
+    - Wave Clear
+    - Vai a fare la spesa
+    - Caricamento
+    - Nome della stanza
+    - Si prega di input
+    - Negozio
+  - lang: Japanese
+    langLocalize: "\u65E5\u672C\u8A9E"
+    value:
+    - "\u767D"
+    - "\u9ED2"
+    - "\u7DD1"
+    - "\u9EC4\u8272"
+    - "\u30ED\u30D3\u30FC"
+    - "\u30ED\u30B0\u30A4\u30F3"
+    - "\u767B\u9332\u3059\u308B"
+    - "\u8A00\u8A9E"
+    - Q.T.B.Boss
+    - "\u6CE2\u3092\u958B\u59CB\u3057\u307E\u3059"
+    - "\u6CE2\u304C\u900F\u3051\u3066\u3044\u307E\u3059"
+    - "\u5E97\u3078\u51FA\u304B\u3051\u308B"
+    - "\u8AAD\u307F\u8FBC\u307F"
+    - "\u90E8\u5C4B\u306E\u540D\u524D"
+    - "\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044"
+    - "\u5E97"
+  - lang: Latvian
+    langLocalize: "Latvie\u0161u"
+    value:
+    - baltums
+    - melns
+    - "za\u013C\u0161"
+    - dzeltens
+    - lobija
+    - "Piesl\u0113gties"
+    - "Re\u0123istr\u0113t"
+    - Valoda
+    - Q.T.B.Boss
+    - "S\u0101kuma vilnis"
+    - Vilnis skaidri
+    - Dodieties uz veikalu
+    - "Iekrau\u0161ana"
+    - Istabas nosaukums
+    - "L\u016Bdzu, ievadiet"
+    - "Uzglab\u0101t"
+  - lang: Lithuanian
+    langLocalize: Lietuvos
+    value:
+    - balta
+    - juodas
+    - "\u017Ealias"
+    - geltona
+    - lobis
+    - Prisijungti
+    - Registruotis
+    - Kalba
+    - Q.T.B.Boss
+    - "Prad\u0117ti bang\u0105"
+    - "Banguoti i\u0161valyti"
+    - "Eik \u012F parduotuv\u0119"
+    - Pakrauti
+    - Kambario vardas
+    - "Pra\u0161au \u012Fvesti"
+    - "Parduotuv\u0117"
+  - lang: Norwegian
+    langLocalize: norsk
+    value:
+    - hvit
+    - svart
+    - "gr\xF8nn"
+    - gul
+    - lobby
+    - Logg Inn
+    - Registrere
+    - "Spr\xE5k"
+    - Q.T.B.Boss
+    - "Start b\xF8lge"
+    - "B\xF8lge klart"
+    - "G\xE5 for \xE5 handle"
+    - Lasting
+    - Romnavn
+    - Vennligst skriv inn
+    - butikk
+  - lang: Polish
+    langLocalize: Polski
+    value:
+    - "bia\u0142y"
+    - czarny
+    - zielony
+    - "\u017C\xF3\u0142ty"
+    - lobby
+    - Zaloguj sie
+    - Rejestr
+    - "J\u0119zyk"
+    - Q.T.B.Boss
+    - "Rozpocznij fal\u0119"
+    - Fala jasna
+    - "Id\u017A do sklepu"
+    - "\u0141adowanie"
+    - Nazwa pokoju
+    - "Prosz\u0119 wprowadzi\u0107"
+    - Sklep
+  - lang: Portuguese
+    langLocalize: "Portugu\xEAs"
+    value:
+    - branco
+    - preto
+    - verde
+    - amarelo
+    - "sal\xE3o"
+    - Conecte-se
+    - Registro
+    - Linguagem
+    - Q.T.B.Boss
+    - "Onda de in\xEDcio"
+    - Onda limpa
+    - "V\xE1 para fazer compras"
+    - Carregando
+    - Nome da sala
+    - Por favor, insira
+    - Loja
+  - lang: Romanian
+    langLocalize: "Rom\xE2n\u0103"
+    value:
+    - alb
+    - negru
+    - verde
+    - galben
+    - lobby
+    - Log in
+    - Inregistreaza-te
+    - Limba
+    - Q.T.B.Boss
+    - Start Wave
+    - "Und\u0103 limpede"
+    - Dute la cumparaturi
+    - "Se \xEEncarc\u0103"
+    - Numele Camerei
+    - "V\u0103 rug\u0103m s\u0103 introduce\u021Bi"
+    - Magazin
+  - lang: Russian
+    langLocalize: "\u0420\u0443\u0441\u0441\u043A\u0438\u0439"
+    value:
+    - "\u0431\u0435\u043B\u044B\u0439"
+    - "\u0447\u0435\u0440\u043D\u044B\u0439"
+    - "\u0437\u0435\u043B\u0435\u043D\u044B\u0439"
+    - "\u0436\u0435\u043B\u0442\u044B\u0439"
+    - "\u043B\u043E\u0431\u0431\u0438"
+    - "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u043E\u0432\u0430\u0442\u044C\u0441\u044F"
+    - "\u0440\u0435\u0433\u0438\u0441\u0442\u0440"
+    - "\u042F\u0437\u044B\u043A"
+    - Q.T.B.Boss
+    - "\u041D\u0430\u0447\u0430\u043B\u043E \u0432\u043E\u043B\u043D\u044B"
+    - "\u0412\u043E\u043B\u043D\u0430 \u044F\u0441\u043D\u0430"
+    - "\u0418\u0434\u0442\u0438 \u0432 \u043C\u0430\u0433\u0430\u0437\u0438\u043D"
+    - "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430"
+    - "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043A\u043E\u043C\u043D\u0430\u0442\u044B"
+    - "\u041F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430, \u0432\u0432\u0435\u0434\u0438\u0442\u0435"
+    - "\u041C\u0430\u0433\u0430\u0437\u0438\u043D"
+  - lang: Slovak
+    langLocalize: "Slovensk\xFD"
+    value:
+    - biely
+    - "\u010Dierna"
+    - "zelen\xE1"
+    - "\u017Elt\xE1"
+    - hala
+    - "Prihl\xE1si\u0165 sa"
+    - "Registrova\u0165"
+    - Jazyk
+    - Q.T.B.Boss
+    - "\u0160tartovacia vlna"
+    - "Vy\u010Disti\u0165"
+    - "Cho\u010Fte do obchodu"
+    - "Na\u010D\xEDtava"
+    - "N\xE1zov miestnosti"
+    - "Pros\xEDm, zadajte"
+    - "Uklada\u0165"
+  - lang: Slovenian
+    langLocalize: "Sloven\u0161\u010Dina"
+    value:
+    - bela
+    - "\u010Crna"
+    - zelena
+    - rumena
+    - preddverje
+    - "Vpi\u0161i se"
+    - Register
+    - Jezik
+    - Q.T.B.Boss
+    - Start Wave
+    - "Val \u010Dist"
+    - Pojdi v trgovino
+    - nalaganje
+    - Ime sobe
+    - Prosimo, vnesite
+    - Shramba
+  - lang: Spanish
+    langLocalize: "Espa\xF1ol"
+    value:
+    - blanco
+    - negro
+    - verde
+    - amarillo
+    - "vest\xEDbulo"
+    - Acceso
+    - Registro
+    - Idioma
+    - Q.T.B.Boss
+    - Start Wave
+    - Ola clara
+    - Ir a la tienda
+    - Cargando
+    - "Nombre de la habitaci\xF3n"
+    - Por favor, input
+    - Almacenar
+  - lang: Swedish
+    langLocalize: svenska
+    value:
+    - vit
+    - svart
+    - "gr\xF6n"
+    - gul
+    - lobby
+    - Logga in
+    - Registrera
+    - "Spr\xE5k"
+    - Q.T.B.Boss
+    - "Startv\xE5g"
+    - Vinkad
+    - "G\xE5 till butik"
+    - "L\xE4ser in"
+    - Rumsnamn
+    - "V\xE4nligen ange"
+    - Lagra
+  - lang: Thai
+    langLocalize: "\u0E41\u0E1A\u0E1A\u0E44\u0E17\u0E22"
+    value:
+    - "\u0E2A\u0E35\u0E02\u0E32\u0E27"
+    - "\u0E2A\u0E35\u0E14\u0E33"
+    - "\u0E2A\u0E35\u0E40\u0E02\u0E35\u0E22\u0E27"
+    - "\u0E2A\u0E35\u0E40\u0E2B\u0E25\u0E37\u0E2D\u0E07"
+    - "\u0E25\u0E47\u0E2D\u0E1A\u0E1A\u0E35\u0E49"
+    - "\u0E40\u0E02\u0E49\u0E32\u0E2A\u0E39\u0E48\u0E23\u0E30\u0E1A\u0E1A"
+    - "\u0E25\u0E07\u0E17\u0E30\u0E40\u0E1A\u0E35\u0E22\u0E19"
+    - "\u0E20\u0E32\u0E29\u0E32"
+    - Q.T.B.Boss
+    - "\u0E40\u0E23\u0E34\u0E48\u0E21\u0E04\u0E25\u0E37\u0E48\u0E19"
+    - "\u0E04\u0E25\u0E37\u0E48\u0E19\u0E43\u0E2A"
+    - "\u0E44\u0E1B\u0E0B\u0E37\u0E49\u0E2D\u0E02\u0E2D\u0E07"
+    - "\u0E01\u0E32\u0E23\u0E42\u0E2B\u0E25\u0E14"
+    - "\u0E0A\u0E37\u0E48\u0E2D\u0E2B\u0E49\u0E2D\u0E07"
+    - "\u0E01\u0E23\u0E38\u0E13\u0E32\u0E1B\u0E49\u0E2D\u0E19\u0E02\u0E49\u0E2D\u0E21\u0E39\u0E25"
+    - "\u0E40\u0E01\u0E47\u0E1A"
+  - lang: Turkish
+    langLocalize: "T\xFCrk\xE7e"
+    value:
+    - beyaz
+    - siyah
+    - "ye\u015Fil"
+    - "sar\u0131"
+    - lobi
+    - "Giri\u015F yapmak"
+    - "Kay\u0131t olmak"
+    - Dil
+    - Q.T.B.Boss
+    - "Ba\u015Fla Dalgas\u0131"
+    - "Dalga temizli\u011Fi"
+    - "D\xFCkkana git"
+    - "Y\xFCkleniyor"
+    - Oda ismi
+    - "L\xFCtfen girin"
+    - "Ma\u011Faza"
+  - lang: Ukrainian
+    langLocalize: "\u0423\u043A\u0440\u0430\u0457\u043D\u0441\u044C\u043A\u0438\u0439"
+    value:
+    - "\u0431\u0456\u043B\u0438\u0439"
+    - "\u0447\u043E\u0440\u043D\u0438\u0439"
+    - "\u0437\u0435\u043B\u0435\u043D\u0438\u0439"
+    - "\u0436\u043E\u0432\u0442\u0438\u0439"
+    - "\u043B\u043E\u0431\u0456"
+    - "\u0412\u0445\u0456\u0434"
+    - "\u0420\u0435\u0454\u0441\u0442\u0440\u0443\u0432\u0430\u0442\u0438"
+    - "\u041C\u043E\u0432\u0430"
+    - Q.T.B.Boss
+    - "\u041F\u043E\u0447\u0430\u0442\u0438 \u0445\u0432\u0438\u043B\u044E"
+    - "\u0425\u0432\u0438\u043B\u044F \u044F\u0441\u043D\u0430"
+    - "\u0419\u0434\u0438 \u0432 \u043C\u0430\u0433\u0430\u0437\u0438\u043D"
+    - "\u041D\u0430\u0432\u0430\u043D\u0442\u0430\u0436\u0435\u043D\u043D\u044F"
+    - "\u041D\u0430\u0437\u0432\u0430 \u043A\u0456\u043C\u043D\u0430\u0442\u0438"
+    - "\u0411\u0443\u0434\u044C \u043B\u0430\u0441\u043A\u0430, \u0432\u0432\u0435\u0434\u0456\u0442\u044C"
+    - "\u041C\u0430\u0433\u0430\u0437\u0438\u043D"
+  - lang: Vietnamese
+    langLocalize: "Ti\u1EBFng Vi\u1EC7t"
+    value:
+    - "tr\u1EAFng"
+    - "\u0111en"
+    - "m\xE0u xanh l\xE1"
+    - "m\xE0u v\xE0ng"
+    - "s\u1EA3nh"
+    - "\u0110\u0103ng nh\u1EADp"
+    - "\u0110\u0103ng k\xFD"
+    - "Ng\xF4n ng\u1EEF"
+    - Q.T.B.Boss
+    - "B\u1EAFt \u0111\u1EA7u s\xF3ng"
+    - "S\xF3ng r\xF5 r\xE0ng"
+    - "\u0110i mua s\u1EAFm"
+    - "\u0110ang t\u1EA3i"
+    - "T\xEAn ph\xF2ng"
+    - "Xin vui l\xF2ng nh\u1EADp"
+    - "C\u1EEDa h\xE0ng"
+  - lang: ChineseSimplified
+    langLocalize: "\u6C49\u8BED"
     value:
     - "\u767D\u8272\u7684"
     - "\u9ED1\u8272\u7684"
     - "\u7EFF\u8272\u7684"
     - "\u9EC4\u8272\u7684"
-    - "\u5927\u5802"
-  - lang: "Spanish\r"
-    langLocalize: "Espa\xF1ol\r"
+    - "\u6E38\u8BF4"
+    - "\u767B\u5F55"
+    - "\u767B\u8BB0"
+    - "\u8BED\u8A00"
+    - Q.T.B.Boss
+    - "\u5F00\u59CB\u6CE2"
+    - "\u6CE2\u6D6A\u6E05\u6670"
+    - "\u53BB\u5546\u5E97"
+    - "\u52A0\u8F7D\u4E2D"
+    - "\u623F\u95F4\u540D\u79F0"
+    - "\u8BF7\u8F93\u5165"
+    - "\u5E97\u94FA"
+  - lang: "ChineseTraditional\r"
+    langLocalize: "\u6F22\u8A9E\r"
     value:
-    - "blanco\r"
-    - "negro\r"
-    - "verde\r"
-    - "amarillo\r"
-    - "vest\xEDbulo"
+    - "\u767D\u8272\u7684\r"
+    - "\u9ED1\u8272\u7684\r"
+    - "\u7DA0\u8272\u7684\r"
+    - "\u9EC3\u8272\u7684\r"
+    - "\u904A\u8AAA\r"
+    - "\u767B\u5165\r"
+    - "\u767B\u8A18\r"
+    - "\u8A9E\u8A00\r"
+    - "Q.T.B.Boss\r"
+    - "\u958B\u59CB\u6CE2\r"
+    - "\u6CE2\u6D6A\u6E05\u6670\r"
+    - "\u53BB\u5546\u5E97\r"
+    - "\u8F09\u5165\u4E2D\r"
+    - "\u623F\u9593\u540D\u7A31\r"
+    - "\u8ACB\u8F38\u5165\r"
+    - "\u5E97\u92EA"
 --- !u!4 &647857149
 Transform:
   m_ObjectHideFlags: 0
@@ -5164,6 +5816,7 @@ GameObject:
   - component: {fileID: 712051547}
   - component: {fileID: 712051549}
   - component: {fileID: 712051548}
+  - component: {fileID: 712051550}
   m_Layer: 5
   m_Name: RoomNameInfoText
   m_TagString: Untagged
@@ -5224,7 +5877,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uBC29\uC774\uB984"
+  m_Text: Room Name
 --- !u!222 &712051549
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5233,6 +5886,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 712051546}
   m_CullTransparentMesh: 1
+--- !u!114 &712051550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 712051546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59936ccae770da24ba3ee13ca5738367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: Room Name
 --- !u!1001 &727846206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5253,7 +5919,7 @@ PrefabInstance:
     - target: {fileID: 3234161796619730020, guid: 22248067d49dd934d8c202db0d20b831,
         type: 3}
       propertyPath: m_Text
-      value: Text_Store
+      value: Store
       objectReference: {fileID: 0}
     - target: {fileID: 3234161796619730021, guid: 22248067d49dd934d8c202db0d20b831,
         type: 3}
@@ -5378,7 +6044,7 @@ PrefabInstance:
     - target: {fileID: 3234161796619730022, guid: 22248067d49dd934d8c202db0d20b831,
         type: 3}
       propertyPath: textKey
-      value: store
+      value: Store
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22248067d49dd934d8c202db0d20b831, type: 3}
@@ -6490,7 +7156,7 @@ PrefabInstance:
     - target: {fileID: 3234161796619730020, guid: 22248067d49dd934d8c202db0d20b831,
         type: 3}
       propertyPath: m_Text
-      value: Text_Lobby
+      value: lobby
       objectReference: {fileID: 0}
     - target: {fileID: 3234161796619730021, guid: 22248067d49dd934d8c202db0d20b831,
         type: 3}
@@ -7439,6 +8105,7 @@ GameObject:
   - component: {fileID: 1067032893}
   - component: {fileID: 1067032892}
   - component: {fileID: 1067032891}
+  - component: {fileID: 1067032894}
   m_Layer: 5
   m_Name: Placeholder
   m_TagString: Untagged
@@ -7479,7 +8146,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uBCC0\uACBD\uD560 \uAC12 \uC785\uB825"
+  m_Text: Please input
 --- !u!222 &1067032892
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7508,6 +8175,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -0.5}
   m_SizeDelta: {x: -20, y: -13}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1067032894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067032890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59936ccae770da24ba3ee13ca5738367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: Please input
 --- !u!1 &1070190713
 GameObject:
   m_ObjectHideFlags: 0
@@ -7729,6 +8409,7 @@ GameObject:
   - component: {fileID: 1085149628}
   - component: {fileID: 1085149627}
   - component: {fileID: 1085149626}
+  - component: {fileID: 1085149629}
   m_Layer: 5
   m_Name: Placeholder
   m_TagString: Untagged
@@ -7769,7 +8450,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: User Name...
+  m_Text: Please input
 --- !u!222 &1085149627
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7798,6 +8479,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -0.5}
   m_SizeDelta: {x: -20, y: -13}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1085149629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085149625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59936ccae770da24ba3ee13ca5738367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: Please input
 --- !u!1 &1086313560
 GameObject:
   m_ObjectHideFlags: 0
@@ -7896,9 +8590,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1108770807}
   - component: {fileID: 1108770809}
-  - component: {fileID: 1108770808}
+  - component: {fileID: 1108770811}
+  - component: {fileID: 1108770810}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7924,7 +8619,15 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1108770808
+--- !u!222 &1108770809
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108770806}
+  m_CullTransparentMesh: 1
+--- !u!114 &1108770810
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7933,7 +8636,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1108770806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -7944,83 +8647,33 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Language
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
-  m_overrideHtmlColors: 0
-  m_faceColor:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
-  m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
-  m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
-  m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
-  m_linkedTextComponent: {fileID: 0}
-  parentLinkedComponent: {fileID: 0}
-  m_enableKerning: 1
-  m_enableExtraPadding: 0
-  checkPaddingRequired: 0
-  m_isRichText: 1
-  m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
-  m_isCullingEnabled: 0
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
-  m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
-  m_IsTextObjectScaleStatic: 0
-  m_VertexBufferAutoSizeReduction: 0
-  m_useMaxVisibleDescender: 1
-  m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
-  m_isUsingLegacyAnimationComponent: 0
-  m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_baseMaterial: {fileID: 0}
-  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &1108770809
-CanvasRenderer:
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Language
+--- !u!114 &1108770811
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1108770806}
-  m_CullTransparentMesh: 1
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59936ccae770da24ba3ee13ca5738367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: Language
 --- !u!1 &1177504091
 GameObject:
   m_ObjectHideFlags: 0
@@ -8589,9 +9242,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1271320248}
   - component: {fileID: 1271320250}
-  - component: {fileID: 1271320249}
+  - component: {fileID: 1271320252}
+  - component: {fileID: 1271320251}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8617,7 +9271,15 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1271320249
+--- !u!222 &1271320250
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271320247}
+  m_CullTransparentMesh: 1
+--- !u!114 &1271320251
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8626,7 +9288,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1271320247}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: 59936ccae770da24ba3ee13ca5738367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: Register
+--- !u!114 &1271320252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271320247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -8637,83 +9312,20 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Regist
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
-  m_overrideHtmlColors: 0
-  m_faceColor:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
-  m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
-  m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
-  m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
-  m_linkedTextComponent: {fileID: 0}
-  parentLinkedComponent: {fileID: 0}
-  m_enableKerning: 1
-  m_enableExtraPadding: 0
-  checkPaddingRequired: 0
-  m_isRichText: 1
-  m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
-  m_isCullingEnabled: 0
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
-  m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
-  m_IsTextObjectScaleStatic: 0
-  m_VertexBufferAutoSizeReduction: 0
-  m_useMaxVisibleDescender: 1
-  m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
-  m_isUsingLegacyAnimationComponent: 0
-  m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_baseMaterial: {fileID: 0}
-  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &1271320250
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1271320247}
-  m_CullTransparentMesh: 1
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Register
 --- !u!1 &1273666355
 GameObject:
   m_ObjectHideFlags: 0
@@ -8994,9 +9606,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1290938181}
   - component: {fileID: 1290938183}
-  - component: {fileID: 1290938182}
+  - component: {fileID: 1290938185}
+  - component: {fileID: 1290938184}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9022,7 +9635,15 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1290938182
+--- !u!222 &1290938183
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290938180}
+  m_CullTransparentMesh: 1
+--- !u!114 &1290938184
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9031,7 +9652,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1290938180}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: 59936ccae770da24ba3ee13ca5738367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: Login
+--- !u!114 &1290938185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290938180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -9042,83 +9676,20 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Login
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
-  m_overrideHtmlColors: 0
-  m_faceColor:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
-  m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
-  m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
-  m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
-  m_linkedTextComponent: {fileID: 0}
-  parentLinkedComponent: {fileID: 0}
-  m_enableKerning: 1
-  m_enableExtraPadding: 0
-  checkPaddingRequired: 0
-  m_isRichText: 1
-  m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
-  m_isCullingEnabled: 0
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
-  m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
-  m_IsTextObjectScaleStatic: 0
-  m_VertexBufferAutoSizeReduction: 0
-  m_useMaxVisibleDescender: 1
-  m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
-  m_isUsingLegacyAnimationComponent: 0
-  m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_baseMaterial: {fileID: 0}
-  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &1290938183
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1290938180}
-  m_CullTransparentMesh: 1
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Login
 --- !u!1 &1300115141
 GameObject:
   m_ObjectHideFlags: 0
@@ -12273,7 +12844,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000289917}
+  m_AnchoredPosition: {x: 0, y: 0.00012207031}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1757712875
@@ -12800,7 +13371,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 176459821}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99372774
+  m_Size: 0.9935667
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
