@@ -13,7 +13,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 {
     public static NetworkManager instance;
 
-    public GameObject Lang_Panel, Room_Panel, UserRoom_Panel, Lobby_Panel, Login_Panel, Store_Panel, Lobby_Screen;
+    public GameObject Lang_Panel, Room_Panel, UserRoom_Panel, Lobby_Panel, Login_Panel, Store_Panel, Lobby_Screen, Option_Panel;
 
     public string localPlayerName = default;
     public string localPlayerLv = default;
@@ -40,6 +40,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public int stars = default;
 
     bool isLoaded;
+
+    public enum State { Login, Lobby, Room, Store, Option};
+    [Header("Lobby UI")]
+    public State state;
+    public Image[] buttonBackGround;    // 로비 버튼 선택여부
+    public PlayerProfile playerInfo;
 
     void Awake()
     {
@@ -419,7 +425,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         isLoaded = true;
         PhotonNetwork.LocalPlayer.NickName = MyPlayFabInfo.DisplayName;
-        LobbyScreen(true);// 로비를 켠다.
+
+        LobbyScreen(true);      // 로비 배경영상를 켠다.
+        state = State.Lobby;    // 상태 로비로 변경
+
         ShowPanel(Lobby_Panel);
         ShowUserNickName();
     }
@@ -436,12 +445,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         curPanel.SetActive(true);
     }
     
-    // 지환
-    void LobbyScreen(bool isLobby)
-    {
-        Lobby_Screen.SetActive(isLobby);
-    }
-
     void ShowUserNickName()
     {
         UserNickNameText.text = "";
@@ -612,5 +615,112 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.LoadLevel("LevelTestScene");
         }
     }
+    #endregion
+
+    // 지환작성
+    #region LobbyUI
+
+    // 지환
+    void LobbyScreen(bool isLobby)
+    {
+        Lobby_Screen.SetActive(isLobby);
+    }
+
+
+    public void HomeButton()
+    {
+        if(state == State.Lobby || state == State.Room)
+        {
+            return;
+        }
+
+        // 로비면 로비 상태로, 방에 있으면 방으로 상태 변경
+        if (PhotonNetwork.InLobby) state = State.Lobby;
+        else if (PhotonNetwork.InRoom) state = State.Room;
+        
+        SetButtonColor(0);
+        SetPanel();
+    }   
+    // 방 나가기 버튼
+    public void LeaveRoomButton()
+    {
+        state = State.Lobby;
+        SetPanel();
+        PhotonNetwork.LeaveRoom();
+    }
+    // 상점 버튼
+    public void StoreButton()
+    {
+        if (state == State.Store)
+        {
+            return;
+        }
+        state = State.Store;
+
+        SetButtonColor(1);
+        SetPanel();
+    }
+    public void OptionButton()
+    {
+        if (state == State.Option)
+        {
+            return;
+        }
+        state = State.Option;
+
+        SetButtonColor(2);
+        SetPanel();
+    }
+    public void ExitButton()
+    {
+        state = State.Login;
+        LobbyScreen(false);
+        PhotonNetwork.Disconnect();
+
+        SetButtonColor(0);
+        SetPanel();
+    }
+
+
+    // 버튼 배경의 색을 변경해주는 메서드
+    public void SetButtonColor(int num)
+    {
+        buttonBackGround[0].color = new Color(255, 255, 255, 0);    // Home
+        buttonBackGround[1].color = new Color(255, 255, 255, 0);    // Store
+        buttonBackGround[2].color = new Color(255, 255, 255, 0);    // Option
+        // 요청한 버튼의 색만 켜주기
+        buttonBackGround[num].color = new Color(255, 255, 255, 0.8f);
+
+    }
+    // 상태에 따라 패널 변경 메서드
+    public void SetPanel()
+    {
+        Login_Panel.SetActive(false);
+        Lobby_Panel.SetActive(false);
+        Room_Panel.SetActive(false);
+        UserRoom_Panel.SetActive(false);
+        Option_Panel.SetActive(false);
+        Store_Panel.SetActive(false);
+
+        switch (state)
+        {
+            case State.Lobby:
+                Lobby_Panel.SetActive(true);
+                break;
+            case State.Room:
+                Room_Panel.SetActive(true);
+                break;
+            case State.Store:
+                Store_Panel.SetActive(true);
+                break;
+            case State.Option:
+                Option_Panel.SetActive(true);
+                break;
+            case State.Login:
+                Login_Panel.SetActive(true);
+                break;
+        }
+    }
+
     #endregion
 }
