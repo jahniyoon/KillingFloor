@@ -77,6 +77,15 @@ MonoBehaviour:
   - MasterTransform
   - SyncTransform
   - bossMove
+  - MasterActive
+  - MasterZed
+  - SyncActive
+  - SyncZedTime
+  - MasterSkill
+  - MasterZedTime
+  - MasterZombieTransform
+  - SyncSkill
+  - SyncZombieTransfrom
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

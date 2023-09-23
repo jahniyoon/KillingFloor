@@ -13,7 +13,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 {
     public static NetworkManager instance;
 
-    public GameObject Lang_Panel, Room_Panel, UserRoom_Panel, Lobby_Panel, Login_Panel, Store_Panel;
+    public GameObject Lang_Panel, Room_Panel, UserRoom_Panel, Lobby_Panel, Login_Panel, Store_Panel, Lobby_Screen;
 
     public string localPlayerName = default;
     public string localPlayerLv = default;
@@ -26,7 +26,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [Header("Lobby")]
     public InputField UserSearchInput;
     public Text LobbyInfoText, UserNickNameText, UserNameText;
-
+    
     [Header("Room")]
     public InputField SetDataInput;
     public GameObject SetDataBtnObj;
@@ -81,7 +81,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             Debug.Log("회원가입 성공");
             SetStat();          // 통계 초기화
-            SetData("Lv.0");    // 유저 데이터 초기화
+            SetData("0");    // 유저 데이터 초기화
         },
             (error) => Debug.Log("회원가입 실패"));
 
@@ -263,17 +263,24 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     #region 유저 데이터 설정
     // 유저 데이터 설정하는 메서드
-    void SetData(string curData)
+    public void SetData(string curData)
     {
         // 업데이트할 사용자 데이터 요청 생성
         var request = new UpdateUserDataRequest()
         {
             Data = new Dictionary<string, string>() { { "HomeLevel", curData } },   // "HomeLevel" 키를 가진 데이터 설정
-            Permission = UserDataPermission.Public      // 데이터 공개
+            Permission = UserDataPermission.Public     // 데이터 공개
         };
 
         // PlayFab를 통해 사용자 데이터 업데이트 요청 전송
-        PlayFabClientAPI.UpdateUserData(request, (result) => { }, (error) => Debug.Log("데이터 저장 실패"));
+        PlayFabClientAPI.UpdateUserData(request, (result) => 
+        {
+            Debug.Log("SetData 성공 -> " + result);
+            Debug.Log($"curData : {curData}");
+
+            localPlayerLv = curData;
+        },
+        (error) => Debug.Log("데이터 저장 실패"));
     }
 
     // 유저 데이터 가져오는 메서드
@@ -284,8 +291,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         UserRoomDataText.text = "고유ID" + curID + "\n" + result.Data["HomeLevel"].Value,
         (error) => Debug.Log("데이터 불러오기 실패"));
     }
-    #endregion
-
     void SetLocalPlayerData()
     {
         PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = MyPlayFabInfo.PlayFabId }, (result) =>
@@ -298,17 +303,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
             UserNameText.text = "Name: " + localPlayerName + "\nLevel: " + localPlayerLv;
 
+            //// 문자열을 정수로 변환 후 1을 더함
+            //int lv = int.Parse(localPlayerLv) + 1;
+            //// 결과를 다시 문자열로 변환
+            //string localPlayerLvUp = lv.ToString();
+
+            //Debug.Log(lv);
+            //Debug.Log("더하기 1 했을 때: " + localPlayerLvUp);
+
         },
             (error) => Debug.Log("데이터 불러오기 실패"));
-
-        // 문자열을 정수로 변환 후 1을 더함
-        int lv = int.Parse(localPlayerLv) + 1;
-        // 결과를 다시 문자열로 변환
-        string localPlayerLvUp = lv.ToString();
-
-        Debug.Log(lv);
-        Debug.Log("더하기 1 했을 때: " + localPlayerLvUp);
     }
+    #endregion
+
 
     #region 유저 Currency
     // 유저 Currency 가져오는 메서드
@@ -412,7 +419,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         isLoaded = true;
         PhotonNetwork.LocalPlayer.NickName = MyPlayFabInfo.DisplayName;
-
+        LobbyScreen(true);// 로비를 켠다.
         ShowPanel(Lobby_Panel);
         ShowUserNickName();
     }
@@ -427,6 +434,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Store_Panel.SetActive(false);
 
         curPanel.SetActive(true);
+    }
+    
+    // 지환
+    void LobbyScreen(bool isLobby)
+    {
+        Lobby_Screen.SetActive(isLobby);
     }
 
     void ShowUserNickName()
@@ -446,6 +459,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
+        LobbyScreen(false);// 로비를 끈다
         isLoaded = false;
         ShowPanel(Login_Panel);
     }

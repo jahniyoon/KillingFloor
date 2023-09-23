@@ -72,14 +72,14 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         if (SceneManager.GetActiveScene().name == "Main")
         {
             Debug.Log("메인씬 입장");
-            spawnPosition = new(135.0f, -6.0f, 200.0f);
+            spawnPosition = new Vector3(135.0f, -6.0f, 200.0f);
 
         }
 
         // 네트워크 상의 모든 클라이언트들에서 생성 실행
         // 단, 해당 게임 오브젝트의 주도권은, 생성 메서드를 직접 실행한 클라이언트에게 있음
         //PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
-        
+
         GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
         if (GMMode)
         {
@@ -124,7 +124,27 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             LeaveServer();
         }
-        if (isZedTime) { StartCoroutine(ZedTime()); Debug.Log("몇번 호출 하는가?"); }
+        if (isZedTime && PhotonNetwork.IsMasterClient)
+        {
+            Zed();
+        }
+    }
+
+    public void Zed()
+    {
+        photonView.RPC("MasterZedTime", RpcTarget.MasterClient);
+    }
+
+    [PunRPC]
+    public void MasterZedTime()
+    {
+        photonView.RPC("SyncZedTime", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void SyncZedTime()
+    {
+        StartCoroutine(ZedTime());
     }
 
     public void SetPlayer()
@@ -222,9 +242,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     }
 
 
-
-
-
     // Junoh 추가
     public void PlusCount(int _num)
     {
@@ -258,7 +275,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             yield return null;
         }
 
-        PlayerUIManager.instance.SetNotice("Start Wave");
+        PlayerUIManager.instance.SetStartNotice("Start Wave");
         StartCoroutine(noticeController.CoroutineManager(false));
 
         while (0 < currentZombieCount)
@@ -275,7 +292,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         isShop = true;
 
-        PlayerUIManager.instance.SetNotice("Wave Clear");
+        PlayerUIManager.instance.SetEndNotice("Wave Clear");
         PlayerUIManager.instance.SetNoticeLogo("Go to Shop");
 
         PlayerUIManager.instance.CountUI.SetActive(false);

@@ -40,7 +40,12 @@ public class Shop : MonoBehaviour
                 ShopClose();
                 input.cancle = false;
             }
+            else if(!GameManager.instance.isShop)
+            {
+                ShopClose();
+            }
         }
+       
     }
     public void ShopCloseButton()
     {
@@ -68,7 +73,7 @@ public class Shop : MonoBehaviour
     {
         
         // 플레이어가 근처에 있으면
-        if (player.CompareTag("Player"))
+        if (player.CompareTag("Player") && GameManager.instance.isShop)
         {
             input = player.GetComponent<PlayerInputs>();
             playerInfo = player.GetComponent<PlayerHealth>();
@@ -94,7 +99,7 @@ public class Shop : MonoBehaviour
     // 플레이어가 근처에서 멀어지면
     private void OnTriggerExit()
     {
-        if (playerInfo != null &&playerInfo.photonView.IsMine)
+        if (playerInfo != null &&playerInfo.photonView.IsMine && GameManager.instance.isShop)
         {
             PlayerUIManager.instance.shopUI.SetActive(false);
             isShopOpen = false;

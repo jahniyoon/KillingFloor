@@ -41,15 +41,17 @@ public class PlayerMeleeAttack : MonoBehaviour
     // TODO : PunRPC로 데미지 들어가도록 수정
     void Damage(GameObject _hitObj)
     {
-        if (_hitObj.transform.GetComponent<HitPoint>() == null)
+        if (_hitObj.transform.GetComponent<HitPoint>() == null && _hitObj.transform.GetComponent<PlayerDamage>() != null)
         {
             playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
-            _hitObj.GetComponent<PlayerDamage>().OnDamage();
+            _hitObj.transform.GetComponent<PlayerDamage>().OnDamage(); // RPC 확인 디버그용
             return;
         }
-        // 좀비일 경우
-        else if (_hitObj.transform.GetComponent<HitPoint>() != null)
+        if (!"Mesh_Alfa_2".Equals(_hitObj.transform.name) && !"Meteor".Equals(_hitObj.transform.name))//보스 가 아닐경우 
         {
+            ////////////////////////////////////////////////좀비////////////////////
+
+
             if (_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health > 0)
             {
                 _hitObj.transform.GetComponent<HitPoint>().Hit(damage); // 좀비에게 데미지
@@ -65,6 +67,33 @@ public class PlayerMeleeAttack : MonoBehaviour
                     //coin += _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin;
                 }
             }
+
+            ////////////////////////////////////////////////////////////////////
+        }
+
+        if ("Mesh_Alfa_2".Equals(_hitObj.name)) // 보스 일경우
+        {
+
+
+            if (9 == _hitObj.transform.gameObject.layer)
+            {
+
+                _hitObj.gameObject.GetComponent<BossController>().OnDamage(damage);
+            }
+            else if (11 == _hitObj.transform.gameObject.layer)
+            {
+
+                _hitObj.gameObject.GetComponent<BossController>().OnDamage(damage * 0.5f);
+            }
+        }
+
+        if ("Meteor".Equals(_hitObj.name))
+        {
+
+
+
+            _hitObj.gameObject.GetComponent<Meteor>().OnDamage(damage);
+
         }
         // 보스일 경우
         if (_hitObj.transform.GetComponent<BossController>() != null)

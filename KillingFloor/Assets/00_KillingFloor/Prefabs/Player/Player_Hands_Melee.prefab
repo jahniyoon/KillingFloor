@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerHealth: {fileID: 0}
-  damage: 30
+  damage: 80
 --- !u!1 &1383337197268814203
 GameObject:
   m_ObjectHideFlags: 0
