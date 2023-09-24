@@ -210,6 +210,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         PhotonNetwork.LeaveRoom();
+        SceneManager.LoadScene("LoginScene");
+
     }
 
     // 룸을 나갈때 자동 실행되는 메서드
