@@ -4163,6 +4163,7 @@ GameObject:
   - component: {fileID: 3312630972397367418}
   - component: {fileID: 2221108193076977954}
   - component: {fileID: 2221108193076978013}
+  - component: {fileID: 2381328836053848024}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -4425,6 +4426,7 @@ MonoBehaviour:
   bulletLineRenderer: {fileID: 0}
   fireParticle: {fileID: 0}
   isParticleTrigger: 0
+  isBloodTrigger: 0
   grenade: 5
   isGrenade: 0
   grenadePrefab: {fileID: 6649126960150165074, guid: 07b0046f16dcc5b4db7cd4fc1c25ed8c,
@@ -4886,6 +4888,41 @@ MonoBehaviour:
   - m_Rig: {fileID: 0}
     m_Active: 1
   m_Effectors: []
+--- !u!114 &2381328836053848024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4861928655055331811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12296e4b2f9303d4f9fc8a623032ca56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InfiniteDecal: 0
+  DirLight: {fileID: 0}
+  BloodAttach: {fileID: 3136605153214515430, guid: 45eef0a861a8a8946b4c23fb9f4f779a,
+    type: 3}
+  BloodFX:
+  - {fileID: 2656253210798625995, guid: a78e9ef18b366424b84e0c7410d2fe72, type: 3}
+  - {fileID: 5865290276592450837, guid: 42a28376f729c864a81abf66add7a418, type: 3}
+  - {fileID: 764304066602274965, guid: 4a322f29a9e1fa54f90223de8bcf3a28, type: 3}
+  - {fileID: 7935733108997359171, guid: e822d59151d3597428b0b63bf25355e7, type: 3}
+  - {fileID: 4288107571095694937, guid: c3f8938673a07704e93ac52eee18f410, type: 3}
+  - {fileID: 1165703760847671896, guid: bb596cd440832554089a7125852e836f, type: 3}
+  - {fileID: 4152240900433254336, guid: 6d3629f845b40e24fb51d381e84bbc77, type: 3}
+  - {fileID: 6463355840203370170, guid: 70ead61ff20b23b4e97b90d8e8997ecd, type: 3}
+  - {fileID: 5170585893340993107, guid: 7b88f11816abaa34c9e02cbaa8485321, type: 3}
+  - {fileID: 2629016494315086251, guid: 5776aed3bb070e54cb09a11c8a6a5831, type: 3}
+  - {fileID: 3034872428933141512, guid: 52d94bfe44b09ff4b9e9788e9a86a778, type: 3}
+  - {fileID: 2360933683143488451, guid: 730678b8a5330c449ada55bde83402ce, type: 3}
+  - {fileID: 5016170632959171363, guid: c3ed06559a66b724b91c3124e75ddec9, type: 3}
+  - {fileID: 8859926575668995837, guid: 097a30048e9007141899f834041a5ac7, type: 3}
+  - {fileID: 5936082179827903908, guid: cb58ece77d11ef945aecd072f2e46a8d, type: 3}
+  - {fileID: 5494213943435191861, guid: db51fe09adf27d640b4e10018c2d76ba, type: 3}
+  - {fileID: 5371219466416337994, guid: f9e099178c81bee439a79eecec91dacb, type: 3}
+  direction: {x: 0, y: 0, z: 0}
 --- !u!1 &4936835494381739693
 GameObject:
   m_ObjectHideFlags: 0

@@ -35,7 +35,7 @@ public class PlayerInfoUI : MonoBehaviourPun
     void Start()
     {
         playerNickname.text = string.Format(PhotonNetwork.LocalPlayer.NickName);
-        playerLevel.text = string.Format("Level");   
+        playerLevel.text = string.Format("0");   
         if(photonView.IsMine)
         {
             healtHUD = PlayerUIManager.instance.hpText;

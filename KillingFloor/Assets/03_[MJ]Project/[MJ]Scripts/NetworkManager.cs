@@ -45,7 +45,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [Header("Lobby UI")]
     public State state;
     public Image[] buttonBackGround;    // 로비 버튼 선택여부
-    public PlayerProfile playerInfo;
+    public PlayerProfile[] playerInfo;
 
     void Awake()
     {
@@ -428,6 +428,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         LobbyScreen(true);      // 로비 배경영상를 켠다.
         state = State.Lobby;    // 상태 로비로 변경
+        playerInfo[0].nickName.text = string.Format(PhotonNetwork.LocalPlayer.NickName);
+        playerInfo[0].level.text = string.Format("0");  // ToDo : 레벨 넣어야함
 
         ShowPanel(Lobby_Panel);
         ShowUserNickName();
@@ -493,6 +495,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                     roomOptions.MaxPlayers = 20;
                     roomOptions.CustomRoomProperties = new Hashtable() { { "PlayFabID", PlayFabUserList[i].PlayFabId } };
                     PhotonNetwork.JoinOrCreateRoom(UserSearchInput.text + "님의 정보창", roomOptions, null);
+
                     return;
                 }
             }
@@ -544,13 +547,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     void RoomRenewal()
     {
         UserNickNameText.text = "";
-
+        ResetPlayerUI();
         PlayFabClientAPI.GetUserData(new GetUserDataRequest(), (result) =>
         {
             for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
                 //TODO : 레벨 플레이어 고유값에 맞게 수정하기
                 UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
+
+                // 방 안의 UI 세팅
+                playerInfo[i + 1].gameObject.SetActive(true);
+                playerInfo[i + 1].nickName.text = PhotonNetwork.PlayerList[i].NickName;
+                playerInfo[i + 1].level.text = result.Data["HomeLevel"].Value;
             }
         },
         (error) => { Debug.Log("레벨 불러오지 못함"); }
@@ -558,7 +566,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         RoomNumInfoText.text = PhotonNetwork.CurrentRoom.PlayerCount + "명 / " + PhotonNetwork.CurrentRoom.MaxPlayers + "최대 인원";
     }
-
+    void ResetPlayerUI()
+    {
+        for (int i = 0; i < 6; i++)
+        { playerInfo[i + 1].gameObject.SetActive(false); }
+    }
     public override void OnLeftRoom()
     {
         SetDataInput.gameObject.SetActive(false);

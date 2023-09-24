@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using Photon.Pun;
+using Photon.Pun.Demo.Cockpit;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,7 @@ public class PlayerShooter : MonoBehaviourPun
     private PlayerMovement playerMovement;
     private PlayerHealth playerHealth;
     private CameraSetup cameraSet;
+    private BloodEffect bloodFX;
     protected Animator animator;
     int layerMask = (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11) | (1 << 14);    // 데미지 받을 좀비의 레이어 마스크
 
@@ -67,6 +69,7 @@ public class PlayerShooter : MonoBehaviourPun
     public LineRenderer bulletLineRenderer;  // 총알 궤적을 그리기 위한 렌더러
     public ParticleSystem fireParticle;
     public bool isParticleTrigger;          // 파티클 생성여부 트리거
+    public bool isBloodTrigger;             // 혈흔효과 여부 트리거
 
     [Header("Grenade")]
     public int grenade;         // 수류탄 개수
@@ -120,6 +123,7 @@ public class PlayerShooter : MonoBehaviourPun
         playerHealth = GetComponent<PlayerHealth>();
         cameraSet = GetComponent<CameraSetup>();
         animator = GetComponent<Animator>();
+        bloodFX = GetComponent<BloodEffect>();
 
         // ========================= 무기 가져오는 부분 =========================//
         // TPS 무기 가져오기
@@ -286,6 +290,11 @@ public class PlayerShooter : MonoBehaviourPun
         Vector3 hitPoint = _cameraForward * range;
         GameObject hitObj = null;
 
+        // 혈흔효과에 사용할 각도
+        float angle = 0;
+        // 혈흔효과가 덮힐 오브젝트
+        Transform hitTransformRoot = null;
+
         // 잠깐 IK 풀어주기
         handIKAmount = animationIKAmount;
         elbowIKAmount = animationIKAmount;
@@ -294,8 +303,13 @@ public class PlayerShooter : MonoBehaviourPun
         // 만약 좀비류에 닿으면 데미지
         if (Physics.Raycast(_cameraPosition, _cameraForward, out hit, range, layerMask))
         {
+            // 혈흔 효과가 덮힐 오브젝트 정해주기
+            hitTransformRoot = hit.transform.root;
+            // 혈흔효과에 사용할 각도
+            angle = Mathf.Atan2(hit.normal.x, hit.normal.z) * Mathf.Rad2Deg + 180;
             hitObj = hit.transform.gameObject;
             hitPoint = hit.point;
+            isBloodTrigger = true;  // 혈흔효과 트리거
         }
 
         // 만약 뭔가에 닿으면 그곳을 히트포인트로
@@ -315,18 +329,81 @@ public class PlayerShooter : MonoBehaviourPun
             Damage(hitObj);
         }
 
+        
+        Vector3 hitNormal = hit.normal;
+        int viewID = 999999;    // null 값을 알기위한 임의의 숫자
 
+        Debug.Log("좀비류에 닿았나? " + hitTransformRoot);
+
+        if (hitTransformRoot != null)
+        {
+            var nearestBone = GetNearestObject(hitTransformRoot, hitPoint);
+            if(nearestBone)
+            Debug.Log("뼈가 있나? : " + nearestBone);
+
+            if (nearestBone.gameObject.GetPhotonView() == null)
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    Debug.Log("포톤뷰가 없다. 상위로 전환 : " + nearestBone);
+                    nearestBone = nearestBone.parent;
+                    if(nearestBone.gameObject.GetPhotonView() != null)
+                    {
+                        break;
+                    }
+                }
+            }
+            //if(nearestBone.gameObject.GetPhotonView() == null)
+            //{
+            //    Debug.Log("포톤뷰가 없어서 상위로 전환");
+            //    nearestBone = nearestBone.parent;
+            //}
+            if (nearestBone != null && nearestBone.gameObject.GetPhotonView() != null)
+            {   
+               
+                viewID = nearestBone.gameObject.GetPhotonView().ViewID;
+                Debug.Log("ViewID 부여 : " + viewID);
+            }
+        }
         // 이펙트 재생 코루틴을 랩핑
-        photonView.RPC("ShotEffectProcessOnClients", RpcTarget.All, hitPoint);
+        photonView.RPC("ShotEffectProcessOnClients", RpcTarget.All, hitPoint, hitNormal, angle, viewID);
+
     }
+
+    // 레이캐스트를 통해 얻은 히트 포인트에서 가장 가까운 뼈를 찾는 함수
+    Transform GetNearestObject(Transform hit, Vector3 hitPos)
+    {
+        var closestPos = 100f;
+        Transform closestBone = null;
+        var childs = hit.GetComponentsInChildren<Transform>();
+
+        foreach (var child in childs)
+        {
+            var dist = Vector3.Distance(child.position, hitPos);
+            if (dist < closestPos)
+            {
+                closestPos = dist;
+                closestBone = child;
+            }
+        }
+
+        var distRoot = Vector3.Distance(hit.position, hitPos);
+        if (distRoot < closestPos)
+        {
+            closestPos = distRoot;
+            closestBone = hit;
+        }
+        return closestBone;
+    }
+
     // 이펙트 재생 코루틴
     [PunRPC]
-    private void ShotEffectProcessOnClients(Vector3 hitPosition)
+    private void ShotEffectProcessOnClients(Vector3 hitPosition, Vector3 _hitNormal, float _angle, int _viewID)
     {
-        StartCoroutine(ShotEffect(hitPosition));
+        StartCoroutine(ShotEffect(hitPosition, _hitNormal, _angle, _viewID));
     }
     // 발사 이펙트와 소리를 재생하고 총알 궤적을 그린다.
-    private IEnumerator ShotEffect(Vector3 _hitPosition)
+    private IEnumerator ShotEffect(Vector3 _hitPosition, Vector3 _hitNormal, float _angle, int _viewID)
     {
         if (isParticleTrigger)
         {
@@ -335,6 +412,11 @@ public class PlayerShooter : MonoBehaviourPun
             _bulletHoleParticle.transform.position = _hitPosition;
             bulletHole.Play();
             isParticleTrigger = false;
+        }
+        if(isBloodTrigger)
+        {
+            bloodFX.OnBloodEffect(_hitPosition, _angle, _hitNormal, _viewID);
+            isBloodTrigger = false;
         }
         fireParticle.Play();    // 파티클 재생
         gunAudioPlayer.clip = equipedWeapon.gunAudio;
