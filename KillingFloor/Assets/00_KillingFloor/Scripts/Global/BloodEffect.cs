@@ -64,6 +64,7 @@ public class BloodEffect : MonoBehaviour
         activeBloods++;
         var settings = instance.GetComponent<BFX_BloodSettings>();
         settings.LightIntensityMultiplier = DirLight.intensity;
+        Destroy(instance, 10f);
 
         PhotonView hitObj = PhotonView.Find(_viewID); // viewID는 찾으려는 PhotonView의 ID입니다.
         if (hitObj != null)
@@ -84,7 +85,7 @@ public class BloodEffect : MonoBehaviour
             bloodT.LookAt(hitPoint + hitNormal, direction);
             bloodT.Rotate(90, 0, 0);
             bloodT.transform.parent = targetObject.transform;
-            
+            Destroy(attachBloodInstance,10f);
         }
     }
 

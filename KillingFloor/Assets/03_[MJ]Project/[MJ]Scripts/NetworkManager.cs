@@ -56,9 +56,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
-        // 포톤 네트워크 속도 최적화 설정
-        PhotonNetwork.SendRate = 60;
-        PhotonNetwork.SerializationRate = 30;
+        //// 포톤 네트워크 속도 최적화 설정
+        //PhotonNetwork.SendRate = 60;
+        //PhotonNetwork.SerializationRate = 30;
         //지환 : 플레이어들의 씬 씽크 맞추기
         PhotonNetwork.AutomaticallySyncScene = true;
     }
@@ -450,9 +450,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         LobbyScreen(true);      // 로비 배경영상를 켠다.
         state = State.Lobby;    // 상태 로비로 변경
+        localPlayerName = PhotonNetwork.LocalPlayer.NickName;
         playerInfo[0].nickName.text = string.Format(PhotonNetwork.LocalPlayer.NickName);
-        playerInfo[0].level.text = string.Format(localPlayerLv);  // ToDo : 레벨 넣어야함
-
+        playerInfo[0].level.text = string.Format(NetworkManager.instance.localPlayerLv);  // ToDo : 레벨 넣어야함
+        
         ShowPanel(Lobby_Panel);
         ShowUserNickName();
     }
