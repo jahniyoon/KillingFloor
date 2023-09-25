@@ -90,11 +90,11 @@ public class NormalZombie : NormalZombieData
             {
                 if (navigation.isLongContact == true && isSkill == false)
                 {
-                    StartCoroutine(Skill());
+                    SkillStart();
                 }
                 else if (navigation.isContact == true && PhotonNetwork.IsMasterClient)
                 {
-                    SkillStart();
+                    Attack();
                 }
                 else { /*No Event*/ }
             }

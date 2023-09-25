@@ -26,8 +26,7 @@ public class NormalZombieSpawner : MonoBehaviourPun
 
     private void Update()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
+        
             if (GameManager.instance.wave == 1 && GameManager.instance.isCheck)
             {
                 GameManager.instance.isCheck = false;
@@ -74,7 +73,7 @@ public class NormalZombieSpawner : MonoBehaviourPun
                 SpawnStart();
                 //StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
             }
-        }
+        
     }
 
     public void SpawnStart()
