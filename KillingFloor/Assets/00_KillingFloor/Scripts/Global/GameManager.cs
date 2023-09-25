@@ -226,6 +226,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public override void OnLeftRoom()
     {
         // 룸을 나가면 로비 씬으로 돌아감
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene("LoginScene");
     }
 

@@ -48,6 +48,7 @@ public class PlayerShooter : MonoBehaviourPun
 
     [Header("Weapon Info")]
     public Weapon equipedWeapon;
+    public Weapon[] weaponList;
     [Range(1, 5)]
     public int weaponSlot = 1;
     public float damage;        // 총기 데미지
@@ -260,6 +261,7 @@ public class PlayerShooter : MonoBehaviourPun
         Vector3 cameraForward = cameraSet.followCam.transform.forward;
         Vector3 cameraPosition = cameraSet.followCam.transform.position;
         // 카메라는 각자 가지고있으므로 카메라값도 함께 전달
+        Debug.Log(photonView.ViewID + "마스터에게 사격 요청");
         photonView.RPC("ShotProcessOnServer", RpcTarget.MasterClient, cameraForward, cameraPosition);
 
 
@@ -366,7 +368,7 @@ public class PlayerShooter : MonoBehaviourPun
             }
         }
         // 이펙트 재생 코루틴을 랩핑
-        photonView.RPC("ShotEffectProcessOnClients", RpcTarget.All, hitPoint, hitNormal, angle, viewID);
+        photonView.RPC("ShotEffectProcessOnClients", RpcTarget.All, hitPoint, hitNormal, angle, viewID, isBloodTrigger, isParticleTrigger);
 
     }
 
@@ -398,23 +400,28 @@ public class PlayerShooter : MonoBehaviourPun
 
     // 이펙트 재생 코루틴
     [PunRPC]
-    private void ShotEffectProcessOnClients(Vector3 hitPosition, Vector3 _hitNormal, float _angle, int _viewID)
+    private void ShotEffectProcessOnClients(Vector3 hitPosition, Vector3 _hitNormal, float _angle, int _viewID, bool _blood, bool _bullet)
     {
-        StartCoroutine(ShotEffect(hitPosition, _hitNormal, _angle, _viewID));
+        StartCoroutine(ShotEffect(hitPosition, _hitNormal, _angle, _viewID, _blood, _bullet));
     }
     // 발사 이펙트와 소리를 재생하고 총알 궤적을 그린다.
-    private IEnumerator ShotEffect(Vector3 _hitPosition, Vector3 _hitNormal, float _angle, int _viewID)
+    private IEnumerator ShotEffect(Vector3 _hitPosition, Vector3 _hitNormal, float _angle, int _viewID, bool _blood, bool _bullet)
     {
-        if (isParticleTrigger)
+        Debug.Log("모두 이펙트를 실행한다.");
+
+        if (_bullet)
         {
+            Debug.Log("총알자국 파티클 생성");
+
             // 총알 자국 파티클 생성
             ParticleSystem _bulletHoleParticle = bulletHole;
             _bulletHoleParticle.transform.position = _hitPosition;
             bulletHole.Play();
             isParticleTrigger = false;
         }
-        if(isBloodTrigger)
+        if(_blood)
         {
+            Debug.Log("블러드 생성");
             bloodFX.OnBloodEffect(_hitPosition, _angle, _hitNormal, _viewID);
             isBloodTrigger = false;
         }
@@ -667,6 +674,8 @@ public class PlayerShooter : MonoBehaviourPun
                     fpsHeal.gameObject.SetActive(false);
                     fpsGrenade.gameObject.SetActive(false);
                     SetWeapon(tpsPistol, fpsPistol); // 무기 장착
+                    photonView.RPC("ServerProcessWeapon", RpcTarget.Others, 1);
+
                     animator.SetBool("isWeaponPistol", true);
                     animator.SetBool("isWeaponRifle", false);
                 }
@@ -685,6 +694,8 @@ public class PlayerShooter : MonoBehaviourPun
                     fpsHeal.gameObject.SetActive(false);
                     fpsGrenade.gameObject.SetActive(false);
                     SetWeapon(tpsRifle, fpsRifle); // 무기 장착
+                    photonView.RPC("ServerProcessWeapon", RpcTarget.Others, 2);
+
                     animator.SetBool("isWeaponPistol", false);
                     animator.SetBool("isWeaponRifle", true);
                 }
@@ -703,6 +714,7 @@ public class PlayerShooter : MonoBehaviourPun
                     fpsHeal.gameObject.SetActive(false);
                     fpsGrenade.gameObject.SetActive(false);
                     SetWeapon(tpsMelee, fpsMelee); // 무기 장착
+
                 }
                 input.weaponSlot3 = false;
             }
@@ -719,6 +731,7 @@ public class PlayerShooter : MonoBehaviourPun
                     fpsHeal.gameObject.SetActive(true);
                     fpsGrenade.gameObject.SetActive(false);
                     SetWeapon(tpsHeal, fpsHeal); // 무기 장착
+
                 }
                 input.weaponSlot4 = false;
             }
@@ -737,6 +750,12 @@ public class PlayerShooter : MonoBehaviourPun
                 input.grenade = false;
             }
         }
+    }
+
+    [PunRPC]
+    public void ServerProcessWeapon(int index)
+    {
+
     }
 
     // 무기 슬롯 입력부분

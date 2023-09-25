@@ -4410,6 +4410,9 @@ MonoBehaviour:
   rightHandPosition: {fileID: 585656881133604207}
   weaponClass: 0
   equipedWeapon: {fileID: 0}
+  weaponList:
+  - {fileID: 886400307266168519}
+  - {fileID: 896297572059544247}
   weaponSlot: 1
   damage: 10
   range: 100
@@ -4461,6 +4464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 100
+  startingArmor: 0
 --- !u!114 &3125894073240229272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29856,6 +29860,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fa02354478e5be44955a56a2e62eb6f, type: 3}
+--- !u!114 &886400307266168519 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7086628792285652324, guid: 0fa02354478e5be44955a56a2e62eb6f,
+    type: 3}
+  m_PrefabInstance: {fileID: 7932496135864206243}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82b8258077779644b302e9526902c96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4784523080863705618 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3203160295817193905, guid: 0fa02354478e5be44955a56a2e62eb6f,
@@ -29931,6 +29947,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e98ac4d37b602a748b93db85a4e3e987, type: 3}
+--- !u!114 &896297572059544247 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7090261006208403283, guid: e98ac4d37b602a748b93db85a4e3e987,
+    type: 3}
+  m_PrefabInstance: {fileID: 7932496136067907044}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82b8258077779644b302e9526902c96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4311020652111199378 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6180681707143397750, guid: e98ac4d37b602a748b93db85a4e3e987,

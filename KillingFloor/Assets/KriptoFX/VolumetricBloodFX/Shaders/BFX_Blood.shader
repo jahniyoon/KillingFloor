@@ -19,7 +19,10 @@
     SubShader
     {
 
-        Tags{ "Queue" = "AlphaTest+1"}
+        Tags{ 
+        "Queue" = "AlphaTest+1"
+        "RenderPipeline" = "UniversalPipeline"
+    }
         Blend SrcAlpha OneMinusSrcAlpha
         Cull Back
         ZWrite On

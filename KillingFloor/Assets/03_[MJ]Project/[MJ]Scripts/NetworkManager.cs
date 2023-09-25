@@ -50,6 +50,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     void Awake()
     {
         instance = this;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
 
         // 포톤 네트워크 속도 최적화 설정
         PhotonNetwork.SendRate = 60;

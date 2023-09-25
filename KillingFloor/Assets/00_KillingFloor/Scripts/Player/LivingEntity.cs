@@ -10,6 +10,7 @@ using static UnityEngine.UI.Image;
 public class LivingEntity : MonoBehaviourPun, IDamageable
 {
     public float startingHealth = 100f; // 시작 체력
+    public float startingArmor = 0f;    // 시작 아머
     public float health { get; protected set; } // 현재 체력
     public float armor { get; protected set; }
     public int coin { get; protected set; }
@@ -37,7 +38,7 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
         dead = false;
         // 체력을 시작 체력으로 초기화
         health = startingHealth;
-        armor = 0;
+        armor = startingArmor;
     }
    
     // 데미지 처리

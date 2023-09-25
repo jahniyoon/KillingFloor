@@ -234,6 +234,9 @@ MonoBehaviour:
   ammo: 999
   remainingAmmo: 999
   magazineSize: 0
+  gunAudio: {fileID: 0}
+  reloadAudio: {fileID: 0}
+  emptyAudio: {fileID: 0}
 --- !u!1 &4431287244747059036
 GameObject:
   m_ObjectHideFlags: 0

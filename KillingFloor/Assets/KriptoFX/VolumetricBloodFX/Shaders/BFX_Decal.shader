@@ -15,7 +15,7 @@ Shader "KriptoFX/BFX/BFX_Decal"
 
 	SubShader
 	{
-		Tags{ "Queue" = "Transparent"}
+		Tags{ "Queue" = "Transparent" "RenderPipeline" = "UniversalPipeline"}
 		Blend DstColor SrcColor
 		//	Blend SrcAlpha OneMinusSrcAlpha
 
