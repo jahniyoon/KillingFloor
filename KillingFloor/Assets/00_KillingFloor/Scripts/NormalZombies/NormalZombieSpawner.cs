@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class NormalZombieSpawner : MonoBehaviourPun
 {
@@ -25,51 +26,71 @@ public class NormalZombieSpawner : MonoBehaviourPun
 
     private void Update()
     {
-        if (GameManager.instance.wave == 1 && GameManager.instance.isCheck)
+        if (PhotonNetwork.IsMasterClient)
         {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 4;
+            if (GameManager.instance.wave == 1 && GameManager.instance.isCheck)
+            {
+                GameManager.instance.isCheck = false;
+                roundPointCount = 4;
 
-            Count();
+                Count();
 
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+                SpawnStart();
+            }
+            else if (GameManager.instance.wave == 2 && GameManager.instance.isCheck)
+            {
+                GameManager.instance.isCheck = false;
+                roundPointCount = 6;
+
+                Count();
+
+                SpawnStart();
+            }
+            else if (GameManager.instance.wave == 3 && GameManager.instance.isCheck)
+            {
+                GameManager.instance.isCheck = false;
+                roundPointCount = 5;
+
+                Count();
+
+                SpawnStart();
+            }
+            else if (GameManager.instance.wave == 4 && GameManager.instance.isCheck)
+            {
+                GameManager.instance.isCheck = false;
+                roundPointCount = 7;
+
+                Count();
+
+                SpawnStart();
+            }
+            else if (GameManager.instance.wave == 5 && GameManager.instance.isCheck)
+            {
+                GameManager.instance.isCheck = false;
+                roundPointCount = 2;
+
+                Count();
+
+                SpawnStart();
+            }
         }
-        else if (GameManager.instance.wave == 2 && GameManager.instance.isCheck)
-        {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 6;
+    }
 
-            Count();
+    public void SpawnStart()
+    {
+        photonView.RPC("MasterSpawn", RpcTarget.MasterClient);
+    }
 
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-        }
-        else if (GameManager.instance.wave == 3 && GameManager.instance.isCheck)
-        {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 5;
+    [PunRPC]
+    public void MasterSpawn()
+    {
+        photonView.RPC("SyncSpawn", RpcTarget.All);
+    }
 
-            Count();
-
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-        }
-        else if (GameManager.instance.wave == 4 && GameManager.instance.isCheck)
-        {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 7;
-
-            Count();
-
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-        }
-        else if (GameManager.instance.wave == 5 && GameManager.instance.isCheck)
-        {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 2;
-
-            Count();
-
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-        }
+    [PunRPC]
+    public void SyncSpawn()
+    {
+        StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
     }
 
     private void Count()
@@ -81,44 +102,33 @@ public class NormalZombieSpawner : MonoBehaviourPun
 
     private void CreateZombie()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            GameObject newObject = PhotonNetwork.Instantiate(zombiePrefab[randZombieNum].name, spawnPoint[pointCount].transform.position, Quaternion.identity);
-            //ZombieTransfrom(newObject);
-            
-            newObject.transform.SetParent(zombieSaveList[randZombieNum]);
-        }
+        GameObject newObject = PhotonNetwork.Instantiate(zombiePrefab[randZombieNum].name, spawnPoint[pointCount].transform.position, Quaternion.identity);
+        ZombieTransfrom(newObject);
+
+        //newObject.transform.SetParent(zombieSaveList[randZombieNum]);
 
         //GameObject newObject = Instantiate(zombiePrefab[randZombieNum], zombieSaveList[randZombieNum]);
 
         //newObject.transform.position = spawnPoint[pointCount].transform.position;
-
-        Debug.Log(zombieSaveList[randZombieNum]);
-        Debug.Log(randZombieNum);
     }
 
-    //public void ZombieTransfrom(GameObject _object)
-    //{
-    //    photonView.RPC("MasterZombieTransform", RpcTarget.MasterClient, _object);
-        
-    //}
+    public void ZombieTransfrom(GameObject _object)
+    {
+        photonView.RPC("MasterZombieTransform", RpcTarget.MasterClient, _object);
 
-    //[PunRPC]
+    }
 
-    //public void MasterZombieTransform(GameObject _object)
-    //{
-    //    photonView.RPC("SyncZombieTransfrom", RpcTarget.All, _object);
-        
-    //}
+    [PunRPC]
+    public void MasterZombieTransform(GameObject _object)
+    {
+        photonView.RPC("SyncZombieTransfrom", RpcTarget.All, _object);
+    }
 
-    //[PunRPC]
-    //public void SyncZombieTransfrom(GameObject _object)
-    //{
-    //    _object.transform.SetParent(zombieSaveList[randZombieNum]);
-
-        
-
-    //}
+    [PunRPC]
+    public void SyncZombieTransfrom(GameObject _object)
+    {
+        _object.transform.SetParent(zombieSaveList[randZombieNum]);
+    }
 
     private void CreateZombieSave()
     {
