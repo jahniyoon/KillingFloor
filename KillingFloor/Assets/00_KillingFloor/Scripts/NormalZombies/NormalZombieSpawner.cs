@@ -36,6 +36,7 @@ public class NormalZombieSpawner : MonoBehaviourPun
                 Count();
 
                 SpawnStart();
+                //StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
             }
             else if (GameManager.instance.wave == 2 && GameManager.instance.isCheck)
             {
@@ -43,8 +44,8 @@ public class NormalZombieSpawner : MonoBehaviourPun
                 roundPointCount = 6;
 
                 Count();
-
                 SpawnStart();
+                //StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
             }
             else if (GameManager.instance.wave == 3 && GameManager.instance.isCheck)
             {
@@ -52,8 +53,8 @@ public class NormalZombieSpawner : MonoBehaviourPun
                 roundPointCount = 5;
 
                 Count();
-
                 SpawnStart();
+                //StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
             }
             else if (GameManager.instance.wave == 4 && GameManager.instance.isCheck)
             {
@@ -61,8 +62,8 @@ public class NormalZombieSpawner : MonoBehaviourPun
                 roundPointCount = 7;
 
                 Count();
-
                 SpawnStart();
+                //StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
             }
             else if (GameManager.instance.wave == 5 && GameManager.instance.isCheck)
             {
@@ -70,8 +71,8 @@ public class NormalZombieSpawner : MonoBehaviourPun
                 roundPointCount = 2;
 
                 Count();
-
                 SpawnStart();
+                //StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
             }
         }
     }
@@ -103,9 +104,9 @@ public class NormalZombieSpawner : MonoBehaviourPun
     private void CreateZombie()
     {
         GameObject newObject = PhotonNetwork.Instantiate(zombiePrefab[randZombieNum].name, spawnPoint[pointCount].transform.position, Quaternion.identity);
-        ZombieTransfrom(newObject);
+        //ZombieTransfrom(newObject);
 
-        //newObject.transform.SetParent(zombieSaveList[randZombieNum]);
+        newObject.transform.SetParent(zombieSaveList[randZombieNum]);
 
         //GameObject newObject = Instantiate(zombiePrefab[randZombieNum], zombieSaveList[randZombieNum]);
 
@@ -118,17 +119,17 @@ public class NormalZombieSpawner : MonoBehaviourPun
 
     }
 
-    [PunRPC]
-    public void MasterZombieTransform(GameObject _object)
-    {
-        photonView.RPC("SyncZombieTransfrom", RpcTarget.All, _object);
-    }
+    //[PunRPC]
+    //public void MasterZombieTransform(GameObject _object)
+    //{
+    //    photonView.RPC("SyncZombieTransfrom", RpcTarget.All, _object);
+    //}
 
-    [PunRPC]
-    public void SyncZombieTransfrom(GameObject _object)
-    {
-        _object.transform.SetParent(zombieSaveList[randZombieNum]);
-    }
+    //[PunRPC]
+    //public void SyncZombieTransfrom(GameObject _object)
+    //{
+    //    _object.transform.SetParent(zombieSaveList[randZombieNum]);
+    //}
 
     private void CreateZombieSave()
     {
