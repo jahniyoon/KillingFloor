@@ -429,6 +429,8 @@ MonoBehaviour:
   inputLock: 0
   shopPosition: {fileID: 4365128104377406915}
   playerCount: 0
+  playerNickName: 
+  playerLevel: 
   noticeController: {fileID: 0}
   volume: {fileID: 0}
   round: 1
@@ -443,7 +445,7 @@ MonoBehaviour:
   shops:
   - {fileID: 4365128104377406915}
   isShop: 0
-  GMMode: 1
+  GMMode: 0
 --- !u!4 &156583478
 Transform:
   m_ObjectHideFlags: 0

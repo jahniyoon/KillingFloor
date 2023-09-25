@@ -294,8 +294,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         // 사용자 데이터를 가져올 요청 생성
         PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = curID }, (result) =>
-        UserRoomDataText.text = "고유ID" + curID + "\n" + result.Data["HomeLevel"].Value,
+        {
+            UserRoomDataText.text = "고유ID" + curID + "\n" + result.Data["HomeLevel"].Value;
+            playerInfo[0].level.text = result.Data["HomeLevel"].Value; },  // 지환 레벨 가져오기 한줄 추가
         (error) => Debug.Log("데이터 불러오기 실패"));
+
     }
     void SetLocalPlayerData()
     {
@@ -429,7 +432,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         LobbyScreen(true);      // 로비 배경영상를 켠다.
         state = State.Lobby;    // 상태 로비로 변경
         playerInfo[0].nickName.text = string.Format(PhotonNetwork.LocalPlayer.NickName);
-        playerInfo[0].level.text = string.Format("0");  // ToDo : 레벨 넣어야함
+        playerInfo[0].level.text = string.Format(localPlayerLv);  // ToDo : 레벨 넣어야함
 
         ShowPanel(Lobby_Panel);
         ShowUserNickName();

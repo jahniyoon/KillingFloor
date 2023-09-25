@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 using UnityEngine.Rendering;
 using static UnityEngine.Rendering.DebugUI;
+using PlayFab.ClientModels;
+using PlayFab;
 
 public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 {
@@ -35,6 +37,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public Transform shopPosition; // 매 웨이브 업데이트되는 상점의 트랜스폼
     public int playerCount;
+    [Header("Game Info")]
+
+    public string playerNickName;
+    public string playerLevel;
+
     // 지환 추가
 
     [Header("Game Setting")]
@@ -108,10 +115,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     // Start is called before the first frame update
     void Start()
     {
-       
+
+        GetPlayerData();
 
         // ToDO : 테스트씬으로 넘어오면 생성되도록 수정하기
-  
+
         StartCoroutine(StartWave());
     }
 
@@ -241,6 +249,14 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             // 동기화하여 받은 점수를 UI로 표시
         }
 
+    }
+    // 지환 추가
+    public void GetPlayerData()
+    {
+        Debug.Log("플레이어 데이터" + NetworkManager.instance.localPlayerName + "" + NetworkManager.instance.localPlayerLv);
+        playerNickName = string.Format(NetworkManager.instance.localPlayerName);
+        playerLevel = string.Format(NetworkManager.instance.localPlayerLv);
+        
     }
 
 

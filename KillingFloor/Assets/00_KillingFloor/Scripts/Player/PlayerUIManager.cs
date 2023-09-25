@@ -78,9 +78,9 @@ public class PlayerUIManager : MonoBehaviour
     }
 
     // 체력 텍스트 갱신
-    public void SetLevel(float value)
+    public void SetLevel(string value)
     {
-        playerLevel.text = string.Format("{0}", value);
+        playerLevel.text = value;
     }
     public void SetHP(float value)
     {

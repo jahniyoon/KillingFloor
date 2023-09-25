@@ -4476,7 +4476,9 @@ MonoBehaviour:
   state: 0
   m_player: {fileID: 0}
   playerNickname: {fileID: 476069275615135483}
+  nickName: 
   playerLevel: {fileID: 6022182744024792868}
+  level: 
   armor: {fileID: 7725070845473741932}
   health: {fileID: 623305403731852907}
   healtHUD: {fileID: 0}

@@ -1,9 +1,12 @@
 using Photon.Pun;
+using PlayFab.ClientModels;
+using PlayFab;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class PlayerInfoUI : MonoBehaviourPun
 {
@@ -12,7 +15,9 @@ public class PlayerInfoUI : MonoBehaviourPun
 
     public PlayerHealth m_player;
     public TMP_Text playerNickname;
+    public string nickName;
     public TMP_Text playerLevel;
+    public string level;
     public Slider armor;
     public Slider health;
     public TMP_Text healtHUD;
@@ -34,10 +39,10 @@ public class PlayerInfoUI : MonoBehaviourPun
     // Start is called before the first frame update
     void Start()
     {
-        playerNickname.text = string.Format(PhotonNetwork.LocalPlayer.NickName);
-        playerLevel.text = string.Format("0");   
+
         if(photonView.IsMine)
         {
+            GetPlayerData();
             healtHUD = PlayerUIManager.instance.hpText;
             armorHUD = PlayerUIManager.instance.shiedldText;
             coinHUD = PlayerUIManager.instance.coinText;
@@ -56,6 +61,22 @@ public class PlayerInfoUI : MonoBehaviourPun
         }
     }
 
+    public void GetPlayerData()
+    {
+        nickName = GameManager.instance.playerNickName;
+        level = GameManager.instance.playerLevel;
+
+        photonView.RPC("DataProcessOnServer", RpcTarget.All, nickName, level);
+        PlayerUIManager.instance.SetLevel(level);
+    }
+
+    [PunRPC]
+    public void DataProcessOnServer(string _nickName, string _level)
+    {
+        playerNickname.text = _nickName;
+        playerLevel.text = _level;
+    }
+   
     public void SetArmor(float value)
     {
         armor.value = value;
