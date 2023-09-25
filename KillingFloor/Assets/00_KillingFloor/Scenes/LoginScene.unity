@@ -18417,6 +18417,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerProfile
       objectReference: {fileID: 0}
+    - target: {fileID: 2005619498632262492, guid: 458b753b409f2c24ab677231a1c76d2f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2005619498632262495, guid: 458b753b409f2c24ab677231a1c76d2f,
         type: 3}
       propertyPath: m_Pivot.x

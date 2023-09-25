@@ -588,20 +588,31 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         UserNickNameText.text = "";
         ResetPlayerUI();
-        PlayFabClientAPI.GetUserData(new GetUserDataRequest() { }, (result) =>
-        {
-            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-            {
-                UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
 
-                // 방 안의 UI 세팅
-                playerInfo[i + 1].gameObject.SetActive(true);
-                playerInfo[i + 1].nickName.text = PhotonNetwork.PlayerList[i].NickName;
-                playerInfo[i + 1].level.text = result.Data["HomeLevel"].Value;
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+
+            // 방 안의 UI 세팅
+            playerInfo[i + 1].gameObject.SetActive(true);
+            playerInfo[i + 1].nickName.text = PhotonNetwork.PlayerList[i].NickName;
+
+            for (int j = 0; j < PlayFabUserList.Count; j++)
+            {
+                if (PhotonNetwork.PlayerList[i].NickName == PlayFabUserList[j].DisplayName)
+                {
+                    PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = PlayFabUserList[j].PlayFabId }, (result) =>
+                    {
+                        playerInfo[i + 1].level.text = result.Data["HomeLevel"].Value;
+
+                        //Debug.Log(PhotonNetwork.PlayerList[i].NickName);
+                        Debug.Log($"playerInfo[i + 1].level: {playerInfo[i + 1].level.text}");
+                        //UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
+                    },
+
+                    (error) => Debug.Log("레벨 불러오지 못함"));
+                }
             }
-        },
-        (error) => { Debug.Log("레벨 불러오지 못함"); }
-        );
+        }
 
         RoomNumInfoText.text = PhotonNetwork.CurrentRoom.PlayerCount + "명 / " + PhotonNetwork.CurrentRoom.MaxPlayers + "최대 인원";
     }
@@ -645,7 +656,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void OnStartCheck(int readyCheck)
     {
         readyCount += readyCheck;
-        Debug.Log($"readyCount: { readyCount}");
+        Debug.Log($"readyCount: {readyCount}");
         Debug.Log($"readyCheck: {readyCheck}");
 
         if (readyCount == PhotonNetwork.CurrentRoom.PlayerCount - 1)
