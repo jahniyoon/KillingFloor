@@ -29,7 +29,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     
     [Header("Room")]
     public InputField SetDataInput;
-    public GameObject SetDataBtnObj;
+    public GameObject SetDataBtnObj, MasterStartBtn, OtherReadyBtn;
     public Text UserRoomDataText, RoomNameInfoText, RoomNumInfoText;
 
     [Header("Store")]
@@ -107,6 +107,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
 
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+
+            SetLocalPlayerData();
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -122,6 +124,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
 
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+
+            SetLocalPlayerData();
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -137,6 +141,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
 
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+
+            SetLocalPlayerData();
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -152,6 +158,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
 
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+
+            SetLocalPlayerData();
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -167,6 +175,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
 
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+
+            SetLocalPlayerData();
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -182,6 +192,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
 
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+
+            SetLocalPlayerData();
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -279,7 +291,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         };
 
         // PlayFab를 통해 사용자 데이터 업데이트 요청 전송
-        PlayFabClientAPI.UpdateUserData(request, (result) => 
+        PlayFabClientAPI.UpdateUserData(request, (result) =>
         {
             Debug.Log("SetData 성공 -> " + result);
             Debug.Log($"curData : {curData}");
@@ -296,7 +308,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = curID }, (result) =>
         {
             UserRoomDataText.text = "고유ID" + curID + "\n" + result.Data["HomeLevel"].Value;
+<<<<<<< HEAD
             playerInfo[0].level.text = result.Data["HomeLevel"].Value; },  // 지환 레벨 가져오기 한줄 추가
+=======
+            playerInfo[0].level.text = result.Data["HomeLevel"].Value;
+        },  // 지환 레벨 가져오기 한줄 추가
+>>>>>>> origin/feature/Mijeong
         (error) => Debug.Log("데이터 불러오기 실패"));
 
     }
@@ -512,10 +529,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinRoomFailed(short returnCode, string message) => print("방참가실패");
 
 
-
+    
     public override void OnJoinedRoom()
     {
         RoomRenewal();
+
+        // [Mijeong] 230925 : 게임 준비,시작 버튼 활성화 메서드 추가
+        PlayerReadyBtn();
 
         string curName = PhotonNetwork.CurrentRoom.Name;
         RoomNameInfoText.text = curName;
@@ -555,7 +575,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
-                //TODO : 레벨 플레이어 고유값에 맞게 수정하기
                 UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
 
                 // 방 안의 UI 세팅
@@ -592,6 +611,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     void SetDataBtnDelay() => GetData(PhotonNetwork.CurrentRoom.CustomProperties["PlayFabID"].ToString());
+    #endregion
+
+    // [Mijeong] 230925 : 게임 준비,시작 체크 메서드 추가
+    #region Player Ready Check
+    void PlayerReadyBtn()
+    {
+        if(PhotonNetwork.IsMasterClient)
+        {
+            MasterStartBtn.SetActive(true);
+            OtherReadyBtn.SetActive(false);
+        }
+    }
+    void ReadyCheck ()
+    {
+
+    }
     #endregion
 
     #region PlayScene Load
