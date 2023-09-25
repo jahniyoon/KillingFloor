@@ -653,7 +653,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.LoadLevel("Main");
+            PhotonNetwork.LoadLevel("MainLoad");
         }
     }
     public void OnLevelTestScene()
