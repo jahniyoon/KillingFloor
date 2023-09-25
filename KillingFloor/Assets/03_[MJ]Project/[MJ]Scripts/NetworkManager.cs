@@ -308,12 +308,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = curID }, (result) =>
         {
             UserRoomDataText.text = "고유ID" + curID + "\n" + result.Data["HomeLevel"].Value;
-<<<<<<< HEAD
             playerInfo[0].level.text = result.Data["HomeLevel"].Value; },  // 지환 레벨 가져오기 한줄 추가
-=======
-            playerInfo[0].level.text = result.Data["HomeLevel"].Value;
-        },  // 지환 레벨 가져오기 한줄 추가
->>>>>>> origin/feature/Mijeong
+
         (error) => Debug.Log("데이터 불러오기 실패"));
 
     }
@@ -655,7 +651,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.LoadLevel("MainLoad");
+            PhotonNetwork.LoadLevel("Main");
         }
     }
     public void OnLevelTestScene()
