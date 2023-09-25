@@ -26,11 +26,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [Header("Lobby")]
     public InputField UserSearchInput;
     public Text LobbyInfoText, UserNickNameText, UserNameText;
-    
+
     [Header("Room")]
     public InputField SetDataInput;
     public GameObject SetDataBtnObj, MasterStartBtn, OtherReadyBtn;
     public Text UserRoomDataText, RoomNameInfoText, RoomNumInfoText;
+    public Button MasterStartButton, OtherReadyButton;
 
     [Header("Store")]
     public Text CoinsValueText;
@@ -40,8 +41,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public int stars = default;
 
     bool isLoaded;
+    int readyCheck = -1;
+    int readyCount = 0;
 
-    public enum State { Login, Lobby, Room, Store, Option};
+    public enum State { Login, Lobby, Room, Store, Option };
     [Header("Lobby UI")]
     public State state;
     public Image[] buttonBackGround;    // 로비 버튼 선택여부
@@ -308,7 +311,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = curID }, (result) =>
         {
             UserRoomDataText.text = "고유ID" + curID + "\n" + result.Data["HomeLevel"].Value;
-            playerInfo[0].level.text = result.Data["HomeLevel"].Value; },  // 지환 레벨 가져오기 한줄 추가
+            playerInfo[0].level.text = result.Data["HomeLevel"].Value;
+        },  // 지환 레벨 가져오기 한줄 추가
 
         (error) => Debug.Log("데이터 불러오기 실패"));
 
@@ -462,7 +466,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         curPanel.SetActive(true);
     }
-    
+
     void ShowUserNickName()
     {
         UserNickNameText.text = "";
@@ -525,7 +529,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinRoomFailed(short returnCode, string message) => print("방참가실패");
 
 
-    
+
     public override void OnJoinedRoom()
     {
         RoomRenewal();
@@ -613,15 +617,46 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #region Player Ready Check
     void PlayerReadyBtn()
     {
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
         {
             MasterStartBtn.SetActive(true);
             OtherReadyBtn.SetActive(false);
         }
     }
-    void ReadyCheck ()
-    {
 
+    [PunRPC]
+    public void OnStartCheck(int readyCheck)
+    {
+        readyCount += readyCheck;
+        Debug.Log($"readyCount: { readyCount}");
+        Debug.Log($"readyCheck: {readyCheck}");
+
+        if (readyCount == PhotonNetwork.CurrentRoom.PlayerCount - 1)
+        {
+            MasterStartButton.interactable = true;
+            Debug.Log("모든 클라이언트 준비 완료");
+        }
+        else
+        {
+            MasterStartButton.interactable = false;
+            Debug.Log("모든 클라이언트가 준비하지 않았습니다.");
+        }
+    }
+
+    public void OnReadyCheck()
+    {
+        switch (readyCheck)
+        {
+            case -1:
+                readyCheck = 1;
+                photonView.RPC("OnStartCheck", RpcTarget.MasterClient, readyCheck);
+                break;
+
+            case 1:
+                readyCheck = -1;
+                photonView.RPC("OnStartCheck", RpcTarget.MasterClient, readyCheck);
+                break;
+        }
     }
     #endregion
 
@@ -675,7 +710,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void HomeButton()
     {
-        if(state == State.Lobby || state == State.Room)
+        if (state == State.Lobby || state == State.Room)
         {
             return;
         }
@@ -683,10 +718,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         // 로비면 로비 상태로, 방에 있으면 방으로 상태 변경
         if (PhotonNetwork.InLobby) state = State.Lobby;
         else if (PhotonNetwork.InRoom) state = State.Room;
-        
+
         SetButtonColor(0);
         SetPanel();
-    }   
+    }
     // 방 나가기 버튼
     public void LeaveRoomButton()
     {
@@ -734,7 +769,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         buttonBackGround[0].color = new Color(255, 255, 255, 0);    // Home
         buttonBackGround[1].color = new Color(255, 255, 255, 0);    // Store
         buttonBackGround[2].color = new Color(255, 255, 255, 0);    // Option
-        // 요청한 버튼의 색만 켜주기
+                                                                    // 요청한 버튼의 색만 켜주기
         buttonBackGround[num].color = new Color(255, 255, 255, 0.8f);
 
     }

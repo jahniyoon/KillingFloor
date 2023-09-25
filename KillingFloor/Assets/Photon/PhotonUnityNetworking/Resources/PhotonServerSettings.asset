@@ -91,6 +91,9 @@ MonoBehaviour:
   - SyncLoad
   - SyncSceneLoad
   - DataProcessOnServer
+  - SyncNum
+  - OnReadyCheck
+  - OnStartCheck
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
