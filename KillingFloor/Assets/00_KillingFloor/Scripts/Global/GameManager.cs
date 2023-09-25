@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public List<Transform> shops = new List<Transform>();
     public bool isShop = false;
 
-    public bool GMMode = true;
+    public bool GMMode = false;
     // Junoh Ãß°¡
 
     private void Awake()
