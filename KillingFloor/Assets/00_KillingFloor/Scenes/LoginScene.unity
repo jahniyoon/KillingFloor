@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -761,7 +761,7 @@ PrefabInstance:
     - target: {fileID: 2005619498632262495, guid: 458b753b409f2c24ab677231a1c76d2f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2005619498632262495, guid: 458b753b409f2c24ab677231a1c76d2f,
         type: 3}
@@ -1285,14 +1285,15 @@ PrefabInstance:
     - target: {fileID: 3234161796619730022, guid: 22248067d49dd934d8c202db0d20b831,
         type: 3}
       propertyPath: textKey
-      value: lobby
+      value: option
       objectReference: {fileID: 0}
     - target: {fileID: 3234161796619730022, guid: 22248067d49dd934d8c202db0d20b831,
         type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3234161796619730022, guid: 22248067d49dd934d8c202db0d20b831, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 22248067d49dd934d8c202db0d20b831, type: 3}
 --- !u!224 &111152622 stripped
 RectTransform:
@@ -1920,8 +1921,8 @@ RectTransform:
   m_Father: {fileID: 798620424}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.10033333}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3089,7 +3090,7 @@ PrefabInstance:
     - target: {fileID: 2005619498632262495, guid: 458b753b409f2c24ab677231a1c76d2f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2005619498632262495, guid: 458b753b409f2c24ab677231a1c76d2f,
         type: 3}
@@ -3482,6 +3483,128 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 448970944}
+  m_CullTransparentMesh: 1
+--- !u!1 &463258637
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 463258638}
+  - component: {fileID: 463258641}
+  - component: {fileID: 463258640}
+  - component: {fileID: 463258639}
+  m_Layer: 5
+  m_Name: MasterStartBtn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &463258638
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463258637}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1112903818}
+  m_Father: {fileID: 498303769}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 680, y: -400}
+  m_SizeDelta: {x: 300, y: 80}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &463258639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463258637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 463258640}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &463258640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463258637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &463258641
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463258637}
   m_CullTransparentMesh: 1
 --- !u!1 &465258622
 GameObject:
@@ -4112,6 +4235,44 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 491463996}
   m_CullTransparentMesh: 1
+--- !u!1 &498303768
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 498303769}
+  m_Layer: 5
+  m_Name: GameStartBtn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &498303769
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498303768}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 463258638}
+  - {fileID: 2108701382}
+  m_Father: {fileID: 1584162434}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &516885137
 GameObject:
   m_ObjectHideFlags: 0
@@ -5372,9 +5533,6 @@ MonoBehaviour:
     langLocalize: English
     value:
     - white
-    - black
-    - green
-    - yellow
     - lobby
     - Login
     - Register
@@ -5387,32 +5545,30 @@ MonoBehaviour:
     - Room Name
     - Please input
     - Store
+    - Ready
+    - Start
   - lang: Korean
     langLocalize: "\uD55C\uAD6D\uC5B4"
     value:
     - "\uD558\uC580\uC0C9"
-    - "\uAC80\uC740\uC0C9"
-    - "\uB179\uC0C9"
-    - "\uB178\uB780\uC0C9"
     - "\uB85C\uBE44"
     - "\uB85C\uADF8\uC778"
-    - "\uB4F1\uB85D\uD558\uB2E4"
+    - "\uD68C\uC6D0\uAC00\uC785"
     - "\uC5B8\uC5B4"
     - Q.T.B.Boss
     - "\uC6E8\uC774\uBE0C \uC2DC\uC791"
     - "\uC6E8\uC774\uBE0C \uD074\uB9AC\uC5B4"
-    - "\uC0C1\uC810\uC73C\uB85C \uC774\uB3D9"
-    - "\uB85C\uB529"
+    - "\uC0C1\uC810\uC73C\uB85C \uC774\uB3D9\uD558\uC138\uC694"
+    - "\uB85C\uB529\uC911"
     - "\uBC29 \uC774\uB984"
     - "\uC785\uB825\uD558\uC2ED\uC2DC\uC624"
     - "\uC0C1\uC810"
+    - "\uC900\uBE44"
+    - "\uC2DC\uC791"
   - lang: Afrikaans
     langLocalize: Afrikaans
     value:
     - wit
-    - swart
-    - groen
-    - geel
     - drukgroep
     - Teken aan
     - Register
@@ -5424,14 +5580,13 @@ MonoBehaviour:
     - Laai
     - Kamernaam
     - Insette
-    - Winkel
+    - "\uB85C\uB4DC \uC911..."
+    - Gereed
+    - Aanskakel
   - lang: Arabic
     langLocalize: "\u0639\u0631\u0628\u064A"
     value:
     - "\u0623\u0628\u064A\u0636"
-    - "\u0623\u0633\u0648\u062F"
-    - "\u0623\u062E\u0636\u0631"
-    - "\u0623\u0635\u0641\u0631"
     - "\u0631\u062F\u0647\u0629"
     - "\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644"
     - "\u064A\u0633\u062C\u0644"
@@ -5442,15 +5597,14 @@ MonoBehaviour:
     - "\u0627\u0630\u0647\u0628 \u0625\u0644\u0649 \u0627\u0644\u0645\u062A\u062C\u0631"
     - "\u062A\u062D\u0645\u064A\u0644"
     - "\u0627\u0633\u0645 \u0627\u0644\u063A\u0631\u0641\u0629"
-    - "\u0627\u0644\u0631\u062C\u0627\u0621 \u0627\u0644\u0625\u062F\u062E\u0627\u0644"
+    - "\u064A\u0631\u062C\u0649 \u0627\u0644\u0625\u062F\u062E\u0627\u0644"
     - "\u0645\u062D\u0644"
+    - "\u0645\u0633\u062A\u0639\u062F"
+    - "\u064A\u0628\u062F\u0623"
   - lang: Bulgarian
     langLocalize: "\u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438"
     value:
     - "\u0431\u044F\u043B"
-    - "\u0427\u0435\u0440\u043D\u043E"
-    - "\u0417\u0435\u043B\u0435\u043D\u043E"
-    - "\u0436\u044A\u043B\u0442\u043E"
     - "\u043B\u043E\u0431\u0438"
     - "\u0412\u043B\u0438\u0437\u0430\u043C"
     - "\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u0430\u043C"
@@ -5463,13 +5617,12 @@ MonoBehaviour:
     - "\u0418\u043C\u0435 \u043D\u0430 \u0441\u0442\u0430\u044F\u0442\u0430"
     - "\u041C\u043E\u043B\u044F, \u0432\u044A\u0432\u0435\u0434\u0435\u0442\u0435"
     - "\u041C\u0430\u0433\u0430\u0437\u0438\u043D"
+    - "\u0413\u043E\u0442\u043E\u0432"
+    - 
   - lang: Catalan
     langLocalize: Catalan
     value:
     - blanc
-    - negre
-    - verd
-    - groga
     - "vest\xEDbul"
     - "iniciar Sessi\xF3"
     - Registrar
@@ -5482,13 +5635,12 @@ MonoBehaviour:
     - "Nom de l'habitaci\xF3"
     - "Si us plau, introdu\xEFu"
     - Tenda
+    - Llest
+    - 
   - lang: Czech
     langLocalize: "\u010De\u0161tina"
     value:
     - "b\xEDl\xFD"
-    - "\u010Cern\xE1"
-    - "zelen\xE1"
-    - "\u017Elut\xE1"
     - lobby
     - "P\u0159ihl\xE1sit se"
     - Registrovat
@@ -5501,14 +5653,13 @@ MonoBehaviour:
     - "N\xE1zev m\xEDstnosti"
     - "Zadejte pros\xEDm"
     - Obchod
+    - "P\u0159ipraven"
+    - 
   - lang: Danish
     langLocalize: dansk
     value:
     - hvid
-    - sort
-    - "gr\xF8n"
-    - gul
-    - Lobby
+    - lobby
     - "Log p\xE5"
     - Tilmeld
     - Sprog
@@ -5520,13 +5671,12 @@ MonoBehaviour:
     - "V\xE6relsets navn"
     - Indtast venligst
     - butik
+    - Parat
+    - 
   - lang: Dutch
     langLocalize: Nederlands
     value:
     - wit
-    - zwart
-    - groente
-    - geel
     - lobby
     - Log in
     - Register
@@ -5539,13 +5689,12 @@ MonoBehaviour:
     - Kamer naam
     - Vul alsjeblieft in
     - Winkel
+    - Klaar
+    - 
   - lang: Estonian
     langLocalize: Eestonian
     value:
     - valge
-    - must
-    - roheline
-    - kollane
     - fuajee
     - Logi sisse
     - Registreeri
@@ -5558,13 +5707,12 @@ MonoBehaviour:
     - Toanimi
     - Palun sisestage
     - Ladu
+    - Valmis
+    - 
   - lang: Finnish
     langLocalize: Suomalainen
     value:
     - valkoinen
-    - musta
-    - "vihre\xE4"
-    - keltainen
     - aula
     - "Kirjaudu sis\xE4\xE4n"
     - "Rekister\xF6id\xE4"
@@ -5577,13 +5725,12 @@ MonoBehaviour:
     - Huoneen nimi
     - "Ole hyv\xE4 ja sy\xF6tt\xE4\xE4"
     - "Myym\xE4l\xE4"
+    - Valmis
+    - 
   - lang: French
     langLocalize: "Fran\xE7ais"
     value:
     - blanc
-    - noir
-    - vert
-    - jaune
     - "hall d'entr\xE9e"
     - Se connecter
     - Registre
@@ -5596,32 +5743,30 @@ MonoBehaviour:
     - Nom de la salle
     - Veuillez saisir
     - Magasin
+    - "Pr\xEAt"
+    - 
   - lang: German
     langLocalize: Deutsch
     value:
     - "Wei\xDF"
-    - Schwarz
-    - "Gr\xFCn"
-    - Gelb
     - Empfangshalle
     - Anmeldung
     - Registrieren
     - Sprache
     - Q.T.B.Boss
     - Welle starten
-    - Welle klar
+    - Wellen Sie klar
     - Zum Laden gehen
     - Wird geladen
     - Raumname
     - Bitte geben Sie ein
     - Speichern
+    - Bereit
+    - 
   - lang: Hebrew
     langLocalize: "\u05E2\u05B4\u05D1\u05E8\u05B4\u05D9\u05EA"
     value:
     - "\u05DC\u05D1\u05DF"
-    - "\u05E9\u05C1\u05B8\u05D7\u05D5\u05B9\u05E8"
-    - "\u05D9\u05E8\u05D5\u05E7"
-    - "\u05E6\u05D4\u05D5\u05D1"
     - "\u05DC\u05D5\u05D1\u05D9"
     - "\u05D4\u05EA\u05D7\u05D1\u05E8\u05D5\u05EA"
     - "\u05D4\u05D9\u05E8\u05E9\u05DD"
@@ -5634,13 +5779,12 @@ MonoBehaviour:
     - "\u05E9\u05DD \u05D7\u05D3\u05E8"
     - "\u05D0\u05E0\u05D0 \u05D4\u05D6\u05DF"
     - "\u05D7\u05E0\u05D5\u05EA"
+    - "\u05DE\u05D5\u05BC\u05DB\u05B8\u05DF"
+    - 
   - lang: Hungarian
     langLocalize: Magyar
     value:
     - "feh\xE9r"
-    - fekete
-    - "z\xF6ld"
-    - "s\xE1rga"
     - "el\u0151csarnok"
     - "Bel\xE9p\xE9s"
     - "Regisztr\xE1ci\xF3"
@@ -5653,13 +5797,12 @@ MonoBehaviour:
     - "Szoban\xE9v"
     - "K\xE9rj\xFCk, adja meg"
     - Bolt
+    - "K\xE9sz"
+    - 
   - lang: Icelandic
     langLocalize: "\xCDslenskt"
     value:
     - "Hv\xEDtur"
-    - Svartur
-    - "Gr\xE6nt"
-    - gult
     - anddyri
     - "Skr\xE1 inn"
     - "Skr\xE1\xF0u \xFEig"
@@ -5672,13 +5815,12 @@ MonoBehaviour:
     - Herbergisnafn
     - Vinsamlegast inntak
     - "Geymi\xF0"
+    - "Tilb\xFAinn"
+    - 
   - lang: Indonesian
     langLocalize: bahasa Indonesia
     value:
     - putih
-    - hitam
-    - hijau
-    - kuning
     - lobi
     - Gabung
     - Daftar
@@ -5691,13 +5833,12 @@ MonoBehaviour:
     - Nama ruangan
     - Mohon masukkan
     - Toko
+    - Siap
+    - 
   - lang: Italian
     langLocalize: Italiano
     value:
     - bianco
-    - nero
-    - verde
-    - giallo
     - atrio
     - Login
     - Registrati
@@ -5710,32 +5851,30 @@ MonoBehaviour:
     - Nome della stanza
     - Si prega di input
     - Negozio
+    - Pronto
+    - 
   - lang: Japanese
     langLocalize: "\u65E5\u672C\u8A9E"
     value:
     - "\u767D"
-    - "\u9ED2"
-    - "\u7DD1"
-    - "\u9EC4\u8272"
     - "\u30ED\u30D3\u30FC"
     - "\u30ED\u30B0\u30A4\u30F3"
     - "\u767B\u9332\u3059\u308B"
     - "\u8A00\u8A9E"
     - Q.T.B.Boss
     - "\u6CE2\u3092\u958B\u59CB\u3057\u307E\u3059"
-    - "\u6CE2\u304C\u900F\u3051\u3066\u3044\u307E\u3059"
+    - wave clear
     - "\u5E97\u3078\u51FA\u304B\u3051\u308B"
     - "\u8AAD\u307F\u8FBC\u307F"
     - "\u90E8\u5C4B\u306E\u540D\u524D"
     - "\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044"
     - "\u5E97"
+    - "\u6E96\u5099\u304C\u3067\u304D\u3066"
+    - 
   - lang: Latvian
     langLocalize: "Latvie\u0161u"
     value:
     - baltums
-    - melns
-    - "za\u013C\u0161"
-    - dzeltens
     - lobija
     - "Piesl\u0113gties"
     - "Re\u0123istr\u0113t"
@@ -5748,13 +5887,12 @@ MonoBehaviour:
     - Istabas nosaukums
     - "L\u016Bdzu, ievadiet"
     - "Uzglab\u0101t"
+    - Gatavs
+    - 
   - lang: Lithuanian
     langLocalize: Lietuvos
     value:
     - balta
-    - juodas
-    - "\u017Ealias"
-    - geltona
     - lobis
     - Prisijungti
     - Registruotis
@@ -5767,13 +5905,12 @@ MonoBehaviour:
     - Kambario vardas
     - "Pra\u0161au \u012Fvesti"
     - "Parduotuv\u0117"
+    - "Paruo\u0161tas"
+    - 
   - lang: Norwegian
     langLocalize: norsk
     value:
     - hvit
-    - svart
-    - "gr\xF8nn"
-    - gul
     - lobby
     - Logg Inn
     - Registrere
@@ -5786,13 +5923,12 @@ MonoBehaviour:
     - Romnavn
     - Vennligst skriv inn
     - butikk
+    - Klar
+    - 
   - lang: Polish
     langLocalize: Polski
     value:
     - "bia\u0142y"
-    - czarny
-    - zielony
-    - "\u017C\xF3\u0142ty"
     - lobby
     - Zaloguj sie
     - Rejestr
@@ -5805,13 +5941,12 @@ MonoBehaviour:
     - Nazwa pokoju
     - "Prosz\u0119 wprowadzi\u0107"
     - Sklep
+    - Gotowy
+    - 
   - lang: Portuguese
     langLocalize: "Portugu\xEAs"
     value:
     - branco
-    - preto
-    - verde
-    - amarelo
     - "sal\xE3o"
     - Conecte-se
     - Registro
@@ -5824,13 +5959,12 @@ MonoBehaviour:
     - Nome da sala
     - Por favor, insira
     - Loja
+    - Preparar
+    - 
   - lang: Romanian
     langLocalize: "Rom\xE2n\u0103"
     value:
     - alb
-    - negru
-    - verde
-    - galben
     - lobby
     - Log in
     - Inregistreaza-te
@@ -5843,13 +5977,12 @@ MonoBehaviour:
     - Numele Camerei
     - "V\u0103 rug\u0103m s\u0103 introduce\u021Bi"
     - Magazin
+    - Gata
+    - 
   - lang: Russian
     langLocalize: "\u0420\u0443\u0441\u0441\u043A\u0438\u0439"
     value:
     - "\u0431\u0435\u043B\u044B\u0439"
-    - "\u0447\u0435\u0440\u043D\u044B\u0439"
-    - "\u0437\u0435\u043B\u0435\u043D\u044B\u0439"
-    - "\u0436\u0435\u043B\u0442\u044B\u0439"
     - "\u043B\u043E\u0431\u0431\u0438"
     - "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u043E\u0432\u0430\u0442\u044C\u0441\u044F"
     - "\u0440\u0435\u0433\u0438\u0441\u0442\u0440"
@@ -5862,13 +5995,12 @@ MonoBehaviour:
     - "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043A\u043E\u043C\u043D\u0430\u0442\u044B"
     - "\u041F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430, \u0432\u0432\u0435\u0434\u0438\u0442\u0435"
     - "\u041C\u0430\u0433\u0430\u0437\u0438\u043D"
+    - "\u0413\u043E\u0442\u043E\u0432\u044B\u0439"
+    - 
   - lang: Slovak
     langLocalize: "Slovensk\xFD"
     value:
     - biely
-    - "\u010Dierna"
-    - "zelen\xE1"
-    - "\u017Elt\xE1"
     - hala
     - "Prihl\xE1si\u0165 sa"
     - "Registrova\u0165"
@@ -5881,13 +6013,12 @@ MonoBehaviour:
     - "N\xE1zov miestnosti"
     - "Pros\xEDm, zadajte"
     - "Uklada\u0165"
+    - "Pripraven\xFD"
+    - 
   - lang: Slovenian
     langLocalize: "Sloven\u0161\u010Dina"
     value:
     - bela
-    - "\u010Crna"
-    - zelena
-    - rumena
     - preddverje
     - "Vpi\u0161i se"
     - Register
@@ -5900,13 +6031,12 @@ MonoBehaviour:
     - Ime sobe
     - Prosimo, vnesite
     - Shramba
+    - Pripravljen
+    - 
   - lang: Spanish
     langLocalize: "Espa\xF1ol"
     value:
     - blanco
-    - negro
-    - verde
-    - amarillo
     - "vest\xEDbulo"
     - Acceso
     - Registro
@@ -5919,13 +6049,12 @@ MonoBehaviour:
     - "Nombre de la habitaci\xF3n"
     - Por favor, input
     - Almacenar
+    - Listo
+    - 
   - lang: Swedish
     langLocalize: svenska
     value:
     - vit
-    - svart
-    - "gr\xF6n"
-    - gul
     - lobby
     - Logga in
     - Registrera
@@ -5938,13 +6067,12 @@ MonoBehaviour:
     - Rumsnamn
     - "V\xE4nligen ange"
     - Lagra
+    - Redo
+    - 
   - lang: Thai
     langLocalize: "\u0E41\u0E1A\u0E1A\u0E44\u0E17\u0E22"
     value:
     - "\u0E2A\u0E35\u0E02\u0E32\u0E27"
-    - "\u0E2A\u0E35\u0E14\u0E33"
-    - "\u0E2A\u0E35\u0E40\u0E02\u0E35\u0E22\u0E27"
-    - "\u0E2A\u0E35\u0E40\u0E2B\u0E25\u0E37\u0E2D\u0E07"
     - "\u0E25\u0E47\u0E2D\u0E1A\u0E1A\u0E35\u0E49"
     - "\u0E40\u0E02\u0E49\u0E32\u0E2A\u0E39\u0E48\u0E23\u0E30\u0E1A\u0E1A"
     - "\u0E25\u0E07\u0E17\u0E30\u0E40\u0E1A\u0E35\u0E22\u0E19"
@@ -5957,13 +6085,12 @@ MonoBehaviour:
     - "\u0E0A\u0E37\u0E48\u0E2D\u0E2B\u0E49\u0E2D\u0E07"
     - "\u0E01\u0E23\u0E38\u0E13\u0E32\u0E1B\u0E49\u0E2D\u0E19\u0E02\u0E49\u0E2D\u0E21\u0E39\u0E25"
     - "\u0E40\u0E01\u0E47\u0E1A"
+    - "\u0E1E\u0E23\u0E49\u0E2D\u0E21"
+    - 
   - lang: Turkish
     langLocalize: "T\xFCrk\xE7e"
     value:
     - beyaz
-    - siyah
-    - "ye\u015Fil"
-    - "sar\u0131"
     - lobi
     - "Giri\u015F yapmak"
     - "Kay\u0131t olmak"
@@ -5976,13 +6103,12 @@ MonoBehaviour:
     - Oda ismi
     - "L\xFCtfen girin"
     - "Ma\u011Faza"
+    - "Haz\u0131r"
+    - 
   - lang: Ukrainian
     langLocalize: "\u0423\u043A\u0440\u0430\u0457\u043D\u0441\u044C\u043A\u0438\u0439"
     value:
     - "\u0431\u0456\u043B\u0438\u0439"
-    - "\u0447\u043E\u0440\u043D\u0438\u0439"
-    - "\u0437\u0435\u043B\u0435\u043D\u0438\u0439"
-    - "\u0436\u043E\u0432\u0442\u0438\u0439"
     - "\u043B\u043E\u0431\u0456"
     - "\u0412\u0445\u0456\u0434"
     - "\u0420\u0435\u0454\u0441\u0442\u0440\u0443\u0432\u0430\u0442\u0438"
@@ -5995,13 +6121,12 @@ MonoBehaviour:
     - "\u041D\u0430\u0437\u0432\u0430 \u043A\u0456\u043C\u043D\u0430\u0442\u0438"
     - "\u0411\u0443\u0434\u044C \u043B\u0430\u0441\u043A\u0430, \u0432\u0432\u0435\u0434\u0456\u0442\u044C"
     - "\u041C\u0430\u0433\u0430\u0437\u0438\u043D"
+    - "\u0413\u043E\u0442\u043E\u0432\u0438\u0439"
+    - 
   - lang: Vietnamese
     langLocalize: "Ti\u1EBFng Vi\u1EC7t"
     value:
     - "tr\u1EAFng"
-    - "\u0111en"
-    - "m\xE0u xanh l\xE1"
-    - "m\xE0u v\xE0ng"
     - "s\u1EA3nh"
     - "\u0110\u0103ng nh\u1EADp"
     - "\u0110\u0103ng k\xFD"
@@ -6014,13 +6139,12 @@ MonoBehaviour:
     - "T\xEAn ph\xF2ng"
     - "Xin vui l\xF2ng nh\u1EADp"
     - "C\u1EEDa h\xE0ng"
+    - "S\u1EB5n s\xE0ng"
+    - 
   - lang: ChineseSimplified
     langLocalize: "\u6C49\u8BED"
     value:
     - "\u767D\u8272\u7684"
-    - "\u9ED1\u8272\u7684"
-    - "\u7EFF\u8272\u7684"
-    - "\u9EC4\u8272\u7684"
     - "\u6E38\u8BF4"
     - "\u767B\u5F55"
     - "\u767B\u8BB0"
@@ -6033,13 +6157,12 @@ MonoBehaviour:
     - "\u623F\u95F4\u540D\u79F0"
     - "\u8BF7\u8F93\u5165"
     - "\u5E97\u94FA"
+    - "\u51C6\u5907\u597D"
+    - 
   - lang: "ChineseTraditional\r"
     langLocalize: "\u6F22\u8A9E\r"
     value:
     - "\u767D\u8272\u7684\r"
-    - "\u9ED1\u8272\u7684\r"
-    - "\u7DA0\u8272\u7684\r"
-    - "\u9EC3\u8272\u7684\r"
     - "\u904A\u8AAA\r"
     - "\u767B\u5165\r"
     - "\u767B\u8A18\r"
@@ -6051,7 +6174,9 @@ MonoBehaviour:
     - "\u8F09\u5165\u4E2D\r"
     - "\u623F\u9593\u540D\u7A31\r"
     - "\u8ACB\u8F38\u5165\r"
-    - "\u5E97\u92EA"
+    - "\u5E97\u92EA\r"
+    - "\u6E96\u5099\u597D\r"
+    - 
 --- !u!4 &647857149
 Transform:
   m_ObjectHideFlags: 0
@@ -7654,6 +7779,8 @@ MonoBehaviour:
   UserNameText: {fileID: 448970946}
   SetDataInput: {fileID: 1392855143}
   SetDataBtnObj: {fileID: 259416734}
+  MasterStartBtn: {fileID: 463258637}
+  OtherReadyBtn: {fileID: 2108701381}
   UserRoomDataText: {fileID: 2109982850}
   RoomNameInfoText: {fileID: 712051548}
   RoomNumInfoText: {fileID: 435116482}
@@ -8087,7 +8214,7 @@ PrefabInstance:
     - target: {fileID: 2005619498632262495, guid: 458b753b409f2c24ab677231a1c76d2f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2005619498632262495, guid: 458b753b409f2c24ab677231a1c76d2f,
         type: 3}
@@ -8868,6 +8995,100 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1031071585}
   m_CullTransparentMesh: 1
+--- !u!1 &1048734827
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1048734828}
+  - component: {fileID: 1048734831}
+  - component: {fileID: 1048734830}
+  - component: {fileID: 1048734829}
+  m_Layer: 5
+  m_Name: Text_Localize(Clone)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1048734828
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048734827}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2108701382}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1048734829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048734827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59936ccae770da24ba3ee13ca5738367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: ready
+--- !u!114 &1048734830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048734827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 96e17474f840a01459f0cc936c5d4d9b, type: 3}
+    m_FontSize: 0
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 0
+    m_MaxSize: 300
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: ready
+--- !u!222 &1048734831
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048734827}
+  m_CullTransparentMesh: 1
 --- !u!1001 &1050429354
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8898,7 +9119,7 @@ PrefabInstance:
     - target: {fileID: 2005619498632262495, guid: 458b753b409f2c24ab677231a1c76d2f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2005619498632262495, guid: 458b753b409f2c24ab677231a1c76d2f,
         type: 3}
@@ -9879,6 +10100,100 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textKey: Language
+--- !u!1 &1112903817
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1112903818}
+  - component: {fileID: 1112903821}
+  - component: {fileID: 1112903820}
+  - component: {fileID: 1112903819}
+  m_Layer: 5
+  m_Name: Text_Localize(Clone)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1112903818
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112903817}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 463258638}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1112903819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112903817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59936ccae770da24ba3ee13ca5738367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: start
+--- !u!114 &1112903820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112903817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 96e17474f840a01459f0cc936c5d4d9b, type: 3}
+    m_FontSize: 0
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 0
+    m_MaxSize: 300
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Start
+--- !u!222 &1112903821
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112903817}
+  m_CullTransparentMesh: 1
 --- !u!1001 &1175269102
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10086,9 +10401,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -17, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1177504093
 MonoBehaviour:
@@ -12582,12 +12897,12 @@ PrefabInstance:
     - target: {fileID: 3234161796619730022, guid: 22248067d49dd934d8c202db0d20b831,
         type: 3}
       propertyPath: textKey
-      value: lobby
+      value: language
       objectReference: {fileID: 0}
     - target: {fileID: 3234161796619730022, guid: 22248067d49dd934d8c202db0d20b831,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22248067d49dd934d8c202db0d20b831, type: 3}
@@ -13813,7 +14128,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1584162434
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13836,6 +14151,7 @@ RectTransform:
   - {fileID: 74124122}
   - {fileID: 1050429355}
   - {fileID: 433599190}
+  - {fileID: 498303769}
   m_Father: {fileID: 1718345587}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15611,7 +15927,7 @@ PrefabInstance:
     - target: {fileID: 2005619498632262495, guid: 458b753b409f2c24ab677231a1c76d2f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2005619498632262495, guid: 458b753b409f2c24ab677231a1c76d2f,
         type: 3}
@@ -16039,7 +16355,7 @@ PrefabInstance:
     - target: {fileID: 2005619498632262495, guid: 458b753b409f2c24ab677231a1c76d2f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2005619498632262495, guid: 458b753b409f2c24ab677231a1c76d2f,
         type: 3}
@@ -17652,6 +17968,128 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2105639905}
+  m_CullTransparentMesh: 1
+--- !u!1 &2108701381
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2108701382}
+  - component: {fileID: 2108701385}
+  - component: {fileID: 2108701384}
+  - component: {fileID: 2108701383}
+  m_Layer: 5
+  m_Name: OtherReadyBtn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2108701382
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108701381}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1048734828}
+  m_Father: {fileID: 498303769}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 680, y: -400}
+  m_SizeDelta: {x: 300, y: 80}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2108701383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108701381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 2108701384}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2108701384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108701381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &2108701385
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108701381}
   m_CullTransparentMesh: 1
 --- !u!1 &2109982848
 GameObject:
