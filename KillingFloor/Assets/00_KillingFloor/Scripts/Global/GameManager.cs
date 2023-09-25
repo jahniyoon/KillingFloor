@@ -126,6 +126,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     // 키보드 입력을 감지하고 룸을 나가게 함
     private void Update()
     {
+
         SetPlayer();
         shopPosition = shops[wave - 1];
         if (Input.GetKeyDown(KeyCode.Backspace))
@@ -136,6 +137,23 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             Zed();
         }
+    }
+
+    public void zombieCount(int _currentZombieCount)
+    {
+        photonView.RPC("MasterCount", RpcTarget.MasterClient, _currentZombieCount);
+    }
+
+    [PunRPC]
+    public void MasterCount(int _currentZombieCount)
+    {
+        photonView.RPC("SyncCount", RpcTarget.All, _currentZombieCount);
+    }
+
+    [PunRPC]
+    public void SyncCount(int _currentZombieCount)
+    {
+        currentZombieCount = _currentZombieCount;
     }
 
     public void Zed()
@@ -256,7 +274,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         Debug.Log("플레이어 데이터" + NetworkManager.instance.localPlayerName + "" + NetworkManager.instance.localPlayerLv);
         playerNickName = string.Format(NetworkManager.instance.localPlayerName);
         playerLevel = string.Format(NetworkManager.instance.localPlayerLv);
-        
+
     }
 
 
