@@ -444,7 +444,7 @@ MonoBehaviour:
   isZedTimeCheck: 0
   shops:
   - {fileID: 4365128104377406915}
-  isShop: 0
+  isShop: 1
 --- !u!4 &156583478
 Transform:
   m_ObjectHideFlags: 0

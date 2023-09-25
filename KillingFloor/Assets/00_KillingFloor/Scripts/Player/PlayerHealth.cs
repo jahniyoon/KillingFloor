@@ -128,7 +128,24 @@ public class PlayerHealth : LivingEntity
         playerInfo.state = PlayerInfoUI.State.Live;
 
     }
+    public void BuyAmmo(int _coin)
+    {
+        photonView.RPC("BuyAmmoProcessOnServer", RpcTarget.MasterClient, _coin);
 
+    }
+    [PunRPC]
+    public void BuyAmmoProcessOnServer(int _coin)
+    {
+        int newCoin = coin - _coin;
+        photonView.RPC("SyncBuyAmmo", RpcTarget.All, newCoin);
+    }
+
+    [PunRPC]
+    public void SyncBuyAmmo(int _coin)
+    {
+        coin = _coin;
+        playerInfo.SetCoin(coin);
+    }
     public void BuyArmor(float _armor)
     {
         photonView.RPC("BuyArmorProcessOnServer", RpcTarget.MasterClient, _armor);

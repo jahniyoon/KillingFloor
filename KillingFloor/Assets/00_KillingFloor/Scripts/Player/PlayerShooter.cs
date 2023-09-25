@@ -677,7 +677,7 @@ public class PlayerShooter : MonoBehaviourPun
                     fpsHeal.gameObject.SetActive(false);
                     fpsGrenade.gameObject.SetActive(false);
                     SetWeapon(tpsPistol, fpsPistol); // ¹«±â ÀåÂø
-                    photonView.RPC("ServerProcessWeapon", RpcTarget.Others, 1);
+                    photonView.RPC("ServerProcessWeapon", RpcTarget.Others, 0);
 
                     animator.SetBool("isWeaponPistol", true);
                     animator.SetBool("isWeaponRifle", false);
@@ -697,7 +697,7 @@ public class PlayerShooter : MonoBehaviourPun
                     fpsHeal.gameObject.SetActive(false);
                     fpsGrenade.gameObject.SetActive(false);
                     SetWeapon(tpsRifle, fpsRifle); // ¹«±â ÀåÂø
-                    photonView.RPC("ServerProcessWeapon", RpcTarget.Others, 2);
+                    photonView.RPC("ServerProcessWeapon", RpcTarget.Others, 1);
 
                     animator.SetBool("isWeaponPistol", false);
                     animator.SetBool("isWeaponRifle", true);
@@ -758,7 +758,32 @@ public class PlayerShooter : MonoBehaviourPun
     [PunRPC]
     public void ServerProcessWeapon(int index)
     {
+        Weapon _tpsWeapon = weaponList[index].GetComponent<Weapon>();
+        equipedWeapon.gameObject.SetActive(false);
+        _tpsWeapon.gameObject.SetActive(true);
+        Debug.Log(index + "¹øÂ° ¹«±â ±³Ã¼ ¿äÃ» :" + _tpsWeapon);
 
+        equipedWeapon = _tpsWeapon;
+        rightHandObj = equipedWeapon.rightHandObj.transform;     // ±ÇÃÑÀÇ ¿À¸¥¼Õ ±×·¦
+        leftHandObj = equipedWeapon.leftHandObj.transform;       // ±ÇÃÑÀÇ ¿Þ¼Õ ±×·¦
+        rightElbowObj = equipedWeapon.rightElbowObj.transform;   // ±ÇÃÑÀÇ ¿À¸¥ÆÈ²ÞÄ¡
+        leftElbowObj = equipedWeapon.leftElbowObj.transform;     // ±ÇÃÑÀÇ ¿ÞÆÈ²ÞÄ¡
+
+        // ¹«±â ÀåÂø ¹× ¹«±â Á¤º¸ ¼¼ÆÃ
+        switch ((Type)equipedWeapon.weaponType)
+        {
+            case Type.Pistol:
+                animator.SetBool("isWeaponPistol", true);
+                animator.SetBool("isWeaponRifle", false);
+                equipedWeapon.weaponType = Weapon.Type.Pistol;
+                break;
+            case Type.Rifle:
+                animator.SetBool("isWeaponRifle", true);
+                animator.SetBool("isWeaponPistol", false);
+                equipedWeapon.weaponType = Weapon.Type.Rifle;
+                break;
+        }
+        animator.SetFloat("ReloadSpeed", reloadRate);
     }
 
     // ¹«±â ½½·Ô ÀÔ·ÂºÎºÐ

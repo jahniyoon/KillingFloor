@@ -59,6 +59,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         //// 포톤 네트워크 속도 최적화 설정
         //PhotonNetwork.SendRate = 60;
         //PhotonNetwork.SerializationRate = 30;
+
         //지환 : 플레이어들의 씬 씽크 맞추기
         PhotonNetwork.AutomaticallySyncScene = true;
     }
@@ -319,6 +320,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         (error) => Debug.Log("데이터 불러오기 실패"));
 
     }
+
+    //[MiJeong] 230925 주석 삭제
     void SetLocalPlayerData()
     {
         PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = MyPlayFabInfo.PlayFabId }, (result) =>
@@ -330,15 +333,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             localPlayerLv = result.Data["HomeLevel"].Value;
 
             UserNameText.text = "Name: " + localPlayerName + "\nLevel: " + localPlayerLv;
-
-            //// 문자열을 정수로 변환 후 1을 더함
-            //int lv = int.Parse(localPlayerLv) + 1;
-            //// 결과를 다시 문자열로 변환
-            //string localPlayerLvUp = lv.ToString();
-
-            //Debug.Log(lv);
-            //Debug.Log("더하기 1 했을 때: " + localPlayerLvUp);
-
         },
             (error) => Debug.Log("데이터 불러오기 실패"));
     }
@@ -364,12 +358,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log(CoinsValueText.text);
     }
     // 코인 추가 메서드
-    public void GrantVirtualCurrency()
+    public void OnAddVirtualCurrency()
     {
         var request = new AddUserVirtualCurrencyRequest { VirtualCurrency = "CN", Amount = 50 };
-        PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
+        PlayFabClientAPI.AddUserVirtualCurrency(request, GrantVirtualCurrencySuccess, OnError);
     }
-    void OnGrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
+    void GrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
     {
         Debug.Log("Add 50 Coins Granted !");
 
@@ -450,10 +444,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         LobbyScreen(true);      // 로비 배경영상를 켠다.
         state = State.Lobby;    // 상태 로비로 변경
-        localPlayerName = PhotonNetwork.LocalPlayer.NickName;
         playerInfo[0].nickName.text = string.Format(PhotonNetwork.LocalPlayer.NickName);
-        playerInfo[0].level.text = string.Format(NetworkManager.instance.localPlayerLv);  // ToDo : 레벨 넣어야함
-        
+        playerInfo[0].level.text = string.Format(localPlayerLv);  // ToDo : 레벨 넣어야함
+
         ShowPanel(Lobby_Panel);
         ShowUserNickName();
     }
@@ -515,7 +508,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 if (PlayFabUserList[i].DisplayName == UserSearchInput.text)
                 {
                     RoomOptions roomOptions = new RoomOptions();
-                    roomOptions.MaxPlayers = 20;
+                    roomOptions.MaxPlayers = 6;
                     roomOptions.CustomRoomProperties = new Hashtable() { { "PlayFabID", PlayFabUserList[i].PlayFabId } };
                     PhotonNetwork.JoinOrCreateRoom(UserSearchInput.text + "님의 정보창", roomOptions, null);
 
@@ -524,7 +517,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             }
             print("닉네임이 일치하지 않습니다");
         }
-        else PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions() { MaxPlayers = 20 }, null);
+        else PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions() { MaxPlayers = 6 }, null);
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message) => print("방만들기실패");
@@ -569,25 +562,58 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer) => RoomRenewal();
 
-    // REGACY:
+    //// REGACY:
+    //void RoomRenewal()
+    //{
+    //    UserNickNameText.text = "";
+    //    ResetPlayerUI();
+    //    PlayFabClientAPI.GetUserData(new GetUserDataRequest(), (result) =>
+    //    {
+    //        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+    //        {
+    //            UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
+
+    //            // 방 안의 UI 세팅
+    //            playerInfo[i + 1].gameObject.SetActive(true);
+    //            playerInfo[i + 1].nickName.text = PhotonNetwork.PlayerList[i].NickName;
+    //            playerInfo[i + 1].level.text = result.Data["HomeLevel"].Value;
+    //        }
+    //    },
+    //    (error) => { Debug.Log("레벨 불러오지 못함"); }
+    //    );
+
+    //    RoomNumInfoText.text = PhotonNetwork.CurrentRoom.PlayerCount + "명 / " + PhotonNetwork.CurrentRoom.MaxPlayers + "최대 인원";
+    //}
     void RoomRenewal()
     {
         UserNickNameText.text = "";
         ResetPlayerUI();
-        PlayFabClientAPI.GetUserData(new GetUserDataRequest(), (result) =>
-        {
-            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-            {
-                UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
 
-                // 방 안의 UI 세팅
-                playerInfo[i + 1].gameObject.SetActive(true);
-                playerInfo[i + 1].nickName.text = PhotonNetwork.PlayerList[i].NickName;
-                playerInfo[i + 1].level.text = result.Data["HomeLevel"].Value;
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+
+            // 방 안의 UI 세팅
+            playerInfo[i + 1].gameObject.SetActive(true);
+            playerInfo[i + 1].nickName.text = PhotonNetwork.PlayerList[i].NickName;
+
+            for (int j = 0; j < PlayFabUserList.Count; j++)
+            {
+                if (PhotonNetwork.PlayerList[i].NickName == PlayFabUserList[j].DisplayName)
+                {
+                    PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = PlayFabUserList[j].PlayFabId }, (result) =>
+                    {
+                        Debug.Log(result.Data["HomeLevel"].Value);
+                        playerInfo[i + 1].level.text = result.Data["HomeLevel"].Value;
+
+                        //Debug.Log(PhotonNetwork.PlayerList[i].NickName);
+                        Debug.Log($"playerInfo[i + 1].level: {playerInfo[i + 1].level.text}");
+                        //UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
+                    },
+
+                    (error) => Debug.Log("레벨 불러오지 못함"));
+                }
             }
-        },
-        (error) => { Debug.Log("레벨 불러오지 못함"); }
-        );
+        }
 
         RoomNumInfoText.text = PhotonNetwork.CurrentRoom.PlayerCount + "명 / " + PhotonNetwork.CurrentRoom.MaxPlayers + "최대 인원";
     }
@@ -631,7 +657,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void OnStartCheck(int readyCheck)
     {
         readyCount += readyCheck;
-        Debug.Log($"readyCount: { readyCount}");
+        Debug.Log($"readyCount: {readyCount}");
         Debug.Log($"readyCheck: {readyCheck}");
 
         if (readyCount == PhotonNetwork.CurrentRoom.PlayerCount - 1)

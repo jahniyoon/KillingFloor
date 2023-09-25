@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
@@ -143,7 +144,7 @@ public class Shop : MonoBehaviour
             if (playerInfo.coin >= 50)
             {
                 shooter.GetAmmo(50);
-                playerInfo.SpendCoin(50);
+                playerInfo.BuyAmmo(50);
             }
         }
     }
