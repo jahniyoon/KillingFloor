@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class Meteor : MonoBehaviourPun
 {
+    private GameObject[] targetPlayer;
     private Transform orgPos;
-    public float MeteorHP = 500;
+    private float MeteorHP = 250;
     private GameObject meteorsField;
     private bool fildchk = false;
   
@@ -13,8 +14,11 @@ public class Meteor : MonoBehaviourPun
 
     void Start()
     {
-
        
+        targetPlayer = GameObject.FindGameObjectsWithTag("Player");
+        Debug.Log(MeteorHP + " ," + targetPlayer);
+        MeteorHP = MeteorHP + (250 * targetPlayer.Length);
+     
         meteorsField = GameObject.Find("FireBreathField");
       
         meteorsParticle = new ParticleSystem[5];
@@ -87,8 +91,9 @@ public class Meteor : MonoBehaviourPun
     // 데미지 
     public void OnDamage(float dam)
     {
+        
         // 마스터에게 데미지 계산 요청
-        Debug.Log("데미지 계산요청" + photonView.ViewID);
+        Debug.Log("메테오 데미지 계산요청" + MeteorHP);
 
         photonView.RPC("MasterDamage", RpcTarget.MasterClient, dam);
     }

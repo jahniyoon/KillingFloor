@@ -539,6 +539,7 @@ public class PlayerShooter : MonoBehaviourPun
 
     void Damage(GameObject _hitObj)
     {
+        Debug.Log(_hitObj.name);
 
         if (_hitObj.transform.GetComponent<HitPoint>() == null && _hitObj.transform.GetComponent<PlayerDamage>() != null)
         {
@@ -546,7 +547,9 @@ public class PlayerShooter : MonoBehaviourPun
             _hitObj.transform.GetComponent<PlayerDamage>().OnDamage(); // RPC 확인 디버그용
             return;
         }
-        if (!"Mesh_Alfa_2".Equals(_hitObj.transform.name) && !"Meteor".Equals(_hitObj.transform.name))//보스 가 아닐경우 
+        Debug.Log("1");
+
+        if (!"Mesh_Alfa_2".Equals(_hitObj.transform.name) && !"DevilEye".Equals(_hitObj.transform.name))//보스 가 아닐경우 
         {
             ////////////////////////////////////////////////좀비////////////////////
 
@@ -569,7 +572,7 @@ public class PlayerShooter : MonoBehaviourPun
 
             ////////////////////////////////////////////////////////////////////
         }
-
+        Debug.Log("2");
         if ("Mesh_Alfa_2".Equals(_hitObj.name)) // 보스 일경우
         {
 
@@ -585,11 +588,11 @@ public class PlayerShooter : MonoBehaviourPun
                 _hitObj.gameObject.GetComponent<BossController>().OnDamage(damage * 0.5f);
             }
         }
-
-        if ("Meteor".Equals(_hitObj.name))
+     
+        if ("DevilEye".Equals(_hitObj.name))
         {
 
-
+            Debug.Log("메테오");
 
             _hitObj.gameObject.GetComponent<Meteor>().OnDamage(damage);
 

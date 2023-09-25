@@ -12,7 +12,8 @@ public class UniqueParticleDam : MonoBehaviour
     {
         if (atkChk == false)
         {
-            if(transform.name.Equals("Effect_38_SmokeField_2")&& transform.name.Equals("Effect_38_ParticleField"))
+            Debug.Log(transform.name);
+            if(transform.name.Equals("Effect_38_SmokeField_2") || transform.name.Equals("Effect_38_ParticleField"))
             {
                 coolTime = 0;
                 damage = 50;      
@@ -24,7 +25,7 @@ public class UniqueParticleDam : MonoBehaviour
             }
             // 상대방으로부터 LivingEntity 타입을 가져오기 시도
             LivingEntity attackTarget = other.GetComponent<LivingEntity>();
-            if (attackTarget != null)
+            if (attackTarget != null) 
             {                // 상대방의 피격 위치와 피격 방향을 근삿값으로 계산
                 Vector3 hitPoint = other.transform.position;
                 Vector3 hitNormal = transform.position - other.transform.position;

@@ -62,11 +62,13 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public List<Transform> shops = new List<Transform>();
     public bool isShop = false;
 
+
     private bool GMMode = false;
     // Junoh 추가
 
     private void Awake()
     {
+
         // 씬에 싱글톤 오브젝트가 된 다른 GameManager 오브젝트가 있다면
         if (instance != this)
         {
@@ -342,7 +344,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         StartCoroutine(noticeController.CoroutineManager(true));
 
         int timeElapsed = 70;
-
+    
 
         while (0 < timeElapsed)
         {
@@ -350,6 +352,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
             PlayerUIManager.instance.SetTimerCount(timeElapsed);
 
+         
             yield return new WaitForSeconds(1);
         }
 
