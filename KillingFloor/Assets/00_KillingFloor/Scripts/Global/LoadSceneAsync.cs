@@ -39,12 +39,14 @@ public class LoadSceneAsync : MonoBehaviourPun
             {
                 if (CheckIfAllPlayersNextLoad())
                 {
+                    yield return new WaitForSeconds(5.0f);
+
                     if (PhotonNetwork.IsMasterClient)
                     {
                         yield return new WaitForSeconds(1.0f);
                     }
 
-                        asyncLoad.allowSceneActivation = true; // 씬 활성화 허용
+                    asyncLoad.allowSceneActivation = true; // 씬 활성화 허용
                 }
             }
 
