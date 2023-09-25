@@ -86,6 +86,10 @@ MonoBehaviour:
   - MasterZombieTransform
   - SyncSkill
   - SyncZombieTransfrom
+  - MasterSpawn
+  - SyncSpawn
+  - SyncLoad
+  - SyncSceneLoad
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

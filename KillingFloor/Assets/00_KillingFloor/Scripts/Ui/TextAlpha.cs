@@ -4,10 +4,11 @@ using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class TextAlpha : MonoBehaviour
 {
-    private TMP_Text text;
+    private Text text;
 
     private Color colorUp = new Color(1.0f, 1.0f, 1.0f, 0.8f);
     private Color colorDown = new Color(1.0f, 1.0f, 1.0f, 0.0f);
@@ -16,7 +17,7 @@ public class TextAlpha : MonoBehaviour
 
     void Start()
     {
-        text = GetComponent<TMP_Text>();
+        text = GetComponent<Text>();
 
         StartCoroutine(AlphaUp());
     }
