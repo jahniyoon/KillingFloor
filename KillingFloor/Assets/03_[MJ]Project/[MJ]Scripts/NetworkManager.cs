@@ -56,9 +56,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
-        // 포톤 네트워크 속도 최적화 설정
-        PhotonNetwork.SendRate = 60;
-        PhotonNetwork.SerializationRate = 30;
+        //// 포톤 네트워크 속도 최적화 설정
+        //PhotonNetwork.SendRate = 60;
+        //PhotonNetwork.SerializationRate = 30;
+
         //지환 : 플레이어들의 씬 씽크 맞추기
         PhotonNetwork.AutomaticallySyncScene = true;
     }
@@ -319,6 +320,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         (error) => Debug.Log("데이터 불러오기 실패"));
 
     }
+
+    //[MiJeong] 230925 주석 삭제
     void SetLocalPlayerData()
     {
         PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = MyPlayFabInfo.PlayFabId }, (result) =>
@@ -330,15 +333,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             localPlayerLv = result.Data["HomeLevel"].Value;
 
             UserNameText.text = "Name: " + localPlayerName + "\nLevel: " + localPlayerLv;
-
-            //// 문자열을 정수로 변환 후 1을 더함
-            //int lv = int.Parse(localPlayerLv) + 1;
-            //// 결과를 다시 문자열로 변환
-            //string localPlayerLvUp = lv.ToString();
-
-            //Debug.Log(lv);
-            //Debug.Log("더하기 1 했을 때: " + localPlayerLvUp);
-
         },
             (error) => Debug.Log("데이터 불러오기 실패"));
     }
@@ -364,12 +358,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log(CoinsValueText.text);
     }
     // 코인 추가 메서드
-    public void GrantVirtualCurrency()
+    public void OnAddVirtualCurrency()
     {
         var request = new AddUserVirtualCurrencyRequest { VirtualCurrency = "CN", Amount = 50 };
-        PlayFabClientAPI.AddUserVirtualCurrency(request, OnGrantVirtualCurrencySuccess, OnError);
+        PlayFabClientAPI.AddUserVirtualCurrency(request, GrantVirtualCurrencySuccess, OnError);
     }
-    void OnGrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
+    void GrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
     {
         Debug.Log("Add 50 Coins Granted !");
 
@@ -568,12 +562,33 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer) => RoomRenewal();
 
-    // REGACY:
+    //// REGACY:
+    //void RoomRenewal()
+    //{
+    //    UserNickNameText.text = "";
+    //    ResetPlayerUI();
+    //    PlayFabClientAPI.GetUserData(new GetUserDataRequest(), (result) =>
+    //    {
+    //        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+    //        {
+    //            UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
+
+    //            // 방 안의 UI 세팅
+    //            playerInfo[i + 1].gameObject.SetActive(true);
+    //            playerInfo[i + 1].nickName.text = PhotonNetwork.PlayerList[i].NickName;
+    //            playerInfo[i + 1].level.text = result.Data["HomeLevel"].Value;
+    //        }
+    //    },
+    //    (error) => { Debug.Log("레벨 불러오지 못함"); }
+    //    );
+
+    //    RoomNumInfoText.text = PhotonNetwork.CurrentRoom.PlayerCount + "명 / " + PhotonNetwork.CurrentRoom.MaxPlayers + "최대 인원";
+    //}
     void RoomRenewal()
     {
         UserNickNameText.text = "";
         ResetPlayerUI();
-        PlayFabClientAPI.GetUserData(new GetUserDataRequest(), (result) =>
+        PlayFabClientAPI.GetUserData(new GetUserDataRequest() { }, (result) =>
         {
             for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
