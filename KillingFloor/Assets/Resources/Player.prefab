@@ -4387,6 +4387,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 055a9101f8952e147b1001ec72ad605e, type: 3}
   m_JumpSound: {fileID: 8300000, guid: 5897aeed9b676024fbb8c694b421a861, type: 3}
   m_LandSound: {fileID: 8300000, guid: 3b09d59f4499d45428baa7a21e954296, type: 3}
+  shopNav: {fileID: 2084018467119056547, guid: 93a4bf2d528056c41898a1dd2ad1c5db, type: 3}
+  shopNavPrant: {fileID: 0}
 --- !u!114 &3189699838051778081
 MonoBehaviour:
   m_ObjectHideFlags: 0

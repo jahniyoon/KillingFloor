@@ -86,9 +86,24 @@ public class PlayerMovement : MonoBehaviourPun
     private float m_StepCycle;
     private float m_NextStep;
 
+    //SSM 230925
+    public GameObject shopNav;
+    private List<GameObject> shopNavList;
+    private GameObject shopNavPrant;
+    //SSM End
 
     void Start()
     {
+        //ssm
+        shopNavList = new List<GameObject>();
+        shopNavPrant = GameObject.Find("ShopNavigation");
+        for (int i = 0; i < 30; i++)
+        {
+            GameObject saveObj = Instantiate(shopNav, shopNavPrant.transform);
+            shopNavList.Add(saveObj);
+            shopNavList[i].SetActive(false);
+        }
+        //ssm end
         input = GetComponent<PlayerInputs>();
         controller = GetComponent<CharacterController>();
         m_AudioSource = GetComponent<AudioSource>();
@@ -123,6 +138,10 @@ public class PlayerMovement : MonoBehaviourPun
         else if (!GameManager.instance.inputLock)
         {
             GetComponent<PlayerInput>().enabled = true;
+        }
+        if(GameManager.instance.isShop == true)
+        {
+            shopNavSp();
         }
     }
 
@@ -390,5 +409,42 @@ public class PlayerMovement : MonoBehaviourPun
         PlayerUIManager.instance.SetShopRotation(shopAngle, false);
  
         
+    }
+    public void shopNavSp()
+    {
+        //SSM 20230925 네비 소환
+
+        StartCoroutine(shopNavSpTime());
+        
+        
+        //SSM End
+    }
+    private IEnumerator shopNavSpTime()
+    {
+       
+
+        int timeElapsed = 70;
+
+
+        while (0 < timeElapsed)
+        {
+            timeElapsed -= 1;
+
+            if(timeElapsed % 4 == 0)
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    if (!shopNavList[i].activeSelf)
+                    {
+                        shopNavList[i].transform.position = transform.position;
+                        shopNavList[i].SetActive(true);
+                        break;
+                    }
+                }
+            }
+        
+
+            yield return new WaitForSeconds(1);
+        }
     }
 }

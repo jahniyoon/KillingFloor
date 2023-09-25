@@ -484,7 +484,7 @@ public class BossController : MonoBehaviourPun
     public void OnDamage(float dam)
     {
         // 마스터에게 데미지 계산 요청
-        Debug.Log("데미지 계산요청" + bossHp);
+      
 
         photonView.RPC("MasterDamage", RpcTarget.MasterClient, dam);
     }
@@ -493,10 +493,10 @@ public class BossController : MonoBehaviourPun
     [PunRPC]
     public void MasterDamage(float _destroyCount)
     {
-        Debug.Log("마스터 모두에게 데미지 업데이트 요청");
+     
 
         bossHp -= _destroyCount;
-        Debug.Log("마스터 계산요청" + bossHp);
+      
         // 마스터가 계산한 값 전달
         photonView.RPC("SyncDamage", RpcTarget.All, bossHp);
 
