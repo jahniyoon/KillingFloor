@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
 
 [System.Serializable]   // 인스펙터에서 보기 위해 직렬화
 public class Lang
@@ -99,11 +98,4 @@ public class Singleton : MonoBehaviour
             Langs.Add(lang);
         }
     }
-
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Alpha1)) SceneManager.LoadScene(0);
-    //    else if (Input.GetKeyDown(KeyCode.Alpha2)) SceneManager.LoadScene(1);
-    //    else if (Input.GetKeyDown(KeyCode.Alpha3)) SceneManager.LoadScene(2);
-    //}
 }
