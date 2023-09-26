@@ -4407,7 +4407,7 @@ MonoBehaviour:
   targetObj: {fileID: 7932496137141355067}
   weaponPosition: {fileID: 5984444562627019452}
   rightHandPosition: {fileID: 585656881133604207}
-  weaponClass: 1
+  weaponClass: 0
   equipedWeapon: {fileID: 0}
   weaponList:
   - {fileID: 886400307266168519}
