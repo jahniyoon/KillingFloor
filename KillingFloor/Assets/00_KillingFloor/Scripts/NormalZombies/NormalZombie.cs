@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -133,7 +134,7 @@ public class NormalZombie : NormalZombieData
         if (gameObject.name == "ZombieWalk_01(Clone)" || gameObject.name == "ZombieWalk_02(Clone)" ||
             gameObject.name == "ZombieWalk_03(Clone)" || gameObject.name == "ZombieWalk_04(Clone)")
         {
-            int number = Random.Range(0, 2);
+            int number = UnityEngine.Random.Range(0, 2);
 
             switch (number)
             {
@@ -227,15 +228,17 @@ public class NormalZombie : NormalZombieData
 
     private void Attack()
     {
-        int number = Random.Range(0, 2);
+        int number = UnityEngine.Random.Range(0, 2);
 
         switch (number)
         {
             case 0:
-                animatorController = StartCoroutine(AnimatorController("atk01"));
+                AniStart("atk01");
+                //animatorController = StartCoroutine(AnimatorController("atk01"));
                 break;
             case 1:
-                animatorController = StartCoroutine(AnimatorController("atk02"));
+                AniStart("atk02");
+                //animatorController = StartCoroutine(AnimatorController("atk02"));
                 break;
         }
     }
@@ -272,7 +275,8 @@ public class NormalZombie : NormalZombieData
     {
         StartCoroutine(CoolTime(10.0f));
 
-        animatorController = StartCoroutine(AnimatorController("atkScreaming"));
+        AniStart("atkScreaming");
+        //animatorController = StartCoroutine(AnimatorController("atkScreaming"));
 
         while (true)
         {
@@ -404,6 +408,35 @@ public class NormalZombie : NormalZombieData
         //}
     }
 
+    private void AniStart(string ani)
+    {
+        photonView.RPC("SyncAni", RpcTarget.All, ani);
+    }
+
+    [PunRPC]
+    private void SyncAni(string ani)
+    {
+        // 받아오는 스트링에 따라 코루틴을 다르게 실행시켜주기 
+        animatorController = StartCoroutine(AnimatorController(ani));
+        //switch (ani)
+        //{
+        //    case "atk01":
+        //        animatorController = StartCoroutine(AnimatorController("atk01"));
+        //    break;
+        //    case "atk02":
+        //        animatorController = StartCoroutine(AnimatorController("atk02"));
+        //        break;
+        //    case "atkScreaming":
+        //        animatorController = StartCoroutine(AnimatorController("atkScreaming"));
+        //        break;
+        //}
+    }
+
+    public void AnimationStart()
+    {
+       
+    }
+
     private void SkillSave(string _name, Vector3 _addVector)
     {
         for (int i = 0; i < skillParent.childCount; i++)
@@ -459,8 +492,8 @@ public class NormalZombie : NormalZombieData
 
     private IEnumerator DeathEnd()
     {
-        int num_Zed = Random.Range(0, 100);
-        if (0 <= num_Zed && num_Zed < 95)
+        int num_Zed = UnityEngine.Random.Range(0, 100);
+        if (0 <= num_Zed && num_Zed < 5)
         {
             GameManager.instance.isZedTime = true;
 
@@ -470,7 +503,7 @@ public class NormalZombie : NormalZombieData
             }
         }   // if: 제드타임 발생
 
-        int num_Ammo = Random.Range(0, 100);
+        int num_Ammo = UnityEngine.Random.Range(0, 100);
         if (0 <= num_Ammo && num_Ammo < 5)
         {
             GameObject newAmmo = Instantiate(ammoPrefab, ammoParent);
@@ -482,7 +515,10 @@ public class NormalZombie : NormalZombieData
             yield return null;
         }
 
-        GameManager.instance.MinusCount(1);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameManager.instance.MinusCount(1);
+        }
 
         yield return new WaitForSeconds(3);
 

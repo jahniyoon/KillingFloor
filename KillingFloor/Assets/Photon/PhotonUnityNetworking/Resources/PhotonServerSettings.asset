@@ -105,6 +105,7 @@ MonoBehaviour:
   - SyncZed
   - MasterParent
   - SyncParent
+  - MasterLoad
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

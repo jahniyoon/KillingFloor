@@ -3,20 +3,20 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LoadSceneAsync : MonoBehaviourPun
 {
-    private bool loadComplete = false;
+    private bool isCheck = false;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        StartCoroutine(WaitPlayersLoadingComplete());
+        asyncLoadScene("Main");
     }
 
-    public void AsyncLoadScene(string name)
+    public void asyncLoadScene(string name)
     {
         // 비동기 씬 로딩 시작
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(name);
@@ -31,65 +31,23 @@ public class LoadSceneAsync : MonoBehaviourPun
         while (!asyncLoad.isDone)
         {
             // 로딩 진행 상황을 표시하거나 추가 작업 수행 가능
-            float progress = Mathf.Clamp01(asyncLoad.progress / 0.9f); // 0.99f는 로딩이 90%까지 완료되었다는 의미
-            Debug.Log("Loading progress: " + progress * 100 + "%");
+            float progress = Mathf.Clamp01(asyncLoad.progress / 0.9f); // 0.9f는 로딩이 90%까지 완료되었다는 의미
 
             // 조건을 만족하면 씬 활성화
             if (progress >= 1.0f)
             {
-                if (CheckIfAllPlayersNextLoad())
+                if (CheckIfAllPlayersLoaded())
                 {
-                    yield return new WaitForSeconds(5.0f);
+                    if (PhotonNetwork.IsMasterClient) { Load(); }
 
-                    if (PhotonNetwork.IsMasterClient)
-                    {
-                        yield return new WaitForSeconds(1.0f);
-                    }
+                    while (!isCheck) { yield return null; }
 
-                    asyncLoad.allowSceneActivation = true; // 씬 활성화 허용
+                    asyncLoad.allowSceneActivation = true;
                 }
             }
 
             // 다음 프레임까지 대기
             yield return null;
-        }
-    }
-
-    private bool CheckIfAllPlayersNextLoad()
-    {
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            object loadingProgressObj;
-            if (player.CustomProperties.TryGetValue("LoadingProgress", out loadingProgressObj))
-            {
-                float loadingProgress = (float)loadingProgressObj;
-                if (loadingProgress < 1.0f)
-                {
-                    // 로딩 진행 상황이 1.0 미만인 플레이어가 있으면 false 반환
-                    return false;
-                }
-            }
-        }
-
-        // 모든 플레이어의 로딩 진행 상황이 1.0 이상이면 true 반환
-        return true;
-    }
-
-    private IEnumerator WaitPlayersLoadingComplete()
-    {
-        while (!loadComplete)
-        {
-            // 모든 플레이어가 로딩을 완료했는지 확인
-            bool allPlayersLoaded = CheckIfAllPlayersLoaded();
-
-            if (allPlayersLoaded)
-            {
-                // 모든 플레이어가 로딩을 완료하면 씬 로딩 시작
-                AsyncLoadScene("Main");
-                loadComplete = true;
-            }
-
-            yield return null; // 일정 간격으로 확인
         }
     }
 
@@ -112,5 +70,32 @@ public class LoadSceneAsync : MonoBehaviourPun
 
         // 모든 플레이어가 로딩을 완료했으면 true 반환
         return true;
+    }
+
+    private void Load()
+    {
+        photonView.RPC("MasterLoad", RpcTarget.MasterClient);
+
+        StartCoroutine(MasterLoadStart());
+    }
+
+    [PunRPC]
+    private void MasterLoad()
+    {
+        photonView.RPC("SyncLoad", RpcTarget.Others);
+
+    }
+
+    [PunRPC]
+    private void SyncLoad()
+    {
+        isCheck = true;
+    }
+
+    private IEnumerator MasterLoadStart()
+    {
+        yield return new WaitForSeconds(1.0f);
+
+        isCheck = true;
     }
 }
