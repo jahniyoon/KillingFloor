@@ -72,9 +72,9 @@ public class NormalZombieSpawner : MonoBehaviourPun
 
     private void Count()
     {
-        zombieCount = GameManager.instance.wave * 20 +
-                    GameManager.instance.player * 10 +
-                    GameManager.instance.difficulty * 10;
+        zombieCount = GameManager.instance.wave * 1 +
+                    GameManager.instance.player * 1 +
+                    GameManager.instance.difficulty * 1;
     }
     private GameObject newObject;
     private void CreateZombie()
@@ -82,6 +82,7 @@ public class NormalZombieSpawner : MonoBehaviourPun
         if (PhotonNetwork.IsMasterClient)
         {
             newObject = PhotonNetwork.Instantiate(zombiePrefab[randZombieNum].name, spawnPoint[pointCount].transform.position, Quaternion.identity);
+            newObject.GetComponent<NormalZombie>().ZombieSetting();
             int viewId = newObject.GetComponent<PhotonView>().ViewID;
 
             if (viewId != null)
@@ -163,6 +164,7 @@ public class NormalZombieSpawner : MonoBehaviourPun
                         }
                         else
                         {
+                            zombieSaveList[randZombieNum].GetChild(x).gameObject.GetComponent<NormalZombie>().ZombieSetting();
                             zombieSaveList[randZombieNum].GetChild(x).gameObject.SetActive(true);
                             zombieSaveList[randZombieNum].GetChild(x).position = spawnPoint[pointCount].transform.position;
                             GameManager.instance.PlusCount(1);
@@ -204,6 +206,7 @@ public class NormalZombieSpawner : MonoBehaviourPun
                         }
                         else
                         {
+                            zombieSaveList[randZombieNum].GetChild(x).gameObject.GetComponent<NormalZombie>().ZombieSetting();
                             zombieSaveList[randZombieNum].GetChild(x).gameObject.SetActive(true);
                             zombieSaveList[randZombieNum].GetChild(x).position = spawnPoint[pointCount].transform.position;
 
