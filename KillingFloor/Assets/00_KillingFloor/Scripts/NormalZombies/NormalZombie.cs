@@ -70,15 +70,6 @@ public class NormalZombie : NormalZombieData
         ammoParent = GameObject.Find("Ammos").transform;
     }
 
-    private void OnEnable()
-    {
-        ZombieSetting();
-    }
-    private void Start()
-    {
-        ZombieSetting();
-    }
-
     private void Update()
     {
         if (isDeath == false)
@@ -127,7 +118,7 @@ public class NormalZombie : NormalZombieData
         StartCoroutine(Skill());
     }
 
-    private void ZombieSetting()
+    public void ZombieSetting()
     {
         blendTreeMove = StartCoroutine(BlendTreeMove(0.0f, 1.0f, 2.0f));
 
@@ -483,6 +474,11 @@ public class NormalZombie : NormalZombieData
 
     public void Death()
     {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameManager.instance.MinusCount(1);
+        }
+
         ani.SetTrigger("isDie");
 
         isDeath = true;
@@ -515,10 +511,6 @@ public class NormalZombie : NormalZombieData
             yield return null;
         }
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            GameManager.instance.MinusCount(1);
-        }
 
         yield return new WaitForSeconds(3);
 
