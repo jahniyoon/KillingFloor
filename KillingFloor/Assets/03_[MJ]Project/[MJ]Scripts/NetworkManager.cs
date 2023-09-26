@@ -83,19 +83,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         RoomRenewal();
     }
 
-    //ITEM
     void Start()
     {
         StartCoroutine(UpdatePlayerCount());
 
+        //ITEM
         foreach (ItemToBuy i in Items)
         {
-            GameObject o = Instantiate(ItemObj, ContentArea.transform.position, Quaternion.identity);
-            o.transform.GetChild(0).GetComponent<Text>().text = i.Name + "["+i.Cost+"]";
-            o.transform.SetParent(ContentArea.transform);
+            GameObject itemObject = Instantiate(ItemObj, ContentArea.transform.position, Quaternion.identity);
+            itemObject.transform.GetChild(1).GetComponent<Text>().text = i.Name;
+            itemObject.transform.GetChild(2).GetComponent<Text>().text = "[" + i.Cost + " Coin]";
+            itemObject.GetComponent<Image>().sprite = i.GetComponent<Image>().sprite;
+            itemObject.GetComponent<Image>().preserveAspect = true;     // 이미지 종횡비 유지하도록 설정
+
+            itemObject.transform.SetParent(ContentArea.transform);
         }
+        //ITEM
     }
-    //ITEM
 
     #region 플레이팹
     // 이메일 충족 조건 : '@', '.' 이 있어야함
@@ -959,7 +963,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void ClassChangeCommando()
     {
         NetworkManager.instance.localPlayerClass = "Commando";
-        Debug.Log(NetworkManager.instance.localPlayerClass  + "클래스 변경");
+        Debug.Log(NetworkManager.instance.localPlayerClass + "클래스 변경");
         // 데이터에 변경된 레벨 서버에 저장하기 위해서 꼭 필요
         NetworkManager.instance.SetClass(NetworkManager.instance.localPlayerClass);
 
@@ -984,7 +988,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         switch (playerClass)
         {
-            case "Commando" :
+            case "Commando":
                 playerInfo[index].classIcon[0].SetActive(true);
                 break;
             case "Demolitionist":
