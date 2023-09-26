@@ -130,6 +130,8 @@ public class NormalZombieSpawner : MonoBehaviourPun
 
     public IEnumerator SpawnZombie(int _zombieCount, int _roundPointCount)
     {
+        yield return new WaitForSeconds(10.0f);
+
         for (int i = 0; i < _roundPointCount; i++)
         {
             for (int j = 0; j < _zombieCount / _roundPointCount * 0.8f; j++)

@@ -75,27 +75,17 @@ public class LoadSceneAsync : MonoBehaviourPun
     private void Load()
     {
         photonView.RPC("MasterLoad", RpcTarget.MasterClient);
-
-        StartCoroutine(MasterLoadStart());
     }
 
     [PunRPC]
     private void MasterLoad()
     {
-        photonView.RPC("SyncLoad", RpcTarget.Others);
-
+        photonView.RPC("SyncLoad", RpcTarget.All);
     }
 
     [PunRPC]
     private void SyncLoad()
     {
-        isCheck = true;
-    }
-
-    private IEnumerator MasterLoadStart()
-    {
-        yield return new WaitForSeconds(1.0f);
-
         isCheck = true;
     }
 }
