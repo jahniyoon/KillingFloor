@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-public class BoomParticle : MonoBehaviourPun
+public class GranadeGunParticle : MonoBehaviourPun
 {
     private GameObject user;
     private PlayerHealth playerHealth;
@@ -10,9 +10,9 @@ public class BoomParticle : MonoBehaviourPun
     {
         
             GameObject IdOBj = FindTopmostParent(gameObject.transform).gameObject;
-
-            int viewID = IdOBj.GetComponent<Grenade>().viewId;
-            
+    
+            int viewID = IdOBj.GetComponent<GranadeGun>().viewId;
+ 
             user = PhotonView.Find(viewID).gameObject;
             playerHealth = user.GetComponent<PlayerHealth>();
 
