@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public int round = 1;               // 현재 라운드
     public int wave = 1;                // 현재 웨이브
+    [SerializeField] private int MaxWave = 4;//마직막 웨이브
     public int player = 4;              // 플레이어 인원 수
     public int difficulty = 0;          // 난이도 0: 보통 1: 어려움 2: 지옥
     public int currentZombieCount = 0;  // 현재 좀비 수
@@ -65,6 +66,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public bool isZedTimeCheck = false;
     public List<Transform> shops = new List<Transform>();
     public bool isShop = false;
+    private bool isRespawn = false;
 
 
     private bool GMMode = false;
@@ -125,6 +127,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             LeaveServer();
+        }
+        if (isRespawn)
+        {
+            OnRespawn();    // 상점이 열리면 리스폰 해주기
         }
     }
 
@@ -226,16 +232,26 @@ public class GameManager : MonoBehaviourPunCallbacks
             yield return null;
         }
 
+        PlayerUIManager.instance.SetZombieCount(currentZombieCount);
+
         StartCoroutine(ChangeWave());
     }
 
     private IEnumerator ChangeWave()
     {
-        isShop = true;
-        OnRespawn();    // 상점이 열리면 리스폰 해주기
-
-        PlayerUIManager.instance.SetEndNotice("Wave Clear");
+        if (MaxWave == wave)
+        {
+            PlayerUIManager.instance.SetEndNotice("Clear");
+        PlayerUIManager.instance.SetNoticeLogo("Congratulate");
+        }
+        else
+        {
+            PlayerUIManager.instance.SetEndNotice("Wave Clear");
         PlayerUIManager.instance.SetNoticeLogo("Go to Shop");
+        }
+
+        isShop = true;
+        isRespawn = true;
 
         PlayerUIManager.instance.CountUI.SetActive(false);
         PlayerUIManager.instance.TimerUI.SetActive(true);
@@ -267,6 +283,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void OnRespawn()
     {
+        isRespawn = false;
+
         if(!isGameover)
         {
             // 죽은사람 카운트 초기화

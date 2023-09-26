@@ -26,7 +26,6 @@ public class NormalZombieSpawner : MonoBehaviourPun
 
     private void Update()
     {
-        Debug.Log("sd");
         if (GameManager.instance.wave == 1 && GameManager.instance.isCheck)
         {
             GameManager.instance.isCheck = false;
