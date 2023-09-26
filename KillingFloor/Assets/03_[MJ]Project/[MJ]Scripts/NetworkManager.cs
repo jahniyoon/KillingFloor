@@ -41,7 +41,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public int stars = default;
 
     public ItemToBuy[] Items;
-    public GameObject[] EnableOnLogin;
+    //public GameObject[] EnableOnLogin;
+    public GameObject ContentArea;
+    public GameObject ItemObj;
 
     public enum State { Login, Lobby, Room, Store, Option };
     [Header("Lobby UI")]
@@ -67,6 +69,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
+    //ITEM
+    void Start()
+    {
+        StartCoroutine(UpdatePlayerCount());
+
+        foreach (ItemToBuy i in Items)
+        {
+            GameObject o = Instantiate(ItemObj, ContentArea.transform.position, Quaternion.identity);
+            o.transform.GetChild(0).GetComponent<Text>().text = i.Name + "["+i.Cost+"]";
+            o.transform.SetParent(ContentArea.transform);
+        }
+    }
+    //ITEM
+
     #region 플레이팹
     // 이메일 충족 조건 : '@', '.' 이 있어야함
     // 비밀번호 충족 조건 : 6~100 자의 문자
@@ -81,6 +97,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+
+            //ITEM
+            //foreach (GameObject obj in EnableOnLogin) obj.SetActive(true);  // 유저 인벤토리 가져옴
+            //ITEM
 
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
         },
@@ -406,11 +426,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     // Photon 서버와의 동기화가 완료 후 CountOfPlayers를 업데이트하도록 코르틴 사용
     private int currentPlayerCount = 0;
-
-    void Start()
-    {
-        StartCoroutine(UpdatePlayerCount());
-    }
 
     private IEnumerator UpdatePlayerCount()
     {
