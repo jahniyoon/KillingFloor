@@ -1,14 +1,16 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerMeleeAttack : MonoBehaviour
+public class PlayerMeleeAttack : MonoBehaviourPun
 {
     int layerMask = (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11) | (1 << 14);    // 데미지 받을 좀비의 레이어 마스크
 
     public PlayerHealth playerHealth;
-    public float damage = 30;
+    public PlayerShooter shooter;
+    public float damage = 80;
 
     // Start is called before the first frame update
     void Start()
@@ -24,16 +26,35 @@ public class PlayerMeleeAttack : MonoBehaviour
     private void OnTriggerEnter(Collider hitObj)
     {
 
-
         // 특정 레이어만 확인
         if (((1 << hitObj.gameObject.layer) & layerMask) != 0)
         {
-            Damage(hitObj.gameObject);
+            if (photonView.IsMine)
+            {
+                Damage(hitObj.gameObject);
+            }
+            var hitTransform = hitObj.transform;
+            if (hitTransform.gameObject.GetPhotonView() == null)
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    Debug.Log("포톤뷰가 없다. 상위로 전환 : " + hitTransform);
+                    hitTransform = hitTransform.parent;
+                    if (hitTransform.gameObject.GetPhotonView() != null)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            photonView.RPC("MeleeBlood", RpcTarget.All, this.transform.position, hitTransform.gameObject.GetPhotonView().ViewID);
+
         }
 
 
 
     }
+
     private void OnTriggerExit(Collider hitObj)
     {
     }
@@ -41,13 +62,18 @@ public class PlayerMeleeAttack : MonoBehaviour
     // TODO : PunRPC로 데미지 들어가도록 수정
     void Damage(GameObject _hitObj)
     {
+
+        Debug.Log(_hitObj.name);
+
         if (_hitObj.transform.GetComponent<HitPoint>() == null && _hitObj.transform.GetComponent<PlayerDamage>() != null)
         {
             playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
             _hitObj.transform.GetComponent<PlayerDamage>().OnDamage(); // RPC 확인 디버그용
             return;
         }
-        if (!"Mesh_Alfa_2".Equals(_hitObj.transform.name) && !"Meteor".Equals(_hitObj.transform.name))//보스 가 아닐경우 
+
+
+        if (!"Mesh_Alfa_2".Equals(_hitObj.transform.name) && !"DevilEye".Equals(_hitObj.transform.name))//보스 가 아닐경우 
         {
             ////////////////////////////////////////////////좀비////////////////////
 
@@ -87,19 +113,13 @@ public class PlayerMeleeAttack : MonoBehaviour
             }
         }
 
-        if ("Meteor".Equals(_hitObj.name))
+        if ("DevilEye".Equals(_hitObj.name))
         {
 
-
+            Debug.Log("메테오");
 
             _hitObj.gameObject.GetComponent<Meteor>().OnDamage(damage);
 
-        }
-        // 보스일 경우
-        if (_hitObj.transform.GetComponent<BossController>() != null)
-        {
-            // 보스 데미지 넣어야하는 부분
-            //_hitObj.transform.GetComponent<BossController>().bossHp -= damage;
         }
     }
 }

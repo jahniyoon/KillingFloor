@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class LookCamera : MonoBehaviour
 {
+
     Camera main_camera;
+
     void Start()
     {
         main_camera = Camera.main;
     }
 
-    // Update is called once per frame
     void Update()
     {
         Vector3 lookDirection = transform.position - main_camera.transform.position;

@@ -555,6 +555,12 @@ public class PlayerShooter : MonoBehaviourPun
             input.shoot = false;
         }
     }
+    [PunRPC]
+    public void MeleeBlood(Vector3 _hitPosition, int _viewID)
+    {
+        Debug.Log("피 효과 요청 "+ _viewID);
+        bloodFX.OnBloodEffect(_hitPosition, 0, Vector3.zero, _viewID);
+    }
     void Heal()
     {
         // 힐 클릭
