@@ -12,8 +12,9 @@ public class Shop : MonoBehaviour
     PlayerShooter shooter;
     public GameObject shopUI;
     bool isShopOpen;
-
-
+    [SerializeField] private int MaxAmmo;
+    [SerializeField] private int remaining;
+    [SerializeField] private int magazineAmmo;
     // Update is called once per frame
     void Update()
     {
@@ -72,7 +73,10 @@ public class Shop : MonoBehaviour
     }
     void OnTriggerStay(Collider player)
     {
-        
+        MaxAmmo =(int)player.GetComponent<PlayerShooter>().equipedWeapon.maxAmmo;
+        remaining = (int)player.GetComponent<PlayerShooter>().equipedWeapon.remainingAmmo;
+        magazineAmmo = (int)player.GetComponent<PlayerShooter>().equipedWeapon.magazineSize;
+
         // 플레이어가 근처에 있으면
         if (player.CompareTag("Player") && GameManager.instance.isShop)
         {
@@ -141,10 +145,19 @@ public class Shop : MonoBehaviour
     {
         if (playerInfo != null)
         {
-            if (playerInfo.coin >= 50)
+         
+            if (playerInfo.coin >= 200 && MaxAmmo > remaining)
             {
-                shooter.GetAmmo(50);
-                playerInfo.BuyAmmo(50);
+                if (magazineAmmo + remaining > MaxAmmo)
+                {
+                    shooter.GetAmmo(remaining- MaxAmmo);
+                }else
+                {
+                    shooter.GetAmmo(magazineAmmo);
+
+                }
+               
+                playerInfo.BuyAmmo(200);
             }
         }
     }

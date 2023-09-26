@@ -109,6 +109,9 @@ MonoBehaviour:
   - DieSync
   - MasterLoad
   - SyncAni
+  - MasterStart
+  - SyncStart
+  - shopNavSp
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -13,11 +13,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 {
     public static NetworkManager instance;
 
-    public GameObject Lang_Panel, Room_Panel, UserRoom_Panel, Lobby_Panel, Login_Panel, Store_Panel, Lobby_Screen, Option_Panel;
+    public GameObject Lang_Panel, Room_Panel, UserRoom_Panel, Lobby_Panel, Login_Panel, Class_Panel, Store_Panel, Lobby_Screen, Option_Panel, PlayerProfile;
 
     [Header("Player")]
     public string localPlayerName = default;
     public string localPlayerLv = default;
+    public string localPlayerClass = default;
 
     [Header("Login")]
     public PlayerLeaderboardEntry MyPlayFabInfo;
@@ -45,7 +46,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public GameObject ContentArea;
     public GameObject ItemObj;
 
-    public enum State { Login, Lobby, Room, Store, Option };
+    public enum State { Login, Lobby, Room, Class, Store, Option };
     [Header("Lobby UI")]
     public State state;
     public Image[] buttonBackGround;    // 로비 버튼 선택여부
@@ -67,6 +68,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         //지환 : 플레이어들의 씬 씽크 맞추기
         PhotonNetwork.AutomaticallySyncScene = true;
+    }
+    public void Update()
+    {
+        if (state == State.Room)
+        {
+            StartCoroutine("RoomRenewalCoroutine"); // 1초마다 업데이트
+        }
+
+    }
+    IEnumerator RoomRenewalCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+        RoomRenewal();
     }
 
     //ITEM
@@ -330,6 +344,26 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         (error) => Debug.Log("데이터 저장 실패"));
     }
 
+    public void SetClass(string curData)
+    {
+        // 업데이트할 사용자 데이터 요청 생성
+        var request = new UpdateUserDataRequest()
+        {
+            Data = new Dictionary<string, string>() { { "Class", curData } },   // "HomeLevel" 키를 가진 데이터 설정
+            Permission = UserDataPermission.Public     // 데이터 공개
+        };
+
+        // PlayFab를 통해 사용자 데이터 업데이트 요청 전송
+        PlayFabClientAPI.UpdateUserData(request, (result) =>
+        {
+            Debug.Log("SetData 성공 -> " + result);
+            Debug.Log($"curData : {curData}");
+
+            localPlayerClass = curData;
+        },
+        (error) => Debug.Log("데이터 저장 실패"));
+    }
+
     // 유저 데이터 가져오는 메서드
     void GetData(string curID)
     {
@@ -338,6 +372,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             UserRoomDataText.text = "고유ID" + curID + "\n" + result.Data["HomeLevel"].Value;
             playerInfo[0].level.text = result.Data["HomeLevel"].Value;
+            playerInfo[0].className.text = result.Data["Class"].Value;
+            SetClassIcon(0, result.Data["Class"].Value);
+
         },  // 지환 레벨 가져오기 한줄 추가
 
         (error) => Debug.Log("데이터 불러오기 실패"));
@@ -354,7 +391,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
             localPlayerName = MyPlayFabInfo.DisplayName;
             localPlayerLv = result.Data["HomeLevel"].Value;
-
+            localPlayerClass = result.Data["Class"].Value;
             UserNameText.text = "Name: " + localPlayerName + "\nLevel: " + localPlayerLv;
         },
             (error) => Debug.Log("데이터 불러오기 실패"));
@@ -464,6 +501,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         state = State.Lobby;    // 상태 로비로 변경
         playerInfo[0].nickName.text = string.Format(PhotonNetwork.LocalPlayer.NickName);
         playerInfo[0].level.text = string.Format(localPlayerLv);  // ToDo : 레벨 넣어야함
+        playerInfo[0].className.text = localPlayerClass;
+        SetClassIcon(0, localPlayerClass);
 
         ShowPanel(Lobby_Panel);
         ShowUserNickName();
@@ -660,6 +699,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                         {
                             string levelValue = result.Data["HomeLevel"].Value;
                             playerInfo[currentPlayerIndex].level.text = levelValue;
+                            playerInfo[currentPlayerIndex].className.text = result.Data["Class"].Value;
+                            SetClassIcon(playerIndex, result.Data["Class"].Value);
+
                             Debug.Log($"Player {currentPlayerIndex}의 레벨: {levelValue}");
                         }
                         else
@@ -815,6 +857,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         SetPanel();
         PhotonNetwork.LeaveRoom();
     }
+    public void ClassButton()
+    {
+        if (state == State.Class)
+        {
+            return;
+        }
+        state = State.Class;
+
+        SetButtonColor(3);
+        SetPanel();
+    }
     // 상점 버튼
     public void StoreButton()
     {
@@ -855,6 +908,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         buttonBackGround[0].color = new Color(255, 255, 255, 0);    // Home
         buttonBackGround[1].color = new Color(255, 255, 255, 0);    // Store
         buttonBackGround[2].color = new Color(255, 255, 255, 0);    // Option
+        buttonBackGround[3].color = new Color(255, 255, 255, 0);    // Class
                                                                     // 요청한 버튼의 색만 켜주기
         buttonBackGround[num].color = new Color(255, 255, 255, 0.8f);
 
@@ -865,6 +919,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Login_Panel.SetActive(false);
         Lobby_Panel.SetActive(false);
         Room_Panel.SetActive(false);
+        Class_Panel.SetActive(false);
         UserRoom_Panel.SetActive(false);
         Option_Panel.SetActive(false);
         Store_Panel.SetActive(false);
@@ -873,21 +928,71 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             case State.Lobby:
                 Lobby_Panel.SetActive(true);
+                PlayerProfile.SetActive(true);
                 break;
             case State.Room:
                 Room_Panel.SetActive(true);
+                PlayerProfile.SetActive(false);
                 break;
             case State.Store:
                 Store_Panel.SetActive(true);
+                PlayerProfile.SetActive(false);
                 break;
             case State.Option:
                 Option_Panel.SetActive(true);
+                PlayerProfile.SetActive(false);
                 break;
             case State.Login:
                 Login_Panel.SetActive(true);
+                PlayerProfile.SetActive(false);
+                break;
+            case State.Class:
+                Class_Panel.SetActive(true);
+                PlayerProfile.SetActive(true);
                 break;
         }
     }
 
     #endregion
+
+    #region SetClass
+    public void ClassChangeCommando()
+    {
+        NetworkManager.instance.localPlayerClass = "Commando";
+        Debug.Log(NetworkManager.instance.localPlayerClass  + "클래스 변경");
+        // 데이터에 변경된 레벨 서버에 저장하기 위해서 꼭 필요
+        NetworkManager.instance.SetClass(NetworkManager.instance.localPlayerClass);
+
+        playerInfo[0].className.text = NetworkManager.instance.localPlayerClass;
+        SetClassIcon(0, "Commando");
+    }
+    public void ClassChangeDemolitionist()
+    {
+        NetworkManager.instance.localPlayerClass = "Demolitionist";
+        Debug.Log(NetworkManager.instance.localPlayerClass + "클래스 변경");
+        // 데이터에 변경된 레벨 서버에 저장하기 위해서 꼭 필요
+        NetworkManager.instance.SetClass(NetworkManager.instance.localPlayerClass);
+
+        playerInfo[0].className.text = NetworkManager.instance.localPlayerClass;
+        SetClassIcon(0, "Demolitionist");
+    }
+
+    public void SetClassIcon(int index, string playerClass)
+    {
+        playerInfo[index].classIcon[0].SetActive(false);    // 코만도
+        playerInfo[index].classIcon[1].SetActive(false);    // 데몰리셔니스트
+
+        switch (playerClass)
+        {
+            case "Commando" :
+                playerInfo[index].classIcon[0].SetActive(true);
+                break;
+            case "Demolitionist":
+                playerInfo[index].classIcon[1].SetActive(true);
+                break;
+        }
+    }
+
+    #endregion
+
 }
