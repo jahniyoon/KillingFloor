@@ -73,6 +73,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
 
+        PhotonNetwork.AutomaticallySyncScene = true;
+
+
         // 씬에 싱글톤 오브젝트가 된 다른 GameManager 오브젝트가 있다면
         if (instance != this)
         {

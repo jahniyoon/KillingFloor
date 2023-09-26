@@ -14,6 +14,8 @@ public class LoadSceneAsync : MonoBehaviourPun
     private void Start()
     {
         asyncLoadScene("Main");
+        PhotonNetwork.AutomaticallySyncScene = true;
+
     }
 
     public void asyncLoadScene(string name)
