@@ -2,14 +2,8 @@ using Cinemachine;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XR;
-using UnityEngine.Windows;
-using DG.DemiLib;
-using DG.Tweening;
 
 public class PlayerMovement : MonoBehaviourPun
 {
@@ -90,6 +84,7 @@ public class PlayerMovement : MonoBehaviourPun
     public GameObject shopNav;
     private List<GameObject> shopNavList;
     private GameObject shopNavPrant;
+    private bool NavAct = false;
     //SSM End
 
     void Start()
@@ -97,12 +92,16 @@ public class PlayerMovement : MonoBehaviourPun
         //ssm
         shopNavList = new List<GameObject>();
         shopNavPrant = GameObject.Find("ShopNavigation");
-        for (int i = 0; i < 30; i++)
+        if (shopNavPrant != null)
         {
-            GameObject saveObj = Instantiate(shopNav, shopNavPrant.transform);
-            shopNavList.Add(saveObj);
-            shopNavList[i].SetActive(false);
+            for (int i = 0; i < 30; i++)
+            {
+                GameObject saveObj = Instantiate(shopNav, shopNavPrant.transform);
+                shopNavList.Add(saveObj);
+                shopNavList[i].SetActive(false);
+            }
         }
+
         //ssm end
         input = GetComponent<PlayerInputs>();
         controller = GetComponent<CharacterController>();
@@ -139,7 +138,7 @@ public class PlayerMovement : MonoBehaviourPun
         {
             GetComponent<PlayerInput>().enabled = true;
         }
-        if(GameManager.instance.isShop == true)
+        if (GameManager.instance.isShop == true)
         {
             shopNavSp();
         }
@@ -395,56 +394,46 @@ public class PlayerMovement : MonoBehaviourPun
     // 상점 UI 업데이트
     public void ShopUIUpdate()
     {
-        
+
         // 상점과의 거리 계산하기
-         float shopDistance = Mathf.FloorToInt(Vector3.Distance(controller.transform.position, GameManager.instance.shopPosition.position));
+        float shopDistance = Mathf.FloorToInt(Vector3.Distance(controller.transform.position, GameManager.instance.shopPosition.position));
         PlayerUIManager.instance.SetShopDistance(shopDistance); // 상점 거리 업데이트
         // 플레이어의 현재방향에서 상점까지의 벡터간 각도 계산하기
         Vector3 playerForward = controller.transform.rotation * Vector3.forward;
-        float shopAngle = Vector3.SignedAngle(playerForward, GameManager.instance.shopPosition.position - controller.transform.position,Vector3.up);
+        float shopAngle = Vector3.SignedAngle(playerForward, GameManager.instance.shopPosition.position - controller.transform.position, Vector3.up);
 
         if (GameManager.instance.shopPosition.position.y + 1f > controller.transform.position.y)
         { PlayerUIManager.instance.SetShopRotation(shopAngle, true); }
         else
-        PlayerUIManager.instance.SetShopRotation(shopAngle, false);
- 
-        
+            PlayerUIManager.instance.SetShopRotation(shopAngle, false);
+
+
     }
     public void shopNavSp()
     {
         //SSM 20230925 네비 소환
+        if (NavAct== false)
+        {
+            for (int i = 0; i < shopNavList.Count; i++)
+            {
+                if (!shopNavList[i].activeSelf)
+                {
+                    shopNavList[i].transform.position = transform.position;
+                    shopNavList[i].SetActive(true);
+                    NavAct = true;
+                    StartCoroutine(shopNavSpTime());
+                    break;
+                }
+            }
+        }
 
-        StartCoroutine(shopNavSpTime());
-        
-        
         //SSM End
     }
     private IEnumerator shopNavSpTime()
     {
-       
+        yield return new WaitForSeconds(3);
+        NavAct = false;
 
-        int timeElapsed = 70;
 
-
-        while (0 < timeElapsed)
-        {
-            timeElapsed -= 1;
-
-            if(timeElapsed % 4 == 0)
-            {
-                for (int i = 0; i < 20; i++)
-                {
-                    if (!shopNavList[i].activeSelf)
-                    {
-                        shopNavList[i].transform.position = transform.position;
-                        shopNavList[i].SetActive(true);
-                        break;
-                    }
-                }
-            }
-        
-
-            yield return new WaitForSeconds(1);
-        }
     }
 }

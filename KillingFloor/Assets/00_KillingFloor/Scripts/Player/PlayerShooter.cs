@@ -547,7 +547,7 @@ public class PlayerShooter : MonoBehaviourPun
             _hitObj.transform.GetComponent<PlayerDamage>().OnDamage(); // RPC 확인 디버그용
             return;
         }
-        Debug.Log("1");
+    
 
         if (!"Mesh_Alfa_2".Equals(_hitObj.transform.name) && !"DevilEye".Equals(_hitObj.transform.name))//보스 가 아닐경우 
         {
@@ -572,7 +572,7 @@ public class PlayerShooter : MonoBehaviourPun
 
             ////////////////////////////////////////////////////////////////////
         }
-        Debug.Log("2");
+     
         if ("Mesh_Alfa_2".Equals(_hitObj.name)) // 보스 일경우
         {
 
@@ -804,7 +804,7 @@ public class PlayerShooter : MonoBehaviourPun
 
         GameObject newGrenade = PhotonNetwork.Instantiate(grenadePrefab.name, throwPosition.transform.position, Quaternion.identity);
         newGrenade.GetComponent<Rigidbody>().AddForce(calculateForce(), ForceMode.Impulse);
-
+        newGrenade.GetComponent<Grenade>().setViewId(photonView.ViewID);
 
         yield return new WaitForSeconds(1f);
 

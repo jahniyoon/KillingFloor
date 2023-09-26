@@ -20,7 +20,7 @@ public class NavShop : MonoBehaviour
         if(GameManager.instance.isShop == true)
         {
             wave = GameManager.instance.wave;
-            string shopName = "Shop_0" + (wave -1);
+            string shopName = "Shop_0" + wave;
             GameObject shopObj = GameObject.Find(shopName);
             float targetDistance =  Vector3.Distance(transform.position,shopObj.transform.position);
             agent.enabled = true;
