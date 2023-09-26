@@ -114,8 +114,11 @@ public class PlayerShooter : MonoBehaviourPun
         bulletlist = new List<GameObject>();
         for (int i = 0; i < 7; i++)
         {
-            GameObject bullet = Instantiate(bulletPrefab, bulletPoint.transform.position, transform.rotation);
-            bulletlist.Add(bullet)  ;
+          
+            GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, bulletPoint.transform.forward, transform.rotation);
+     
+            bulletlist.Add(bullet);
+            bulletlist[i].GetComponent<GranadeGun>().setViewId(photonView.ViewID);
             bulletlist[i].SetActive(false);
         }
 
@@ -235,20 +238,50 @@ public class PlayerShooter : MonoBehaviourPun
                 // ToDo : 틱 사운드 플레이되도록 하기 (총알 없음)
                 gunAudioPlayer.clip = equipedWeapon.emptyAudio;
                 gunAudioPlayer.PlayOneShot(gunAudioPlayer.clip); // 총소리 재생
+             
                 input.shoot = false;
             }
         }
         if (input.shoot && weaponSlot < 3 && weaponClass == WeaponClass.Demolitionist)
         {
-
-            for (int i = 0; i < 7; i++)
+            if(state == State.Ready && Time.time >= lastFireTime + fireRate && 0 < equipedWeapon.ammo )
             {
-                if(!bulletlist[i].activeSelf)
+                lastFireTime = Time.time;
+                if(weaponSlot == 2)
                 {
-                    bulletlist[i].GetComponent<Rigidbody>().AddForce(transform.forward * bulletSpeed);
-                    break;
+                    for (int i = 0; i < 7; i++)
+                    {
+                        if (!bulletlist[i].activeSelf)
+                        {
+
+                            bulletlist[i].transform.position = bulletPoint.transform.position;
+                            bulletlist[i].transform.rotation = bulletPoint.transform.rotation;
+                            bulletlist[i].GetComponent<Rigidbody>().velocity = Vector3.zero; // 이전 속도 초기화
+                            bulletlist[i].SetActive(true);
+                            bulletlist[i].GetComponent<Rigidbody>().AddForce(bulletPoint.transform.forward * bulletSpeed * 2f);
+                            handAnimator.SetTrigger("isFire");
+                            animator.SetTrigger("isFire");
+                            equipedWeapon.ammo -= 1;
+                            PlayerUIManager.instance.SetAmmo(equipedWeapon.ammo);           // 현재 탄 UI 세팅
+
+                            if (equipedWeapon.ammo <= 0)
+                            {
+                                // 탄창에 남은 탄약이 없다면, 총의 현재 상태를 Empty으로 갱신
+                                state = State.Empty;
+                                input.shoot = false;
+                            }
+                            break;
+                        }
+                    }
                 }
+            
+               
             }
+           
+              
+               
+            
+               
             // 데몰리스트 발사 입력 후 할것들
         }
         PlayerUIManager.instance.SetCoin(playerHealth.coin);
@@ -262,7 +295,10 @@ public class PlayerShooter : MonoBehaviourPun
         Vector3 cameraPosition = cameraSet.followCam.transform.position;
         // 카메라는 각자 가지고있으므로 카메라값도 함께 전달
         Debug.Log(photonView.ViewID + "마스터에게 사격 요청");
+       
+          
         photonView.RPC("ShotProcessOnServer", RpcTarget.MasterClient, cameraForward, cameraPosition);
+        
 
 
         // 애니메이션 작동 
