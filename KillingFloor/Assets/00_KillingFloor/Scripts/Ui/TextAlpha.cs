@@ -24,7 +24,6 @@ public class TextAlpha : MonoBehaviour
 
     private IEnumerator AlphaUp()
     {
-        if (SceneManager.GetActiveScene().name == "MainLoad")
         {
             timeElapsed = 0.0f;
 
@@ -37,6 +36,11 @@ public class TextAlpha : MonoBehaviour
                 text.color = Color.Lerp(colorDown, colorUp, time);
 
                 yield return null;
+
+                if (!gameObject.activeSelf)
+                {
+                    yield break;
+                }
             }
 
             StartCoroutine(AlphaDown());
@@ -45,22 +49,24 @@ public class TextAlpha : MonoBehaviour
 
     private IEnumerator AlphaDown()
     {
-        if (SceneManager.GetActiveScene().name == "MainLoad")
+        timeElapsed = 0.0f;
+
+        while (timeElapsed < 2.0f)
         {
-            timeElapsed = 0.0f;
+            timeElapsed += Time.deltaTime;
 
-            while (timeElapsed < 2.0f)
+            float time = Mathf.Clamp01(timeElapsed / 2.0f);
+
+            text.color = Color.Lerp(colorUp, colorDown, time * time);
+
+            yield return null;
+
+            if (!gameObject.activeSelf)
             {
-                timeElapsed += Time.deltaTime;
-
-                float time = Mathf.Clamp01(timeElapsed / 2.0f);
-
-                text.color = Color.Lerp(colorUp, colorDown, time * time);
-
-                yield return null;
+                yield break;
             }
-
-            StartCoroutine(AlphaUp());
         }
+
+        StartCoroutine(AlphaUp());
     }
 }
