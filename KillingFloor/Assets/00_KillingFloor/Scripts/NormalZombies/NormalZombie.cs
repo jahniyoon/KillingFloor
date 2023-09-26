@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
+using UnityEngine.SocialPlatforms;
 
 public class NormalZombie : NormalZombieData
 {
@@ -22,8 +24,9 @@ public class NormalZombie : NormalZombieData
     public GameObject skillPrefab;
     public GameObject ammoPrefab;
 
+    public Volume volume;
+
     private float timeElapsed;
-    private float zedTime;
 
     // 현재 애니메이션 좌표
     private float startTime;
@@ -43,9 +46,12 @@ public class NormalZombie : NormalZombieData
     private bool isDeath = false;
     private bool isHit = false;
     private bool isSkill = false;
+    private bool isZedTime = false;
+    private bool isZedTimeCheck = false;
 
     private void Awake()
     {
+        volume = GameObject.Find("Global Volume").GetComponent<Volume>();
         navigation = GetComponent<NormalNavigation>();
         ani = GetComponent<Animator>();
         GetComponent<NavMeshAgent>().speed = 0.1f;
@@ -454,9 +460,11 @@ public class NormalZombie : NormalZombieData
     private IEnumerator DeathEnd()
     {
         int num_Zed = Random.Range(0, 100);
-        if (0 <= num_Zed && num_Zed < 5)
+        if (0 <= num_Zed && num_Zed < 95)
         {
             GameManager.instance.isZedTime = true;
+
+            photonView.RPC("SyncZedTime", RpcTarget.All);
         }   // if: 제드타임 발생
 
         int num_Ammo = Random.Range(0, 100);
@@ -476,6 +484,63 @@ public class NormalZombie : NormalZombieData
         yield return new WaitForSeconds(3);
 
         gameObject.SetActive(false);
+    }
+
+    [PunRPC]
+    private void SyncZed()
+    {
+        if (GameManager.instance.isZedTime && PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(ZedTime());
+        }
+    }
+
+    public IEnumerator ZedTime()
+    {
+        isZedTime = false;
+
+        float timeElapsed = 0.0f;
+
+        if (isZedTimeCheck == false)
+        {
+            while (timeElapsed < 0.5f)
+            {
+                timeElapsed += Time.deltaTime;
+
+                float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / 0.5f), 2);
+
+                Time.timeScale = Mathf.Lerp(1.0f, 0.2f, time);
+                volume.weight = Mathf.Lerp(0.0f, 1.0f, time);
+
+                yield return null;
+            }
+
+            isZedTimeCheck = true;
+        }
+        timeElapsed = 0.0f;
+
+        while (timeElapsed < 6.0 * 0.2f)
+        {
+            timeElapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        timeElapsed = 0.0f;
+
+        while (timeElapsed < 0.5f)
+        {
+            timeElapsed += Time.deltaTime;
+
+            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / 0.5f), 2);
+
+            Time.timeScale = Mathf.Lerp(0.2f, 1.0f, time);
+            volume.weight = Mathf.Lerp(1.0f, 0.0f, time);
+
+            yield return null;
+        }
+
+        isZedTimeCheck = false;
     }
 
     protected virtual (float, float, int) ZombieWalk()
