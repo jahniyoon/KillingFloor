@@ -95,7 +95,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             itemObject.transform.GetChild(2).GetComponent<Text>().text = "[" + i.Cost + " Coin]";
             itemObject.GetComponent<Image>().sprite = i.GetComponent<Image>().sprite;
             itemObject.GetComponent<Image>().preserveAspect = true;     // 이미지 종횡비 유지하도록 설정
-
             itemObject.transform.SetParent(ContentArea.transform);
         }
         //ITEM
@@ -115,6 +114,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+            GetItemPrices();                        // 아이템 가격 가져옴
 
             //ITEM
             //foreach (GameObject obj in EnableOnLogin) obj.SetActive(true);  // 유저 인벤토리 가져옴
@@ -273,6 +273,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
 
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+            GetItemPrices();                        // 아이템 가격 가져옴
 
             SetLocalPlayerData();
         },
@@ -555,6 +556,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void ExitStore_Panel()
     {
         Store_Panel.SetActive(false);
+    }
+
+    public void GetItemPrices()
+    {
+        GetCatalogItemsRequest request = new GetCatalogItemsRequest();
+        request.CatalogVersion = "Player Items Catalog";
+        PlayFabClientAPI.GetCatalogItems(request, result => 
+        {
+            List<CatalogItem> items = result.Catalog;
+            foreach(CatalogItem item in items)
+            {
+                uint cost = item.VirtualCurrencyPrices["CN"];
+                Debug.Log($"cost : {cost}");
+            }
+        }, 
+        error => { });
     }
     #endregion
 
