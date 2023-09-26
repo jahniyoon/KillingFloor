@@ -117,7 +117,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     // Start is called before the first frame update
     void Start()
     {
-
         GetPlayerData();
 
         // ToDO : 테스트씬으로 넘어오면 생성되도록 수정하기
@@ -128,16 +127,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     // 키보드 입력을 감지하고 룸을 나가게 함
     private void Update()
     {
-
         SetPlayer();
         shopPosition = shops[wave - 1];
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             LeaveServer();
-        }
-        if (isZedTime && PhotonNetwork.IsMasterClient)
-        {
-            Zed();
         }
     }
 
@@ -158,23 +152,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         currentZombieCount = _currentZombieCount;
     }
 
-    public void Zed()
-    {
-        photonView.RPC("MasterZedTime", RpcTarget.MasterClient);
-    }
-
-    [PunRPC]
-    public void MasterZedTime()
-    {
-        photonView.RPC("SyncZedTime", RpcTarget.All);
-    }
-
-    [PunRPC]
-    public void SyncZedTime()
-    {
-        StartCoroutine(ZedTime());
-    }
-
     public void SetPlayer()
     {
         //if(playerCount == PhotonNetwork.CurrentRoom.PlayerCount)
@@ -185,54 +162,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-
-    private IEnumerator ZedTime()
-    {
-        isZedTime = false;
-
-        float timeElapsed = 0.0f;
-
-        if (isZedTimeCheck == false)
-        {
-            while (timeElapsed < 0.5f)
-            {
-                timeElapsed += Time.deltaTime;
-
-                float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / 0.5f), 2);
-
-                Time.timeScale = Mathf.Lerp(1.0f, 0.2f, time);
-                volume.weight = Mathf.Lerp(0.0f, 1.0f, time);
-
-                yield return null;
-            }
-
-            isZedTimeCheck = true;
-        }
-        timeElapsed = 0.0f;
-
-        while (timeElapsed < 6.0 * 0.2f)
-        {
-            timeElapsed += Time.deltaTime;
-
-            yield return null;
-        }
-
-        timeElapsed = 0.0f;
-
-        while (timeElapsed < 0.5f)
-        {
-            timeElapsed += Time.deltaTime;
-
-            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / 0.5f), 2);
-
-            Time.timeScale = Mathf.Lerp(0.2f, 1.0f, time);
-            volume.weight = Mathf.Lerp(1.0f, 0.0f, time);
-
-            yield return null;
-        }
-
-        isZedTimeCheck = false;
-    }
     public void LeaveServer()
     {
         Cursor.visible = true;

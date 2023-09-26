@@ -97,12 +97,16 @@ public class PlayerMovement : MonoBehaviourPun
         //ssm
         shopNavList = new List<GameObject>();
         shopNavPrant = GameObject.Find("ShopNavigation");
-        for (int i = 0; i < 30; i++)
+        if (shopNavPrant != null)
         {
-            GameObject saveObj = Instantiate(shopNav, shopNavPrant.transform);
-            shopNavList.Add(saveObj);
-            shopNavList[i].SetActive(false);
+            for (int i = 0; i < 30; i++)
+            {
+                GameObject saveObj = Instantiate(shopNav, shopNavPrant.transform);
+                shopNavList.Add(saveObj);
+                shopNavList[i].SetActive(false);
+            }
         }
+      
         //ssm end
         input = GetComponent<PlayerInputs>();
         controller = GetComponent<CharacterController>();
@@ -413,8 +417,10 @@ public class PlayerMovement : MonoBehaviourPun
     public void shopNavSp()
     {
         //SSM 20230925 네비 소환
-
-        StartCoroutine(shopNavSpTime());
+        if (shopNavPrant != null)
+        {
+            StartCoroutine(shopNavSpTime());
+        }
         
         
         //SSM End
