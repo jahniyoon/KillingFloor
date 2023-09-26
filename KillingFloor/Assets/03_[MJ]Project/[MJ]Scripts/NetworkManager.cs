@@ -581,6 +581,39 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     //    },
     //    (error) => { Debug.Log("레벨 불러오지 못함"); }
     //    );
+    //// REGACY2:
+    //    RoomNumInfoText.text = PhotonNetwork.CurrentRoom.PlayerCount + "명 / " + PhotonNetwork.CurrentRoom.MaxPlayers + "최대 인원";
+    ////}
+    //void RoomRenewal()
+    //{
+    //    UserNickNameText.text = "";
+    //    ResetPlayerUI();
+
+    //    for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+    //    {
+
+    //        // 방 안의 UI 세팅
+    //        playerInfo[i + 1].gameObject.SetActive(true);
+    //        playerInfo[i + 1].nickName.text = PhotonNetwork.PlayerList[i].NickName;
+
+    //        for (int j = 0; j < PlayFabUserList.Count; j++)
+    //        {
+    //            if (PhotonNetwork.PlayerList[i].NickName == PlayFabUserList[j].DisplayName)
+    //            {
+    //                PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = PlayFabUserList[j].PlayFabId }, (result) =>
+    //                {
+    //                    Debug.Log(result.Data["HomeLevel"].Value);
+    //                    playerInfo[i+1].level.text = result.Data["HomeLevel"].Value;
+
+    //                    //Debug.Log(PhotonNetwork.PlayerList[i].NickName);
+    //                    Debug.Log($"playerInfo[i + 1].level: {playerInfo[i + 1].level.text}");
+    //                    //UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
+    //                },
+
+    //                (error) => Debug.Log("레벨 불러오지 못함"));
+    //            }
+    //        }
+    //    }
 
     //    RoomNumInfoText.text = PhotonNetwork.CurrentRoom.PlayerCount + "명 / " + PhotonNetwork.CurrentRoom.MaxPlayers + "최대 인원";
     //}
@@ -591,25 +624,31 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-
             // 방 안의 UI 세팅
-            playerInfo[i + 1].gameObject.SetActive(true);
-            playerInfo[i + 1].nickName.text = PhotonNetwork.PlayerList[i].NickName;
+            int playerIndex = i + 1; // 현재 플레이어 인덱스 저장
+
+            playerInfo[playerIndex].gameObject.SetActive(true);
+            playerInfo[playerIndex].nickName.text = PhotonNetwork.PlayerList[i].NickName;
 
             for (int j = 0; j < PlayFabUserList.Count; j++)
             {
                 if (PhotonNetwork.PlayerList[i].NickName == PlayFabUserList[j].DisplayName)
                 {
+                    int currentPlayerIndex = playerIndex; // 클로저에서 사용할 현재 플레이어 인덱스
+
                     PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = PlayFabUserList[j].PlayFabId }, (result) =>
                     {
-                        Debug.Log(result.Data["HomeLevel"].Value);
-                        playerInfo[i + 1].level.text = result.Data["HomeLevel"].Value;
-
-                        //Debug.Log(PhotonNetwork.PlayerList[i].NickName);
-                        Debug.Log($"playerInfo[i + 1].level: {playerInfo[i + 1].level.text}");
-                        //UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
+                        if (result.Data.ContainsKey("HomeLevel"))
+                        {
+                            string levelValue = result.Data["HomeLevel"].Value;
+                            playerInfo[currentPlayerIndex].level.text = levelValue;
+                            Debug.Log($"Player {currentPlayerIndex}의 레벨: {levelValue}");
+                        }
+                        else
+                        {
+                            Debug.Log($"Player {currentPlayerIndex}의 레벨 정보가 없습니다.");
+                        }
                     },
-
                     (error) => Debug.Log("레벨 불러오지 못함"));
                 }
             }
