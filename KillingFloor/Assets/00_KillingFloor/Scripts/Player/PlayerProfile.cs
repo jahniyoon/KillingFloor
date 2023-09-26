@@ -9,7 +9,7 @@ public class PlayerProfile : MonoBehaviour
     public TMP_Text nickName;
     public TMP_Text level;
     public TMP_Text className;
-    public Image classIcon;
+    public GameObject[] classIcon;
     public GameObject ready;
 
 

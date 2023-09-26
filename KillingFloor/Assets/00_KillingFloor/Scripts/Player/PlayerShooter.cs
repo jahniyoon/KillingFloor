@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using Photon.Pun;
 using Photon.Pun.Demo.Cockpit;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -107,6 +108,19 @@ public class PlayerShooter : MonoBehaviourPun
     [Range(0, 1)]
     public float animationIKAmount = 0.5f; // 애니메이션 중 IK 기본값
     public bool ikActive = false;
+
+    private void Awake()
+    {
+        switch(GameManager.instance.playerClass)
+        {
+            case "Commando":
+                weaponClass = WeaponClass.Commando;
+                break;
+            case "Demolitionist":
+                weaponClass = WeaponClass.Demolitionist;
+                break;
+        }    
+    }
 
     // Start is called before the first frame update
     void Start()

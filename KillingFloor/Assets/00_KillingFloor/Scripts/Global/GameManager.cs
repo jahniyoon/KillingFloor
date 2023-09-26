@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public string playerNickName;
     public string playerLevel;
+    public string playerClass;
 
     
 
@@ -72,6 +73,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
+        GetPlayerData();    // 로컬 플레이어 데이터 가져오기
 
         PhotonNetwork.AutomaticallySyncScene = true;
 
@@ -110,7 +112,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        GetPlayerData();
 
         // ToDO : 테스트씬으로 넘어오면 생성되도록 수정하기
 
@@ -179,6 +180,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log("플레이어 데이터" + NetworkManager.instance.localPlayerName + "" + NetworkManager.instance.localPlayerLv);
         playerNickName = string.Format(NetworkManager.instance.localPlayerName);
         playerLevel = string.Format(NetworkManager.instance.localPlayerLv);
+        playerClass = NetworkManager.instance.localPlayerClass;
 
     }
 

@@ -18,6 +18,7 @@ public class PlayerInfoUI : MonoBehaviourPun
     public string nickName;
     public TMP_Text playerLevel;
     public string level;
+    public TMP_Text playerClass;
     public Slider armor;
     public Slider health;
     public TMP_Text healtHUD;
@@ -65,6 +66,7 @@ public class PlayerInfoUI : MonoBehaviourPun
     {
         nickName = GameManager.instance.playerNickName;
         level = GameManager.instance.playerLevel;
+        playerClass.text = GameManager.instance.playerClass;
 
         photonView.RPC("DataProcessOnServer", RpcTarget.All, nickName, level);
         PlayerUIManager.instance.SetLevel(level);
