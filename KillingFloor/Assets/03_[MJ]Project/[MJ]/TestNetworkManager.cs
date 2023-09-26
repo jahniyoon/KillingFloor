@@ -9,13 +9,12 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.UI;
 using System;
 
-public class NetworkManager : MonoBehaviourPunCallbacks
+public class TestNetworkManager : MonoBehaviourPunCallbacks
 {
-    public static NetworkManager instance;
+    public static TestNetworkManager instance;
 
     public GameObject Lang_Panel, Room_Panel, UserRoom_Panel, Lobby_Panel, Login_Panel, Store_Panel, Lobby_Screen, Option_Panel;
 
-    [Header("Player")]
     public string localPlayerName = default;
     public string localPlayerLv = default;
 
@@ -37,21 +36,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [Header("Store")]
     public Text CoinsValueText;
     public Text StarsValueText;
+
     public int coins = default;
     public int stars = default;
 
-    public ItemToBuy[] Items;
-    public GameObject[] EnableOnLogin;
+    bool isLoaded;
+    int readyCheck = -1;
+    int readyCount = 0;
 
     public enum State { Login, Lobby, Room, Store, Option };
     [Header("Lobby UI")]
     public State state;
     public Image[] buttonBackGround;    // 로비 버튼 선택여부
     public PlayerProfile[] playerInfo;
-
-    bool isLoaded;
-    int readyCheck = -1;
-    int readyCount = 0;
 
     void Awake()
     {
@@ -757,7 +754,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.LoadLevel("Main");
+            PhotonNetwork.LoadLevel("MainLoad");
         }
     }
     public void OnLevelTestScene()
