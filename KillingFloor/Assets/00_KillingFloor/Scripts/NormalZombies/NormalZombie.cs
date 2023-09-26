@@ -24,7 +24,7 @@ public class NormalZombie : NormalZombieData
     public GameObject skillPrefab;
     public GameObject ammoPrefab;
 
-    public Volume volume;
+    public VolumeController volume;
 
     private float timeElapsed;
 
@@ -51,7 +51,7 @@ public class NormalZombie : NormalZombieData
 
     private void Awake()
     {
-        volume = GameObject.Find("Global Volume").GetComponent<Volume>();
+        volume = GameObject.Find("Global Volume").GetComponent<VolumeController>();
         navigation = GetComponent<NormalNavigation>();
         ani = GetComponent<Animator>();
         GetComponent<NavMeshAgent>().speed = 0.1f;
@@ -464,7 +464,10 @@ public class NormalZombie : NormalZombieData
         {
             GameManager.instance.isZedTime = true;
 
-            photonView.RPC("SyncZedTime", RpcTarget.All);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                volume.isZedTime = true;
+            }
         }   // if: 제드타임 발생
 
         int num_Ammo = Random.Range(0, 100);
@@ -484,63 +487,6 @@ public class NormalZombie : NormalZombieData
         yield return new WaitForSeconds(3);
 
         gameObject.SetActive(false);
-    }
-
-    [PunRPC]
-    private void SyncZed()
-    {
-        if (GameManager.instance.isZedTime && PhotonNetwork.IsMasterClient)
-        {
-            StartCoroutine(ZedTime());
-        }
-    }
-
-    public IEnumerator ZedTime()
-    {
-        isZedTime = false;
-
-        float timeElapsed = 0.0f;
-
-        if (isZedTimeCheck == false)
-        {
-            while (timeElapsed < 0.5f)
-            {
-                timeElapsed += Time.deltaTime;
-
-                float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / 0.5f), 2);
-
-                Time.timeScale = Mathf.Lerp(1.0f, 0.2f, time);
-                volume.weight = Mathf.Lerp(0.0f, 1.0f, time);
-
-                yield return null;
-            }
-
-            isZedTimeCheck = true;
-        }
-        timeElapsed = 0.0f;
-
-        while (timeElapsed < 6.0 * 0.2f)
-        {
-            timeElapsed += Time.deltaTime;
-
-            yield return null;
-        }
-
-        timeElapsed = 0.0f;
-
-        while (timeElapsed < 0.5f)
-        {
-            timeElapsed += Time.deltaTime;
-
-            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / 0.5f), 2);
-
-            Time.timeScale = Mathf.Lerp(0.2f, 1.0f, time);
-            volume.weight = Mathf.Lerp(1.0f, 0.0f, time);
-
-            yield return null;
-        }
-
-        isZedTimeCheck = false;
     }
 
     protected virtual (float, float, int) ZombieWalk()

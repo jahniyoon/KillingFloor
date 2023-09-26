@@ -333,6 +333,7 @@ MonoBehaviour:
   skillPrefab: {fileID: 0}
   ammoPrefab: {fileID: 6384981777947841841, guid: cda61820b7a633744a242523bf5385d9,
     type: 3}
+  volume: {fileID: 0}
   hitPos: 0
   isCoroutine: 0
 --- !u!114 &7207939716731105052
