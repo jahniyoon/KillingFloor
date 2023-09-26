@@ -140,7 +140,8 @@ public class PlayerMovement : MonoBehaviourPun
         }
         if (GameManager.instance.isShop == true)
         {
-            shopNavSp();
+            photonView.RPC("shopNavSp", RpcTarget.All);
+       
         }
     }
 
@@ -409,6 +410,7 @@ public class PlayerMovement : MonoBehaviourPun
 
 
     }
+    [PunRPC]
     public void shopNavSp()
     {
         //SSM 20230925 네비 소환

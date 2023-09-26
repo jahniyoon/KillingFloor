@@ -2780,6 +2780,7 @@ MonoBehaviour:
   ammo: 6
   remainingAmmo: 60
   magazineSize: 6
+  maxAmmo: 60
   gunAudio: {fileID: 8300000, guid: e47e6a3fc7e2a81459f76244208a1cd5, type: 3}
   reloadAudio: {fileID: 8300000, guid: aeb5e01a260114f4391089be7ca23888, type: 3}
   emptyAudio: {fileID: 8300000, guid: 1e3cfaa883eff6e428f66cbaf902eaf3, type: 3}
@@ -4482,6 +4483,7 @@ MonoBehaviour:
   nickName: 
   playerLevel: {fileID: 6022182744024792868}
   level: 
+  playerClass: {fileID: 0}
   armor: {fileID: 7725070845473741932}
   health: {fileID: 623305403731852907}
   healtHUD: {fileID: 0}
@@ -29532,6 +29534,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.0687
       objectReference: {fileID: 0}
+    - target: {fileID: 7086628792285652324, guid: 0fa02354478e5be44955a56a2e62eb6f,
+        type: 3}
+      propertyPath: maxAmmo
+      value: 70
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fa02354478e5be44955a56a2e62eb6f, type: 3}
 --- !u!114 &886400307266168519 stripped
@@ -29618,6 +29625,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AR-15 Varmint Rifle
+      objectReference: {fileID: 0}
+    - target: {fileID: 7090261006208403283, guid: e98ac4d37b602a748b93db85a4e3e987,
+        type: 3}
+      propertyPath: maxAmmo
+      value: 240
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e98ac4d37b602a748b93db85a4e3e987, type: 3}

@@ -45,6 +45,12 @@ public class ItemObject : MonoBehaviour
         // 플레이어가 근처에 있으면
         if(player.CompareTag("Player"))
         {
+            value =(int)player.GetComponent<PlayerShooter>().equipedWeapon.magazineSize;
+            if((int)player.GetComponent<PlayerShooter>().equipedWeapon.maxAmmo < value + (int)player.GetComponent<PlayerShooter>().equipedWeapon.remainingAmmo)
+            {
+                value = (int)player.GetComponent<PlayerShooter>().equipedWeapon.maxAmmo - (int)player.GetComponent<PlayerShooter>().equipedWeapon.remainingAmmo;
+            }
+
             input = player.GetComponent<PlayerInputs>();
             shooter = player.GetComponent<PlayerShooter>(); 
             PlayerUIManager.instance.equipUI.SetActive(true);

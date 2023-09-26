@@ -51,9 +51,9 @@ public class BossController : MonoBehaviourPun
         meteorFattern = new float[] { 2000, 1000, 0, -10, -10, -10 };
         meteors = new GameObject[4];
         meteor = GameObject.Find("Meteor");
+      
 
-
-
+      
         for (int i = 0; i <= 1; i++) // 메테오 배열에 저장하는과정
         {
             meteors[i] = meteor.transform.GetChild(i).gameObject;
@@ -109,8 +109,9 @@ public class BossController : MonoBehaviourPun
         {
             randPlayerNum = Random.Range(0, targetPlayer.Length);
         }
+        bossHp = bossHp + (1000 * targetPlayer.Length);
 
-   
+
     }
 
     void Update()
@@ -149,6 +150,12 @@ public class BossController : MonoBehaviourPun
         currentTime += Time.deltaTime;
         if (currentTime >= setTime)
         {
+          
+
+            if (targetPlayer[randPlayerNum].GetComponent<PlayerHealth>().dead)
+            {
+                changeplayerlook();
+            }
 
             NavMeshPath path = new NavMeshPath();
             agent.CalculatePath(targetPlayer[randPlayerNum].transform.position, path);
@@ -459,12 +466,12 @@ public class BossController : MonoBehaviourPun
     // 타겟변경
     public void changeplayerlook()
     {
+       
         List<int> playerNumber = new List<int>();
         targetPlayer = GameObject.FindGameObjectsWithTag("Player");
         for(int i=0; i < targetPlayer.Length; i++)
-        {
-            float hp = targetPlayer[i].GetComponent<LivingEntity>().health;
-            if(hp > 0)
+        {            
+            if(!targetPlayer[i].GetComponent<PlayerHealth>().dead)
             {
                 playerNumber.Add(i);
             }

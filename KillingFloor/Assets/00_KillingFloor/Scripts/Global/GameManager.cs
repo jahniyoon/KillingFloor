@@ -247,6 +247,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         else
         {
             PlayerUIManager.instance.SetEndNotice("Wave Clear");
+//=======
+//        isShop = true;
+//        OnRespawn();    // 상점이 열리면 리스폰 해주기
+     
+//        PlayerUIManager.instance.SetEndNotice("Wave Clear");
+//>>>>>>> origin/feature/ssm
         PlayerUIManager.instance.SetNoticeLogo("Go to Shop");
         }
 

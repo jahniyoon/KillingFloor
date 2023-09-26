@@ -67,6 +67,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         //지환 : 플레이어들의 씬 씽크 맞추기
         PhotonNetwork.AutomaticallySyncScene = true;
     }
+    public void Update()
+    {
+        if (state == State.Room)
+        {
+            StartCoroutine("RoomRenewalCoroutine"); // 1초마다 업데이트
+        }
+
+    }
+    IEnumerator RoomRenewalCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+        RoomRenewal();
+    }
 
     #region 플레이팹
     // 이메일 충족 조건 : '@', '.' 이 있어야함
