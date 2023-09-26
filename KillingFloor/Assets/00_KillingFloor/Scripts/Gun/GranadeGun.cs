@@ -34,7 +34,7 @@ public class GranadeGun : MonoBehaviourPun
    
     private void OnTriggerEnter(Collider other)
     {
-       Debug.Log(other.transform.name);
+       
         grenade.SetActive(false);
         explosion.Play();
         explosionSound.Play();
