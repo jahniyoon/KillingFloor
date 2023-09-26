@@ -98,14 +98,13 @@ MonoBehaviour:
   - SyncNum
   - OnReadyCheck
   - OnStartCheck
-<<<<<<< HEAD
   - BuyAmmoProcessOnServer
   - SyncBuyAmmo
-=======
   - MasterParent
   - SyncParent
   - SyncZed
->>>>>>> origin/feature/junoh
+  - MasterParent
+  - SyncParent
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
