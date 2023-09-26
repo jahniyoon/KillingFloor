@@ -11,6 +11,7 @@ TagManager:
   - Boss
   - Item
   - FxTemporaire
+  - Inspector CAM
   layers:
   - Default
   - TransparentFX

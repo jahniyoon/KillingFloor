@@ -27,7 +27,7 @@ public class NavShop : MonoBehaviour
             if (shopObj != null)
             {
                 agent.SetDestination(shopObj.transform.position);
-                Debug.Log("네비 상대 위치 " + targetDistance);
+                //Debug.Log("네비 상대 위치 " + targetDistance);
                 if (targetDistance <= 1f)
                 {
                     gameObject.SetActive(false);

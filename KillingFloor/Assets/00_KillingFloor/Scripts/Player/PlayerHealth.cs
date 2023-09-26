@@ -98,14 +98,62 @@ public class PlayerHealth : LivingEntity
     {
      
         base.Die();
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         playerInfo.state = PlayerInfoUI.State.Die;
         playerCamera.SetCamera();
+        
+        
+        Invoke("PlayerDisable", 3f);
+
         playerAnimator.SetBool("isDead", true);
-        Invoke("Respawn",3f);
+
+        // 죽으면 마스터에게 죽었다고 알림
+        photonView.RPC("DieProcessOnServer", RpcTarget.MasterClient);
+        //Invoke("Respawn",3f);
     }
+    public void PlayerDisable()
+    {
+        // 게임 오버 상태가 아니면
+        if (!GameManager.instance.isGameover)
+        {
+            for (int i = 0; i <= GameManager.instance.targetPlayer.Length; i++)
+            {
+                
+                // 누군가 살아있으면
+                if (GameManager.instance.targetPlayer[i].GetComponent<PlayerHealth>().dead == false)
+                {
+                    playerInfo.ResetScreen();
+                    playerCamera.InspectorCam(GameManager.instance.targetPlayer[i]);
+                    break;
+                }
+            }
+        }
+
+        transform.position = new Vector3(0, -100, 0);
+    }
+    [PunRPC]
+    public void DieProcessOnServer()
+    {
+        // 마스터는 죽은 사람의 수를 계산하고 보내줌
+        int dieCount = GameManager.instance.playerDieCount + 1;
+        photonView.RPC("DieSync", RpcTarget.All, dieCount);
+    }
+    [PunRPC]
+    public void DieSync(int _dieCount)
+    {
+        GameManager.instance.playerDieCount = _dieCount;
+
+        // 만약 지금 있는 플레이어보다 카운트가 높거나 같으면 게임오버 실행
+        if(GameManager.instance.playerDieCount >= GameManager.instance.targetPlayer.Length)
+        {
+            GameManager.instance.OnGameOver();
+        }
+    }
+
     public void Respawn()
     {
-        gameObject.SetActive(false);
 
         // 죽으면 리스폰 시키기
         if (photonView.IsMine)

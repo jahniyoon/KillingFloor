@@ -8,8 +8,9 @@ using UnityEngine.Rendering;
 using static UnityEngine.Rendering.DebugUI;
 using PlayFab.ClientModels;
 using PlayFab;
+using Photon.Pun.Demo.Cockpit;
 
-public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
+public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager instance
     {
@@ -30,17 +31,20 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public GameObject playerPrefab; // 생성할 플레이어 캐릭터 프리팹
     public Vector3 spawnPosition;   // 플레이어 스폰 포지션
-    private GameObject[] targetPlayer; //플레이어 리스트
-
+    public GameObject[] targetPlayer; //플레이어 리스트
     public bool isGameover { get; private set; } // 게임 오버 상태
     public bool inputLock;  // 입력을 받을 수 있는 상태. true면 락이 걸려 입력 불가
 
     public Transform shopPosition; // 매 웨이브 업데이트되는 상점의 트랜스폼
-    public int playerCount;
+    public int playerDieCount;
     [Header("Game Info")]
 
     public string playerNickName;
     public string playerLevel;
+
+    
+
+
 
     // 지환 추가
 
@@ -99,20 +103,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         //newPlayer.transform.SetParent(GameObject.Find("Players").transform);
 
     }
-
-    //private void Awake()
-    //{
-    //    // 씬에 싱글톤 오브젝트가 된 다른 GameManager 오브젝트가 있다면
-    //    if (instance != this)
-    //    {
-    //        // 자신을 파괴
-    //        Destroy(gameObject);
-    //    }
-    //    if (instance == null)
-    //    { instance = this; }
-    //    else
-    //    { GlobalFunc.LogWarning("씬에 두 개 이상의 게임 매니저가 존재합니다."); }
-    //}
 
     // Start is called before the first frame update
     void Start()
@@ -180,27 +170,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         SceneManager.LoadScene("LoginScene");
     }
 
-
-    // 주기적으로 자동 실행되는, 동기화 메서드
-    // ToDo : 좀비 웨이브, 좀비 카운트 등 업데이트 필요하면 부탁해요
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        // 로컬 오브젝트라면 쓰기 부분이 실행됨
-        if (stream.IsWriting)
-        {
-            // 네트워크를 통해 round 값을 보내기
-            //stream.SendNext(currentZombieCount);
-        }
-        else
-        {
-            // 리모트 오브젝트라면 읽기 부분이 실행됨         
-
-            // 네트워크를 통해 score 값 받기
-            //currentZombieCount = (int)stream.ReceiveNext();
-            // 동기화하여 받은 점수를 UI로 표시
-        }
-
-    }
     // 지환 추가
     public void GetPlayerData()
     {
@@ -260,6 +229,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     private IEnumerator ChangeWave()
     {
         isShop = true;
+        OnRespawn();    // 상점이 열리면 리스폰 해주기
 
         PlayerUIManager.instance.SetEndNotice("Wave Clear");
         PlayerUIManager.instance.SetNoticeLogo("Go to Shop");
@@ -291,4 +261,32 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         StartCoroutine(StartWave());
     }
     // Junoh 추가
+
+    public void OnRespawn()
+    {
+        if(!isGameover)
+        {
+            // 죽은사람 카운트 초기화
+            playerDieCount = 0;
+
+            for (int i = 0 ; i <= targetPlayer.Length; i++)
+            {
+                PlayerHealth player = targetPlayer[i].GetComponent<PlayerHealth>();
+                // 플레이어가 죽었을 경우 리스폰 시켜주기
+                if (player.dead)
+                {
+                    player.Respawn();
+                }
+            }
+        }
+
+    }
+
+    public void OnGameOver()
+    {
+        isGameover = true;
+        PlayerUIManager.instance.gameOverUI.SetActive(true);
+        PlayerUIManager.instance.leaveButton.SetActive(true);
+        Debug.Log("게임오버");
+    }
 }

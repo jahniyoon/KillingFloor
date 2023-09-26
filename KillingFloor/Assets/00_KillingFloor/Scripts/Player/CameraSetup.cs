@@ -1,5 +1,6 @@
 using Cinemachine; // 시네머신 관련 코드
 using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine;
 
 // 시네머신 카메라가 로컬 플레이어를 추적하도록 설정
@@ -9,6 +10,7 @@ public class CameraSetup : MonoBehaviourPun
     PlayerMovement playerMovement;
     GameObject fpsCam;
     GameObject tpsCam;
+    GameObject inspectorCam;
     public CinemachineVirtualCamera followCam; // 현재 카메라
     public GameObject tpsPlayerBody;    // 3인칭 플레이어 바디
     public GameObject fpsPlayerBody;    // 1인칭 플레이어 바디
@@ -32,9 +34,11 @@ public class CameraSetup : MonoBehaviourPun
             tpsCam.transform.parent = this.transform;
             fpsCam = GameObject.FindWithTag("FPS CAM");
             fpsCam.transform.parent = this.transform;
+            inspectorCam = GameObject.FindWithTag("Inspector CAM");
             playerSpine = this.transform.GetChild(1).gameObject;
             playerSpine.SetActive(false);               // 3인칭 총도 꺼주기
             tpsCam.SetActive(false);                    // 3인칭은 미리 꺼두기 (Debug용)
+            inspectorCam.SetActive(false);
 
             followCam = fpsCam.GetComponent<CinemachineVirtualCamera>();    // FPS 카메라를 팔로우캠으로 설정
             playerMovement.followCamera = followCam;
@@ -69,6 +73,7 @@ public class CameraSetup : MonoBehaviourPun
 
     public void SetCamera()
     {
+        inspectorCam.SetActive(false);
         tpsCam.SetActive(isFPS);
         fpsCam.SetActive(!isFPS);
         tpsPlayerBody.SetActive(isFPS);
@@ -87,6 +92,19 @@ public class CameraSetup : MonoBehaviourPun
         CameraSet(followCam);
     }
 
+    public void InspectorCam(GameObject _player)
+    {
+        tpsCam.SetActive(false);
+        fpsCam.SetActive(false);
+        tpsPlayerBody.SetActive(true);
+        fpsPlayerBody.SetActive(false);
+
+        inspectorCam.SetActive(true);
+        followCam = inspectorCam.GetComponent<CinemachineVirtualCamera>();
+        followCam.Follow = _player.GetComponent<PlayerMovement>().cinemachineCameraTarget.transform;
+        followCam.LookAt = _player.GetComponent<PlayerMovement>().cinemachineCameraTarget.transform;
+
+    }
     public void TPSTest()
     {
         tpsCam.SetActive(isFPS);

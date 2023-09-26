@@ -51,6 +51,8 @@ public class PlayerUIManager : MonoBehaviour
     public bool isShopState;
     public bool isPauseState;
 
+    public GameObject gameOverUI;
+    public GameObject leaveButton;
 
     // 코인 증가효과 계산용 변수
     private int coin;
