@@ -3427,6 +3427,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 448970944}
   m_CullTransparentMesh: 1
+--- !u!1 &461199395 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7182268278723101105, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1105187119}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &463258637
 GameObject:
   m_ObjectHideFlags: 0
@@ -7773,8 +7779,13 @@ MonoBehaviour:
   StarsValueText: {fileID: 1031385535}
   coins: 0
   stars: 0
-  Items: []
-  EnableOnLogin: []
+  Items:
+  - {fileID: 3390553670332517953, guid: d3a54a5e1b008454b8075ba45e7d0585, type: 3}
+  - {fileID: 6602614885980759347, guid: 4a39cacff396d9743a5f9e37303adf73, type: 3}
+  - {fileID: 9118345387016695962, guid: 9108a6123a5c09e49a5e93239b2ca986, type: 3}
+  - {fileID: 561756328943057700, guid: 363c06886e3f9f24e92217be9eef0cfb, type: 3}
+  ContentArea: {fileID: 461199395}
+  ItemObj: {fileID: 3390553670332517957, guid: d3a54a5e1b008454b8075ba45e7d0585, type: 3}
   state: 0
   buttonBackGround:
   - {fileID: 1288910790}
@@ -9884,16 +9895,56 @@ PrefabInstance:
     - target: {fileID: 710481800074263219, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3133224434725596605, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4129280951928062643, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5043266857411578636, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5721197251570088785, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5721197251570088785, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523878529533280092, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523878529533280092, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
+        type: 3}
+      propertyPath: m_ChildControlWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523878529533280092, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
+        type: 3}
+      propertyPath: m_ChildForceExpandWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523878529533280092, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
+        type: 3}
+      propertyPath: m_ChildForceExpandHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7182268278723101105, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
+        type: 3}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
