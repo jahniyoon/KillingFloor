@@ -5,26 +5,33 @@ using PlayFab;
 using PlayFab.ClientModels;
 using System;
 
+[System.Serializable]
 public class ItemToBuy : MonoBehaviour
 {
-    public int coinPrice;
-    public string itemName;
+    //[Mijeong] 230926 Store Test
+    public string Name;
+    public int Cost;
+    public int GainPerSecond;
 
-    public void BuyItem()
-    {
-        var request = new SubtractUserVirtualCurrencyRequest { VirtualCurrency = "CN", Amount = coinPrice };
-        PlayFabClientAPI.SubtractUserVirtualCurrency(request, OnSubtractCoinsSuccess, OnError);
-    }
+    //LEGACY:
+    //public int coinPrice;
+    //public string itemName;
 
-    void OnSubtractCoinsSuccess(ModifyUserVirtualCurrencyResult result)
-    {
-        Debug.Log("Bought Item: " + itemName);
+    //public void BuyItem()
+    //{
+    //    var request = new SubtractUserVirtualCurrencyRequest { VirtualCurrency = "CN", Amount = coinPrice };
+    //    PlayFabClientAPI.SubtractUserVirtualCurrency(request, OnSubtractCoinsSuccess, OnError);
+    //}
 
-        NetworkManager.instance.GetVirtualCurrencies();
-    }
+    //void OnSubtractCoinsSuccess(ModifyUserVirtualCurrencyResult result)
+    //{
+    //    Debug.Log("Bought Item: " + itemName);
 
-    void OnError(PlayFabError error)
-    {
-        Debug.Log("Error: " + error.ErrorMessage);
-    }
+    //    NetworkManager.instance.GetVirtualCurrencies();
+    //}
+
+    //void OnError(PlayFabError error)
+    //{
+    //    Debug.Log("Error: " + error.ErrorMessage);
+    //}
 }

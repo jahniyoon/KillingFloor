@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -7773,6 +7773,8 @@ MonoBehaviour:
   StarsValueText: {fileID: 1031385535}
   coins: 0
   stars: 0
+  Items: []
+  EnableOnLogin: []
   state: 0
   buttonBackGround:
   - {fileID: 1288910790}
@@ -9744,6 +9746,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1718345587}
     m_Modifications:
+    - target: {fileID: 118147511623461735, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 118147511623461735, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 118147511623461735, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -17
+      objectReference: {fileID: 0}
     - target: {fileID: 710481798734219538, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -9868,6 +9885,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5721197251570088785, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5721197251570088785, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c3f22a90ce34aa4c90eef95d5d27f6a, type: 3}
