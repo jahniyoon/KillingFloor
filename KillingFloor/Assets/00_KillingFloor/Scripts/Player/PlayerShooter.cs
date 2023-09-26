@@ -308,7 +308,7 @@ public class PlayerShooter : MonoBehaviourPun
         Vector3 cameraForward = cameraSet.followCam.transform.forward;
         Vector3 cameraPosition = cameraSet.followCam.transform.position;
         // 카메라는 각자 가지고있으므로 카메라값도 함께 전달
-        Debug.Log(photonView.ViewID + "마스터에게 사격 요청");
+        //Debug.Log(photonView.ViewID + "마스터에게 사격 요청");
        
           
         photonView.RPC("ShotProcessOnServer", RpcTarget.MasterClient, cameraForward, cameraPosition);
@@ -370,10 +370,7 @@ public class PlayerShooter : MonoBehaviourPun
             hitPoint = hit.point;
             isParticleTrigger = true;
         }
-        // 안닿으면 최대거리를 히트포인트로
-        //else
-        //{ hitPoint = cameraSet.followCam.transform.forward * range; }
-
+        
         // 발사처리를 마스터에게 위임
         if (hitObj != null)
         {
@@ -385,19 +382,19 @@ public class PlayerShooter : MonoBehaviourPun
         Vector3 hitNormal = hit.normal;
         int viewID = 999999;    // null 값을 알기위한 임의의 숫자
 
-        Debug.Log("좀비류에 닿았나? " + hitTransformRoot);
+        //Debug.Log("좀비류에 닿았나? " + hitTransformRoot);
 
         if (hitTransformRoot != null)
         {
             var nearestBone = GetNearestObject(hitTransformRoot, hitPoint);
             if(nearestBone)
-            Debug.Log("뼈가 있나? : " + nearestBone);
+            //Debug.Log("뼈가 있나? : " + nearestBone);
 
             if (nearestBone.gameObject.GetPhotonView() == null)
             {
                 for (int i = 0; i < 20; i++)
                 {
-                    Debug.Log("포톤뷰가 없다. 상위로 전환 : " + nearestBone);
+                    //Debug.Log("포톤뷰가 없다. 상위로 전환 : " + nearestBone);
                     nearestBone = nearestBone.parent;
                     if(nearestBone.gameObject.GetPhotonView() != null)
                     {
@@ -414,7 +411,7 @@ public class PlayerShooter : MonoBehaviourPun
             {   
                
                 viewID = nearestBone.gameObject.GetPhotonView().ViewID;
-                Debug.Log("ViewID 부여 : " + viewID);
+                //Debug.Log("ViewID 부여 : " + viewID);
             }
         }
         // 이펙트 재생 코루틴을 랩핑
@@ -457,11 +454,11 @@ public class PlayerShooter : MonoBehaviourPun
     // 발사 이펙트와 소리를 재생하고 총알 궤적을 그린다.
     private IEnumerator ShotEffect(Vector3 _hitPosition, Vector3 _hitNormal, float _angle, int _viewID, bool _blood, bool _bullet)
     {
-        Debug.Log("모두 이펙트를 실행한다.");
+        //Debug.Log("모두 이펙트를 실행한다.");
 
         if (_bullet)
         {
-            Debug.Log("총알자국 파티클 생성");
+            //Debug.Log("총알자국 파티클 생성");
 
             // 총알 자국 파티클 생성
             ParticleSystem _bulletHoleParticle = bulletHole;
@@ -471,7 +468,7 @@ public class PlayerShooter : MonoBehaviourPun
         }
         if(_blood)
         {
-            Debug.Log("블러드 생성");
+            //Debug.Log("블러드 생성");
             bloodFX.OnBloodEffect(_hitPosition, _angle, _hitNormal, _viewID);
             isBloodTrigger = false;
         }
@@ -600,6 +597,7 @@ public class PlayerShooter : MonoBehaviourPun
         if (_hitObj.transform.GetComponent<HitPoint>() == null && _hitObj.transform.GetComponent<PlayerDamage>() != null)
         {
             playerHealth.GetCoin(100);  // Debug 디버그용 재화 획득
+            playerHealth.ExpUp(8);
             _hitObj.transform.GetComponent<PlayerDamage>().OnDamage(); // RPC 확인 디버그용
             return;
         }
@@ -619,6 +617,7 @@ public class PlayerShooter : MonoBehaviourPun
                 {
                     // 코인 먹이고
                     playerHealth.GetCoin(_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin);
+                    playerHealth.ExpUp(_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin);
 
                     // 코인값 초기화
                     _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin = 0;

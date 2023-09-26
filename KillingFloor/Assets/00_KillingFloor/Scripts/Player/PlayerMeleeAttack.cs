@@ -38,7 +38,7 @@ public class PlayerMeleeAttack : MonoBehaviourPun
             {
                 for (int i = 0; i < 20; i++)
                 {
-                    Debug.Log("포톤뷰가 없다. 상위로 전환 : " + hitTransform);
+                    //Debug.Log("포톤뷰가 없다. 상위로 전환 : " + hitTransform);
                     hitTransform = hitTransform.parent;
                     if (hitTransform.gameObject.GetPhotonView() != null)
                     {
@@ -87,6 +87,8 @@ public class PlayerMeleeAttack : MonoBehaviourPun
                 {
                     // 코인 먹이고
                     playerHealth.GetCoin(_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin);
+                    playerHealth.ExpUp(_hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin);
+
 
                     // 코인값 초기화
                     _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin = 0;

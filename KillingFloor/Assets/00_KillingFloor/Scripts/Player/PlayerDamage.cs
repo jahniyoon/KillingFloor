@@ -19,7 +19,7 @@ public class PlayerDamage : MonoBehaviourPun
     public void OnDamage()
     {
         // 마스터에게 데미지 계산 요청
-        Debug.Log("데미지 계산요청" + photonView.ViewID);
+        //Debug.Log("데미지 계산요청" + photonView.ViewID);
 
         photonView.RPC("MasterDamage", RpcTarget.MasterClient, destroyCount);
     }
@@ -28,7 +28,7 @@ public class PlayerDamage : MonoBehaviourPun
     [PunRPC]
     public void MasterDamage(int _destroyCount)
     {
-        Debug.Log("마스터 모두에게 데미지 업데이트 요청" );
+        //Debug.Log("마스터 모두에게 데미지 업데이트 요청" );
 
         // 5번 데미지 요청 받으면 파괴도록하기위해 카운트 1 증가
         int newDestroyCount = _destroyCount + 1;
@@ -45,7 +45,7 @@ public class PlayerDamage : MonoBehaviourPun
 
         if (5 < destroyCount)
         {
-            Debug.Log("게임오브젝트 제거");
+            //Debug.Log("게임오브젝트 제거");
             PhotonNetwork.Destroy(gameObject);
         }
     }

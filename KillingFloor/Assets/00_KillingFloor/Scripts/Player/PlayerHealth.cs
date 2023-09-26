@@ -4,6 +4,8 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 using UnityEngine.Windows;
+using static Cinemachine.DocumentationSortingAttribute;
+using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerHealth : LivingEntity
 {
@@ -21,6 +23,7 @@ public class PlayerHealth : LivingEntity
         playerShooter = GetComponent<PlayerShooter>();
         playerInfo = GetComponent<PlayerInfoUI>();
         playerCamera = GetComponent<CameraSetup>();
+        
     }
 
     protected override void OnEnable()
@@ -29,6 +32,7 @@ public class PlayerHealth : LivingEntity
         base.OnEnable();
 
         // 플레이어 조작을 받는 컴포넌트들 활성화
+        level =int.Parse(NetworkManager.instance.localPlayerLv);
         playerMovement.enabled = true;
         playerShooter.enabled = true;
         playerAnimator.SetBool("isDead", false);
@@ -76,6 +80,19 @@ public class PlayerHealth : LivingEntity
     {
         base.RestoreArmor(newArmor);
         playerInfo.SetArmor(armor);
+    }
+
+    [PunRPC]
+    public override void ExpUp(int value)
+    {
+        base.ExpUp(value);
+        playerInfo.SetExp(exp);
+        playerInfo.SetLevel(level);
+    }
+    public override void LevelUp()
+    {
+        base.LevelUp();
+        NetworkManager.instance.SetData(string.Format("{0}", level));
     }
 
     // 코인 획득

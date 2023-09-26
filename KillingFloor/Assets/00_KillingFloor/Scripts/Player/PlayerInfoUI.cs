@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static Cinemachine.DocumentationSortingAttribute;
+using WebSocketSharp;
 
 public class PlayerInfoUI : MonoBehaviourPun
 {
@@ -25,10 +26,12 @@ public class PlayerInfoUI : MonoBehaviourPun
 
     public Slider armor;
     public Slider health;
+    public Slider exp;
 
     public TMP_Text healtHUD;
     public TMP_Text armorHUD;
     public TMP_Text coinHUD;
+    public TMP_Text levelHUD;
 
     public float playerHealth;  // 블러드스크린에 영향을 주기위한 플레이어의 체력
     public Image bloodScreen;   // 피 데미지 스크린
@@ -52,6 +55,8 @@ public class PlayerInfoUI : MonoBehaviourPun
             healtHUD = PlayerUIManager.instance.hpText;
             armorHUD = PlayerUIManager.instance.shiedldText;
             coinHUD = PlayerUIManager.instance.coinText;
+            levelHUD = PlayerUIManager.instance.playerLevel;
+            exp = PlayerUIManager.instance.expSlider;
             bloodScreen = PlayerUIManager.instance.bloodScreen;
             poisonScreen = PlayerUIManager.instance.poisonScreen;   
         }
@@ -114,19 +119,21 @@ public class PlayerInfoUI : MonoBehaviourPun
     {
         playerNickname.text = string.Format("{0}", name);
     }
-    public void SetLevel(int level)
+    public void SetLevel(int _level)
     {
-        playerLevel.text = string.Format("{0}", level);
+        playerLevel.text = string.Format("{0}", _level);
+        level = string.Format("{0}", _level);
+        levelHUD.text = string.Format("{0}", _level);
     }
-    public void SetClass(string playerClass)
+    public void SetExp(int value)
     {
-
+        exp.value = value;
     }
+ 
 
     public void SetCoin(int value)
     {
         targetCoin = value;
-
     }
     // 코인 증가 업데이트
     public void CoinUpdate()
@@ -184,7 +191,7 @@ public class PlayerInfoUI : MonoBehaviourPun
         // 체력이 100이면 변함없음
         float newHealth = (-1 * _health + 100);
 
-        bloodScreenValue += 200 + newHealth;
+        bloodScreenValue += 120 + newHealth;
         if (900 < bloodScreenValue)
         { bloodScreenValue = 900; }
 

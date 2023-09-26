@@ -4490,9 +4490,11 @@ MonoBehaviour:
   - {fileID: 7428421250798928571}
   armor: {fileID: 7725070845473741932}
   health: {fileID: 623305403731852907}
+  exp: {fileID: 0}
   healtHUD: {fileID: 0}
   armorHUD: {fileID: 0}
   coinHUD: {fileID: 0}
+  levelHUD: {fileID: 0}
   playerHealth: 0
   bloodScreen: {fileID: 0}
   poisonScreen: {fileID: 0}

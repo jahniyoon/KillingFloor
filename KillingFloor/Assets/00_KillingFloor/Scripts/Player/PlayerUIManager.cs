@@ -33,6 +33,7 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text coinText;       // 현재 재화
     public TMP_Text weightText;     // 현재 무게       
     public GameObject[] classIcon;  // 클래스 아이콘
+    public Slider expSlider;        // 경험치
 
     // 코인 증가효과 계산용 변수
     private int coin;
@@ -138,6 +139,10 @@ public class PlayerUIManager : MonoBehaviour
                 classIcon[1].gameObject.SetActive(true);
                 break;
         }
+    }
+    public void SetExp(int value)
+    {
+        expSlider.value = value;
     }
 
     // 코인 증가 업데이트
