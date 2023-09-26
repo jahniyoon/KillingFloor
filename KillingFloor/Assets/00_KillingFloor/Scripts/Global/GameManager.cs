@@ -213,8 +213,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         PlayerUIManager.instance.zombieCountText.gameObject.SetActive(true);
         PlayerUIManager.instance.timerCountText.gameObject.SetActive(false);
 
-        isCheck = true;
-
         while (true)
         {
             if (currentZombieCount > 0) { break; }

@@ -9,48 +9,26 @@ using UnityEngine.SceneManagement;
 
 public class LoadSceneAsync : MonoBehaviourPun
 {
-    private bool isCheck = false;
+    [SerializeField]
+    private GameObject loadingHUD;
+    [SerializeField]
+    private GameObject playerHUD;
 
     private void Start()
     {
-        asyncLoadScene("Main");
-        PhotonNetwork.AutomaticallySyncScene = true;
-
-    }
-
-    public void asyncLoadScene(string name)
-    {
-        // 비동기 씬 로딩 시작
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(name);
-        asyncLoad.allowSceneActivation = false; // 씬 로딩 완료 후 자동 활성화 막기
-
-        // 로딩이 완료될 때까지 대기
-        StartCoroutine(WaitForSceneLoad(asyncLoad));
-    }
-
-    private IEnumerator WaitForSceneLoad(AsyncOperation asyncLoad)
-    {
-        while (!asyncLoad.isDone)
+        if (PhotonNetwork.IsMasterClient)
         {
-            // 로딩 진행 상황을 표시하거나 추가 작업 수행 가능
-            float progress = Mathf.Clamp01(asyncLoad.progress / 0.9f); // 0.9f는 로딩이 90%까지 완료되었다는 의미
-
-            // 조건을 만족하면 씬 활성화
-            if (progress >= 1.0f)
-            {
-                if (CheckIfAllPlayersLoaded())
-                {
-                    if (PhotonNetwork.IsMasterClient) { Load(); }
-
-                    while (!isCheck) { yield return null; }
-
-                    asyncLoad.allowSceneActivation = true;
-                }
-            }
-
-            // 다음 프레임까지 대기
-            yield return null;
+            StartCoroutine(StartCheck());
         }
+    }
+
+    private IEnumerator StartCheck()
+    {
+        while (!CheckIfAllPlayersLoaded())
+        { yield return null; }
+
+        GameManager.instance.isCheck = true;
+        StartGame();
     }
 
     private bool CheckIfAllPlayersLoaded()
@@ -74,20 +52,21 @@ public class LoadSceneAsync : MonoBehaviourPun
         return true;
     }
 
-    private void Load()
+    private void StartGame()
     {
-        photonView.RPC("MasterLoad", RpcTarget.MasterClient);
+        photonView.RPC("MasterStart", RpcTarget.MasterClient);
     }
 
     [PunRPC]
-    private void MasterLoad()
+    private void MasterStart()
     {
-        photonView.RPC("SyncLoad", RpcTarget.All);
+        photonView.RPC("SyncStart", RpcTarget.All);
     }
 
     [PunRPC]
-    private void SyncLoad()
+    private void SyncStart()
     {
-        isCheck = true;
+        loadingHUD.SetActive(false);
+        playerHUD.SetActive(true);
     }
 }
