@@ -72,20 +72,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         //지환 : 플레이어들의 씬 씽크 맞추기
         PhotonNetwork.AutomaticallySyncScene = true;
     }
-    public void Update()
-    {
-        if (state == State.Room)
-        {
-            StartCoroutine("RoomRenewalCoroutine"); // 1초마다 업데이트
-        }
-
-    }
-    IEnumerator RoomRenewalCoroutine()
-    {
-        yield return new WaitForSeconds(1f);
-        RoomRenewal();
-        Debug.Log("룸 리뉴얼");
-    }
 
     void Start()
     {
@@ -751,7 +737,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                             string levelValue = result.Data["HomeLevel"].Value;
                             playerInfo[currentPlayerIndex].level.text = levelValue;
                             playerInfo[currentPlayerIndex].className.text = result.Data["Class"].Value;
-                            SetClassIcon(playerIndex, result.Data["Class"].Value);
+                            SetClassIcon(currentPlayerIndex, result.Data["Class"].Value);
 
                             Debug.Log($"Player {currentPlayerIndex}의 레벨: {levelValue}");
                         }
@@ -895,8 +881,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         // 로비면 로비 상태로, 방에 있으면 방으로 상태 변경
-        if (PhotonNetwork.InLobby) state = State.Lobby;
-        else if (PhotonNetwork.InRoom) state = State.Room;
+        if (PhotonNetwork.InLobby) { state = State.Lobby; }
+        else if (PhotonNetwork.InRoom) 
+        { 
+            state = State.Room;
+            RoomRenewal();
+
+        }
 
         SetButtonColor(0);
         SetPanel();
@@ -1024,6 +1015,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         playerInfo[0].className.text = NetworkManager.instance.localPlayerClass;
         SetClassIcon(0, "Commando");
         SetClass("Commando");
+        SetLocalPlayerData();
+
+        photonView.RPC("SyncClass", RpcTarget.All);
 
     }
     public void ClassChangeDemolitionist()
@@ -1036,6 +1030,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         playerInfo[0].className.text = NetworkManager.instance.localPlayerClass;
         SetClassIcon(0, "Demolitionist");
         SetClass("Demolitionist");
+        SetLocalPlayerData();
+
+        photonView.RPC("SyncClass", RpcTarget.All);
+
     }
 
     public void SetClassIcon(int index, string playerClass)
@@ -1054,6 +1052,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+    [PunRPC]
+    public void SyncClass()
+    {
+        RoomRenewal();
+    }
     #endregion
 
 }

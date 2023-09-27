@@ -958,7 +958,7 @@ public class PlayerShooter : MonoBehaviourPun
         playerMovement.fpsAnimator = handAnimator;
 
         // FPS 파이어 포지션 변경해주기
-        if (weaponSlot < 3)
+        if (weaponSlot < 3 && weaponClass == WeaponClass.Commando)
         {
             fireTransform = _fpsWeapon.GetComponent<FireTransform>().fireTransform;
             bulletLineRenderer = _fpsWeapon.GetComponent<LineRenderer>();

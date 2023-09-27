@@ -114,6 +114,7 @@ MonoBehaviour:
   - shopNavSp
   - MeleeBlood
   - ExpUp
+  - SyncClass
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
