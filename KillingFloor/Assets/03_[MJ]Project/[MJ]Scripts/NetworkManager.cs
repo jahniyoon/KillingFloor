@@ -8,6 +8,7 @@ using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.UI;
 using System;
+using TMPro;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -18,6 +19,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public string localPlayerName = default;
     public string localPlayerLv = default;
     public string localPlayerClass = default;
+    public int localCashItem = default;
 
     [Header("Login")]
     public PlayerLeaderboardEntry MyPlayFabInfo;
@@ -48,6 +50,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public GameObject ContentArea;
     public GameObject ItemObj;
     public GameObject InventoryContent;
+    public TMP_Text StoreItem_BtnTxt;
 
     public enum State { Login, Lobby, Room, Class, Store, Option };
     [Header("Lobby UI")]
@@ -495,8 +498,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 GameObject itemObject = Instantiate(ItemObj, ContentArea.transform.position, Quaternion.identity);
                 itemObject.transform.GetChild(1).GetComponent<Text>().text = i.Name;
                 itemObject.transform.GetChild(2).GetComponent<Text>().text = "[" + i.Cost + " Coin]";
+                itemObject.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "BUY";
                 itemObject.GetComponent<Image>().sprite = i.GetComponent<Image>().sprite;
                 itemObject.GetComponent<Image>().preserveAspect = true;     // 이미지 종횡비 유지하도록 설정
+
                 itemObject.transform.SetParent(ContentArea.transform);
                 itemObject.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate { MakePurchase(i.Name, i.Cost); });
             }
@@ -518,8 +523,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                         GameObject itemObject = Instantiate(ItemObj, InventoryContent.transform.position, Quaternion.identity);
                         itemObject.transform.GetChild(1).GetComponent<Text>().text = i.ItemId;
                         itemObject.transform.GetChild(2).GetComponent<Text>().text = "[" + editorI.Cost + " Coin]";
+                        itemObject.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "EQUIP";
                         itemObject.GetComponent<Image>().sprite = editorI.GetComponent<Image>().sprite;
                         itemObject.GetComponent<Image>().preserveAspect = true;     // 이미지 종횡비 유지하도록 설정
+
                         itemObject.transform.SetParent(InventoryContent.transform);
                     }
 
