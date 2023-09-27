@@ -14,24 +14,22 @@ public class ItemToBuy : MonoBehaviour
     public int GainPerSecond;
 
     //LEGACY:
-    //public int coinPrice;
-    //public string itemName;
 
-    //public void BuyItem()
-    //{
-    //    var request = new SubtractUserVirtualCurrencyRequest { VirtualCurrency = "CN", Amount = coinPrice };
-    //    PlayFabClientAPI.SubtractUserVirtualCurrency(request, OnSubtractCoinsSuccess, OnError);
-    //}
+    public void BuyItem()
+    {
+        var request = new SubtractUserVirtualCurrencyRequest { VirtualCurrency = "CN", Amount = Cost };
+        PlayFabClientAPI.SubtractUserVirtualCurrency(request, OnSubtractCoinsSuccess, OnError);
+    }
 
-    //void OnSubtractCoinsSuccess(ModifyUserVirtualCurrencyResult result)
-    //{
-    //    Debug.Log("Bought Item: " + itemName);
+    void OnSubtractCoinsSuccess(ModifyUserVirtualCurrencyResult result)
+    {
+        Debug.Log("Bought Item: " + Name);
 
-    //    NetworkManager.instance.GetVirtualCurrencies();
-    //}
+        NetworkManager.instance.GetVirtualCurrencies();
+    }
 
-    //void OnError(PlayFabError error)
-    //{
-    //    Debug.Log("Error: " + error.ErrorMessage);
-    //}
+    void OnError(PlayFabError error)
+    {
+        Debug.Log("Error: " + error.ErrorMessage);
+    }
 }

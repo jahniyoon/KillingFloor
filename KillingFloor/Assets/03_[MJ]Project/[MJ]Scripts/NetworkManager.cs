@@ -86,19 +86,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         RoomRenewal();
     }
 
-    //ITEM
     void Start()
     {
         StartCoroutine(UpdatePlayerCount());
 
+        //ITEM
         foreach (ItemToBuy i in Items)
         {
-            GameObject o = Instantiate(ItemObj, ContentArea.transform.position, Quaternion.identity);
-            o.transform.GetChild(0).GetComponent<Text>().text = i.Name + "["+i.Cost+"]";
-            o.transform.SetParent(ContentArea.transform);
+            GameObject itemObject = Instantiate(ItemObj, ContentArea.transform.position, Quaternion.identity);
+            itemObject.transform.GetChild(1).GetComponent<Text>().text = i.Name;
+            itemObject.transform.GetChild(2).GetComponent<Text>().text = "[" + i.Cost + " Coin]";
+            itemObject.GetComponent<Image>().sprite = i.GetComponent<Image>().sprite;
+            itemObject.GetComponent<Image>().preserveAspect = true;     // 이미지 종횡비 유지하도록 설정
+            itemObject.transform.SetParent(ContentArea.transform);
         }
+        //ITEM
     }
-    //ITEM
 
     #region 플레이팹
     // 이메일 충족 조건 : '@', '.' 이 있어야함
@@ -118,6 +121,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
             SetLocalPlayerData();                   // 로컬플레이어데이터 세팅
+            GetItemPrices();                        // 아이템 가격 가져옴
+
             //ITEM
             //foreach (GameObject obj in EnableOnLogin) obj.SetActive(true);  // 유저 인벤토리 가져옴
             //ITEM
@@ -287,6 +292,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
 
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+            GetItemPrices();                        // 아이템 가격 가져옴
 
             SetLocalPlayerData();
         },
@@ -575,6 +581,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void ExitStore_Panel()
     {
         Store_Panel.SetActive(false);
+    }
+
+    public void GetItemPrices()
+    {
+        GetCatalogItemsRequest request = new GetCatalogItemsRequest();
+        request.CatalogVersion = "Player Items Catalog";
+        PlayFabClientAPI.GetCatalogItems(request, result => 
+        {
+            List<CatalogItem> items = result.Catalog;
+            foreach(CatalogItem item in items)
+            {
+                uint cost = item.VirtualCurrencyPrices["CN"];
+                Debug.Log($"cost : {cost}");
+            }
+        }, 
+        error => { });
     }
     #endregion
 
@@ -990,7 +1012,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void ClassChangeCommando()
     {
         NetworkManager.instance.localPlayerClass = "Commando";
-        Debug.Log(NetworkManager.instance.localPlayerClass  + "클래스 변경");
+        Debug.Log(NetworkManager.instance.localPlayerClass + "클래스 변경");
         // 데이터에 변경된 레벨 서버에 저장하기 위해서 꼭 필요
         NetworkManager.instance.SetClass(NetworkManager.instance.localPlayerClass);
 
@@ -1015,7 +1037,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         switch (playerClass)
         {
-            case "Commando" :
+            case "Commando":
                 playerInfo[index].classIcon[0].SetActive(true);
                 break;
             case "Demolitionist":
