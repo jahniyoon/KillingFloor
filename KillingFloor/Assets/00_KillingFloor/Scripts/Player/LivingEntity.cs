@@ -3,6 +3,7 @@ using System;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static Cinemachine.DocumentationSortingAttribute;
 using static UnityEngine.UI.Image;
 
 // 생명체로서 동작할 게임 오브젝트들을 위한 뼈대를 제공
@@ -158,6 +159,32 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
         }
 
     }
+    public virtual void ExpUp(int value)
+    {
+        if(dead)
+        {
+            return;
+        }
+        //호스트만 경험치를 직접 갱신 가능
+        if (PhotonNetwork.IsMasterClient)
+        {
+            exp += value;
+            Debug.Log(exp + "+" + value);
+            // 경험치가 1000을 넘기면 레벨업
+            if(1000 <= exp)
+            {
+                level++;
+                exp -= 1000;
+                LevelUp();
+                Debug.Log("레벨업");
+            }
+            // 서버에서 클라이언트로 동기화
+            photonView.RPC("ApplyUpdatedHealth", RpcTarget.Others, health, armor, coin, level, exp, dead);
+
+            // 다른 클라이언트들도 RestoreHealth를 실행하도록 함
+            photonView.RPC("ExpUp", RpcTarget.Others, value);
+        }
+    }
     public virtual void GetCoin(int newCoin)
     {
         if(dead)
@@ -188,7 +215,6 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
             // 서버에서 클라이언트로 동기화
             photonView.RPC("ApplyUpdatedHealth", RpcTarget.Others, health, armor, coin, level, exp, dead);
 
-            // 다른 클라이언트들도 RestoreHealth를 실행하도록 함
             photonView.RPC("SpendCoin", RpcTarget.Others, newCoin);
         }
     }
@@ -201,14 +227,16 @@ public class LivingEntity : MonoBehaviourPun, IDamageable
         //호스트만 실드를 직접 갱신 가능
         if (PhotonNetwork.IsMasterClient)
         {
-            // 다른 클라이언트들도 RestoreHealth를 실행하도록 함
             photonView.RPC("OnPoison", RpcTarget.Others);
         }
-
     }
     public virtual void Die()
     {
         // 사망 상태를 참으로 변경
         dead = true;
+    }
+    public virtual void LevelUp()
+    {
+
     }
 }

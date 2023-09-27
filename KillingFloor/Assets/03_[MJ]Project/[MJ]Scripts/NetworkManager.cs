@@ -12,7 +12,6 @@ using System;
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     public static NetworkManager instance;
-
     public GameObject Lang_Panel, Room_Panel, UserRoom_Panel, Lobby_Panel, Login_Panel, Class_Panel, Store_Panel, Lobby_Screen, Option_Panel, PlayerProfile;
 
     [Header("Player")]
@@ -23,7 +22,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [Header("Login")]
     public PlayerLeaderboardEntry MyPlayFabInfo;
     public List<PlayerLeaderboardEntry> PlayFabUserList = new List<PlayerLeaderboardEntry>();
-    public InputField EmailInput, PasswordInput, UsernameInput;
+    public InputField EmailInput, PasswordInput, UsernameInput, LoginIDInput, LoginPWInput;
+    public GameObject RegistBox;
+    public GameObject LoginBox;
+    public Text RegistInfoText;
+    public Text LoginInfoText;
 
     [Header("Lobby")]
     public InputField UserSearchInput;
@@ -106,14 +109,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // 이름 충족 조건 : 3~20 자의 문자
     public void Login()
     {
+        LoginInfoText.text = "Loading...";
         // 이메일과 비밀번호 사용해서 로그인 요청
-        var request = new LoginWithEmailAddressRequest { Email = EmailInput.text, Password = PasswordInput.text };
+        var request = new LoginWithEmailAddressRequest { Email = LoginIDInput.text, Password = LoginPWInput.text };
 
         PlayFabClientAPI.LoginWithEmailAddress(request, (result) =>
         {
+            LoginInfoText.text = "접속중...";
+
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+            SetLocalPlayerData();                   // 로컬플레이어데이터 세팅
             GetItemPrices();                        // 아이템 가격 가져옴
 
             //ITEM
@@ -122,10 +129,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
         },
-            (error) => Debug.Log("로그인 실패"));
+            (error) =>
+            {
+                Debug.Log("로그인 실패");
+                LoginInfoText.text = "로그인 실패";
+
+            });
     }
     public void Register()
     {
+        RegistInfoText.text = "Loading...";
         // 이메일, 비밀번호, 유저 이름으로 등록 요청 생성
         var request = new RegisterPlayFabUserRequest
         { Email = EmailInput.text, Password = PasswordInput.text, Username = UsernameInput.text, DisplayName = UsernameInput.text };
@@ -133,10 +146,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PlayFabClientAPI.RegisterPlayFabUser(request, (result) =>
         {
             Debug.Log("회원가입 성공");
+            RegistInfoText.text = "회원가입 성공";
             SetStat();          // 통계 초기화
             SetData("0");    // 유저 데이터 초기화
+            SetClass("Commando");
         },
-            (error) => Debug.Log("회원가입 실패"));
+            (error) => 
+            { 
+                Debug.Log("회원가입 실패");
+                RegistInfoText.text = "회원가입 실패";
+
+            }) ;
 
     }
 
@@ -154,7 +174,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
 
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
-
             SetLocalPlayerData();
         },
             (error) => Debug.Log("로그인 실패"));
@@ -490,29 +509,35 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         // 방에서 로비로 올 땐 딜레이없고, 로그인해서 로비로 올 땐 PlayFabUserList가 채워질 시간동안 딜레이
         if (isLoaded)
         {
+            SetLocalPlayerProfile();
             ShowPanel(Lobby_Panel);
             ShowUserNickName();
         }
-        else Invoke("OnJoinedLobbyDelay", 3);
+        else Invoke("OnJoinedLobbyDelay", 1);
     }
 
     // 로컬 플레이어 닉네임 할당
     void OnJoinedLobbyDelay()
     {
         isLoaded = true;
-        PhotonNetwork.LocalPlayer.NickName = MyPlayFabInfo.DisplayName;
 
+        SetLocalPlayerProfile();
         LobbyScreen(true);      // 로비 배경영상를 켠다.
         state = State.Lobby;    // 상태 로비로 변경
-        playerInfo[0].nickName.text = string.Format(PhotonNetwork.LocalPlayer.NickName);
-        playerInfo[0].level.text = string.Format(localPlayerLv);  // ToDo : 레벨 넣어야함
-        playerInfo[0].className.text = localPlayerClass;
-        SetClassIcon(0, localPlayerClass);
+        PlayerProfile.gameObject.SetActive(true);
 
         ShowPanel(Lobby_Panel);
         ShowUserNickName();
     }
 
+    public void SetLocalPlayerProfile()
+    {
+        PhotonNetwork.LocalPlayer.NickName = MyPlayFabInfo.DisplayName;
+        playerInfo[0].nickName.text = string.Format(PhotonNetwork.LocalPlayer.NickName);
+        playerInfo[0].level.text = string.Format(localPlayerLv);
+        playerInfo[0].className.text = localPlayerClass;
+        SetClassIcon(0, localPlayerClass);
+    }
     void ShowPanel(GameObject curPanel)
     {
 
@@ -921,6 +946,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         SetButtonColor(0);
         SetPanel();
     }
+    public void RegistButton()
+    {
+        RegistBox.gameObject.SetActive(!RegistBox.gameObject.activeSelf);
+        LoginBox.gameObject.SetActive(!RegistBox.gameObject.activeSelf);
+    }
 
 
     // 버튼 배경의 색을 변경해주는 메서드
@@ -944,6 +974,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         UserRoom_Panel.SetActive(false);
         Option_Panel.SetActive(false);
         Store_Panel.SetActive(false);
+        PlayerProfile.SetActive(false);
+
 
         switch (state)
         {
@@ -965,7 +997,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 break;
             case State.Login:
                 Login_Panel.SetActive(true);
-                PlayerProfile.SetActive(false);
+                PlayerProfile.SetActive(true);
                 break;
             case State.Class:
                 Class_Panel.SetActive(true);

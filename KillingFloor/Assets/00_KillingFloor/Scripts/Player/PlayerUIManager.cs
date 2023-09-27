@@ -23,7 +23,7 @@ public class PlayerUIManager : MonoBehaviour
         }
     }
     private static PlayerUIManager m_instance; // 싱글톤이 할당될 변수
-
+    [Header("Player")]
     public TMP_Text playerLevel;
     public TMP_Text hpText;         // 체력 표시
     public TMP_Text shiedldText;    // 실드 표시
@@ -31,7 +31,15 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text totalAmmoText;  // 남은 탄약
     public TMP_Text grenadeText;    // 남은 수류탄
     public TMP_Text coinText;       // 현재 재화
-    public TMP_Text weightText;     // 현재 무게
+    public TMP_Text weightText;     // 현재 무게       
+    public GameObject[] classIcon;  // 클래스 아이콘
+    public Slider expSlider;        // 경험치
+
+    // 코인 증가효과 계산용 변수
+    private int coin;
+    private int targetCoin;
+
+    [Header("Shop")]
     public TMP_Text shopDistance;   // 상점까지 거리
     public Slider shopUpRotation;     // 상점 방향
     public Slider shopDownRotation;     // 상점 방향
@@ -39,6 +47,8 @@ public class PlayerUIManager : MonoBehaviour
     public GameObject equipUI;      // 상호작용 UI
     public GameObject shopUI;       // 상점 상호작용 UI
     public GameObject pauseUI;       // 포즈 UI
+
+    [Header("BloodScreen")]
     public float playerHealth;  // 블러드스크린에 영향을 주기위한 플레이어의 체력
     public Image bloodScreen;   // 피 데미지 스크린
     public Image poisonScreen;  // 독 데미지 스크린
@@ -46,6 +56,7 @@ public class PlayerUIManager : MonoBehaviour
     public float poisonScreenValue;
     public bool isPoison; // 현재 포이즌 상태인지 확인
 
+    [Header("Pause")]
     public Slider mouseSensitive;
     public TMP_Text mouseSensitiveValue;
     public bool isShopState;
@@ -54,12 +65,7 @@ public class PlayerUIManager : MonoBehaviour
     public GameObject gameOverUI;
     public GameObject leaveButton;
 
-    // 코인 증가효과 계산용 변수
-    private int coin;
-    private int targetCoin;
-
-
-
+    [Header("Wave")]
     //JunOh
     public Text warningEndText;   // 웨이브 종료 내용
     public Text warningStartText; // 웨이브 시작 내용
@@ -120,6 +126,25 @@ public class PlayerUIManager : MonoBehaviour
     {
         targetCoin = value;
     }
+    public void SetClass(string playerClass)
+    {
+        switch (playerClass)
+        {
+            case "Commando":
+                classIcon[0].gameObject.SetActive(true); 
+                classIcon[1].gameObject.SetActive(false); 
+                break;
+            case "Demolitionist":
+                classIcon[0].gameObject.SetActive(false);
+                classIcon[1].gameObject.SetActive(true);
+                break;
+        }
+    }
+    public void SetExp(int value)
+    {
+        expSlider.value = value;
+    }
+
     // 코인 증가 업데이트
     public void CoinUpdate()
     {

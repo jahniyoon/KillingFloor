@@ -7,23 +7,31 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static Cinemachine.DocumentationSortingAttribute;
+using WebSocketSharp;
 
 public class PlayerInfoUI : MonoBehaviourPun
 {
     public enum State { Live, Die }
     public State state;
 
-    public PlayerHealth m_player;
-    public TMP_Text playerNickname;
     public string nickName;
-    public TMP_Text playerLevel;
     public string level;
-    public TMP_Text playerClass;
+    public string playerClass;
+    public PlayerHealth m_player;
+
+    public TMP_Text playerNickname;
+    public TMP_Text playerLevel;
+    public TMP_Text playerClassText;
+    public GameObject[] classIcon;
+
     public Slider armor;
     public Slider health;
+    public Slider exp;
+
     public TMP_Text healtHUD;
     public TMP_Text armorHUD;
     public TMP_Text coinHUD;
+    public TMP_Text levelHUD;
 
     public float playerHealth;  // 블러드스크린에 영향을 주기위한 플레이어의 체력
     public Image bloodScreen;   // 피 데미지 스크린
@@ -47,6 +55,8 @@ public class PlayerInfoUI : MonoBehaviourPun
             healtHUD = PlayerUIManager.instance.hpText;
             armorHUD = PlayerUIManager.instance.shiedldText;
             coinHUD = PlayerUIManager.instance.coinText;
+            levelHUD = PlayerUIManager.instance.playerLevel;
+            exp = PlayerUIManager.instance.expSlider;
             bloodScreen = PlayerUIManager.instance.bloodScreen;
             poisonScreen = PlayerUIManager.instance.poisonScreen;   
         }
@@ -66,23 +76,37 @@ public class PlayerInfoUI : MonoBehaviourPun
     {
         nickName = GameManager.instance.playerNickName;
         level = GameManager.instance.playerLevel;
-        playerClass.text = GameManager.instance.playerClass;
+        playerClass = GameManager.instance.playerClass;
 
-        photonView.RPC("DataProcessOnServer", RpcTarget.All, nickName, level);
+        photonView.RPC("DataProcessOnServer", RpcTarget.All, nickName, level, playerClass);
         PlayerUIManager.instance.SetLevel(level);
+        PlayerUIManager.instance.SetClass(playerClass);
     }
 
     [PunRPC]
-    public void DataProcessOnServer(string _nickName, string _level)
+    public void DataProcessOnServer(string _nickName, string _level, string _class)
     {
         playerNickname.text = _nickName;
         playerLevel.text = _level;
+        playerClassText.text = _class;
+
+        switch (_class)
+        {
+            case "Commando":
+                classIcon[0].gameObject.SetActive(true);
+                classIcon[1].gameObject.SetActive(false);
+                break;
+            case "Demolitionist":
+                classIcon[0].gameObject.SetActive(false);
+                classIcon[1].gameObject.SetActive(true);
+                break;
+        }
     }
    
     public void SetArmor(float value)
     {
         armor.value = value;
-        if (photonView.IsMine)
+        if (photonView.IsMine && armorHUD != null)
         { armorHUD.text = string.Format("{0}", value); }
     }
     public void SetHealth(float value)
@@ -95,16 +119,21 @@ public class PlayerInfoUI : MonoBehaviourPun
     {
         playerNickname.text = string.Format("{0}", name);
     }
-    public void SetLevel(int level)
+    public void SetLevel(int _level)
     {
-        playerLevel.text = string.Format("{0}", level);
+        playerLevel.text = string.Format("{0}", _level);
+        level = string.Format("{0}", _level);
+        levelHUD.text = string.Format("{0}", _level);
     }
-
+    public void SetExp(int value)
+    {
+        exp.value = value;
+    }
+ 
 
     public void SetCoin(int value)
     {
         targetCoin = value;
-
     }
     // 코인 증가 업데이트
     public void CoinUpdate()
@@ -162,7 +191,7 @@ public class PlayerInfoUI : MonoBehaviourPun
         // 체력이 100이면 변함없음
         float newHealth = (-1 * _health + 100);
 
-        bloodScreenValue += 200 + newHealth;
+        bloodScreenValue += 120 + newHealth;
         if (900 < bloodScreenValue)
         { bloodScreenValue = 900; }
 
