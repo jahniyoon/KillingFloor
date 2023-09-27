@@ -34,6 +34,22 @@ public class GranadeGun : MonoBehaviourPun
 
     private void OnTriggerEnter(Collider other)
     {
+        TriggerExplosionPlay();
+
+    }
+    private void TriggerExplosionPlay()
+    {
+        photonView.RPC("TriggerMasterAct", RpcTarget.MasterClient);
+
+    }
+    [PunRPC]
+    private void TriggerMasterAct()
+    {
+        photonView.RPC("TriggerAllAct", RpcTarget.All);
+    }
+    [PunRPC]
+    private void TriggerAllAct()
+    {
         if (!explosionSound.isPlaying)
         {
             actchk = true;
@@ -42,26 +58,55 @@ public class GranadeGun : MonoBehaviourPun
             explosionSound.Play();
             Invoke("ActFalse", 0.3f);
         }
-            
-        
     }
+
+
+
+
+
+
+
     private void ExplosionPlay()
     {
-        if(actchk)
+        photonView.RPC("MasterAct", RpcTarget.MasterClient);
+
+    }
+    [PunRPC]
+    private void MasterAct()
+    {
+        photonView.RPC("AllAct", RpcTarget.All);
+    }
+    [PunRPC]
+    private void AllAct()
+    {
+        if (actchk)
         {
             grenade.SetActive(false);
             explosion.Play();
             explosionSound.Play();
             Invoke("ActFalse", 0.3f);
         }
-     
     }
+
+   
     private void ActFalse()
+    {
+        photonView.RPC("EndMasterAct", RpcTarget.MasterClient);
+    }
+
+    [PunRPC]
+    private void EndMasterAct()
+    {
+        photonView.RPC("EndAllAct", RpcTarget.All);
+    }
+    [PunRPC]
+    private void EndAllAct()
     {
         explosion.Stop();
         explosionSound.Stop();
-        grenade.SetActive(true); 
+        grenade.SetActive(true);
         actchk = false;
         gameObject.SetActive(false);
     }
+
 }

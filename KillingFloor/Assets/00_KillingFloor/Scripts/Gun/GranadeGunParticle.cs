@@ -22,11 +22,13 @@ public class GranadeGunParticle : MonoBehaviourPun
         playerHealth = user.GetComponent<PlayerHealth>();
 
 
-
+        Debug.Log(FindTopmostParent(other.transform));
         if (FindTopmostParent(other.transform).name.Contains("Zombie"))
         {
-            if (other.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().health > 0)
+            if (FindTopmostParent(other.transform).gameObject.GetComponent<NormalZombie>().health > 0)
             {
+
+                Debug.Log("들어왔다구" + other.name);
                 other.transform.GetComponent<HitPoint>().Hit(60); // 좀비에게 데미지
 
 
@@ -95,8 +97,16 @@ public class GranadeGunParticle : MonoBehaviourPun
         }
         else
         {
-            // 부모가 있으면 부모의 부모를 재귀적으로 찾습니다.
-            return FindTopmostParent(currentTransform.parent);
+            if(currentTransform.name.Contains("(Clone"))
+            {
+                return currentTransform;
+            }
+            else
+            {
+                // 부모가 있으면 부모의 부모를 재귀적으로 찾습니다.
+                return FindTopmostParent(currentTransform.parent);
+            }
+          
         }
     }
 }

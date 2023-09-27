@@ -1,6 +1,4 @@
-using JetBrains.Annotations;
 using Photon.Pun;
-using Photon.Pun.Demo.Cockpit;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -111,7 +109,7 @@ public class PlayerShooter : MonoBehaviourPun
 
     private void Awake()
     {
-        switch(GameManager.instance.playerClass)
+        switch (GameManager.instance.playerClass)
         {
             case "Commando":
                 weaponClass = WeaponClass.Commando;
@@ -119,32 +117,30 @@ public class PlayerShooter : MonoBehaviourPun
             case "Demolitionist":
                 weaponClass = WeaponClass.Demolitionist;
                 break;
-        }    
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
         bulletlist = new List<GameObject>();
-        if (photonView.IsMine)
+
+
+        for (int i = 0; i < 7; i++)
         {
-            if (weaponClass == WeaponClass.Demolitionist)
-            {
-                for (int i = 0; i < 7; i++)
-                {
 
-                    GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, bulletPoint.transform.forward, transform.rotation);
+            GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, bulletPoint.transform.forward, transform.rotation);
 
-                    bulletlist.Add(bullet);
-                    bulletlist[i].GetComponent<GranadeGun>()?.setViewId(photonView.ViewID);
-                    bulletlist[i].SetActive(false);
-                }
-
-            }
+            bulletlist.Add(bullet);
+            bulletlist[i].GetComponent<GranadeGun>()?.setViewId(photonView.ViewID);
+            bulletlist[i].SetActive(false);
         }
-     
-        
-      
+
+
+
+
+
+
 
         input = GetComponent<PlayerInputs>();
         playerMovement = GetComponent<PlayerMovement>();
@@ -232,7 +228,7 @@ public class PlayerShooter : MonoBehaviourPun
     void Fire()
     {
 
-        if (input.shoot && weaponSlot < 3 && weaponClass == WeaponClass.Commando || 
+        if (input.shoot && weaponSlot < 3 && weaponClass == WeaponClass.Commando ||
             input.shoot && weaponSlot == 1 && weaponClass == WeaponClass.Demolitionist)
         {
             // 현재 상태가 발사 가능한 상태
@@ -262,16 +258,16 @@ public class PlayerShooter : MonoBehaviourPun
                 // ToDo : 틱 사운드 플레이되도록 하기 (총알 없음)
                 gunAudioPlayer.clip = equipedWeapon.emptyAudio;
                 gunAudioPlayer.PlayOneShot(gunAudioPlayer.clip); // 총소리 재생
-             
+
                 input.shoot = false;
             }
         }
         if (input.shoot && weaponSlot < 3 && weaponClass == WeaponClass.Demolitionist)
         {
-            if(state == State.Ready && Time.time >= lastFireTime + fireRate && 0 < equipedWeapon.ammo )
+            if (state == State.Ready && Time.time >= lastFireTime + fireRate && 0 < equipedWeapon.ammo)
             {
                 lastFireTime = Time.time;
-                if(weaponSlot == 2)
+                if (weaponSlot == 2)
                 {
                     for (int i = 0; i < 7; i++)
                     {
@@ -298,14 +294,14 @@ public class PlayerShooter : MonoBehaviourPun
                         }
                     }
                 }
-            
-               
+
+
             }
-           
-              
-               
-            
-               
+
+
+
+
+
             // 데몰리스트 발사 입력 후 할것들
         }
         PlayerUIManager.instance.SetCoin(playerHealth.coin);
@@ -319,10 +315,10 @@ public class PlayerShooter : MonoBehaviourPun
         Vector3 cameraPosition = cameraSet.followCam.transform.position;
         // 카메라는 각자 가지고있으므로 카메라값도 함께 전달
         //Debug.Log(photonView.ViewID + "마스터에게 사격 요청");
-       
-          
+
+
         photonView.RPC("ShotProcessOnServer", RpcTarget.MasterClient, cameraForward, cameraPosition);
-        
+
 
 
         // 애니메이션 작동 
@@ -380,7 +376,7 @@ public class PlayerShooter : MonoBehaviourPun
             hitPoint = hit.point;
             isParticleTrigger = true;
         }
-        
+
         // 발사처리를 마스터에게 위임
         if (hitObj != null)
         {
@@ -388,7 +384,7 @@ public class PlayerShooter : MonoBehaviourPun
             Damage(hitObj);
         }
 
-        
+
         Vector3 hitNormal = hit.normal;
         int viewID = 999999;    // null 값을 알기위한 임의의 숫자
 
@@ -397,29 +393,29 @@ public class PlayerShooter : MonoBehaviourPun
         if (hitTransformRoot != null)
         {
             var nearestBone = GetNearestObject(hitTransformRoot, hitPoint);
-            if(nearestBone)
-            //Debug.Log("뼈가 있나? : " + nearestBone);
+            if (nearestBone)
+                //Debug.Log("뼈가 있나? : " + nearestBone);
 
-            if (nearestBone.gameObject.GetPhotonView() == null)
-            {
-                for (int i = 0; i < 20; i++)
+                if (nearestBone.gameObject.GetPhotonView() == null)
                 {
-                    //Debug.Log("포톤뷰가 없다. 상위로 전환 : " + nearestBone);
-                    nearestBone = nearestBone.parent;
-                    if(nearestBone.gameObject.GetPhotonView() != null)
+                    for (int i = 0; i < 20; i++)
                     {
-                        break;
+                        //Debug.Log("포톤뷰가 없다. 상위로 전환 : " + nearestBone);
+                        nearestBone = nearestBone.parent;
+                        if (nearestBone.gameObject.GetPhotonView() != null)
+                        {
+                            break;
+                        }
                     }
                 }
-            }
             //if(nearestBone.gameObject.GetPhotonView() == null)
             //{
             //    Debug.Log("포톤뷰가 없어서 상위로 전환");
             //    nearestBone = nearestBone.parent;
             //}
             if (nearestBone != null && nearestBone.gameObject.GetPhotonView() != null)
-            {   
-               
+            {
+
                 viewID = nearestBone.gameObject.GetPhotonView().ViewID;
                 //Debug.Log("ViewID 부여 : " + viewID);
             }
@@ -476,7 +472,7 @@ public class PlayerShooter : MonoBehaviourPun
             bulletHole.Play();
             isParticleTrigger = false;
         }
-        if(_blood)
+        if (_blood)
         {
             //Debug.Log("블러드 생성");
             bloodFX.OnBloodEffect(_hitPosition, _angle, _hitNormal, _viewID);
@@ -565,7 +561,7 @@ public class PlayerShooter : MonoBehaviourPun
     [PunRPC]
     public void MeleeBlood(Vector3 _hitPosition, int _viewID)
     {
-        Debug.Log("피 효과 요청 "+ _viewID);
+        Debug.Log("피 효과 요청 " + _viewID);
         bloodFX.OnBloodEffect(_hitPosition, 0, Vector3.zero, _viewID);
     }
     void Heal()
@@ -580,7 +576,7 @@ public class PlayerShooter : MonoBehaviourPun
             float heal = damage;
             if (heal + playerHealth.health >= 100)
             { heal -= ((heal + playerHealth.health) - 100); }
-            photonView.RPC("HealProcessOnServer",RpcTarget.All, heal);
+            photonView.RPC("HealProcessOnServer", RpcTarget.All, heal);
             //PlayerUIManager.instance.SetHP(playerHealth.health);
             input.shoot = false;
         }
@@ -611,7 +607,7 @@ public class PlayerShooter : MonoBehaviourPun
             _hitObj.transform.GetComponent<PlayerDamage>().OnDamage(); // RPC 확인 디버그용
             return;
         }
-    
+
 
         if (!"Mesh_Alfa_2".Equals(_hitObj.transform.name) && !"DevilEye".Equals(_hitObj.transform.name))//보스 가 아닐경우 
         {
@@ -637,7 +633,7 @@ public class PlayerShooter : MonoBehaviourPun
 
             ////////////////////////////////////////////////////////////////////
         }
-     
+
         if ("Mesh_Alfa_2".Equals(_hitObj.name)) // 보스 일경우
         {
 
@@ -653,7 +649,7 @@ public class PlayerShooter : MonoBehaviourPun
                 _hitObj.gameObject.GetComponent<BossController>().OnDamage(damage * 0.5f);
             }
         }
-     
+
         if ("DevilEye".Equals(_hitObj.name))
         {
 

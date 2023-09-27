@@ -119,6 +119,12 @@ MonoBehaviour:
   - SyncChange
   - changeMaster
   - changeRender
+  - AllAct
+  - EndAllAct
+  - EndMasterAct
+  - MasterAct
+  - TriggerAllAct
+  - TriggerMasterAct
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
