@@ -16,7 +16,7 @@ public class UniqueParticleDam : MonoBehaviour
             if(transform.name.Equals("Effect_38_SmokeField_2") || transform.name.Equals("Effect_38_ParticleField"))
             {
                 coolTime = 0;
-                damage = 50;      
+                damage = 2000;      
             }
             else
             {
