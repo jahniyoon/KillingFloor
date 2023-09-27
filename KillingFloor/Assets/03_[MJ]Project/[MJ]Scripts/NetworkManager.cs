@@ -1023,6 +1023,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         playerInfo[0].className.text = NetworkManager.instance.localPlayerClass;
         SetClassIcon(0, "Commando");
+        SetClass("Commando");
+
     }
     public void ClassChangeDemolitionist()
     {
@@ -1033,6 +1035,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         playerInfo[0].className.text = NetworkManager.instance.localPlayerClass;
         SetClassIcon(0, "Demolitionist");
+        SetClass("Demolitionist");
     }
 
     public void SetClassIcon(int index, string playerClass)
