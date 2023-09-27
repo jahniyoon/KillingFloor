@@ -115,6 +115,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     // 키보드 입력을 감지하고 룸을 나가게 함
     private void Update()
     {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            zombieCount(currentZombieCount);
+        }
+
         SetPlayer();
         shopPosition = shops[wave - 1];
         if (Input.GetKeyDown(KeyCode.Backspace))
@@ -126,7 +131,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             OnRespawn();    // 상점이 열리면 리스폰 해주기
         }
     }
-    
+
     public void WaveStart()
     {
         photonView.RPC("MasterStart", RpcTarget.MasterClient);
