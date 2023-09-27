@@ -120,8 +120,8 @@ public class NormalZombie : NormalZombieData
 
     public void ZombieSetting()
     {
-        blendTreeMove = StartCoroutine(BlendTreeMove(0.0f, 1.0f, 2.0f));
-
+        //blendTreeMove = StartCoroutine(BlendTreeMove(0.0f, 1.0f, 2.0f));
+        ani.SetFloat("move", 1.0f);
         if (gameObject.name == "ZombieWalk_01(Clone)" || gameObject.name == "ZombieWalk_02(Clone)" ||
             gameObject.name == "ZombieWalk_03(Clone)" || gameObject.name == "ZombieWalk_04(Clone)")
         {
@@ -236,7 +236,7 @@ public class NormalZombie : NormalZombieData
 
     public void Hit(int number)
     {
-        if (blendTreeMove != null) { StopCoroutine(blendTreeMove); }
+        //if (blendTreeMove != null) { StopCoroutine(blendTreeMove); }
         if (animatorController != null) { StopCoroutine(animatorController); }
 
         switch (number)
@@ -514,7 +514,9 @@ public class NormalZombie : NormalZombieData
 
         yield return new WaitForSeconds(3);
 
-        gameObject.SetActive(false);
+        Destroy(gameObject);
+
+        //gameObject.SetActive(false);
     }
 
     protected virtual (float, float, int) ZombieWalk()

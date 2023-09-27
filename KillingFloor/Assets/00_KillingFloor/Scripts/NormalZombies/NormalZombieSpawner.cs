@@ -18,6 +18,7 @@ public class NormalZombieSpawner : MonoBehaviourPun
     private int pointCount = 0;
     private int zombieCount;
     private int randZombieNum;
+    private bool isStart = true;
 
     private void Awake()
     {
@@ -28,44 +29,64 @@ public class NormalZombieSpawner : MonoBehaviourPun
     {
         if (GameManager.instance.wave == 1 && GameManager.instance.isCheck)
         {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 4;
+            if (isStart)
+            {
+                isStart = false;
+                GameManager.instance.isCheck = false;
+                roundPointCount = 4;
 
-            Count();
+                Count();
 
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+            }
         }
         else if (GameManager.instance.wave == 2 && GameManager.instance.isCheck)
         {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 6;
+            if (isStart)
+            {
+                isStart = false;
+                GameManager.instance.isCheck = false;
+                roundPointCount = 6;
 
-            Count();
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+                Count();
+                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+            }
         }
         else if (GameManager.instance.wave == 3 && GameManager.instance.isCheck)
         {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 5;
+            if (isStart)
+            {
+                isStart = false;
+                GameManager.instance.isCheck = false;
+                roundPointCount = 5;
 
-            Count();
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+                Count();
+                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+            }
         }
         else if (GameManager.instance.wave == 4 && GameManager.instance.isCheck)
         {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 7;
+            if (isStart)
+            {
+                isStart = false;
+                GameManager.instance.isCheck = false;
+                roundPointCount = 7;
 
-            Count();
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+                Count();
+                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+            }
         }
         else if (GameManager.instance.wave == 5 && GameManager.instance.isCheck)
         {
-            GameManager.instance.isCheck = false;
-            roundPointCount = 2;
+            if (isStart)
+            {
+                isStart = false;
+                GameManager.instance.isCheck = false;
+                roundPointCount = 2;
 
-            Count();
-            StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+                Count();
+                StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+            }
         }
     }
 
@@ -130,8 +151,6 @@ public class NormalZombieSpawner : MonoBehaviourPun
 
     public IEnumerator SpawnZombie(int _zombieCount, int _roundPointCount)
     {
-        yield return new WaitForSeconds(10.0f);
-
         for (int i = 0; i < _roundPointCount; i++)
         {
             for (int j = 0; j < _zombieCount / _roundPointCount * 0.8f; j++)
@@ -221,5 +240,7 @@ public class NormalZombieSpawner : MonoBehaviourPun
 
             pointCount += 1;
         }
+
+        isStart = true;
     }
 }

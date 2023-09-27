@@ -44,8 +44,8 @@ public class LoadSceneAsync : MonoBehaviourPun
                 {
                     isCheck = true;
 
-                    GameManager.instance.isCheck = true;
-                    GameManager.instance.MasterStart();
+                    GameManager.instance.isWave = true;
+                    GameManager.instance.WaveStart();
 
                     StartGame();
                 }
