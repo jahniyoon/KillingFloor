@@ -18,13 +18,10 @@ public class LoadSceneAsync : MonoBehaviourPun
     public int photonCount;
     private bool isCheck = false;
 
-    //private void Start()
-    //{
-    //    if (PhotonNetwork.IsMasterClient)
-    //    {
-    //        StartCoroutine(StartCheck());
-    //    }
-    //}
+    private void Start()
+    {
+        GameManager.instance.inputLock = true;
+    }
     private void Update()
     {
         if (!isCheck)
@@ -39,6 +36,8 @@ public class LoadSceneAsync : MonoBehaviourPun
         // 포톤 룸의 총 플레이어가 메인씬 안의 사람들과 같은 경우
         if (PhotonNetwork.CurrentRoom.PlayerCount == GameManager.instance.targetPlayer.Length)
         {
+            GameManager.instance.inputLock = false;
+
             if (PhotonNetwork.IsMasterClient)
             {
                 if (!isCheck)
