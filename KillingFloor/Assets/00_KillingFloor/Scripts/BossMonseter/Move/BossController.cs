@@ -458,7 +458,7 @@ public class BossController : MonoBehaviourPun
     // ¡§±‘»≠
     public float normalization()
     {
-        float normalizedHealth = (bossHp - 0) / (3500f - 0);
+        float normalizedHealth = (bossHp - 0) / (3500f + (1000f * targetPlayer.Length) - 0);
         return normalizedHealth;
     }
 
