@@ -84,6 +84,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(1f);
         RoomRenewal();
+        Debug.Log("룸 리뉴얼");
     }
 
     void Start()
@@ -640,7 +641,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         RoomNameInfoText.text = curName;
         Debug.Log(curName);
 
-        if (curName == "ROOM1" || curName == "ROOM2" || curName == "ROOM3" || curName == "ROOM4") ShowPanel(Room_Panel);
+        if (curName == "ROOM1" || curName == "ROOM2" || curName == "ROOM3" || curName == "ROOM4")
+        {
+            state = State.Room;
+            ShowPanel(Room_Panel);
+        }
 
         //유저방이면 데이터 가져오기
         else
