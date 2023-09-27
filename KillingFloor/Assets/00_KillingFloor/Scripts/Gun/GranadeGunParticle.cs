@@ -1,22 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Photon.Pun;
+using UnityEngine;
 public class GranadeGunParticle : MonoBehaviourPun
 {
     private GameObject user;
     private PlayerHealth playerHealth;
     private void OnParticleCollision(GameObject other)
     {
-        
-            GameObject IdOBj = FindTopmostParent(gameObject.transform).gameObject;
-    
-            int viewID = IdOBj.GetComponent<GranadeGun>().viewId;
- 
-            user = PhotonView.Find(viewID).gameObject;
-            playerHealth = user.GetComponent<PlayerHealth>();
 
-         
+        GameObject IdOBj = FindTopmostParent(gameObject.transform).gameObject;
+
+        int viewID = IdOBj.GetComponent<GranadeGun>().viewId;
+        if (viewID != null)
+        {
+            user = PhotonView.Find(viewID).gameObject;
+        }
+       
+
+        playerHealth = user.GetComponent<PlayerHealth>();
+
+
 
         if (FindTopmostParent(other.transform).name.Contains("Zombie"))
         {
@@ -36,7 +38,7 @@ public class GranadeGunParticle : MonoBehaviourPun
                     //coin += _hitObj.transform.GetComponent<HitPoint>().parentObject.GetComponent<NormalZombie>().coin;
                 }
             }
-          
+
         }
         if ("Mesh_Alfa_2".Equals(other.name)) // 보스 일경우
         {
