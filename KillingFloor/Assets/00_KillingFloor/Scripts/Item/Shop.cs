@@ -29,13 +29,11 @@ public class Shop : MonoBehaviour
     void Update()
     {
 
-        if (playerInfo.photonView.IsMine)
+        if (playerInfo != null &&playerInfo.photonView.IsMine)
         {
             ShopUpdate();
-            if (playerInfo != null)
-            {
-                ShopOpen();
-            }
+            
+            ShopOpen();
         }
     }
 
