@@ -9,6 +9,7 @@ public class ItemObject : MonoBehaviourPun
     Material mat;
     PlayerInputs input;
     PlayerShooter shooter;
+    public GameObject equipUI;
 
     public int value;
     public bool isBlink;
@@ -43,8 +44,9 @@ public class ItemObject : MonoBehaviourPun
     private void OnTriggerStay(Collider player)
     {
         // 플레이어가 근처에 있으면
-        if(player.CompareTag("Player") && photonView.IsMine)
+        if(player.CompareTag("Player"))
         {
+
             value =(int)player.GetComponent<PlayerShooter>().equipedWeapon.magazineSize;
             if((int)player.GetComponent<PlayerShooter>().equipedWeapon.maxAmmo < value + (int)player.GetComponent<PlayerShooter>().equipedWeapon.remainingAmmo)
             {
@@ -53,13 +55,13 @@ public class ItemObject : MonoBehaviourPun
 
             input = player.GetComponent<PlayerInputs>();
             shooter = player.GetComponent<PlayerShooter>(); 
-            PlayerUIManager.instance.equipUI.SetActive(true);
+            equipUI.SetActive(true);
 
             if(input.equip)
             {
                 shooter.photonView.RPC("GetAmmo", RpcTarget.All,value);
                 //shooter.GetAmmo(value);
-                PlayerUIManager.instance.equipUI.SetActive(false);
+                equipUI.SetActive(false);
                 input.equip = false;
                 Destroy(gameObject);
             }
@@ -68,7 +70,7 @@ public class ItemObject : MonoBehaviourPun
 
     private void OnTriggerExit()
     {
-        PlayerUIManager.instance.equipUI.SetActive(false);
+        equipUI.SetActive(false);
     }
 
 }
