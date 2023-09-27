@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using WebSocketSharp;
 
@@ -10,8 +11,15 @@ public class Shop : MonoBehaviour
     PlayerInputs input;
     PlayerHealth playerInfo;
     PlayerShooter shooter;
+
+    [Header("Shop State")]
     public GameObject shopUI;
     bool isShopOpen;
+
+    public TMP_Text playerCoin;
+    public TMP_Text wave;
+    public TMP_Text waveTime;
+
     [SerializeField] private int MaxAmmo;
     [SerializeField] private int remaining;
     [SerializeField] private int magazineAmmo;
@@ -20,10 +28,22 @@ public class Shop : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(playerInfo != null && playerInfo.photonView.IsMine)
-        { 
-            ShopOpen();
+
+        if (playerInfo.photonView.IsMine)
+        {
+            ShopUpdate();
+            if (playerInfo != null)
+            {
+                ShopOpen();
+            }
         }
+    }
+
+    public void ShopUpdate()
+    {
+        waveTime.text = PlayerUIManager.instance.timerCountText.text;
+        wave.text = PlayerUIManager.instance.zombieWaveText.text;
+        playerCoin.text = PlayerUIManager.instance.coinText.text;
     }
 
     // »óÁ¡ ¿ÀÇÂ

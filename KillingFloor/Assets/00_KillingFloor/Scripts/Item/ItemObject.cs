@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemObject : MonoBehaviour
+public class ItemObject : MonoBehaviourPun
 {
     public MeshRenderer itemRenderer;
     Material mat;
@@ -43,7 +43,7 @@ public class ItemObject : MonoBehaviour
     private void OnTriggerStay(Collider player)
     {
         // 플레이어가 근처에 있으면
-        if(player.CompareTag("Player"))
+        if(player.CompareTag("Player") && photonView.IsMine)
         {
             value =(int)player.GetComponent<PlayerShooter>().equipedWeapon.magazineSize;
             if((int)player.GetComponent<PlayerShooter>().equipedWeapon.maxAmmo < value + (int)player.GetComponent<PlayerShooter>().equipedWeapon.remainingAmmo)

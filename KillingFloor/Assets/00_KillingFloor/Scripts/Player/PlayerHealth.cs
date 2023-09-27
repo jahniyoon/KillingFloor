@@ -179,7 +179,7 @@ public class PlayerHealth : LivingEntity
 
             if (SceneManager.GetActiveScene().name == "Main")
             {
-                spawnPosition = new(135.0f, -6.0f, 200.0f);
+                spawnPosition = new(-22.639f, -5.9f, 22.1f);
             }
             // 지정된 위치로 이동
             transform.position = spawnPosition;
