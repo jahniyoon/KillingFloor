@@ -14,16 +14,50 @@ public class LoadSceneAsync : MonoBehaviourPun
     [SerializeField]
     private GameObject playerHUD;
 
-    private void Start()
+    public int playerCount;
+    public int photonCount;
+    private bool isCheck = false;
+
+    //private void Start()
+    //{
+    //    if (PhotonNetwork.IsMasterClient)
+    //    {
+    //        StartCoroutine(StartCheck());
+    //    }
+    //}
+    private void Update()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (!isCheck)
         {
-            StartCoroutine(StartCheck());
+            PlayerCheck();
         }
     }
+    public void PlayerCheck()
+    {
+        playerCount = GameManager.instance.targetPlayer.Length;
+        photonCount = PhotonNetwork.CurrentRoom.PlayerCount;
+        // 포톤 룸의 총 플레이어가 메인씬 안의 사람들과 같은 경우
+        if (PhotonNetwork.CurrentRoom.PlayerCount == GameManager.instance.targetPlayer.Length)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (!isCheck)
+                {
+                    isCheck = true;
 
+                    GameManager.instance.isCheck = true;
+                    GameManager.instance.MasterStart();
+
+                    StartGame();
+                }
+            }
+        }
+    }
     private IEnumerator StartCheck()
     {
+        Debug.Log(GameManager.instance.targetPlayer.Length);
+        Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount);
+
         while (PhotonNetwork.CurrentRoom.PlayerCount != GameManager.instance.targetPlayer.Length)
         { yield return null; }
         while (!CheckIfAllPlayersLoaded())
