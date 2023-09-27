@@ -599,5 +599,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: 1
-  Cost: 0
+  Cost: 5
   GainPerSecond: 1
