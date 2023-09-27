@@ -69,6 +69,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     public bool isShop = false;
     private bool isRespawn = false;
 
+    public bool isWave = false;
+    private bool isRest = false;
+
 
     private bool GMMode = false;
     // Junoh 추가
@@ -118,6 +121,17 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             zombieCount(currentZombieCount);
+
+            if (isWave)
+            {
+                isWave = false;
+                WaveStart();
+            }
+            else if (isRest)
+            {
+                isRest = false;
+                WaveChange();
+            }
         }
 
         SetPlayer();
@@ -130,6 +144,24 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             OnRespawn();    // 상점이 열리면 리스폰 해주기
         }
+    }
+
+    #region WaveController
+    public void WaveChange()
+    {
+        photonView.RPC("MasterChange", RpcTarget.MasterClient);
+    }
+
+    [PunRPC]
+    public void MasterChange()
+    {
+        photonView.RPC("SyncChange", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void SyncChange()
+    {
+        StartCoroutine(ChangeWave());
     }
 
     public void WaveStart()
@@ -148,7 +180,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         StartCoroutine(StartWave());
     }
+    #endregion
 
+    #region ZombieCount
     public void zombieCount(int _currentZombieCount)
     {
         photonView.RPC("MasterCount", RpcTarget.MasterClient, _currentZombieCount);
@@ -175,6 +209,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             players.transform.SetParent(GameObject.Find("Players").transform);
         }
     }
+    #endregion
 
     public void LeaveServer()
     {
@@ -223,6 +258,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private IEnumerator StartWave()
     {
+        Debug.Log("안녕?");
+
+        isCheck = true;
+
         PlayerUIManager.instance.CountUI.SetActive(true);
         PlayerUIManager.instance.TimerUI.SetActive(false);
 
@@ -248,7 +287,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         PlayerUIManager.instance.SetZombieCount(currentZombieCount);
 
-        StartCoroutine(ChangeWave());
+        if (PhotonNetwork.IsMasterClient)
+        {
+            isRest = true;
+        }
     }
 
     private IEnumerator ChangeWave()
@@ -290,8 +332,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         isShop = false;
         SetWave(1);
-        isCheck = true;
-        StartCoroutine(StartWave());
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            isWave = true;
+        }
     }
     // Junoh 추가
 
