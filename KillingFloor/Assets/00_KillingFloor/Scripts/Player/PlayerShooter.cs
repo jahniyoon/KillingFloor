@@ -239,12 +239,7 @@ public class PlayerShooter : MonoBehaviourPun
                 lastFireTime = Time.time;
                 // 실제 발사 처리 실행
                 Shot();
-                //=======
-                //                GameObject hitObj = hit.transform.gameObject;
-                //                Damage(hitObj); 
-                //                hitPoint = hit.point;
-
-                //>>>>>>> origin/feature/ssm
+             
             }
             // 남은 총알이 있을 때 발사하면 재장전 실행
             else if (state == State.Empty && 0 < equipedWeapon.remainingAmmo && !input.dash)
@@ -269,45 +264,50 @@ public class PlayerShooter : MonoBehaviourPun
                 lastFireTime = Time.time;
                 if (weaponSlot == 2)
                 {
-                    for (int i = 0; i < 7; i++)
-                    {
-                        if (!bulletlist[i].activeSelf)
-                        {
+                    photonView.RPC("GranadeActMaster", RpcTarget.MasterClient);
 
-                            bulletlist[i].transform.position = bulletPoint.transform.position;
-                            bulletlist[i].transform.rotation = bulletPoint.transform.rotation;
-                            bulletlist[i].GetComponent<Rigidbody>().velocity = Vector3.zero; // 이전 속도 초기화
-                            bulletlist[i].SetActive(true);
-                            bulletlist[i].GetComponent<Rigidbody>().AddForce(bulletPoint.transform.forward * bulletSpeed * 2f);
-                            handAnimator.SetTrigger("isFire");
-                            animator.SetTrigger("isFire");
-                            equipedWeapon.ammo -= 1;
-                            PlayerUIManager.instance.SetAmmo(equipedWeapon.ammo);           // 현재 탄 UI 세팅
-
-                            if (equipedWeapon.ammo <= 0)
-                            {
-                                // 탄창에 남은 탄약이 없다면, 총의 현재 상태를 Empty으로 갱신
-                                state = State.Empty;
-                                input.shoot = false;
-                            }
-                            break;
-                        }
-                    }
                 }
-
-
             }
-
-
-
-
-
             // 데몰리스트 발사 입력 후 할것들
         }
         PlayerUIManager.instance.SetCoin(playerHealth.coin);
 
     }
+    [PunRPC]
+    void GranadeActMaster()
+    {
+        photonView.RPC("GranadeActAll", RpcTarget.All);
+    }
+    [PunRPC]
+    void GranadeActAll()
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            if (!bulletlist[i].activeSelf)
+            {
 
+
+                bulletlist[i].transform.position = bulletPoint.transform.position;
+                bulletlist[i].transform.rotation = bulletPoint.transform.rotation;
+
+                bulletlist[i].GetComponent<Rigidbody>().velocity = Vector3.zero; // 이전 속도 초기화
+                bulletlist[i].SetActive(true);
+                bulletlist[i].GetComponent<Rigidbody>().AddForce(bulletPoint.transform.forward * bulletSpeed * 2f);
+                handAnimator.SetTrigger("isFire");
+                animator.SetTrigger("isFire");
+                equipedWeapon.ammo -= 1;
+                PlayerUIManager.instance.SetAmmo(equipedWeapon.ammo);           // 현재 탄 UI 세팅
+
+                if (equipedWeapon.ammo <= 0)
+                {
+                    // 탄창에 남은 탄약이 없다면, 총의 현재 상태를 Empty으로 갱신
+                    state = State.Empty;
+                    input.shoot = false;
+                }
+                break;
+            }
+        }
+    }
     void Shot()
     {
 
@@ -408,11 +408,6 @@ public class PlayerShooter : MonoBehaviourPun
                         }
                     }
                 }
-            //if(nearestBone.gameObject.GetPhotonView() == null)
-            //{
-            //    Debug.Log("포톤뷰가 없어서 상위로 전환");
-            //    nearestBone = nearestBone.parent;
-            //}
             if (nearestBone != null && nearestBone.gameObject.GetPhotonView() != null)
             {
 
