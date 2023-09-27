@@ -48,7 +48,7 @@ public class BossController : MonoBehaviourPun
 
     void Start()
     {
-        meteorFattern = new float[] { 2000, 1000, 0, -10, -10, -10 };
+       
         meteors = new GameObject[4];
         meteor = GameObject.Find("Meteor");
       
@@ -111,7 +111,7 @@ public class BossController : MonoBehaviourPun
         }
         bossHp = bossHp + (1000 * targetPlayer.Length);
 
-
+        meteorFattern = new float[] { bossHp/2, 1000, 0, -10, -10, -10 };
     }
 
     void Update()

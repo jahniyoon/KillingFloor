@@ -15,6 +15,8 @@ public class Shop : MonoBehaviour
     [SerializeField] private int MaxAmmo;
     [SerializeField] private int remaining;
     [SerializeField] private int magazineAmmo;
+    [SerializeField] private int waveShop;
+    [SerializeField] private int subWaveShop;
     // Update is called once per frame
     void Update()
     {
@@ -76,29 +78,32 @@ public class Shop : MonoBehaviour
         MaxAmmo =(int)player.GetComponent<PlayerShooter>().equipedWeapon.maxAmmo;
         remaining = (int)player.GetComponent<PlayerShooter>().equipedWeapon.remainingAmmo;
         magazineAmmo = (int)player.GetComponent<PlayerShooter>().equipedWeapon.magazineSize;
-
-        // 플레이어가 근처에 있으면
-        if (player.CompareTag("Player") && GameManager.instance.isShop)
+        if(GameManager.instance.wave == waveShop || GameManager.instance.wave == subWaveShop)
         {
-            input = player.GetComponent<PlayerInputs>();
-            playerInfo = player.GetComponent<PlayerHealth>();
-            shooter = player.GetComponent<PlayerShooter>();
-            if (playerInfo != null && playerInfo.photonView.IsMine)
+            if (player.CompareTag("Player") && GameManager.instance.isShop)
             {
-                PlayerUIManager.instance.shopUI.SetActive(true); // 안내 UI 켜기
-
-                if (input.equip && !isShopOpen) // 버튼을 누르면
+                input = player.GetComponent<PlayerInputs>();
+                playerInfo = player.GetComponent<PlayerHealth>();
+                shooter = player.GetComponent<PlayerShooter>();
+                if (playerInfo != null && playerInfo.photonView.IsMine)
                 {
-                    shopUI.SetActive(true);
-                    PlayerUIManager.instance.shopUI.SetActive(false);
-                    PlayerUIManager.instance.isShopState = true;
+                    PlayerUIManager.instance.shopUI.SetActive(true); // 안내 UI 켜기
 
-                    isShopOpen = true;
-                    input.equip = false;
+                    if (input.equip && !isShopOpen) // 버튼을 누르면
+                    {
+                        shopUI.SetActive(true);
+                        PlayerUIManager.instance.shopUI.SetActive(false);
+                        PlayerUIManager.instance.isShopState = true;
+
+                        isShopOpen = true;
+                        input.equip = false;
+                    }
                 }
-            }
 
+            }
         }
+        // 플레이어가 근처에 있으면
+      
     }
     
     // 플레이어가 근처에서 멀어지면

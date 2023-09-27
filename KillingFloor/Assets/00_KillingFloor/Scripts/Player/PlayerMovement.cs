@@ -89,6 +89,7 @@ public class PlayerMovement : MonoBehaviourPun
 
     void Start()
     {
+      
         //ssm
         shopNavList = new List<GameObject>();
         shopNavPrant = GameObject.Find("ShopNavigation");
@@ -413,6 +414,10 @@ public class PlayerMovement : MonoBehaviourPun
     [PunRPC]
     public void shopNavSp()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
         //SSM 20230925 네비 소환
         if (NavAct== false)
         {

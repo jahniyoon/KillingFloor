@@ -126,15 +126,25 @@ public class PlayerShooter : MonoBehaviourPun
     void Start()
     {
         bulletlist = new List<GameObject>();
-        for (int i = 0; i < 7; i++)
+        if (photonView.IsMine)
         {
-          
-            GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, bulletPoint.transform.forward, transform.rotation);
-     
-            bulletlist.Add(bullet);
-            bulletlist[i].GetComponent<GranadeGun>().setViewId(photonView.ViewID);
-            bulletlist[i].SetActive(false);
+            if (weaponClass == WeaponClass.Demolitionist)
+            {
+                for (int i = 0; i < 7; i++)
+                {
+
+                    GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, bulletPoint.transform.forward, transform.rotation);
+
+                    bulletlist.Add(bullet);
+                    bulletlist[i].GetComponent<GranadeGun>()?.setViewId(photonView.ViewID);
+                    bulletlist[i].SetActive(false);
+                }
+
+            }
         }
+     
+        
+      
 
         input = GetComponent<PlayerInputs>();
         playerMovement = GetComponent<PlayerMovement>();
