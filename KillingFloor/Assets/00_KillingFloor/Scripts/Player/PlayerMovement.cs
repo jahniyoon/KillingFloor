@@ -85,12 +85,26 @@ public class PlayerMovement : MonoBehaviourPun
     private List<GameObject> shopNavList;
     private GameObject shopNavPrant;
     private bool NavAct = false;
+
+    private List<string> cashTem;
+   
     //SSM End
 
     void Start()
     {
-      
+        
+        cashTem = new List<string>();
         //ssm
+        for (int i = 0; i < GameManager.instance.cashItem.Count; i++)
+        {
+            if (GameManager.instance.cashItem[i] == "GoldSkin")
+            {
+                
+                photonView.RPC("changeMaster", RpcTarget.MasterClient,photonView.ViewID);   
+             
+            }
+        }
+
         shopNavList = new List<GameObject>();
         shopNavPrant = GameObject.Find("ShopNavigation");
         if (shopNavPrant != null)
@@ -442,5 +456,22 @@ public class PlayerMovement : MonoBehaviourPun
         NavAct = false;
 
 
+    }
+    [PunRPC]
+    private void changeMaster(int viewid)
+    {
+
+        photonView.RPC("changeRender", RpcTarget.All, viewid);
+    
+    }
+    [PunRPC]
+    private void changeRender(int viewid)
+    {
+        GameObject user = PhotonView.Find(viewid).gameObject;
+        Transform childObject = user.transform.Find("genAssault_LOD0");
+        Renderer renderer = childObject.GetComponent<Renderer>();
+        Material newMaterial = new Material(Shader.Find("Standard"));
+        newMaterial.color = Color.blue;
+        renderer.material = newMaterial;
     }
 }

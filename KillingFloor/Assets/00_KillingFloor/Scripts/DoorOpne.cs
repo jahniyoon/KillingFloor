@@ -14,7 +14,7 @@ public class DoorOpne : MonoBehaviourPun
     // Update is called once per frame
     void Update()
     {
-        if(GameManager.instance.wave == GameManager.instance.MaxWave)
+        if(GameManager.instance.wave >= GameManager.instance.MaxWave)
         {
             gameObject.transform.rotation = Quaternion.Euler(transform.rotation.x, -90f, transform.rotation.z);
         }

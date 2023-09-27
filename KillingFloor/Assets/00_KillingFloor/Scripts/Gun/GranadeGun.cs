@@ -30,15 +30,20 @@ public class GranadeGun : MonoBehaviourPun
     {
         viewId = id;
     }
-    
-   
+
+
     private void OnTriggerEnter(Collider other)
     {
-       
-        grenade.SetActive(false);
-        explosion.Play();
-        explosionSound.Play();
-        Invoke("ActFalse", 0.3f);
+        if (!explosionSound.isPlaying)
+        {
+            actchk = true;
+            grenade.SetActive(false);
+            explosion.Play();
+            explosionSound.Play();
+            Invoke("ActFalse", 0.3f);
+        }
+            
+        
     }
     private void ExplosionPlay()
     {
