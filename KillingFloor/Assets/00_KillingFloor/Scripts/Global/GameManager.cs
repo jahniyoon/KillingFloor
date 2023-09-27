@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public bool isShop = false;
     private bool isRespawn = false;
 
-    public bool isWave = false;
+    public bool isWave = true;
     private bool isRest = false;
 
 
@@ -258,8 +258,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private IEnumerator StartWave()
     {
-        Debug.Log("¾È³ç?");
-
         isCheck = true;
 
         PlayerUIManager.instance.CountUI.SetActive(true);
