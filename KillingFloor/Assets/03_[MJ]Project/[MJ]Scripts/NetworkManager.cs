@@ -50,8 +50,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public GameObject ContentArea;
     public GameObject ItemObj;
     public GameObject InventoryContent;
-    public TMP_Text StoreItem_BtnTxt;
-
     public enum State { Login, Lobby, Room, Class, Store, Option };
     [Header("Lobby UI")]
     public State state;
