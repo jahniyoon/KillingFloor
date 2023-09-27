@@ -9,9 +9,12 @@ using static UnityEngine.Rendering.DebugUI;
 using PlayFab.ClientModels;
 using PlayFab;
 using Photon.Pun.Demo.Cockpit;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+   
+    public List<string> cashItem;
     public static GameManager instance
     {
         get
@@ -78,6 +81,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
+        cashItem = new List<string>();
+        //cashItem 에 저장
+
+        //
         GetPlayerData();    // 로컬 플레이어 데이터 가져오기
 
         PhotonNetwork.AutomaticallySyncScene = true;
@@ -105,6 +112,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         //PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
 
         GameObject newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, newRotation);
+
+
         if (GMMode)
         {
             Debug.Log("GM Mode");

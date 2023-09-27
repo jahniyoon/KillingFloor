@@ -4,6 +4,9 @@ public class GranadeGunParticle : MonoBehaviourPun
 {
     private GameObject user;
     private PlayerHealth playerHealth;
+
+    private float damage = 5f;
+    private float coolTime = 0.05f;
     private void OnParticleCollision(GameObject other)
     {
 
@@ -14,7 +17,7 @@ public class GranadeGunParticle : MonoBehaviourPun
         {
             user = PhotonView.Find(viewID).gameObject;
         }
-       
+
 
         playerHealth = user.GetComponent<PlayerHealth>();
 
@@ -63,6 +66,25 @@ public class GranadeGunParticle : MonoBehaviourPun
             // 보스 데미지 넣어야하는 부분
             //_hitObj.transform.GetComponent<BossController>().bossHp -= damage;
         }
+
+        
+      
+       
+          
+        
+        // 상대방으로부터 LivingEntity 타입을 가져오기 시도
+        LivingEntity attackTarget = other.GetComponent<LivingEntity>();
+        if (attackTarget != null)
+        {                // 상대방의 피격 위치와 피격 방향을 근삿값으로 계산
+            Vector3 hitPoint = other.transform.position;
+            Vector3 hitNormal = transform.position - other.transform.position;
+
+            // 공격 실행
+            attackTarget.OnDamage(1, hitPoint, hitNormal);
+        }
+      
+
+
     }
     private Transform FindTopmostParent(Transform currentTransform)
     {
