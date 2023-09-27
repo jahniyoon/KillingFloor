@@ -277,19 +277,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3390553669198013386}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3390553670332517953}
-        m_TargetAssemblyTypeName: ItemToBuy, Assembly-CSharp
-        m_MethodName: BuyItem
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3390553669641412268
 GameObject:
   m_ObjectHideFlags: 0
@@ -516,7 +504,7 @@ GameObject:
   - component: {fileID: 3390553670332517956}
   - component: {fileID: 3390553670332517958}
   - component: {fileID: 3390553670332517959}
-  - component: {fileID: 3390553670332517953}
+  - component: {fileID: 2106398151246747056}
   m_Layer: 5
   m_Name: Item(3)
   m_TagString: Untagged
@@ -586,7 +574,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3390553670332517953
+--- !u!114 &2106398151246747056
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -599,5 +587,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: 4
-  Cost: 30
-  GainPerSecond: 1
+  Cost: 0

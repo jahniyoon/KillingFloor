@@ -45,9 +45,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public int stars = default;
 
     public ItemToBuy[] Items;
-    //public GameObject[] EnableOnLogin;
     public GameObject ContentArea;
     public GameObject ItemObj;
+    public GameObject InventoryContent;
 
     public enum State { Login, Lobby, Room, Class, Store, Option };
     [Header("Lobby UI")]
@@ -78,7 +78,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             StartCoroutine("RoomRenewalCoroutine"); // 1초마다 업데이트
         }
-
     }
     IEnumerator RoomRenewalCoroutine()
     {
@@ -90,18 +89,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     void Start()
     {
         StartCoroutine(UpdatePlayerCount());
-
-        //ITEM
-        foreach (ItemToBuy i in Items)
-        {
-            GameObject itemObject = Instantiate(ItemObj, ContentArea.transform.position, Quaternion.identity);
-            itemObject.transform.GetChild(1).GetComponent<Text>().text = i.Name;
-            itemObject.transform.GetChild(2).GetComponent<Text>().text = "[" + i.Cost + " Coin]";
-            itemObject.GetComponent<Image>().sprite = i.GetComponent<Image>().sprite;
-            itemObject.GetComponent<Image>().preserveAspect = true;     // 이미지 종횡비 유지하도록 설정
-            itemObject.transform.SetParent(ContentArea.transform);
-        }
-        //ITEM
     }
 
     #region 플레이팹
@@ -123,10 +110,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
             SetLocalPlayerData();                   // 로컬플레이어데이터 세팅
             GetItemPrices();                        // 아이템 가격 가져옴
-
-            //ITEM
-            //foreach (GameObject obj in EnableOnLogin) obj.SetActive(true);  // 유저 인벤토리 가져옴
-            //ITEM
+            UpdateInventory();                      // 유저 인벤토리 아이템 가져옴
 
             PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
         },
@@ -152,12 +136,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             SetData("0");    // 유저 데이터 초기화
             SetClass("Commando");
         },
-            (error) => 
-            { 
+            (error) =>
+            {
                 Debug.Log("회원가입 실패");
                 RegistInfoText.text = "회원가입 실패";
 
-            }) ;
+            });
 
     }
 
@@ -172,10 +156,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
-            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
-
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
-            SetLocalPlayerData();
+            SetLocalPlayerData();                   // 로컬플레이어데이터 세팅
+            GetItemPrices();                        // 아이템 가격 가져옴
+            UpdateInventory();                      // 유저 인벤토리 아이템 가져옴
+
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -188,11 +174,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
-            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
-
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+            SetLocalPlayerData();                   // 로컬플레이어데이터 세팅
+            GetItemPrices();                        // 아이템 가격 가져옴
+            UpdateInventory();                      // 유저 인벤토리 아이템 가져옴
 
-            SetLocalPlayerData();
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -205,11 +192,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
-            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
-
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+            SetLocalPlayerData();                   // 로컬플레이어데이터 세팅
+            GetItemPrices();                        // 아이템 가격 가져옴
+            UpdateInventory();                      // 유저 인벤토리 아이템 가져옴
 
-            SetLocalPlayerData();
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -222,11 +210,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
-            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
-
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+            SetLocalPlayerData();                   // 로컬플레이어데이터 세팅
+            GetItemPrices();                        // 아이템 가격 가져옴
+            UpdateInventory();                      // 유저 인벤토리 아이템 가져옴
 
-            SetLocalPlayerData();
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -239,11 +228,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
-            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
-
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+            SetLocalPlayerData();                   // 로컬플레이어데이터 세팅
+            GetItemPrices();                        // 아이템 가격 가져옴
+            UpdateInventory();                      // 유저 인벤토리 아이템 가져옴
 
-            SetLocalPlayerData();
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -256,11 +246,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
-            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
-
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+            SetLocalPlayerData();                   // 로컬플레이어데이터 세팅
+            GetItemPrices();                        // 아이템 가격 가져옴
+            UpdateInventory();                      // 유저 인벤토리 아이템 가져옴
 
-            SetLocalPlayerData();
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -273,11 +264,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
-            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
-
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+            SetLocalPlayerData();                   // 로컬플레이어데이터 세팅
+            GetItemPrices();                        // 아이템 가격 가져옴
+            UpdateInventory();                      // 유저 인벤토리 아이템 가져옴
 
-            SetLocalPlayerData();
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -290,12 +282,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             // 로그인 성공시 실행
             GetLeaderboard(result.PlayFabId);       // PlayFab 리더보드 가져옴
-            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
-
             GetVirtualCurrencies();                 // 유저 Currency 가져옴
+            SetLocalPlayerData();                   // 로컬플레이어데이터 세팅
             GetItemPrices();                        // 아이템 가격 가져옴
+            UpdateInventory();                      // 유저 인벤토리 아이템 가져옴
 
-            SetLocalPlayerData();
+            PhotonNetwork.ConnectUsingSettings();   // Photon 서버 연결
         },
             (error) => Debug.Log("로그인 실패"));
     }
@@ -422,7 +414,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             (error) => Debug.Log("데이터 불러오기 실패"));
     }
     #endregion
-
+    #endregion
 
     #region 유저 Currency
     // 유저 Currency 가져오는 메서드
@@ -442,19 +434,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log(result);
         Debug.Log(CoinsValueText.text);
     }
-    // 코인 추가 메서드
-    public void OnAddVirtualCurrency()
+    // 코인 추가 요청 메서드
+    public void OnAddVirtualCurrency(/*int addCoin*/)
     {
-        var request = new AddUserVirtualCurrencyRequest { VirtualCurrency = "CN", Amount = 50 };
+        int addCoin = 50;
+
+        var request = new AddUserVirtualCurrencyRequest { VirtualCurrency = "CN", Amount = addCoin };
         PlayFabClientAPI.AddUserVirtualCurrency(request, GrantVirtualCurrencySuccess, OnError);
     }
+    // 코인 추가 요청 성공시 콜백
     void GrantVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
     {
-        Debug.Log("Add 50 Coins Granted !");
+        Debug.Log("Add Coins Granted !");
 
-        coins += 50;
-        CoinsValueText.text = "Coins: " + coins.ToString();
-        StarsValueText.text = "Stars: " + stars.ToString();
+        GetVirtualCurrencies();
+        //coins += 50;
+        //CoinsValueText.text = "Coins: " + coins.ToString();
+        //StarsValueText.text = "Stars: " + stars.ToString();
     }
     void OnError(PlayFabError error)
     {
@@ -462,6 +458,92 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
+    #region Store_Panel
+    public void StoreBtn()
+    {
+        Store_Panel.SetActive(true);
+    }
+    public void ExitStore_Panel()
+    {
+        Store_Panel.SetActive(false);
+    }
+
+    public void GetItemPrices()
+    {
+        GetCatalogItemsRequest request = new GetCatalogItemsRequest();
+        request.CatalogVersion = "Player Items Catalog";
+        PlayFabClientAPI.GetCatalogItems(request, result =>
+        {
+            List<CatalogItem> items = result.Catalog;
+            foreach (CatalogItem item in items)
+            {
+                uint cost = item.VirtualCurrencyPrices["CN"];
+
+                foreach (ItemToBuy editorItems in Items)
+                {
+                    if (editorItems.Name == item.ItemId)
+                    {
+                        editorItems.Cost = (int)cost;
+                        //Debug.L
+                    }
+                }
+                Debug.Log($"cost : {cost}");
+            }
+
+            foreach (ItemToBuy i in Items)
+            {
+                GameObject itemObject = Instantiate(ItemObj, ContentArea.transform.position, Quaternion.identity);
+                itemObject.transform.GetChild(1).GetComponent<Text>().text = i.Name;
+                itemObject.transform.GetChild(2).GetComponent<Text>().text = "[" + i.Cost + " Coin]";
+                itemObject.GetComponent<Image>().sprite = i.GetComponent<Image>().sprite;
+                itemObject.GetComponent<Image>().preserveAspect = true;     // 이미지 종횡비 유지하도록 설정
+                itemObject.transform.SetParent(ContentArea.transform);
+                itemObject.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate { MakePurchase(i.Name, i.Cost); });
+            }
+        },
+        error => { });
+    }
+
+    void UpdateInventory()
+    {
+        PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), result =>
+        {
+            List<ItemInstance> itemIv = result.Inventory;
+            foreach (ItemInstance i in itemIv)
+            {
+                foreach (ItemToBuy editorI in Items)
+                {
+                    if (editorI.Name == i.ItemId)
+                    {
+                        GameObject itemObject = Instantiate(ItemObj, InventoryContent.transform.position, Quaternion.identity);
+                        itemObject.transform.GetChild(1).GetComponent<Text>().text = i.ItemId;
+                        itemObject.transform.GetChild(2).GetComponent<Text>().text = "[" + editorI.Cost + " Coin]";
+                        itemObject.GetComponent<Image>().sprite = editorI.GetComponent<Image>().sprite;
+                        itemObject.GetComponent<Image>().preserveAspect = true;     // 이미지 종횡비 유지하도록 설정
+                        itemObject.transform.SetParent(InventoryContent.transform);
+                    }
+
+                }
+            }
+        }, error => { });
+    }
+
+    void MakePurchase(string name, int price)
+    {
+        PurchaseItemRequest request = new PurchaseItemRequest();
+        request.CatalogVersion = "Player Items Catalog";
+        request.ItemId = name;
+        request.Price = price;
+        request.VirtualCurrency = "CN";
+
+        PlayFabClientAPI.PurchaseItem(request, result => 
+        {
+            Debug.Log("구매 성공");
+            UpdateInventory();
+            GetVirtualCurrencies();
+        },
+            error => { Debug.Log(error.ErrorMessage); });
+    }
     #endregion
 
     #region Lang_Panel
@@ -574,54 +656,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
-    #region Store_Panel
-    public void StoreBtn()
-    {
-        Store_Panel.SetActive(true);
-    }
-    public void ExitStore_Panel()
-    {
-        Store_Panel.SetActive(false);
-    }
-
-    public void GetItemPrices()
-    {
-        GetCatalogItemsRequest request = new GetCatalogItemsRequest();
-        request.CatalogVersion = "Player Items Catalog";
-        PlayFabClientAPI.GetCatalogItems(request, result => 
-        {
-            List<CatalogItem> items = result.Catalog;
-            foreach(CatalogItem item in items)
-            {
-                uint cost = item.VirtualCurrencyPrices["CN"];
-                Debug.Log($"cost : {cost}");
-            }
-        }, 
-        error => { });
-    }
-    #endregion
-
+    //[Mijeong] 230927 불필요한 코드 삭제
     #region UserRoom
     public void JoinOrCreateRoom(string roomName)
     {
-        if (roomName == "유저방")
-        {
-            //PlayFabUserList의 표시이름과 입력받은 닉네임이 같다면 PlayFabID를 커스텀 프로퍼티로 넣고 방을 만든다
-            for (int i = 0; i < PlayFabUserList.Count; i++)
-            {
-                if (PlayFabUserList[i].DisplayName == UserSearchInput.text)
-                {
-                    RoomOptions roomOptions = new RoomOptions();
-                    roomOptions.MaxPlayers = 6;
-                    roomOptions.CustomRoomProperties = new Hashtable() { { "PlayFabID", PlayFabUserList[i].PlayFabId } };
-                    PhotonNetwork.JoinOrCreateRoom(UserSearchInput.text + "님의 정보창", roomOptions, null);
-
-                    return;
-                }
-            }
-            print("닉네임이 일치하지 않습니다");
-        }
-        else PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions() { MaxPlayers = 6 }, null);
+        PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions() { MaxPlayers = 6 }, null);
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message) => print("방만들기실패");
@@ -629,7 +668,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinRoomFailed(short returnCode, string message) => print("방참가실패");
 
 
-
+    //[Mijeong] 230927 불필요한 코드 삭제
     public override void OnJoinedRoom()
     {
         RoomRenewal();
@@ -646,85 +685,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             state = State.Room;
             ShowPanel(Room_Panel);
         }
-
-        //유저방이면 데이터 가져오기
-        else
-        {
-            ShowPanel(UserRoom_Panel);
-
-            string curID = PhotonNetwork.CurrentRoom.CustomProperties["PlayFabID"].ToString();
-            GetData(curID);
-
-            // 현재 방 PlatyFabID 커스텀 프로퍼티가 나의 PlayFabID와 같다면 값을 저장할 수 있음
-            if (curID == MyPlayFabInfo.PlayFabId)
-            {
-                RoomNameInfoText.text += " (나의 정보창)";
-
-                SetDataInput.gameObject.SetActive(true);
-                SetDataBtnObj.SetActive(true);
-            }
-        }
+        else { };
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) => RoomRenewal();
 
     public override void OnPlayerLeftRoom(Player otherPlayer) => RoomRenewal();
 
-    //// REGACY:
-    //void RoomRenewal()
-    //{
-    //    UserNickNameText.text = "";
-    //    ResetPlayerUI();
-    //    PlayFabClientAPI.GetUserData(new GetUserDataRequest(), (result) =>
-    //    {
-    //        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-    //        {
-    //            UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
-
-    //            // 방 안의 UI 세팅
-    //            playerInfo[i + 1].gameObject.SetActive(true);
-    //            playerInfo[i + 1].nickName.text = PhotonNetwork.PlayerList[i].NickName;
-    //            playerInfo[i + 1].level.text = result.Data["HomeLevel"].Value;
-    //        }
-    //    },
-    //    (error) => { Debug.Log("레벨 불러오지 못함"); }
-    //    );
-    //// REGACY2:
-    //    RoomNumInfoText.text = PhotonNetwork.CurrentRoom.PlayerCount + "명 / " + PhotonNetwork.CurrentRoom.MaxPlayers + "최대 인원";
-    ////}
-    //void RoomRenewal()
-    //{
-    //    UserNickNameText.text = "";
-    //    ResetPlayerUI();
-
-    //    for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-    //    {
-
-    //        // 방 안의 UI 세팅
-    //        playerInfo[i + 1].gameObject.SetActive(true);
-    //        playerInfo[i + 1].nickName.text = PhotonNetwork.PlayerList[i].NickName;
-
-    //        for (int j = 0; j < PlayFabUserList.Count; j++)
-    //        {
-    //            if (PhotonNetwork.PlayerList[i].NickName == PlayFabUserList[j].DisplayName)
-    //            {
-    //                PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = PlayFabUserList[j].PlayFabId }, (result) =>
-    //                {
-    //                    Debug.Log(result.Data["HomeLevel"].Value);
-    //                    playerInfo[i+1].level.text = result.Data["HomeLevel"].Value;
-
-    //                    //Debug.Log(PhotonNetwork.PlayerList[i].NickName);
-    //                    Debug.Log($"playerInfo[i + 1].level: {playerInfo[i + 1].level.text}");
-    //                    //UserNickNameText.text += PhotonNetwork.PlayerList[i].NickName + " : " + result.Data["HomeLevel"].Value + "\n";
-    //                },
-
-    //                (error) => Debug.Log("레벨 불러오지 못함"));
-    //            }
-    //        }
-    //    }
-
-    //    RoomNumInfoText.text = PhotonNetwork.CurrentRoom.PlayerCount + "명 / " + PhotonNetwork.CurrentRoom.MaxPlayers + "최대 인원";
-    //}
     void RoomRenewal()
     {
         UserNickNameText.text = "";
@@ -1050,7 +1017,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 break;
         }
     }
-
     #endregion
 
 }
