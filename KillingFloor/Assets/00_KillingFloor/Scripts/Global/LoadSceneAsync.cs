@@ -24,11 +24,16 @@ public class LoadSceneAsync : MonoBehaviourPun
 
     private IEnumerator StartCheck()
     {
+        while (PhotonNetwork.CurrentRoom.PlayerCount != GameManager.instance.targetPlayer.Length)
+        { yield return null; }
         while (!CheckIfAllPlayersLoaded())
         { yield return null; }
 
         GameManager.instance.isCheck = true;
+        GameManager.instance.WaveStart();
+
         StartGame();
+
     }
 
     private bool CheckIfAllPlayersLoaded()

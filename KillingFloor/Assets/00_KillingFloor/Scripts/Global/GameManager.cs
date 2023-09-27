@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public string playerLevel;
     public string playerClass;
 
-    
+
 
 
 
@@ -112,15 +112,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-        // ToDO : 테스트씬으로 넘어오면 생성되도록 수정하기
-
-        StartCoroutine(StartWave());
-    }
-
     // 키보드 입력을 감지하고 룸을 나가게 함
     private void Update()
     {
@@ -134,6 +125,23 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             OnRespawn();    // 상점이 열리면 리스폰 해주기
         }
+    }
+    
+    public void WaveStart()
+    {
+        photonView.RPC("MasterStart", RpcTarget.MasterClient);
+    }
+
+    [PunRPC]
+    public void MasterStart()
+    {
+        photonView.RPC("SyncStart", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void SyncStart()
+    {
+        StartCoroutine(StartWave());
     }
 
     public void zombieCount(int _currentZombieCount)
@@ -243,18 +251,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (MaxWave == wave)
         {
             PlayerUIManager.instance.SetEndNotice("Clear");
-        PlayerUIManager.instance.SetNoticeLogo("Congratulate");
+            PlayerUIManager.instance.SetNoticeLogo("Congratulate");
         }
         else
         {
             PlayerUIManager.instance.SetEndNotice("Wave Clear");
-//=======
-//        isShop = true;
-//        OnRespawn();    // 상점이 열리면 리스폰 해주기
-     
-//        PlayerUIManager.instance.SetEndNotice("Wave Clear");
-//>>>>>>> origin/feature/ssm
-        PlayerUIManager.instance.SetNoticeLogo("Go to Shop");
+            PlayerUIManager.instance.SetNoticeLogo("Go to Shop");
         }
 
         isShop = true;
@@ -269,7 +271,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         StartCoroutine(noticeController.CoroutineManager(true));
 
         int timeElapsed = 70;
-    
+
 
         while (0 < timeElapsed)
         {
@@ -277,7 +279,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             PlayerUIManager.instance.SetTimerCount(timeElapsed);
 
-         
+
             yield return new WaitForSeconds(1);
         }
 
@@ -292,12 +294,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         isRespawn = false;
 
-        if(!isGameover)
+        if (!isGameover)
         {
             // 죽은사람 카운트 초기화
             playerDieCount = 0;
 
-            for (int i = 0 ; i <= targetPlayer.Length; i++)
+            for (int i = 0; i <= targetPlayer.Length; i++)
             {
                 PlayerHealth player = targetPlayer[i].GetComponent<PlayerHealth>();
                 // 플레이어가 죽었을 경우 리스폰 시켜주기
