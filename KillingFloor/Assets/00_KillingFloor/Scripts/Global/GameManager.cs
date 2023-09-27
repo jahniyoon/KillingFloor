@@ -13,7 +13,7 @@ using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-   
+
     public List<string> cashItem;
     public static GameManager instance
     {
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public bool isShop = false;
     private bool isRespawn = false;
 
-    public bool isWave = true;
+    public bool isWave = false;
     private bool isRest = false;
 
 
@@ -131,15 +131,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             zombieCount(currentZombieCount);
 
-            if (isWave)
+            if (GameObject.Find("LoadManager").GetComponent<LoadSceneAsync>().isCheck)
             {
-                isWave = false;
-                WaveStart();
-            }
-            else if (isRest)
-            {
-                isRest = false;
-                WaveChange();
+                if (isWave)
+                {
+                    isWave = false;
+                    WaveStart();
+                }
+                else if (isRest)
+                {
+                    isRest = false;
+                    WaveChange();
+                }
             }
         }
 

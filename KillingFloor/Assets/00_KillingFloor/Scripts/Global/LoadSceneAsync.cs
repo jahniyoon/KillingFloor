@@ -16,7 +16,7 @@ public class LoadSceneAsync : MonoBehaviourPun
 
     public int playerCount;
     public int photonCount;
-    private bool isCheck = false;
+    public bool isCheck = false;
 
     private void Start()
     {
@@ -43,7 +43,7 @@ public class LoadSceneAsync : MonoBehaviourPun
                 if (!isCheck)
                 {
                     isCheck = true;
-                    GameManager.instance.isCheck = true;
+                    GameManager.instance.isWave = true;
 
                     StartGame();
                 }
