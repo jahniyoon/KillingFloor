@@ -18,6 +18,8 @@ public class NoticeController : MonoBehaviour
     public CanvasGroup warningStartText;
     public CanvasGroup noticeTextText;
     public CanvasGroup noticeTextCount;
+    public CanvasGroup GameOverWarning;
+    public CanvasGroup GameOverNotice;
 
     private Vector2 initalLeft;
     private Vector2 initalRight;
@@ -40,6 +42,8 @@ public class NoticeController : MonoBehaviour
         warningStartText.alpha = 0.0f;
         noticeTextText.alpha = 0.0f;
         noticeTextCount.alpha = 0.0f;
+        GameOverWarning.alpha = 0.0f;
+        GameOverNotice.alpha = 0.0f;
     }
 
     public IEnumerator CoroutineManager(bool _isText)
@@ -71,8 +75,25 @@ public class NoticeController : MonoBehaviour
         StartCoroutine(WarningSubMove(new Vector2(300.0f, 0.0f), new Vector2(-300.0f, 0.0f), new Vector2(-60.0f, 0.0f), 0.1f));
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(WarningSubScale(0.1f, true));
+    }
 
-        yield break;
+    public IEnumerator GameOver(bool _isText)
+    {
+        StartCoroutine(WarningMainScale(0.1f));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(WarningMainScale(0.1f));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(WarningSubScale(0.1f, false));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(WarningSubMove(new Vector2(-300.0f, 0.0f), new Vector2(300.0f, 0.0f), new Vector2(60.0f, 0.0f), 0.1f));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(GameOverText(0.1f, GameOverWarning));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(NoticeScale(0.1f, false, _isText));
+        yield return new WaitForSeconds(0.1f);
+        if (_isText) { StartCoroutine(NoticeMove(new Vector2(-300.0f, 0.0f), new Vector2(300.0f, 0.0f), new Vector2(60.0f, 0.0f), 0.1f)); }
+        else { StartCoroutine(NoticeMove(new Vector2(-100.0f, 0.0f), new Vector2(100.0f, 0.0f), new Vector2(20.0f, 0.0f), 0.1f)); }
+        StartCoroutine(GameOverText(0.1f, GameOverNotice));
     }
 
     private IEnumerator WarningMainScale(float _duration)
@@ -328,6 +349,22 @@ public class NoticeController : MonoBehaviour
         {
             if (_isText) { noticeTextText.alpha = 1.0f; }
             else { noticeTextCount.alpha = 1.0f; }
+        }
+    }
+
+    private IEnumerator GameOverText(float _duration, CanvasGroup _gameObject)
+    {
+        timeElapsed = 0.0f;
+
+        while (timeElapsed < _duration)
+        {
+            timeElapsed += Time.deltaTime;
+
+            float time = 1.0f - Mathf.Pow(1.0f - Mathf.Clamp01(timeElapsed / _duration), 2);
+
+            _gameObject.alpha = Mathf.Lerp(0.0f, 1.0f, time);
+
+            yield return null;
         }
     }
 }

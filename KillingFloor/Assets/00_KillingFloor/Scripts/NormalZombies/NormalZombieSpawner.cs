@@ -175,8 +175,6 @@ public class NormalZombieSpawner : MonoBehaviourPun
                 {
                     CreateZombie();
 
-                    GameManager.instance.PlusCount(1);
-
                     continue;
                 }
                 else
@@ -189,8 +187,6 @@ public class NormalZombieSpawner : MonoBehaviourPun
                             {
                                 CreateZombie();
 
-                                GameManager.instance.PlusCount(1);
-
                                 break;
                             }
                         }
@@ -199,7 +195,6 @@ public class NormalZombieSpawner : MonoBehaviourPun
                             zombieSaveList[randZombieNum].GetChild(x).gameObject.SetActive(true);
                             zombieSaveList[randZombieNum].GetChild(x).gameObject.GetComponent<NormalZombie>().ZombieSetting();
                             zombieSaveList[randZombieNum].GetChild(x).position = spawnPoint[pointCount].transform.position;
-                            GameManager.instance.PlusCount(1);
 
                             break;
                         }
@@ -216,8 +211,6 @@ public class NormalZombieSpawner : MonoBehaviourPun
                 {
                     CreateZombie();
 
-                    GameManager.instance.PlusCount(1);
-
                     continue;
                 }
                 else
@@ -230,8 +223,6 @@ public class NormalZombieSpawner : MonoBehaviourPun
                             {
                                 CreateZombie();
 
-                                GameManager.instance.PlusCount(1);
-
                                 break;
                             }
                             else { /*No Event*/ }
@@ -241,8 +232,6 @@ public class NormalZombieSpawner : MonoBehaviourPun
                             zombieSaveList[randZombieNum].GetChild(x).gameObject.SetActive(true);
                             zombieSaveList[randZombieNum].GetChild(x).gameObject.GetComponent<NormalZombie>().ZombieSetting();
                             zombieSaveList[randZombieNum].GetChild(x).position = spawnPoint[pointCount].transform.position;
-
-                            GameManager.instance.PlusCount(1);
 
                             break;
                         }
