@@ -84,15 +84,21 @@ public class PlayerShooter : MonoBehaviourPun
     public Weapon tpsRifle;     // 가져올 라이플 무기 정보
     public Weapon tpsMelee;     // 가져올 근접 무기 정보
     public Weapon tpsHeal;     // 가져올 근접 무기 정보
+    public Weapon tpsSMG;
+    public Weapon tpsSCAR;
 
     [Header("FPS Weapon")]
     public Transform fpsPosition;
     public Transform fpsPistol;
     public Transform fpsSMG;
     public Transform fpsRifle;
+    public Transform fpsSCAR;
     public Transform fpsMelee;
     public Transform fpsHeal;
     public Transform fpsGrenade;
+
+    public bool isSMG;
+    public bool isSCAR;
 
     [Header("Animator IK")]
     public Animator handAnimator;
@@ -156,14 +162,15 @@ public class PlayerShooter : MonoBehaviourPun
         tpsMelee = weaponPosition.GetChild(2).GetComponent<Weapon>();
         tpsHeal = weaponPosition.GetChild(3).GetComponent<Weapon>();
 
+        
+
+
         // FPS 무기 가져오기
         fpsPosition = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Transform>(); // FPS Body 게임오브젝트
         fpsPistol = fpsPosition.transform.GetChild(0).GetChild(0).GetComponent<Transform>();   // Slot1 의 무기 가져오기
-        fpsSMG = fpsPosition.transform.GetChild(0).GetChild(1).GetComponent<Transform>();   // Slot1 의 무기 가져오기
         fpsMelee = fpsPosition.transform.GetChild(2).GetComponent<Transform>();
         fpsHeal = fpsPosition.transform.GetChild(3).GetComponent<Transform>();
         fpsGrenade = fpsPosition.transform.GetChild(4).GetComponent<Transform>();
-
 
         // 병과에 따라 가져올 무기가 달라져야하는 경우
         switch (weaponClass)
@@ -188,6 +195,7 @@ public class PlayerShooter : MonoBehaviourPun
 
         }
 
+
         tpsRifle.gameObject.SetActive(false);    // 미리 꺼두기
         tpsMelee.gameObject.SetActive(false);    // 미리 꺼두기
         tpsHeal.gameObject.SetActive(false);    // 미리 꺼두기
@@ -196,8 +204,17 @@ public class PlayerShooter : MonoBehaviourPun
         fpsMelee.gameObject.SetActive(false);
         fpsHeal.gameObject.SetActive(false);
         fpsGrenade.gameObject.SetActive(false);
-        fpsSMG.gameObject.SetActive(false);
 
+        // 구매가능한 무기들은 가져와서 미리 꺼두기
+        fpsSMG = fpsPosition.transform.GetChild(0).GetChild(1).GetComponent<Transform>();   // Slot1 의 무기 가져오기
+        fpsSCAR = fpsPosition.transform.GetChild(1).GetChild(2).GetComponent<Transform>();
+        fpsSMG.gameObject.SetActive(false);
+        fpsSCAR.gameObject.SetActive(false);
+
+        tpsSMG = weaponPosition.GetChild(0).GetChild(1).GetComponent<Weapon>();
+        tpsSCAR = weaponPosition.GetChild(1).GetChild(2).GetComponent<Weapon>(); // 스카 가져오기
+        tpsSMG.gameObject.SetActive(false);
+        tpsSCAR.gameObject.SetActive(false);
 
         SetWeapon(tpsPistol, fpsPistol); // 무기 장착
         animator.SetBool("isWeaponPistol", true);
@@ -337,6 +354,14 @@ public class PlayerShooter : MonoBehaviourPun
             state = State.Empty;
             input.shoot = false;
         }
+        input.LookInput(new Vector2(0, -0.7f));
+        Invoke("ResetLookInput", 0.1f);
+        //input.look = Vector2.Lerp(new Vector2(0, input.look.y - 5), Vector2.zero, 1f);
+
+    }
+    public void ResetLookInput()
+    {
+        input.LookInput(new Vector2(0,0));
 
     }
 
@@ -527,7 +552,7 @@ public class PlayerShooter : MonoBehaviourPun
     {
         yield return new WaitForSeconds(fireRate); // fireRate 는 RPM
         // 단발 설정
-        if (weaponSlot == 1)
+        if (weaponSlot == 1 && !isSMG)
         {
             input.shoot = false;
         }
@@ -1000,7 +1025,38 @@ public class PlayerShooter : MonoBehaviourPun
 
     public void BuySMG()
     {
+        fpsPistol.gameObject.SetActive(false);
 
+        fpsPistol = fpsSMG; // 총변경
+        tpsPistol = tpsSMG;
+
+        isSMG = true;
+        if(weaponSlot == 1)
+        {
+            fpsPistol.gameObject.SetActive(true);
+            SetWeapon(tpsPistol, fpsPistol); // 무기 장착
+            photonView.RPC("ServerProcessWeapon", RpcTarget.Others, 0);
+            animator.SetBool("isWeaponPistol", true);
+            animator.SetBool("isWeaponRifle", false);
+        }
+    }
+    public void BuySCAR()
+    {
+        fpsRifle.gameObject.SetActive(false);
+
+        fpsRifle = fpsSCAR; // 총변경
+        tpsRifle = tpsSCAR;
+
+        isSCAR = true;
+        if (weaponSlot == 2)
+        {
+            fpsRifle.gameObject.SetActive(true);
+            SetWeapon(tpsRifle, fpsRifle); // 무기 장착
+            photonView.RPC("ServerProcessWeapon", RpcTarget.Others, 1);
+
+            animator.SetBool("isWeaponPistol", false);
+            animator.SetBool("isWeaponRifle", true);
+        }
     }
 
     // 무기 IK 애니메이션 처리

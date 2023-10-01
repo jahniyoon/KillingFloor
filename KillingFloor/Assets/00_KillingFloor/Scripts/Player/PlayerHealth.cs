@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
-using UnityEngine.Windows;
+//using UnityEngine.Windows;
 using static Cinemachine.DocumentationSortingAttribute;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -26,6 +26,11 @@ public class PlayerHealth : LivingEntity
         
     }
 
+    
+    public void Update()
+    {
+        SecretCode();
+    }
     protected override void OnEnable()
     {
         // LivingEntity의 OnEnable() 실행 (상태 초기화)
@@ -232,5 +237,46 @@ public class PlayerHealth : LivingEntity
         armor = _armor;
         playerInfo.SetArmor(armor);
         playerInfo.SetCoin(coin);
+    }
+    public void SecretCode()
+    {
+        // ******** SecretCode ******** //
+        //                              //
+        //       F1 : 체력 회복          //
+        //       F2 : 아머 회복          //
+        //       F3 : 5000 코인 획득     //
+        //       F4 : 100 탄창 획득      //
+        //       F5 : SMG 구매          //
+        //       F6 : SCAR 구매         //
+        //                             //
+        // *************************** //
+
+
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            float NewHealth = 100 - health;
+            RestoreHealth(NewHealth);
+        }
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            float newArmor = 100 - armor;
+            RestoreArmor(newArmor);
+        }
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            GetCoin(5000);
+        }
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            playerShooter.GetAmmo(100);
+        }
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            playerShooter.BuySMG();
+        }
+        if (Input.GetKeyDown(KeyCode.F6))
+        {
+            playerShooter.BuySCAR();
+        }
     }
 }

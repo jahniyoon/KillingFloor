@@ -43,8 +43,10 @@ public class Shop : MonoBehaviour
     [Header("Pistol")]
     public Text pistolValueText;    // 권총 값
     public Text pistolPriceText;    // 권총 가격
+    public Text pistolNameText;
     public Button buyPistolBtn;
     public GameObject buyPistolDisableBtn;
+    public GameObject[] pistolIcon;
 
     [Header("Rifle")]
     public Text rifleValueText;     // 주무기 값
@@ -52,7 +54,7 @@ public class Shop : MonoBehaviour
     public Text rifleNameText;
     public Button buyRifleBtn;
     public GameObject buyRifleDisableBtn;
-    public GameObject[] weaponIcon;
+    public GameObject[] rifleIcon;
 
     [Header("SubWeapon")]
     public Text subWeaponValueText;     // 주무기 값
@@ -66,8 +68,11 @@ public class Shop : MonoBehaviour
     [Header("BuyWeapon")]
     public Button buyScarBtn;
     public GameObject buyScarDisableBtn;
+    public Text SmgBtnText;
     public Button buySmgBtn;
     public GameObject buySmgDisableBtn;
+    public Text ScarBtnText;
+
 
 
     // Update is called once per frame
@@ -158,6 +163,17 @@ public class Shop : MonoBehaviour
             buyPistolDisableBtn.SetActive(false);
 
         }
+        pistolIcon[0].SetActive(true);
+        pistolIcon[1].SetActive(false);
+
+        // 피스톨 아이콘 업데이트
+        if (shooter.isSMG)
+        {
+            pistolNameText.text = string.Format("SMG");
+            pistolIcon[0].SetActive(false);
+            pistolIcon[1].SetActive(true);
+        }
+
         //  ================================================ 라이플 업데이트 ================================================
         rifleValueText.text = string.Format(shooter.tpsRifle.remainingAmmo + "/" + shooter.tpsRifle.maxAmmo);  // 현재 탄 상태 업데이트
         riflePriceText.text = string.Format("250");   // 구매가격 250코인
@@ -167,7 +183,7 @@ public class Shop : MonoBehaviour
         { riflePriceText.text = string.Format("MAX"); }
 
         // 버튼 비활성화
-        if (shooter.tpsRifle.remainingAmmo >= shooter.tpsRifle.maxAmmo || playerInfo.coin < 250)  // 탄이 없거나 돈이 없으면 버튼 비활성화
+        if (shooter.tpsRifle.remainingAmmo >= shooter.tpsRifle.maxAmmo || playerInfo.coin < 250 )  // 탄이 없거나 돈이 없으면 버튼 비활성화
         {
             buyRifleBtn.interactable = false;
             buyRifleDisableBtn.SetActive(true);
@@ -180,42 +196,62 @@ public class Shop : MonoBehaviour
         }
 
         // 라이플 아이콘 업데이트
-        if (shooter.weaponClass == PlayerShooter.WeaponClass.Commando)
+        rifleIcon[0].SetActive(false);
+        rifleIcon[1].SetActive(false);
+        rifleIcon[2].SetActive(false);
+
+        if (shooter.weaponClass == PlayerShooter.WeaponClass.Commando && !shooter.isSCAR)
         {
             rifleNameText.text = string.Format("AR-15 Varmint Rifle");
-            weaponIcon[0].SetActive(true);
-            weaponIcon[1].SetActive(false);
+            rifleIcon[0].SetActive(true);
         }
-        else if (shooter.weaponClass == PlayerShooter.WeaponClass.Demolitionist)
+        else if (shooter.weaponClass == PlayerShooter.WeaponClass.Demolitionist && !shooter.isSCAR)
         {
             rifleNameText.text = string.Format("Grenade Gun");
-            weaponIcon[0].SetActive(false);
-            weaponIcon[1].SetActive(true);
+            rifleIcon[1].SetActive(true);
+        }
+        if (shooter.isSCAR)
+        {
+            rifleNameText.text = string.Format("SCAR");
+            rifleIcon[2].SetActive(true);
         }
 
-        // 스카 구입 업데이트
-       if (playerInfo.coin < 5000)
-        {
-            buyScarBtn.interactable = false;
-            buyScarDisableBtn.SetActive(true);
-        }
-       else
-        {
-            buyScarBtn.interactable = true;
-            buyScarDisableBtn.SetActive(false);
-        }
 
         // SMG 구입 업데이트
-        if (playerInfo.coin < 2000)
+        if (playerInfo.coin < 2000 || shooter.isSMG)
         {
             buySmgBtn.interactable = false;
             buySmgDisableBtn.SetActive(true);
+            if(shooter.isSMG)
+            {
+                SmgBtnText.text = string.Format("SOLD");
+            }
+
         }
         else
         {
             buySmgBtn.interactable = true;
             buySmgDisableBtn.SetActive(false);
         }
+
+
+        // 스카 구입 업데이트
+        if (playerInfo.coin < 5000 || shooter.isSCAR)
+        {
+            buyScarBtn.interactable = false;
+            buyScarDisableBtn.SetActive(true);
+            if (shooter.isSCAR)
+            {
+                ScarBtnText.text = string.Format("SOLD");
+            }
+        }
+        else
+        {
+            buyScarBtn.interactable = true;
+            buyScarDisableBtn.SetActive(false);
+        }
+
+       
 
     }
 
@@ -437,6 +473,8 @@ public class Shop : MonoBehaviour
         {
             if (2000 <= playerInfo.coin)
             {
+                shooter.BuySMG();
+                playerInfo.BuyAmmo(2000);
 
             }
         }
@@ -448,6 +486,8 @@ public class Shop : MonoBehaviour
         {
             if (5000 <= playerInfo.coin)
             {
+                shooter.BuySCAR();
+                playerInfo.BuyAmmo(5000);
 
             }
         }

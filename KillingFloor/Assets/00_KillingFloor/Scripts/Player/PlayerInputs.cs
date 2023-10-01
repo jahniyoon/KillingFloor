@@ -23,6 +23,7 @@ public class PlayerInputs : MonoBehaviourPun
     public bool grenade;
     public bool equip;
     public bool cancle;
+    
 
     [Header("Mouse Cursor Settings")]
     public bool cursorLocked = true;
