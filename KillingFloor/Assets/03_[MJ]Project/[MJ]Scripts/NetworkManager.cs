@@ -63,20 +63,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public static NetworkManager net_instance;
     void Awake()
     {
-            if (net_instance == null)
-            {
+        if (net_instance == null)
+        {
             net_instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                if (net_instance != this)
-                {
-                    Destroy(this.gameObject);
-                }
-            }
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (net_instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-            Cursor.visible = true;
+        Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
         //지환 : 플레이어들의 씬 씽크 맞추기
