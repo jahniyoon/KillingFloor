@@ -25,7 +25,7 @@ public class Singleton : MonoBehaviour
     public static Singleton local_singleton;
     private void Awake()
     {
-        if (null == local_singleton)
+        if (local_singleton == null)
         {
             local_singleton = this;
             DontDestroyOnLoad(this);
