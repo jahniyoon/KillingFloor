@@ -9,22 +9,22 @@ public class TestGamaManager : MonoBehaviour
     public void OnLvUpBtn()
     {
         // 버튼을 누를시 localPlayerLv 값 재할당
-        int lvUp = int.Parse(NetworkManager.instance.localPlayerLv) + 1;
-        NetworkManager.instance.localPlayerLv = lvUp.ToString();
+        int lvUp = int.Parse(NetworkManager.net_instance.localPlayerLv) + 1;
+        NetworkManager.net_instance.localPlayerLv = lvUp.ToString();
 
-        Debug.Log("더하기 1 했을 때: " + NetworkManager.instance.localPlayerLv);
+        Debug.Log("더하기 1 했을 때: " + NetworkManager.net_instance.localPlayerLv);
 
         // 데이터에 변경된 레벨 서버에 저장하기 위해서 꼭 필요
-        NetworkManager.instance.SetData(NetworkManager.instance.localPlayerLv);
+        NetworkManager.net_instance.SetData(NetworkManager.net_instance.localPlayerLv);
     }
     // 로컬플레이어 레벨 -1 Test 메서드
     public void OnLvDownBtn()
     {
-        int lvDown = int.Parse(NetworkManager.instance.localPlayerLv) - 1;
-        NetworkManager.instance.localPlayerLv = lvDown.ToString();
+        int lvDown = int.Parse(NetworkManager.net_instance.localPlayerLv) - 1;
+        NetworkManager.net_instance.localPlayerLv = lvDown.ToString();
 
-        Debug.Log("빼기 1 했을 때: " + NetworkManager.instance.localPlayerLv);
+        Debug.Log("빼기 1 했을 때: " + NetworkManager.net_instance.localPlayerLv);
 
-        NetworkManager.instance.SetData(NetworkManager.instance.localPlayerLv);
+        NetworkManager.net_instance.SetData(NetworkManager.net_instance.localPlayerLv);
     }
 }

@@ -230,6 +230,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene("LoginScene");
 
+        ////[Mijeong] 231001 : LocalPlayer Date 다시 불러옴
+        //NetworkManager.net_instance.SetLocalPlayerData();
     }
 
     // 룸을 나갈때 자동 실행되는 메서드
@@ -239,15 +241,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene("LoginScene");
+
+        ////[Mijeong] 231001 : LocalPlayer Date 다시 불러옴
+        //NetworkManager.net_instance.SetLocalPlayerData();
     }
 
     // 지환 추가
     public void GetPlayerData()
     {
-        Debug.Log("플레이어 데이터" + NetworkManager.instance.localPlayerName + "" + NetworkManager.instance.localPlayerLv);
-        playerNickName = string.Format(NetworkManager.instance.localPlayerName);
-        playerLevel = string.Format(NetworkManager.instance.localPlayerLv);
-        playerClass = NetworkManager.instance.localPlayerClass;
+        Debug.Log("플레이어 데이터" + NetworkManager.net_instance.localPlayerName + "" + NetworkManager.net_instance.localPlayerLv);
+        playerNickName = string.Format(NetworkManager.net_instance.localPlayerName);
+        playerLevel = string.Format(NetworkManager.net_instance.localPlayerLv);
+        playerClass = NetworkManager.net_instance.localPlayerClass;
 
     }
 

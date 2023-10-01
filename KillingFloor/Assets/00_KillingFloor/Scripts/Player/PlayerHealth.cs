@@ -32,7 +32,7 @@ public class PlayerHealth : LivingEntity
         base.OnEnable();
 
         // 플레이어 조작을 받는 컴포넌트들 활성화
-        level =int.Parse(NetworkManager.instance.localPlayerLv);
+        level =int.Parse(NetworkManager.net_instance.localPlayerLv);
         playerMovement.enabled = true;
         playerShooter.enabled = true;
         playerAnimator.SetBool("isDead", false);
@@ -92,7 +92,7 @@ public class PlayerHealth : LivingEntity
     public override void LevelUp()
     {
         base.LevelUp();
-        NetworkManager.instance.SetData(string.Format("{0}", level));
+        NetworkManager.net_instance.SetData(string.Format("{0}", level));
     }
 
     // 코인 획득

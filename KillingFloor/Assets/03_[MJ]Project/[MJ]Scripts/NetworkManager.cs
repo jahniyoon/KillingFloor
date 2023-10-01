@@ -12,7 +12,6 @@ using TMPro;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-    public static NetworkManager instance;
     public GameObject Lang_Panel, Room_Panel, UserRoom_Panel, Lobby_Panel, Login_Panel, Class_Panel, Store_Panel, Lobby_Screen, Option_Panel, PlayerProfile;
 
     [Header("Player")]
@@ -60,15 +59,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     int readyCheck = -1;
     int readyCount = 0;
 
+
+    public static NetworkManager net_instance;
     void Awake()
     {
-        instance = this;
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+            if (net_instance == null)
+            {
+            net_instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                if (net_instance != this)
+                {
+                    Destroy(this.gameObject);
+                }
+            }
 
-        //// 포톤 네트워크 속도 최적화 설정
-        //PhotonNetwork.SendRate = 60;
-        //PhotonNetwork.SerializationRate = 30;
+            Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
 
         //지환 : 플레이어들의 씬 씽크 맞추기
         PhotonNetwork.AutomaticallySyncScene = true;
@@ -369,37 +378,31 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         (error) => Debug.Log("데이터 저장 실패"));
     }
 
-    // 유저 데이터 가져오는 메서드
-    void GetData(string curID)
-    {
-        // 사용자 데이터를 가져올 요청 생성
-        PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = curID }, (result) =>
-        {
-            UserRoomDataText.text = "고유ID" + curID + "\n" + result.Data["HomeLevel"].Value;
-            playerInfo[0].level.text = result.Data["HomeLevel"].Value;
-            playerInfo[0].className.text = result.Data["Class"].Value;
-            SetClassIcon(0, result.Data["Class"].Value);
-
-        },  // 지환 레벨 가져오기 한줄 추가
-
-        (error) => Debug.Log("데이터 불러오기 실패"));
-
-    }
-
-    //[MiJeong] 230925 주석 삭제
-    void SetLocalPlayerData()
+    //[MiJeong] 231001 로컬플레이어 값 Null 오류 수정
+    public void SetLocalPlayerData()
     {
         PlayFabClientAPI.GetUserData(new GetUserDataRequest() { PlayFabId = MyPlayFabInfo.PlayFabId }, (result) =>
         {
-            Debug.Log("result: " + result);
-            Debug.Log(MyPlayFabInfo.DisplayName + result.Data["HomeLevel"].Value);
+            if (MyPlayFabInfo.DisplayName != null && MyPlayFabInfo.DisplayName != localPlayerName)
+            {
+                PhotonNetwork.LocalPlayer.NickName = MyPlayFabInfo.DisplayName;
 
-            localPlayerName = MyPlayFabInfo.DisplayName;
-            localPlayerLv = result.Data["HomeLevel"].Value;
-            localPlayerClass = result.Data["Class"].Value;
-            UserNameText.text = "Name: " + localPlayerName + "\nLevel: " + localPlayerLv;
+                localPlayerName = MyPlayFabInfo.DisplayName;
+                localPlayerLv = result.Data["HomeLevel"].Value;
+                localPlayerClass = result.Data["Class"].Value;
+                UserNameText.text = "Name: " + localPlayerName + "\nLevel: " + localPlayerLv;
+
+                playerInfo[0].nickName.text = localPlayerName;
+                playerInfo[0].level.text = localPlayerLv;
+                playerInfo[0].className.text = localPlayerClass;
+                SetClassIcon(0, result.Data["Class"].Value);
+            }
+            else
+            {
+                SetLocalPlayerData();
+            }
         },
-            (error) => Debug.Log("데이터 불러오기 실패"));
+            (error) => Debug.Log("데이터 불러오기 실패" + error.ErrorMessage));
     }
     #endregion
     #endregion
@@ -472,7 +475,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                     if (editorItems.Name == item.ItemId)
                     {
                         editorItems.Cost = (int)cost;
-                        //Debug.L
                     }
                 }
                 Debug.Log($"cost : {cost}");
@@ -528,7 +530,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         request.Price = price;
         request.VirtualCurrency = "CN";
 
-        PlayFabClientAPI.PurchaseItem(request, result => 
+        PlayFabClientAPI.PurchaseItem(request, result =>
         {
             Debug.Log("구매 성공");
             UpdateInventory();
@@ -551,14 +553,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     #region Lobby
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
-
-    //LEGACY:
-    //void Update()
-    //{
-    //    LobbyInfoText.text =
-    //    "로비 : " + (PhotonNetwork.CountOfPlayers - PhotonNetwork.CountOfPlayersInRooms)
-    //    + " / 접속 : " + PhotonNetwork.CountOfPlayers;
-    //}
 
     // Photon 서버와의 동기화가 완료 후 CountOfPlayers를 업데이트하도록 코르틴 사용
     private int currentPlayerCount = 0;
@@ -607,10 +601,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void SetLocalPlayerProfile()
     {
-        PhotonNetwork.LocalPlayer.NickName = MyPlayFabInfo.DisplayName;
-        playerInfo[0].nickName.text = string.Format(PhotonNetwork.LocalPlayer.NickName);
-        playerInfo[0].level.text = string.Format(localPlayerLv);
-        playerInfo[0].className.text = localPlayerClass;
+        //PhotonNetwork.LocalPlayer.NickName = MyPlayFabInfo.DisplayName;
+
+        //Debug.Log($"포톤네트워크 닉네임 : {PhotonNetwork.LocalPlayer.NickName}");
+        //playerInfo[0].nickName.text = string.Format(PhotonNetwork.LocalPlayer.NickName);
+        //Debug.Log($"playerInfo[0].nickName: {playerInfo[0].nickName.text}");
+        //playerInfo[0].level.text = string.Format(localPlayerLv);
+        //playerInfo[0].className.text = localPlayerClass;
+
+        if (playerInfo[0].nickName == null)
+        {
+            Debug.Log("로컬 플레이어 데이터가 초기화 되어서 다시 불러옴");
+            SetLocalPlayerData();
+        }
+
         SetClassIcon(0, localPlayerClass);
     }
     void ShowPanel(GameObject curPanel)
@@ -741,14 +745,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         UserRoomDataText.text = "";
     }
 
-    public void SetDataBtn()
-    {
-        // 자기자신의 방에서만 값 저장이 가능하고, 값 저장 후 1초 뒤에 값 불러오기
-        SetData(SetDataInput.text);
-        Invoke("SetDataBtnDelay", 1);
-    }
+    //public void SetDataBtn()
+    //{
+    //    // 자기자신의 방에서만 값 저장이 가능하고, 값 저장 후 1초 뒤에 값 불러오기
+    //    SetData(SetDataInput.text);
+    //    Invoke("SetDataBtnDelay", 1);
+    //}
 
-    void SetDataBtnDelay() => GetData(PhotonNetwork.CurrentRoom.CustomProperties["PlayFabID"].ToString());
+    //void SetDataBtnDelay() => GetData(PhotonNetwork.CurrentRoom.CustomProperties["PlayFabID"].ToString());
     #endregion
 
     // [Mijeong] 230925 : 게임 준비,시작 체크 메서드 추가
@@ -855,8 +859,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         // 로비면 로비 상태로, 방에 있으면 방으로 상태 변경
         if (PhotonNetwork.InLobby) { state = State.Lobby; }
-        else if (PhotonNetwork.InRoom) 
-        { 
+        else if (PhotonNetwork.InRoom)
+        {
             state = State.Room;
             RoomRenewal();
 
@@ -980,12 +984,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #region SetClass
     public void ClassChangeCommando()
     {
-        NetworkManager.instance.localPlayerClass = "Commando";
-        Debug.Log(NetworkManager.instance.localPlayerClass + "클래스 변경");
+        NetworkManager.net_instance.localPlayerClass = "Commando";
+        Debug.Log(NetworkManager.net_instance.localPlayerClass + "클래스 변경");
         // 데이터에 변경된 레벨 서버에 저장하기 위해서 꼭 필요
-        NetworkManager.instance.SetClass(NetworkManager.instance.localPlayerClass);
+        NetworkManager.net_instance.SetClass(NetworkManager.net_instance.localPlayerClass);
 
-        playerInfo[0].className.text = NetworkManager.instance.localPlayerClass;
+        playerInfo[0].className.text = NetworkManager.net_instance.localPlayerClass;
         SetClassIcon(0, "Commando");
         SetClass("Commando");
         SetLocalPlayerData();
@@ -995,12 +999,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     public void ClassChangeDemolitionist()
     {
-        NetworkManager.instance.localPlayerClass = "Demolitionist";
-        Debug.Log(NetworkManager.instance.localPlayerClass + "클래스 변경");
+        NetworkManager.net_instance.localPlayerClass = "Demolitionist";
+        Debug.Log(NetworkManager.net_instance.localPlayerClass + "클래스 변경");
         // 데이터에 변경된 레벨 서버에 저장하기 위해서 꼭 필요
-        NetworkManager.instance.SetClass(NetworkManager.instance.localPlayerClass);
+        NetworkManager.net_instance.SetClass(NetworkManager.net_instance.localPlayerClass);
 
-        playerInfo[0].className.text = NetworkManager.instance.localPlayerClass;
+        playerInfo[0].className.text = NetworkManager.net_instance.localPlayerClass;
         SetClassIcon(0, "Demolitionist");
         SetClass("Demolitionist");
         SetLocalPlayerData();
