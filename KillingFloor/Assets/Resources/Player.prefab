@@ -2855,6 +2855,20 @@ MonoBehaviour:
   bloodScreenValue: 0
   poisonScreenValue: 0
   cameraShakeTrigger: 0
+  Lod:
+  - {fileID: 352881514241155848}
+  - {fileID: 7592009013722111602}
+  - {fileID: 3901071208085508401}
+  - {fileID: 8966892426094578667}
+  changeMat:
+  - {fileID: 2100000, guid: 854ab9e9b9fae4643b6bd8880175c1da, type: 2}
+  - {fileID: 2100000, guid: 68584c302c930d7458809c8721627441, type: 2}
+  - {fileID: 2100000, guid: 6739bf1158284ee4c85216f4b8102f98, type: 2}
+  - {fileID: 2100000, guid: 2927d64a6584c3c458b264d3478a605d, type: 2}
+  - {fileID: 2100000, guid: b7f4b006eb0b85c48a043f85cb3eaf21, type: 2}
+  - {fileID: 2100000, guid: bd5a0a0d1458b6a4e9cb272a4becf656, type: 2}
+  - {fileID: 2100000, guid: 78ecb1eae0c7ddf4abd5047ded27d70f, type: 2}
+  - {fileID: 2100000, guid: ac1361c6919f3d449895e2f2c326d9db, type: 2}
 --- !u!114 &3074268453861525134
 MonoBehaviour:
   m_ObjectHideFlags: 0

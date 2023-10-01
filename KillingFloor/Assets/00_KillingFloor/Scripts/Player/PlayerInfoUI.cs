@@ -45,6 +45,10 @@ public class PlayerInfoUI : MonoBehaviourPun
     private int coin;
     private int targetCoin;
 
+    // 플레이어 스킨 변경
+    public GameObject[] Lod;
+    public Material[] changeMat;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -81,6 +85,8 @@ public class PlayerInfoUI : MonoBehaviourPun
         photonView.RPC("DataProcessOnServer", RpcTarget.All, nickName, level, playerClass);
         PlayerUIManager.instance.SetLevel(level);
         PlayerUIManager.instance.SetClass(playerClass);
+
+        ChangeMat(0);
     }
 
     [PunRPC]
@@ -229,6 +235,15 @@ public class PlayerInfoUI : MonoBehaviourPun
         if (state == State.Live)
         {
             GameManager.instance.inputLock = false;
+        }
+    }
+
+    public void ChangeMat(int index)
+    {
+
+        for (int i = 0; i < Lod.Length; i++)
+        {
+            Lod[i].GetComponent<SkinnedMeshRenderer>().material = changeMat[index];
         }
     }
 }

@@ -38,12 +38,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public GameObject SetDataBtnObj, MasterStartBtn, OtherReadyBtn;
     public Text UserRoomDataText, RoomNameInfoText, RoomNumInfoText;
     public Button MasterStartButton, OtherReadyButton;
+    public GameObject masterStartBtnDisable;
 
     [Header("Store")]
     public Text CoinsValueText;
     public Text StarsValueText;
     public int coins = default;
     public int stars = default;
+    public GameObject playerSample;
 
     public ItemToBuy[] Items;
     public GameObject ContentArea;
@@ -489,6 +491,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
                 itemObject.transform.SetParent(ContentArea.transform);
                 itemObject.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate { MakePurchase(i.Name, i.Cost); });
+                itemObject.transform.localScale = Vector3.one;
+
             }
         },
         error => { });
@@ -513,6 +517,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                         itemObject.GetComponent<Image>().preserveAspect = true;     // 이미지 종횡비 유지하도록 설정
 
                         itemObject.transform.SetParent(InventoryContent.transform);
+                        itemObject.transform.localScale = Vector3.one;
+
                     }
 
                 }
@@ -688,6 +694,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     void RoomRenewal()
     {
+
         UserNickNameText.text = "";
         ResetPlayerUI();
 
@@ -759,14 +766,33 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            MasterStartBtn.SetActive(true);
+            MasterStartBtn.SetActive(true); // 룸 마스터만 스타트 버튼 활성화
             OtherReadyBtn.SetActive(false);
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            {
+                masterStartBtnDisable.gameObject.SetActive(false);
+            }
         }
     }
 
     [PunRPC]
-    public void OnStartCheck(int readyCheck)
+    public void OnStartCheck(int readyCheck, int index)
     {
+        if(readyCheck == -1)
+        {
+            playerInfo[index].ready.gameObject.SetActive(false);
+        }
+        else if (readyCheck == 1)
+        {
+            playerInfo[index].ready.gameObject.SetActive(true);
+        }
+
+        // 아래는 마스터클라이언트가 아니면 리턴
+        if(!PhotonNetwork.IsMasterClient)
+        { return; }
+        photonView.RPC("OnStartCheck", RpcTarget.Others, readyCheck, index);
+
+
         readyCount += readyCheck;
         Debug.Log($"readyCount: {readyCount}");
         Debug.Log($"readyCheck: {readyCheck}");
@@ -774,27 +800,46 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         if (readyCount == PhotonNetwork.CurrentRoom.PlayerCount - 1)
         {
             MasterStartButton.interactable = true;
+            masterStartBtnDisable.gameObject.SetActive(false);
             Debug.Log("모든 클라이언트 준비 완료");
         }
         else
         {
             MasterStartButton.interactable = false;
+            masterStartBtnDisable.gameObject.SetActive(true);
+
             Debug.Log("모든 클라이언트가 준비하지 않았습니다.");
         }
     }
 
     public void OnReadyCheck()
     {
+        int profileIndex = 0; // 레디로 변경할 프로필의 넘버
+
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            int playerIndex = i + 1; // 현재 플레이어 인덱스 저장
+
+            if (PhotonNetwork.PlayerList[i].NickName == localPlayerName)
+            {
+                profileIndex = playerIndex;
+            }
+
+        }
+
+
         switch (readyCheck)
         {
             case -1:
                 readyCheck = 1;
-                photonView.RPC("OnStartCheck", RpcTarget.MasterClient, readyCheck);
+                photonView.RPC("OnStartCheck", RpcTarget.MasterClient, readyCheck, profileIndex);
                 break;
 
             case 1:
                 readyCheck = -1;
-                photonView.RPC("OnStartCheck", RpcTarget.MasterClient, readyCheck);
+                photonView.RPC("OnStartCheck", RpcTarget.MasterClient, readyCheck, profileIndex);
+                OtherReadyBtn.GetComponent<Button>().interactable = false;
+                OtherReadyBtn.GetComponent<Button>().interactable = true;
                 break;
         }
     }
@@ -947,6 +992,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Store_Panel.SetActive(false);
         PlayerProfile.SetActive(false);
 
+        playerSample.SetActive(false);
+
 
         switch (state)
         {
@@ -961,6 +1008,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             case State.Store:
                 Store_Panel.SetActive(true);
                 PlayerProfile.SetActive(false);
+                playerSample.SetActive(true);
+
                 break;
             case State.Option:
                 Option_Panel.SetActive(true);
