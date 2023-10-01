@@ -76,8 +76,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     private bool isRest = false;
 
 
+
     private bool GMMode = false;
     // Junoh 추가
+    
+    [Header("Debug")]
+    public bool palyerTestMode; // 지환 : 플레이어 테스트룸 
 
     private void Awake()
     {
@@ -127,7 +131,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     // 키보드 입력을 감지하고 룸을 나가게 함
     private void Update()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient && !palyerTestMode)    // 지환 : 플레이어 테스트 상태일경우 스킵
         {
             zombieCount(currentZombieCount);
 

@@ -528,6 +528,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba594f0c1db5e74b872409866064d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cashItem: []
   playerPrefab: {fileID: 4861928655055331811, guid: 7f847b893ce10e24ea00df64ab0271fb,
     type: 3}
   spawnPosition: {x: 0, y: 0, z: 0}
@@ -553,6 +554,8 @@ MonoBehaviour:
   shops:
   - {fileID: 4365128104377406915}
   isShop: 1
+  isWave: 0
+  palyerTestMode: 1
 --- !u!4 &156583478
 Transform:
   m_ObjectHideFlags: 0
@@ -1688,7 +1691,7 @@ Camera:
     height: 1
   near clip plane: 0.001
   far clip plane: 1000
-  field of view: 50
+  field of view: 40
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -1713,8 +1716,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 670898034}
-  m_LocalRotation: {x: -3.2025135e-17, y: 0.9830482, z: -1.7170815e-16, w: -0.18334748}
-  m_LocalPosition: {x: 47.17154, y: 1.8300998, z: 19.379238}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1854,6 +1857,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingHUD: {fileID: 2278167332335380625}
   playerHUD: {fileID: 2278167332335380624}
+  playerCount: 0
+  photonCount: 0
+  isCheck: 0
 --- !u!4 &693973789
 Transform:
   m_ObjectHideFlags: 0
@@ -5016,6 +5022,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3057854118836134249, guid: cda61820b7a633744a242523bf5385d9,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 6384981777947841841, guid: cda61820b7a633744a242523bf5385d9,
         type: 3}
       propertyPath: m_Name

@@ -650,6 +650,7 @@ MonoBehaviour:
   ammo: 20
   remainingAmmo: 120
   magazineSize: 20
+  maxAmmo: 360
   gunAudio: {fileID: 8300000, guid: 8018acccaecddce498259f8e5a93b440, type: 3}
   reloadAudio: {fileID: 8300000, guid: cc988050393583047ad560d1ce931d72, type: 3}
   emptyAudio: {fileID: 8300000, guid: 1e3cfaa883eff6e428f66cbaf902eaf3, type: 3}

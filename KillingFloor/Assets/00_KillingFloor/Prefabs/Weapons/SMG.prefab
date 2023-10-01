@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 3203160295817193905}
   - component: {fileID: 7086628792285652324}
   m_Layer: 0
-  m_Name: 9mm Pistol
+  m_Name: SMG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

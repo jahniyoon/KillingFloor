@@ -80,14 +80,15 @@ public class PlayerShooter : MonoBehaviourPun
 
 
     [Header("TPS Weapon")]
-    Weapon tpsPistol;    // 가져올 권총 무기 정보
-    Weapon tpsRifle;     // 가져올 라이플 무기 정보
-    Weapon tpsMelee;     // 가져올 근접 무기 정보
-    Weapon tpsHeal;     // 가져올 근접 무기 정보
+    public Weapon tpsPistol;    // 가져올 권총 무기 정보
+    public Weapon tpsRifle;     // 가져올 라이플 무기 정보
+    public Weapon tpsMelee;     // 가져올 근접 무기 정보
+    public Weapon tpsHeal;     // 가져올 근접 무기 정보
 
     [Header("FPS Weapon")]
     public Transform fpsPosition;
     public Transform fpsPistol;
+    public Transform fpsSMG;
     public Transform fpsRifle;
     public Transform fpsMelee;
     public Transform fpsHeal;
@@ -158,6 +159,7 @@ public class PlayerShooter : MonoBehaviourPun
         // FPS 무기 가져오기
         fpsPosition = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Transform>(); // FPS Body 게임오브젝트
         fpsPistol = fpsPosition.transform.GetChild(0).GetChild(0).GetComponent<Transform>();   // Slot1 의 무기 가져오기
+        fpsSMG = fpsPosition.transform.GetChild(0).GetChild(1).GetComponent<Transform>();   // Slot1 의 무기 가져오기
         fpsMelee = fpsPosition.transform.GetChild(2).GetComponent<Transform>();
         fpsHeal = fpsPosition.transform.GetChild(3).GetComponent<Transform>();
         fpsGrenade = fpsPosition.transform.GetChild(4).GetComponent<Transform>();
@@ -194,6 +196,7 @@ public class PlayerShooter : MonoBehaviourPun
         fpsMelee.gameObject.SetActive(false);
         fpsHeal.gameObject.SetActive(false);
         fpsGrenade.gameObject.SetActive(false);
+        fpsSMG.gameObject.SetActive(false);
 
 
         SetWeapon(tpsPistol, fpsPistol); // 무기 장착
@@ -995,6 +998,11 @@ public class PlayerShooter : MonoBehaviourPun
         weaponPosition.rotation = targetObj.rotation;
     }
 
+    public void BuySMG()
+    {
+
+    }
+
     // 무기 IK 애니메이션 처리
     void OnAnimatorIK()
     {
@@ -1069,4 +1077,6 @@ public class PlayerShooter : MonoBehaviourPun
             return FindTopmostParent(currentTransform.parent);
         }
     }
+
+
 }
