@@ -10087,13 +10087,12 @@ MonoBehaviour:
   stars: 0
   playerSample: {fileID: 959516175}
   Items:
-  - {fileID: 676412721220790093, guid: d3a54a5e1b008454b8075ba45e7d0585, type: 3}
-  - {fileID: 4360387292434290034, guid: 299ca619a875ff64991569e8e0d28d26, type: 3}
-  - {fileID: 586014694517706597, guid: 5c4e507d80b342e47844c5b4d56733c8, type: 3}
-  - {fileID: 7237734707205868044, guid: 08afad965361de746a6d0e82559b6be6, type: 3}
-  ContentArea: []
-  ItemsObj: {fileID: 0}
-  ItemObj: {fileID: 7237734707205868040, guid: 60cf36db77ec05647a3ae070c3ccdfaf, type: 3}
+  - {fileID: 4476479411501820482, guid: d3a54a5e1b008454b8075ba45e7d0585, type: 3}
+  - {fileID: 2832021100946747974, guid: 299ca619a875ff64991569e8e0d28d26, type: 3}
+  - {fileID: 2273932610549387154, guid: 5c4e507d80b342e47844c5b4d56733c8, type: 3}
+  - {fileID: 2106398151246747056, guid: 08afad965361de746a6d0e82559b6be6, type: 3}
+  ContentArea: {fileID: 6232437769714408415}
+  ItemObj: {fileID: 1250171949855763286, guid: 60cf36db77ec05647a3ae070c3ccdfaf, type: 3}
   InventoryContent: {fileID: 854055966}
   state: 0
   buttonBackGround:
