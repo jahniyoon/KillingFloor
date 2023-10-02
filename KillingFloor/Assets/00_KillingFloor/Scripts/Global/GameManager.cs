@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public int round = 1;               // 현재 라운드
     public int wave = 1;                // 현재 웨이브
-    [SerializeField] public int MaxWave = 4;//마직막 웨이브
+    [SerializeField] public int MaxWave = 5;//마직막 웨이브
     public int player = 4;              // 플레이어 인원 수
     public int difficulty = 0;          // 난이도 0: 보통 1: 어려움 2: 지옥
     public int currentZombieCount = 0;  // 현재 좀비 수

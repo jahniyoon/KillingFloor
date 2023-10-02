@@ -68,7 +68,9 @@ public class NormalZombieSpawner : MonoBehaviourPun
             roundPointCount = 7;
 
             Count();
-
+            //영상 제작용
+            zombieCount = 5;
+            //영상 제작용
             spawnCoroutine = StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
 
         }
