@@ -423,11 +423,6 @@ public class NormalZombie : NormalZombieData
         //}
     }
 
-    public void AnimationStart()
-    {
-       
-    }
-
     private void SkillSave(string _name, Vector3 _addVector)
     {
         for (int i = 0; i < skillParent.childCount; i++)
@@ -474,11 +469,6 @@ public class NormalZombie : NormalZombieData
 
     public void Death()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            GameManager.instance.MinusCount(1);
-        }
-
         ani.SetTrigger("isDie");
 
         isDeath = true;

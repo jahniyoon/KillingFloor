@@ -10,6 +10,7 @@ using PlayFab.ClientModels;
 using PlayFab;
 using Photon.Pun.Demo.Cockpit;
 using Unity.VisualScripting;
+using Photon.Pun.Demo.PunBasics;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -71,6 +72,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public List<Transform> shops = new List<Transform>();
     public bool isShop = false;
     private bool isRespawn = false;
+    [SerializeField] private Transform zombieParent;
 
     public bool isWave = false;
     private bool isRest = false;
@@ -133,7 +135,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient && !palyerTestMode)    // 지환 : 플레이어 테스트 상태일경우 스킵
         {
-            zombieCount(currentZombieCount);
+            ZombieCountCheck();
+            ZombieCount(currentZombieCount);
 
             if (GameObject.Find("LoadManager").GetComponent<LoadSceneAsync>().isCheck)
             {
@@ -199,7 +202,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region ZombieCount
-    public void zombieCount(int _currentZombieCount)
+    public void ZombieCount(int _currentZombieCount)
     {
         photonView.RPC("MasterCount", RpcTarget.MasterClient, _currentZombieCount);
     }
@@ -260,16 +263,20 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     }
 
-
     // Junoh 추가
-    public void PlusCount(int _num)
+    private void ZombieCountCheck()
     {
-        currentZombieCount += _num;
-    }
+        int count = 0;
 
-    public void MinusCount(int _num)
-    {
-        currentZombieCount -= _num;
+        for (int i = 0; i < zombieParent.childCount; i++)
+        {
+            for (int j = 0; j < zombieParent.GetChild(i).childCount; j++)
+            {
+                count += 1;
+            }
+        }
+
+        currentZombieCount = count;
     }
 
     public void SetWave(int _num)
@@ -386,6 +393,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         isGameover = true;
         PlayerUIManager.instance.gameOverUI.SetActive(true);
         PlayerUIManager.instance.leaveButton.SetActive(true);
+        StartCoroutine(noticeController.GameOver(true));
         Debug.Log("게임오버");
     }
 }
