@@ -107,9 +107,9 @@ Material:
     - _pack_normal: 0
     - _speed: 35
     m_Colors:
-    - _Color: {r: 0.745283, g: 0, b: 0, a: 1}
+    - _Color: {r: 1, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _HeightOffset: {r: -45.4, g: -26.17, b: 12.7, a: 1}
-    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecColor: {r: 1, g: 0, b: 0, a: 1}
     - _SunPos: {r: 0.56, g: 1.07, b: -0.09, a: 0.83}
   m_BuildTextureStacks: []

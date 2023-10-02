@@ -44,7 +44,7 @@ public class BossController : MonoBehaviourPun
     private GameObject bossintro;
     private bool changeBool = false;
     private bool audioChk = false;
-
+    private bool atkChk = false;
 
     void Start()
     {
@@ -169,18 +169,29 @@ public class BossController : MonoBehaviourPun
                 Invoke("changeplayerlook", 30f);
                 changeBool = true;
             }
+            if (!atkChk)
+            {
+                atkChk = true;
+                randomFattern = Random.Range(0, 6);
+                if (bossHp < meteorFattern[mereorCount])
+                {
+                    mereorCount++;
+                    randomFattern = 6;
+                }
+            }
+            
+            Debug.Log(randomFattern);
             // 플레이어와 보스 사이의 거리를 계산합니다.
             float distance = Vector3.Distance(targetPlayer[randPlayerNum].transform.position, transform.position);
-            
-            if (distance < 6f)//근거리 애니메이션
+      
+            if (distance < distanceAtk(randomFattern))//근거리 애니메이션
             {
-            
+                atkChk = false;
                 agent.isStopped = true;
                 agent.updatePosition = false;
                 agent.updateRotation = false;
                 agent.velocity = Vector3.zero;
 
-                randomFattern = Random.Range(0, 6);
                 if (randomFattern != saveFattern)// 공격패턴 중복체크, 중복패턴 변경
                 {
                     saveFattern = randomFattern;
@@ -199,21 +210,15 @@ public class BossController : MonoBehaviourPun
                     }
                 }// 공격패턴 중복체크, 중복패턴 변경 End
               
-                if (bossHp < meteorFattern[mereorCount])
-                {
-                    mereorCount++;
-                    randomFattern = 6;
-                }
+                
                 switch (randomFattern)//보스 공격패턴
                 {
                     case 0:
-                        StartCoroutine(TimeAudio(intro, 1));
-                        AnimatorStart("Attack1");
+                        animator.SetTrigger("Shout");//짖기
+                        photonView.RPC("PartticleOn", RpcTarget.All, 2); // 포톤으로 호출
 
-                        audioSource.PlayOneShot(attack1Audio);
                         currentTime = 0;
-
-                        setTime = 3.7f;
+                        setTime = 3.6f;
 
                         break;
                     case 1:
@@ -223,23 +228,29 @@ public class BossController : MonoBehaviourPun
                         currentTime = 0;
 
                         setTime = 3.7f;
+
+
                         break;
                     case 2:
 
-                        animator.SetTrigger("Attack3");//브레스
-                        photonView.RPC("PartticleOn", RpcTarget.All,1); // 포톤으로 호출
-                        audioSource.PlayOneShot(fireBreathsAudio);                                  
+                        StartCoroutine(TimeAudio(intro, 1));
+                        AnimatorStart("Attack1");///찍기
+
+                        audioSource.PlayOneShot(attack1Audio);
                         currentTime = 0;
 
-                        setTime = 5.75f;
+                        setTime = 3.7f;
+                    
                         break;
                     case 3:
 
-                        animator.SetTrigger("Shout");//짖기
-                        photonView.RPC("PartticleOn", RpcTarget.All,2); // 포톤으로 호출
-
+                        animator.SetTrigger("Attack3");//브레스
+                        photonView.RPC("PartticleOn", RpcTarget.All, 1); // 포톤으로 호출
+                        audioSource.PlayOneShot(fireBreathsAudio);
                         currentTime = 0;
-                        setTime = 3.6f;
+
+                        setTime = 5.75f;
+
                         break;
                     case 4://점프공격
                         audioSource.PlayOneShot(jump);
@@ -296,13 +307,44 @@ public class BossController : MonoBehaviourPun
         }
 
     }
+    // 랜덤공격 설정 
+    private int distanceAtk(int num)
+    {
+        int returnNum = 0;
+         switch(num)
+        {
+            case 0:
+                returnNum = 3;
+                break;
+            case 1:
+                returnNum = 4;
+                break;
+            case 2:
+                returnNum = 5;
+                break;
+            case 3:
+                returnNum = 7;
+                break;
+            case 4:
+                returnNum = 6;
+                break;
+            case 5:
+                returnNum = 8;
+                break;
+            case 6:
+                returnNum = 20;
+                break;
+        }
+        return returnNum;
+    }
+
     [PunRPC]
-    private void bossMove()
+    private void bossMove()// 보스 내비 설정 
     {
         agent.SetDestination(targetPlayer[randPlayerNum].transform.position);
     }
     [PunRPC]
-    private void PartticleOn(int num)
+    private void PartticleOn(int num) // 파티클 on/off 
     {
         switch(num)
         {

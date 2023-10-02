@@ -564,7 +564,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 68a3e585a9d79094c9b3396a7340f845, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4dd2e474932008445a35b29611e03b4d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -586,5 +586,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed349b66ef0a0b848885ad0482e8a2cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: 1
-  Cost: 0
+  Name: Defalut
+  Cost: 100

@@ -354,11 +354,13 @@ public class PlayerShooter : MonoBehaviourPun
             state = State.Empty;
             input.shoot = false;
         }
+        // 총을 쏠 때 마다 살짝씩 올라가게 하기
         input.LookInput(new Vector2(0, -0.7f));
         Invoke("ResetLookInput", 0.1f);
         //input.look = Vector2.Lerp(new Vector2(0, input.look.y - 5), Vector2.zero, 1f);
 
     }
+    // 총기 반동 초기화
     public void ResetLookInput()
     {
         input.LookInput(new Vector2(0,0));
@@ -987,7 +989,7 @@ public class PlayerShooter : MonoBehaviourPun
         playerMovement.fpsAnimator = handAnimator;
 
         // FPS 파이어 포지션 변경해주기
-        if (weaponSlot < 3 && weaponClass == WeaponClass.Commando)
+        if (weaponSlot == 1 || weaponClass == WeaponClass.Commando && weaponSlot == 2)
         {
             fireTransform = _fpsWeapon.GetComponent<FireTransform>().fireTransform;
             bulletLineRenderer = _fpsWeapon.GetComponent<LineRenderer>();
@@ -1048,6 +1050,8 @@ public class PlayerShooter : MonoBehaviourPun
         tpsRifle = tpsSCAR;
 
         isSCAR = true;
+        weaponClass = WeaponClass.Commando; // 클래스도 변경해주기
+
         if (weaponSlot == 2)
         {
             fpsRifle.gameObject.SetActive(true);
