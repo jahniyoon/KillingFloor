@@ -48,8 +48,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public GameObject playerSample;
 
     public ItemToBuy[] Items;
-    public GameObject[] ContentArea;
-    public GameObject ItemsObj;
+    public GameObject ContentArea;
+
     public GameObject ItemObj;
     public GameObject InventoryContent;
     public enum State { Login, Lobby, Room, Class, Store, Option };
@@ -418,10 +418,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     void OnGetUserInventorySuccess(GetUserInventoryResult result)
     {
         coins = result.VirtualCurrency["CN"];
-        stars = result.VirtualCurrency["ST"];
+        stars = result.VirtualCurrency["GD"];
 
         CoinsValueText.text = "Coins: " + coins.ToString();
-        StarsValueText.text = "Stars: " + stars.ToString();
+        StarsValueText.text = "Golds: " + stars.ToString();
 
         Debug.Log(result);
         Debug.Log(CoinsValueText.text);
@@ -478,35 +478,21 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                         editorItems.Cost = (int)cost;
                     }
                 }
-                //Debug.Log($"cost : {cost}");
             }
 
-                int initCount = 0;
             foreach (ItemToBuy i in Items)
             {
 
-                GameObject itemObject = Instantiate(ItemObj, ContentArea[initCount].transform.position, Quaternion.identity);
+                GameObject itemObject = Instantiate(ItemObj, ContentArea.transform.position, Quaternion.identity);
                 itemObject.transform.GetChild(1).GetComponent<Text>().text = i.Name;
                 itemObject.transform.GetChild(2).GetComponent<Text>().text = "[" + i.Cost + " Coin]";
-                itemObject.transform.GetChild(0).GetComponent<Image>().sprite = i.transform.GetChild(0).GetComponent<Image>().sprite;
+                itemObject.GetComponent<Image>().sprite = i.GetComponent<Image>().sprite;
                 itemObject.GetComponent<Image>().preserveAspect = true;     // 이미지 종횡비 유지하도록 설정
 
-//<<<<<<< HEAD
-//                itemObject.transform.SetParent(ContentArea.transform);
-//                itemObject.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate { MakePurchase(i.Name, i.Cost); });
-//                //itemObject.transform.localScale = Vector3.one;
-
-//=======
-                Debug.Log($"ContentArea[initCount].transform.position: {ContentArea[initCount].transform.position}");
-                Debug.Log("아이템 생성");
-                itemObject.transform.SetParent(ItemsObj.transform);
-
-                //itemObject.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate { MakePurchase(i.Name, i.Cost); });
+                itemObject.transform.SetParent(ContentArea.transform);
+                itemObject.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate { MakePurchase(i.Name, i.Cost); });
                 itemObject.transform.localScale = Vector3.one;  // 지환추가
-
-                initCount++;
-                Debug.Log($"initCount : {initCount}");
-//>>>>>>> origin/feature/Mijeong
+                itemObject.transform.SetParent(ContentArea.transform);
             }
 
         },
