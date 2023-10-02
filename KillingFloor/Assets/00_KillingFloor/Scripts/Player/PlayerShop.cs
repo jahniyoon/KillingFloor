@@ -36,4 +36,12 @@ public class PlayerShop : MonoBehaviour
             Lod[i].GetComponent<SkinnedMeshRenderer>().material = changeMat[colorIndex];
         }
     }
+
+    public void EquipMat(int index)
+    {
+        for (int i = 0; i < Lod.Length; i++)
+        {
+            Lod[i].GetComponent<SkinnedMeshRenderer>().material = changeMat[index];
+        }
+    }
 }

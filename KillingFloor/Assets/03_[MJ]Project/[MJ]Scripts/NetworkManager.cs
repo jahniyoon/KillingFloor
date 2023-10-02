@@ -489,29 +489,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 itemObject.GetComponent<Image>().sprite = i.GetComponent<Image>().sprite;
                 itemObject.GetComponent<Image>().preserveAspect = true;     // 이미지 종횡비 유지하도록 설정
 
-//<<<<<<< HEAD
-////<<<<<<< HEAD
-////                itemObject.transform.SetParent(ContentArea.transform);
-////                itemObject.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate { MakePurchase(i.Name, i.Cost); });
-////                //itemObject.transform.localScale = Vector3.one;
-
-////=======
-//                Debug.Log($"ContentArea[initCount].transform.position: {ContentArea[initCount].transform.position}");
-//                Debug.Log("아이템 생성");
-//                itemObject.transform.SetParent(ItemsObj.transform);
-
-//                //itemObject.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate { MakePurchase(i.Name, i.Cost); });
-//                itemObject.transform.localScale = Vector3.one;
-
-//                initCount++;
-//                Debug.Log($"initCount : {initCount}");
-////>>>>>>> origin/feature/Mijeong
-//=======
                 itemObject.transform.SetParent(ContentArea.transform);
                 itemObject.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate { MakePurchase(i.Name, i.Cost); });
                 itemObject.transform.localScale = Vector3.one;  // 지환추가
                 itemObject.transform.SetParent(ContentArea.transform);
-//>>>>>>> origin/feature/Mijeong
             }
 
         },
@@ -520,6 +501,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     void UpdateInventory()
     {
+        // InventoryContent의 모든 자식 오브젝트 삭제
+        foreach (Transform child in InventoryContent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
         PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), result =>
         {
             List<ItemInstance> itemIv = result.Inventory;
@@ -539,6 +526,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                         itemObject.transform.SetParent(InventoryContent.transform);
                         itemObject.transform.localScale = Vector3.one;
 
+                        //[MiJeong] 231002: 상점에서 EQUIP 값 전달하기 위해
+                        itemObject.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate { PlayerColorChange(i.ItemId); });
+
+
                     }
 
                 }
@@ -557,10 +548,57 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PlayFabClientAPI.PurchaseItem(request, result =>
         {
             Debug.Log("구매 성공");
-            UpdateInventory();
+            //UpdateInventory();
+
+            foreach (ItemToBuy editorItems in Items)
+            {
+                if (editorItems.Name == name)
+                {
+                    GameObject itemObject = Instantiate(ItemObj, InventoryContent.transform.position, Quaternion.identity);
+                    itemObject.transform.GetChild(1).GetComponent<Text>().text = name;
+                    itemObject.transform.GetChild(2).GetComponent<Text>().text = "[" + price + " Coin]";
+                    itemObject.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = "EQUIP";
+                    itemObject.GetComponent<Image>().sprite = editorItems.GetComponent<Image>().sprite;
+                    itemObject.GetComponent<Image>().preserveAspect = true;     // 이미지 종횡비 유지하도록 설정
+
+                    itemObject.transform.SetParent(InventoryContent.transform);
+                    itemObject.transform.localScale = Vector3.one;
+                    //[MiJeong] 231002: 상점에서 EQUIP 값 전달하기 위해
+                    itemObject.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate { PlayerColorChange(name); });
+
+                }
+            }
+
+
             GetVirtualCurrencies();
         },
             error => { Debug.Log(error.ErrorMessage); });
+    }
+
+    //[Mijeong] 231002: 플레이어 스킨 선택한 값 전달
+    public void PlayerColorChange(string colorName)
+    {
+
+        switch (colorName)
+        {
+            case "Default":
+                localCashItem = 0;
+                break;
+
+            case "SWAT":
+                localCashItem = 1;
+                break;
+
+            case "GreenArmyMan":
+                localCashItem = 2;
+                break;
+            case "GoldMan":
+                localCashItem = 3;
+                break;
+        }
+
+        playerSample.GetComponent<PlayerShop>().EquipMat(localCashItem);
+        Debug.Log(colorName);
     }
     #endregion
 

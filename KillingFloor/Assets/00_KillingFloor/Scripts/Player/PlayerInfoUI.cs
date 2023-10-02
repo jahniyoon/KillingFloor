@@ -17,6 +17,7 @@ public class PlayerInfoUI : MonoBehaviourPun
     public string nickName;
     public string level;
     public string playerClass;
+    public int playerSkin;
     public PlayerHealth m_player;
 
     public TMP_Text playerNickname;
@@ -81,12 +82,13 @@ public class PlayerInfoUI : MonoBehaviourPun
         nickName = GameManager.instance.playerNickName;
         level = GameManager.instance.playerLevel;
         playerClass = GameManager.instance.playerClass;
+        playerSkin = GameManager.instance.playerSkin;
 
         photonView.RPC("DataProcessOnServer", RpcTarget.All, nickName, level, playerClass);
         PlayerUIManager.instance.SetLevel(level);
         PlayerUIManager.instance.SetClass(playerClass);
 
-        ChangeMat(0);
+        ChangeMat(playerSkin);
     }
 
     [PunRPC]

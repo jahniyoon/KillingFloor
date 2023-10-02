@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public string playerNickName;
     public string playerLevel;
     public string playerClass;
+    public int playerSkin;
 
 
 
@@ -278,6 +279,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         playerNickName = string.Format(NetworkManager.net_instance.localPlayerName);
         playerLevel = string.Format(NetworkManager.net_instance.localPlayerLv);
         playerClass = NetworkManager.net_instance.localPlayerClass;
+        playerSkin = NetworkManager.net_instance.localCashItem;
 
     }
 
