@@ -163,6 +163,24 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             OnRespawn();    // 상점이 열리면 리스폰 해주기
         }
+
+        if (Input.GetKey(KeyCode.L) && isReset)
+        {
+            StartCoroutine(WaveReset());
+        }
+    }
+
+    private bool isReset = false;
+
+    private IEnumerator WaveReset()
+    {
+        isReset = true;
+
+        WaveStart();
+
+        yield return new WaitForSeconds(10);
+
+        isReset = false;
     }
 
     #region WaveController

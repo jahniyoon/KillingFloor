@@ -48,14 +48,9 @@ public class NormalZombieSpawner : MonoBehaviourPun
             roundPointCount = 6;
 
             Count();
-            if (spawnCoroutine != null)
-            {
-                return;
-            }
-            else
-            {
-                spawnCoroutine = StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-            }
+
+            spawnCoroutine = StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+
         }
         else if (GameManager.instance.wave == 3 && GameManager.instance.isCheck)
         {
@@ -63,14 +58,9 @@ public class NormalZombieSpawner : MonoBehaviourPun
             roundPointCount = 5;
 
             Count();
-            if (spawnCoroutine != null)
-            {
-                return;
-            }
-            else
-            {
-                spawnCoroutine = StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-            }
+
+            spawnCoroutine = StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+
         }
         else if (GameManager.instance.wave == 4 && GameManager.instance.isCheck)
         {
@@ -78,14 +68,9 @@ public class NormalZombieSpawner : MonoBehaviourPun
             roundPointCount = 7;
 
             Count();
-            if (spawnCoroutine != null)
-            {
-                return;
-            }
-            else
-            {
-                spawnCoroutine = StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-            }
+
+            spawnCoroutine = StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+
         }
         else if (GameManager.instance.wave == 5 && GameManager.instance.isCheck)
         {
@@ -93,14 +78,9 @@ public class NormalZombieSpawner : MonoBehaviourPun
             roundPointCount = 2;
 
             Count();
-            if (spawnCoroutine != null)
-            {
-                return;
-            }
-            else
-            {
-                spawnCoroutine = StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
-            }
+
+            spawnCoroutine = StartCoroutine(SpawnZombie(zombieCount, roundPointCount));
+
         }
     }
 
