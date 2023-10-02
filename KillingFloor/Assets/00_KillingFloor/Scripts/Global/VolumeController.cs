@@ -19,7 +19,7 @@ public class VolumeController : MonoBehaviourPun
 
     private void Update()
     {
-        if (isZedTime) { ZedTimeStart(); }
+        if (isZedTime && photonView.IsMine) { ZedTimeStart(); }
     }
 
     public void ZedTimeStart()

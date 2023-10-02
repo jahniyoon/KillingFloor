@@ -285,7 +285,8 @@ public class PlayerShooter : MonoBehaviourPun
                 if (weaponSlot == 2)
                 {
                     photonView.RPC("GranadeActMaster", RpcTarget.MasterClient);
-
+                    equipedWeapon.ammo -= 1;
+                    PlayerUIManager.instance.SetAmmo(equipedWeapon.ammo);           // 현재 탄 UI 세팅
                 }
             }
             // 데몰리스트 발사 입력 후 할것들
@@ -315,8 +316,7 @@ public class PlayerShooter : MonoBehaviourPun
                 bulletlist[i].GetComponent<Rigidbody>().AddForce(bulletPoint.transform.forward * bulletSpeed * 2f);
                 handAnimator.SetTrigger("isFire");
                 animator.SetTrigger("isFire");
-                equipedWeapon.ammo -= 1;
-                PlayerUIManager.instance.SetAmmo(equipedWeapon.ammo);           // 현재 탄 UI 세팅
+               
 
                 if (equipedWeapon.ammo <= 0)
                 {

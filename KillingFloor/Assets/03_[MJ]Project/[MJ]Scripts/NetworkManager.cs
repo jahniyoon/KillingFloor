@@ -502,7 +502,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 itemObject.transform.SetParent(ItemsObj.transform);
 
                 //itemObject.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate { MakePurchase(i.Name, i.Cost); });
-                itemObject.transform.localScale = Vector3.one;  // 지환추가
+                itemObject.transform.localScale = Vector3.one;
 
                 initCount++;
                 Debug.Log($"initCount : {initCount}");
