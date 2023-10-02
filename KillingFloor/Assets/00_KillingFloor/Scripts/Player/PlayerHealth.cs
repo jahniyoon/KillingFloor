@@ -192,6 +192,7 @@ public class PlayerHealth : LivingEntity
 
         // 컴포넌트들을 리셋하기 위해 게임 오브젝트를 잠시 껐다가 다시 켜기
         // 컴포넌트들의 OnDisable(), OnEnable() 메서드가 실행됨
+        gameObject.SetActive(false);
         gameObject.SetActive(true);
         playerCamera.SetCamera();
         playerInfo.ResetScreen();
