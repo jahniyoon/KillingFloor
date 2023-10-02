@@ -176,6 +176,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mesh_Alfa_2
       objectReference: {fileID: 0}
+    - target: {fileID: 2719809025853862907, guid: c138d35eb6124514aa622876fc3997fa,
+        type: 3}
+      propertyPath: VelocityModule.orbitalX.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2719809025853862907, guid: c138d35eb6124514aa622876fc3997fa,
+        type: 3}
+      propertyPath: VelocityModule.orbitalY.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2719809025853862907, guid: c138d35eb6124514aa622876fc3997fa,
+        type: 3}
+      propertyPath: VelocityModule.orbitalZ.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2719809025853862907, guid: c138d35eb6124514aa622876fc3997fa,
+        type: 3}
+      propertyPath: VelocityModule.orbitalOffsetX.scalar
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2719809025853862907, guid: c138d35eb6124514aa622876fc3997fa,
+        type: 3}
+      propertyPath: VelocityModule.orbitalOffsetY.scalar
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2719809025853862907, guid: c138d35eb6124514aa622876fc3997fa,
+        type: 3}
+      propertyPath: VelocityModule.orbitalOffsetZ.scalar
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 2802358643665327293, guid: c138d35eb6124514aa622876fc3997fa,
         type: 3}
       propertyPath: m_Radius
