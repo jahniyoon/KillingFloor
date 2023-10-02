@@ -557,7 +557,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PlayFabClientAPI.PurchaseItem(request, result =>
         {
             Debug.Log("구매 성공");
-            //UpdateInventory();
+            UpdateInventory();
             GetVirtualCurrencies();
         },
             error => { Debug.Log(error.ErrorMessage); });
